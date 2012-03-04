@@ -60,7 +60,7 @@
   <div class="span8">
     <h2>Site news</h2>
     {% for item in news %}
-      <div>
+      <div class="news-item">
         <div>
           <h3><a href="{{ item.get_absolute_url() }}">{{ item.title | safe }}</a></h3>
         </div>
