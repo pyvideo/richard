@@ -37,7 +37,7 @@ class SiteNews(models.Model):
 
     class Meta(object):
         get_latest_by = "updated"
-        ordering = ["-updated"]
+        ordering = ["updated"]
 
     @models.permalink
     def get_absolute_url(self):
