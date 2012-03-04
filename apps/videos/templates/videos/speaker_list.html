@@ -1,0 +1,38 @@
+{#
+# richard -- video index system
+# Copyright (C) 2012 richard contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-#}
+{% extends "base.html" %}
+{% block content %}
+<div class="row-fluid">
+  <div class="span12">
+    <h1>List of speakers</h1>
+    <div class="pagination">
+      <ul>
+        {% for c in 'abcdefghijklmnopqrstuvwxyz' %}
+          <li class="{{ 'active' if c == active_c }}"><a href="{{ url('speaker_list') }}?character={{ c }}">{{ c.upper() }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+    <ul>
+      {% for s in speakers %}
+        <li><a href="{{ s.get_absolute_url() }}">{{ s.name }}</a>
+          ({{ s.video_set.count() }})</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

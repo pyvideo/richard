@@ -1,0 +1,5 @@
+*.pyc
+*~
+richard/settings_local.py
+
+docs/_build/

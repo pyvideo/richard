@@ -1,0 +1,58 @@
+{#
+# richard -- video index system
+# Copyright (C) 2012 richard contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-#}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ settings.STATIC_URL }}bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ settings.STATIC_URL }}bootstrap/css/bootstrap-responsive.min.css">
+  <link rel="stylesheet" href="{{ settings.STATIC_URL }}css/richard.css">
+  <title>{{ title }}</title>
+<body>
+  <div class="navbar">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="brand" href="{{ url('home') }}">richard</a>
+        <ul class="nav nav-pills">
+          <li><a href="{{ url('category_list') }}">Categories</a></li>
+          <li><a href="{{ url('speaker_list') }}">Speakers</a></li>
+
+          <li><a href="{{ url('haystack_search') }}">Search</a></li>
+        </ul>
+
+        <ul class="nav nav-pills pull-right">
+          <li><a href="{{ url('news_list') }}">News</a></li>
+          <li><a href="{{ url('pages_view', page='about') }}">About</a></li>
+          <li><a href="{{ url('pages_view', page='contact') }}">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="content" class="container">
+    {# TODO: messages #}
+    {# TODO: breadcrumbs #}
+
+    {% block content %}{% endblock %}
+
+    <div id="footer">
+      Questions, comments or concerns? Send email to willg at bluesock dot org.
+    </div>
+  </div>
+</body>
+</html>

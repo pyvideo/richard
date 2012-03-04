@@ -1,0 +1,19 @@
+{#
+  this just tosses everything into the "text". should do analysis at
+  some point as to whether that's a good idea.
+#}
+{{ object.title }}
+
+{{ object.summary }}
+
+{{ object.description }}
+
+{{ object.quality_notes }}
+
+{% for s in object.speakers.all() %}
+  {{ s.name }}
+{% endfor %}
+
+{% for t in object.tags.all() %}
+  {{ t.tag }}
+{% endfor %}

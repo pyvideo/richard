@@ -1,0 +1,47 @@
+{#
+# richard -- video index system
+# Copyright (C) 2012 richard contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-#}
+{% macro video_summary(v) -%}
+  <div class="row-fluid section">
+    <div class="span2">
+      <a href="{{ v.get_absolute_url() }}" class="thumbnail"><img src="{{ v.thumbnail_url }}"></a>
+    </div>
+
+    <div class="span7">
+      <div>
+        <a href="{{ v.get_absolute_url() }}">{{ v.title }}</a>
+      </div>
+      <div>
+        {{ v.summary|safe }}
+      </div>
+    </div>
+    <div class="span3">
+      Event: <a href="{{ v.category.get_absolute_url() }}">{{ v.category.title }}</a><br>
+      {% if v.speakers.all() %}
+        Speakers: 
+        {% set pipe = joiner(", ") %}
+        {% for s in v.speakers.all() -%}
+          {{ pipe() }}<a href="{{ s.get_absolute_url() }}">{{ s.name }}</a>
+        {%- endfor %}
+        <br>
+      {% endif %}
+      {% if v.recorded %}
+        Recorded: {{ v.recorded | datetime }}<br>
+      {% endif %}
+    </div>
+  </div>
+{%- endmacro %}

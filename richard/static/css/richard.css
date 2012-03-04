@@ -1,0 +1,14 @@
+.section {
+  padding-top: 10px;
+  padding-bottom: 15px;
+}
+
+div#sidebar dd {
+  padding: 6px;
+}
+
+div#footer {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-top: 1px solid #ccc;
+}

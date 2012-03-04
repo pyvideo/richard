@@ -1,0 +1,136 @@
+{#
+# richard -- video index system
+# Copyright (C) 2012 richard contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-#}
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row-fluid">
+  <div id="videobox" class="span8">
+    <div class="videobox-inner">
+      {% if v.embed %}
+        {{ v.embed|safe }}
+      {% else %}
+        <video id="{{ v.slug }}">
+          {% if v.video_ogv_url %}
+            <source src="{{ v.video_ogv_url }}" type="video/ogv">
+          {% endif %}
+          {% if v.video_mp4_url %}
+            <source src="{{ v.video_mp4_url }}" type="video/mp4">
+          {% endif %}
+          {% if v.video_webm_url %}
+            <source src="{{ v.video_webm_url }}" type="video/webm">
+          {% endif %}
+        </video>
+      {% endif %}
+    </div>
+
+    {% if v.summary %}
+      <div class="section">
+        <h2>Summary</h2>
+        {{ v.summary|safe }}
+      </div>
+    {% endif %}
+
+    {% if v.description %}
+      <div class="section">
+        <h2>Description</h2>
+        {{ v.description|safe }}
+      </div>
+    {% endif %}
+  </div>
+
+
+  <div class="span4">
+    <div id="sidebar" class="well">
+      <h2>{{ v.title }}</h2>
+      <dl>
+        <dt>Category</dt>
+        <dd>
+          <a href="{{ v.category.get_absolute_url() }}">{{ v.category.title }}</a>
+        </dd>
+
+        {% if v.recorded %}
+          <dt>Recorded</dt>
+          <dd>{{ v.recorded | datetime }}</dd>
+        {% endif %}
+
+        <dt>Speakers</dt>
+        <dd>
+          {% if v.speakers.all() %}
+            {% for s in v.speakers.all() %}
+              <div><a href="{{ s.get_absolute_url() }}">{{ s.name }}</a></div>
+            {% endfor %}
+          {% else %}
+            Unknown
+          {% endif %}
+        </dd>
+
+        <dt>Download</dt>
+        <dd>
+          {% if v.video_ogv_url %}
+            <a href="{{ v.video_ogv_url }}">OGV</a>
+          {% endif %}
+          {% if v.video_mp4_url %}
+            <a href="{{ v.video_mp4_url }}">MP4</a>
+          {% endif %}
+          {% if v.video_webm_url %}
+            <a href="{{ v.video_webm_url }}">WEBM</a>
+          {% endif %}
+        </dd>
+
+        <dt>Tags</dt>
+        <dd>
+          {% if v.tags %}
+            {% for t in v.tags.all() %}
+              {{ t.tag }}
+            {% endfor %}
+          {% else %}
+            No tags
+          {% endif %}
+        </dd>
+
+        <dt>Video origin</dt>
+        <dd>
+          {% if v.source_url %}
+            <a href="{{ v.source_url }}">{{ v.source_url }}</a>
+          {% else %}
+            Unknown
+          {% endif %}
+        </dd>
+
+        <dt>Copyright</dt>
+        <dd>
+          {% if v.copyright_text %}
+            {{ v.copyright_text }}
+          {% elif v.source_url %}
+            See <a href="{{ v.source_url }}">{{ v.source_url }}</a>
+            for copyright information.
+          {% else %}
+            Unknown.
+          {% endif %}
+        </dd>
+
+        {% if v.updated %}
+          <dt>Last updated</dt>
+          <dd>{{ v.updated | datetime }}</dd>
+        {% endif %}
+      </dl>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,61 @@
+{#
+# richard -- video index system
+# Copyright (C) 2012 richard contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-#}
+{% extends "base.html" %}
+{% import "videos/macros.html" as macros %}
+{% block content %}
+<div class="row-fluid">
+  <div class="span12">
+    <form class="well form-search" method="get" action="/search/">
+      <input type="hidden" name="models" value="videos.video">
+      <input type="text" class="input-medium search-query" name="q" value="{{ query }}">
+      <button type="submit" class="btn">Search</button>
+    </form>
+  </div>
+</div>
+
+{% if query %}
+<div class="row-fluid">
+  <div class="span12">
+    <h3>Results</h3>
+  </div>
+</div>
+  {% for result in page.object_list %}
+    {{ macros.video_summary(result.object) }}
+  {% else %}
+    <div class="row-fluid">
+      <div class="span12">
+        No results
+      </div>
+    </div>
+  {% endfor %}
+
+  {% if page.has_previous() or page.has_next() %}
+    <div class="row-fluid">
+      <div class="span12">
+        <div class="section">
+          {% if page.has_previous() %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number() }}">{% endif %}&laquo; Previous{% if page.has_previous() %}</a>{% endif %}
+          |
+          {% if page.has_next() %}<a href="?q={{ query }}&amp;page={{ page.next_page_number() }}">{% endif %}Next &raquo;{% if page.has_next() %}</a>{% endif %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% else %}
+  {# Show some example queries to run, maybe query syntax, something else? #}
+{% endif %}    
+{% endblock %}
