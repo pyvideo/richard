@@ -80,7 +80,7 @@ If you have a tarball::
 If you're cloning from git::
 
     $ cd your_site
-    $ git clone git://path/to/richard
+    $ git clone git://github.com/willkg/richard.git
 
 
 .. Note::
