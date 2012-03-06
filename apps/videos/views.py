@@ -14,6 +14,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import bleach
+
+
 from django.shortcuts import get_object_or_404
 import jingo
 
@@ -75,8 +78,16 @@ def speaker(request, speaker_id, slug=None):
 def video(request, video_id, slug):
     obj = get_object_or_404(models.Video, pk=video_id)
 
+    meta = [
+        ('keywords', ",".join([t.tag for t in obj.tags.all()]))
+        ]
+    if obj.summary:
+        meta.append(('description', 
+                     bleach.clean(obj.summary, tags=[], strip=True)))
+
     ret = jingo.render(
         request, 'videos/video.html',
         {'title': utils.title(obj.title),
+         'meta': meta,
          'v': obj})
     return ret

@@ -4,3 +4,4 @@ MySQL-python
 whoosh
 -e git://github.com/jbalogh/jingo.git#egg=jingo
 -e git://github.com/toastdriven/django-haystack.git@master#egg=django-haystack
+bleach
