@@ -44,6 +44,9 @@ Documentation:
     Documentation is in the ``docs/`` directory including docs for
     installing, upgrading, deploying, contributing, ...
 
+IRC channel:
+    ``richard`` on ``irc.freenode.net``
+
 
 Want to help?
 =============
