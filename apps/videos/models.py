@@ -115,6 +115,11 @@ class Video(models.Model):
     # url for the thumbnail
     thumbnail_url = models.URLField(max_length=255, null=True)
 
+    # TODO: fix this--there should be one duration in seconds and then
+    # each video type should have a filesize
+
+    # TODO: add video_m4v
+
     # these are downloadable urls
     video_ogv_length = models.IntegerField(null=True)
     video_ogv_url = models.URLField(max_length=255, null=True)
