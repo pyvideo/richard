@@ -15,7 +15,8 @@ Administrators guide
    :maxdepth: 2
 
    install
-   deploy
+   upgrade
+   performance
    administration
 
 

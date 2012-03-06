@@ -66,11 +66,9 @@ I suggest something like the following::
 
 To generate that::
 
-    $ mkdir -p your_site \
-          your_site/bin \
-          your_site/templates \
-          your_site/media \
-          your_site/venv
+    $ mkdir your_site
+    $ cd your_site
+    $ mkdir bin templates media venv
 
 If you have a tarball::
 
@@ -98,7 +96,7 @@ in the requirements files provided.
 Using pip, create a virtual environment and install everything into
 it::
 
-    $ pip install -E ./venv/ -r requirements/base.txt
+    $ pip install -E ./venv/ -r richard/requirements/base.txt
 
 
 .. Note::
@@ -159,9 +157,23 @@ Make sure to set a ``SECRET_KEY``::
 .. todo:: template for production deployments
 
 
-Upgrading
+Setting up your server
+======================
+
+Apache and mod_wsgi
+-------------------
+
+http://code.google.com/p/modwsgi/wiki/IntegrationWithDjango
+
+A sample ``.wsgi`` file is in ``richard/`` in the repository.
+
+
+Your favorite server combo here!
+--------------------------------
+
+
+Templates
 =========
 
-This is a stub.
+.. todo:: write up instructions for templates
 
-.. todo:: write upgrade documentation
