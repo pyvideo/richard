@@ -18,6 +18,7 @@ from django.shortcuts import get_object_or_404
 import jingo
 
 
+from richard import utils
 from videos import models
 
 
@@ -26,7 +27,7 @@ def category_list(request):
 
     ret = jingo.render(
         request, 'videos/category_list.html',
-        {'title': 'Category List',
+        {'title': utils.title(u'Categories'),
          'kinds': models.Category.KIND_CHOICES,
          'categories': categories})
     return ret
@@ -37,7 +38,8 @@ def category(request, category_id, slug):
 
     ret = jingo.render(
         request, 'videos/category.html',
-        {'category': obj})
+        {'title': utils.title(obj.title),
+         'category': obj})
     return ret
 
 
@@ -54,7 +56,8 @@ def speaker_list(request):
 
     ret = jingo.render(
         request, 'videos/speaker_list.html',
-        {'active_c': c,
+        {'title': utils.title(u'Speakers'),
+         'active_c': c,
          'speakers': speakers})
     return ret
 
@@ -64,7 +67,8 @@ def speaker(request, speaker_id, slug=None):
 
     ret = jingo.render(
         request, 'videos/speaker.html',
-        {'speaker': obj})
+        {'title': utils.title(obj.name),
+         'speaker': obj})
     return ret
 
 
@@ -73,6 +77,6 @@ def video(request, video_id, slug):
 
     ret = jingo.render(
         request, 'videos/video.html',
-        {'v': obj})
+        {'title': utils.title(obj.title),
+         'v': obj})
     return ret
-    

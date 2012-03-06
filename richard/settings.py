@@ -25,6 +25,9 @@ ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 
+# Title of your site here
+SITE_TITLE = u'richard'
+
 MANAGERS = ADMINS
 
 DATABASES = {

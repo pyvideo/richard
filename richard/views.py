@@ -14,9 +14,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from django.conf import settings
+import jingo
+
+
 from videos.models import Category
 from sitenews.models import SiteNews
-import jingo
 
 
 def home(request):
@@ -28,7 +31,8 @@ def home(request):
 
     ret = jingo.render(
         request, 'home.html',
-        {'events': event_list,
+        {'title': settings.SITE_TITLE,
+         'events': event_list,
          'pugs': pug_list,
          'news': news_list})
     return ret

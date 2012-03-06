@@ -18,6 +18,7 @@ from django.shortcuts import get_object_or_404
 import jingo
 
 from sitenews import models
+from richard import utils
 
 
 def get_years():
@@ -30,7 +31,7 @@ def news_list(request):
 
     ret = jingo.render(
         request, 'sitenews/news_list.html',
-        {'title': 'News List',
+        {'title': utils.title(u'News'),
          'items': items,
          'archives': get_years()})
     return ret
@@ -41,7 +42,8 @@ def news(request, news_id, slug):
 
     ret = jingo.render(
         request, 'sitenews/news.html',
-        {'item': item,
+        {'title': utils.title(u'News: %s' % item.title),
+         'item': item,
          'archives': get_years()})
     return ret
 
@@ -52,7 +54,7 @@ def news_archive_year(request, year):
 
     ret = jingo.render(
         request, 'sitenews/news_list.html',
-        {'title': 'News List - %s' % year,
+        {'title': utils.title(u'News: %s' % year),
          'items': items,
          'archives': get_years(),
          'activeyear': year})
