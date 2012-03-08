@@ -1,5 +1,6 @@
 -r ./base.txt
 
+nose
 django-nose
 Pygments
 sphinx

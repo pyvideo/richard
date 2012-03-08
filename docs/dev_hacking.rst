@@ -55,17 +55,12 @@ in the requirements files provided.
 Using pip, create a virtual environment and install everything into
 it::
 
-    $ pip install -E ./venv/ -r requirements/base.txt
-
-(Optional) If you plan on doing development work, running tests,
-building documentation or something along those lines, then do::
-
     $ pip install -E ./venv/ -r requirements/development.txt
 
 .. Note::
 
    This created a virtual environment. You'll need to use that virtual
-   environment to run Richard. To activate the virtual environment, do::
+   environment to run richard. To activate the virtual environment, do::
 
        $ . ./venv/bin/activate
 
@@ -83,10 +78,9 @@ For example, to create a database named ``richard`` with a user named
     mysql> GRANT ALL ON richard.* TO richard@localhost IDENTIFIED BY
         'password';
 
-(Optional) If you're a developer and plan to run the test suite,
-you'll also need to add permissions to the test database. The test
-database has the same name as the database prepended with ``test_``.
-For example::
+The test suite uses a separate database that has the same name as the
+database prepended with ``test_``. You need to give your user access to
+that, too. For example::
 
     $ mysql -u root -p
     mysql> GRANT ALL ON test_richard.* TO richard@localhost IDENTIFIED
@@ -134,6 +128,16 @@ Make sure to set a ``SECRET_KEY``::
     # Make this unique, and don't share it with anybody.
     SECRET_KEY = 'long secret key'
 
-.. todo:: create admin user
-
 .. todo:: list configuration settings that should be in settings_local.py
+
+
+Creating tables
+===============
+
+After doing the configuration, you need to build the database tables. Run::
+
+    $ ./manage.py syncdb
+
+After creating the tables, Django will ask you if you want to create a superuser.
+Do that now. That's the account you'll use for the admin.
+
