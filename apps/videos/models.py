@@ -21,29 +21,39 @@ from django.template.defaultfilters import slugify
 USE_HTML_HELP_TEXT = "Use HTML."
 
 
+class CategoryKind(models.Model):
+    name = models.CharField(max_length=40)
+
+
 class Category(models.Model):
-    KIND_CONFERENCE = 1
-    KIND_PUG = 2
+    kind = models.ForeignKey(CategoryKind)
 
-    KIND_CHOICES = (
-        (KIND_CONFERENCE, u'Conference'),
-        (KIND_PUG, u'Python User Group'),
-        )
+    name = models.CharField(
+        max_length=255,
+        help_text='The name of the category. e.g. PyCon')
 
-    kind = models.IntegerField(choices=KIND_CHOICES)
+    title = models.CharField(
+        max_length=255,
+        help_text='The complete title for the category. e.g. '
+        'PyCon 2010')
+    description = models.TextField(
+        blank=True, default=u'',
+        help_text=USE_HTML_HELP_TEXT)
+    url = models.URLField(
+        blank=True, default=u'',
+        help_text='URL for the category. e.g. If this category was a '
+        'conference, this would be the url for the conference '
+        'web-site.')
+    start_date = models.DateField(
+        null=True,
+        help_text='If the category was an event, then this is the start '
+        'date for the event.')
 
-    # e.g. 'PyCon', 'ChiPy', ...
-    name = models.CharField(max_length=255)
+    whiteboard = models.TextField(
+        blank=True, default=u'',
+        help_text='Editor notes for this category.')
 
-    # e.g. 'PyCon 2010', 'ChiPy', ...
-    title = models.CharField(max_length=255)
-
-    description = models.TextField(blank=True, default=u'',
-                                   help_text=USE_HTML_HELP_TEXT)
-    url = models.URLField(blank=True, default=u'')
     slug = models.SlugField(unique=True)
-    notes = models.TextField(blank=True, default=u'')
-    start_date = models.DateField(null=True)
 
     def __unicode__(self):
         return '<Category %s>' % self.title

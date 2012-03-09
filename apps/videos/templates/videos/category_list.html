@@ -19,10 +19,10 @@
 {% block content %}
 <div class="row-fluid">
   <div class="span12">
-    {% for kind, kind_name in kinds %}
-      <h2>{{ kind_name }}</h2>
+    {% for kind in kinds %}
+      <h2>{{ kind.name }}</h2>
       <ul>
-        {% for cat in categories %}
+        {% for cat in kind.category_set.all() %}
           {% if cat.kind == kind %}
             <li><a href="{{ cat.get_absolute_url() }}">{{ cat.title }}</a></li>
           {% endif %}

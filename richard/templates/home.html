@@ -36,23 +36,17 @@
 <div class="row-fluid">
   <div class="span4">
     <h2>Categories</h2>
-    <dl>
-      <dt>Conferences</dt>
       <dd>
-        <ul>
-          {% for ev in events %}
-            <li><a href="{{ ev.get_absolute_url() }}">{{ ev.title }}</a></li>
-          {% endfor %}
-        </ul>
-      </dd>
-
-      <dt>User Groups</dt>
-      <dd>
-        <ul>
-          {% for ev in pugs %}
-            <li><a href="{{ ev.get_absolute_url() }}">{{ ev.title }}</a></li>
-          {% endfor %}
-        </ul>
+        {% for kind in kinds %}
+          <dt>{{ kind.name }}</dt>
+          <dd>
+            <ul>
+              {% for cat in kind.category_set.all() %}
+                <li><a href="{{ cat.get_absolute_url() }}">{{ cat.title }}</a></li>
+              {% endfor %}
+            </ul>
+          </dd>
+        {% endfor %}
       </dd>
     </dl>
   </div>

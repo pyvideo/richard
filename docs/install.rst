@@ -117,6 +117,7 @@ For example, to create a database named ``richard`` with a user named
 
     $ mysql -u root -p
     mysql> CREATE DATABASE richard;
+    mysql> CREATE USER richard@localhost IDENTIFIED BY 'password';
     mysql> GRANT ALL ON richard.* TO richard@localhost IDENTIFIED BY
         'password';
 
@@ -157,6 +158,14 @@ Make sure to set a ``SECRET_KEY``::
 .. todo:: template for production deployments
 
 
+Setting up sample data (optional)
+=================================
+
+If you want to set up some initial data, do::
+
+    ./manage.py loaddata sample_data.json
+
+
 Setting up your server
 ======================
 
@@ -168,8 +177,18 @@ http://code.google.com/p/modwsgi/wiki/IntegrationWithDjango
 A sample ``.wsgi`` file is in ``richard/`` in the repository.
 
 
+Nginx and gunicorn
+------------------
+
+Create a file ``/etc/nginx/sites-available/your-site``::
+
+.. todo:: finish writing this
+
+
 Your favorite server combo here!
 --------------------------------
+
+Here!
 
 
 Templates

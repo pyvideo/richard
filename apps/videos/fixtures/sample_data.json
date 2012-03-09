@@ -1,0 +1,70 @@
+[
+  {
+    "model": "videos.CategoryKind",
+    "pk": 1,
+    "fields": {
+      "name": "Conference"
+    }
+  },
+  {
+    "model": "videos.Category",
+    "pk": 1,
+    "fields": {
+      "kind": 1,
+      "name": "PyCon",
+      "title": "PyCon 2011",
+      "description": "PyCon 2011 in Atlanta, GA",
+      "url": "http://us.pycon.org/2011/home/",
+      "slug": "pycon-2011"
+    }
+  },
+  {
+    "pk": 1,
+    "model": "videos.Speaker",
+    "fields": {
+      "name": "Jacob Kaplan-Moss",
+      "slug": "jacob-kaplan-moss"
+    }
+  },
+  {
+    "pk": 1,
+    "model": "videos.Tag", 
+    "fields": {
+      "tag": "documentation"
+    }
+  }, 
+  {
+    "pk": 2,
+    "model": "videos.Tag",
+    "fields": {
+      "tag": "sphinx"
+    }
+  },
+  {
+    "model": "videos.Video", 
+    "pk": 1,
+    "fields": {
+      "category": 1,
+      "speakers": [
+        1
+      ], 
+      "added": "2012-02-22 22:20",
+      "title": "Writing great documentation", 
+      "summary": "<p>Writing great documentation</p>\n<p>Presented by Jacob Kaplan-Moss</p>\n<p>\nDjango\u2019s among the best documented open source projects; I'm intensely proud of that accomplishment. If any part of Django endures, I hope it\u2019ll be a \u201cdocumentation culture\u201d \u2014 an ethos that values great, well-written documentation. To that end, this talk looks at the tools, tips, and techniques I\u2019ve learned over the years. I hope it helps you write great documentation, too.\n</p>",
+      "description": "<p>\nThis talk looks at tips, tools, and techniques you can use to produce great technical documentation.\n</p>\n<p>\nIt's split roughly into two parts:\n</p>\n<ul>\n<li>Part 1: technique. We'll look at the structural elements that make documentation useful: tutorials, high-level overviews, topical guides, reference material, FAQs, and more. We'll cover some tips on how to get documentation done, and community processes for handling documentation in teams (open or not). We'll also talk about what I'm calling \"Documentation Driven Development\" - a technique riffing off Test Driven Development that calls for writing documentation before code.\n\n</li><li>Part 2: tools. Over the last couple of years a few fantastic tools have sprung up that ease the technical aspects of writing documentation. We'll talk about which tools are suitable for which uses, and look at a handful of cool tools including <a href=\"http://sphinx.pocoo.org/\">Sphinx</a>, <a href=\"http://epydoc.sourceforge.net/\">Epydoc</a>, and <a href=\"http://fitzgen.github.com/pycco/\">http://fitzgen.github.com/pycco/</a>.\n</li></ul>\n<p>\nThis talk is mostly targeted towards those documenting libraries or frameworks intended for use by other developers, but much of it probably applies to any sort of technical documentation.\n</p>", 
+      "copyright_text": "Creative Commons Attribution-NonCommercial-ShareAlike 3.0", 
+      "tags": [
+        1,
+        2
+      ], 
+      "recorded": "2011-03-11", 
+      "updated": "2011-03-14T03:47:59+00:00", 
+      "source_url": "http://blip.tv/file/4881071", 
+      "video_mp4_url": "http://blip.tv/file/get/Pycon-PyCon2011WritingGreatDocumentation191.mp4", 
+      "video_ogv_length": "158578172", 
+      "video_ogv_url": "http://blip.tv/file/get/Pycon-PyCon2011WritingGreatDocumentation312.ogv",
+      "thumbnail_url": "http://a.images.blip.tv/Pycon-PyCon2011WritingGreatDocumentation902.png", 
+      "slug": "pycon-2011-writing-great-documentation"
+    }
+  } 
+]

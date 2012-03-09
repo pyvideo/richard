@@ -26,13 +26,12 @@ from videos import models
 
 
 def category_list(request):
-    categories = models.Category.objects.all()
+    category_kinds = models.CategoryKind.objects.all()
 
     ret = jingo.render(
         request, 'videos/category_list.html',
         {'title': utils.title(u'Categories'),
-         'kinds': models.Category.KIND_CHOICES,
-         'categories': categories})
+         'kinds': category_kinds})
     return ret
 
 

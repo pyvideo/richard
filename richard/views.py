@@ -18,21 +18,17 @@ from django.conf import settings
 import jingo
 
 
-from videos.models import Category
+from videos.models import CategoryKind
 from sitenews.models import SiteNews
 
 
 def home(request):
-    event_list = (Category.objects
-                  .filter(kind=Category.KIND_CONFERENCE)
-                  .order_by('start_date'))
-    pug_list = Category.objects.filter(kind=Category.KIND_PUG)
+    category_list = CategoryKind.objects.all()
     news_list = SiteNews.objects.all()[:5]
 
     ret = jingo.render(
         request, 'home.html',
         {'title': settings.SITE_TITLE,
-         'events': event_list,
-         'pugs': pug_list,
+         'kinds': category_list,
          'news': news_list})
     return ret
