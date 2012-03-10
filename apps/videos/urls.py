@@ -62,4 +62,8 @@ urlpatterns = patterns(
             template='videos/search.html',
             form_class=ModelSearchForm),
         name='haystack_search'),
+
+    # faux api
+    url(r'^api/1.0/videos/urlforsource$',
+        'apiurlforsource', name='apiurlforsource'),
 )

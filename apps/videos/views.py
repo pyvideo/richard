@@ -17,7 +17,9 @@
 import bleach
 
 
+from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
+from django.core import serializers
 import jingo
 
 
@@ -90,3 +92,20 @@ def video(request, video_id, slug):
          'meta': meta,
          'v': obj})
     return ret
+
+
+# TODO: Move this elsewhere
+
+class JSONResponse(HttpResponse):
+     def __init__(self, content):
+         super(JSONResponse, self).__init__(
+             content, mimetype='application/json')
+
+
+def apiurlforsource(request):
+    host_url = request.GET.get('host_url')
+    if not host_url:
+        raise Http404
+
+    obj = get_object_or_404(models.Video, source_url=host_url)
+    return JSONResponse('{"source_url": "http://pyvideo.org%s"}' % obj.get_absolute_url())
