@@ -1,6 +1,6 @@
 -r ./base.txt
 
 nose
-django-nose
+-e git://github.com/jbalogh/django-nose.git#egg=django-nose
 Pygments
 sphinx

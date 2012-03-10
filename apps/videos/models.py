@@ -31,7 +31,6 @@ class Category(models.Model):
     name = models.CharField(
         max_length=255,
         help_text='The name of the category. e.g. PyCon')
-
     title = models.CharField(
         max_length=255,
         help_text='The complete title for the category. e.g. '
@@ -100,6 +99,8 @@ class Video(models.Model):
         (STATE_DRAFT, u'Draft'),
         )
 
+    # TODO: this shouldn't default to null--this should default to
+    # draft
     state = models.IntegerField(choices=STATE_CHOICES, null=True)
 
     title = models.CharField(max_length=255)
@@ -171,6 +172,7 @@ class Video(models.Model):
         super(Video, self).save()
 
 
+
 class RelatedUrl(models.Model):
     video = models.ForeignKey(Video, related_name='related_urls')
     url = models.URLField(max_length=255)
@@ -178,3 +180,72 @@ class RelatedUrl(models.Model):
 
     def __unicode__(self):
         return '<URL %s>' % self.url
+
+
+def create_speakers(speakers):
+    ret = []
+        
+    for name in speakers:
+        try:
+            s = Speaker.objects.get(name=name)
+            ret.append(s)
+        except Speaker.DoesNotExist:
+            s = Speaker(name=name, slug=slugify(name))
+            s.save()
+            ret.append(s)
+    return ret
+
+
+def create_tags(tags):
+    ret = []
+
+    for tag in tags:
+        try:
+            t = Tag.objects.get(tag=tag)
+            ret.append(t)
+        except Tag.DoesNotExist:
+            t = Tag(tag=tag)
+            t.save()
+            ret.append(t)
+    return ret
+
+class BadVideoError(Exception):
+    pass
+
+
+def create_videos(data):
+    created = []
+    for mem in data:
+        if not 'source_url' in mem:
+            raise BadVideoError('missing source_url')
+
+        try:
+            v = Video.objects.get(source_url=mem['source_url'])
+            continue
+
+        except Video.DoesNotExist:
+            # Fix category
+            cat = Category.objects.get(pk=mem['category'])
+            mem['category'] = cat
+
+            # Take out speakers and tags
+            speakers = mem.get('speakers', [])
+            tags = mem.get('tags', [])
+            
+            for badthing in ('tags', 'speakers'):
+                if badthing in mem:
+                    del mem[badthing]
+
+            v = Video(**mem)
+            v.save()
+
+            # Add speakers and tags
+            for s in create_speakers(speakers):
+                v.speakers.add(s)
+            for t in create_tags(tags):
+                v.tags.add(t)
+
+            v.save()
+            created.append(v)
+    return created
+
