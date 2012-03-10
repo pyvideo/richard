@@ -118,6 +118,7 @@ class Video(models.Model):
 
     # text for copyright/license--for now it's loose form.
     # if null, use source video link.
+    # TODO: rename this to license
     copyright_text = models.TextField(null=True)
 
     # embed for flash player things
@@ -168,7 +169,7 @@ class Video(models.Model):
         return ('video', (self.pk, self.slug))
 
     def save(self):
-        self.slug = slugify(self.title)
+        self.slug = slugify(self.title[:49])
         super(Video, self).save()
 
 
@@ -184,8 +185,9 @@ class RelatedUrl(models.Model):
 
 def create_speakers(speakers):
     ret = []
-        
+
     for name in speakers:
+        name = name.strip()
         try:
             s = Speaker.objects.get(name=name)
             ret.append(s)
@@ -200,6 +202,7 @@ def create_tags(tags):
     ret = []
 
     for tag in tags:
+        tag = tag.strip()
         try:
             t = Tag.objects.get(tag=tag)
             ret.append(t)
@@ -228,10 +231,14 @@ def create_videos(data):
             cat = Category.objects.get(pk=mem['category'])
             mem['category'] = cat
 
+            # TODO: convert dates from strings here
+
+            # TODO: switch to use .pop()
+
             # Take out speakers and tags
             speakers = mem.get('speakers', [])
             tags = mem.get('tags', [])
-            
+
             for badthing in ('tags', 'speakers'):
                 if badthing in mem:
                     del mem[badthing]
