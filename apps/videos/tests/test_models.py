@@ -14,8 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from django.test import TestCase
 from nose.tools import eq_
-from unittest import TestCase
 from videos.tests import category_kind, category, tag, speaker, video
 from videos.models import create_videos
 
@@ -40,15 +40,15 @@ class TestCreatevideo(TestCase):
         eq_(ret[0].title, vid['title'])
 
     def test_video_with_speakers(self):
-        cat = category(name=u'foo2', slug=u'foo2')
+        cat = category(name=u'foo', slug=u'foo')
         cat.save()
 
         speaker_names = [u'Carl Karsten', u'Ryan Verner']
         vid = {
             'state': 1,
-            'title': u'foo2',
-            'summary': u'foo2',
-            'source_url': u'http://example.com/2',
+            'title': u'foo',
+            'summary': u'foo',
+            'source_url': u'http://example.com/',
             'category': cat.id,
             'speakers': speaker_names}
         ret = create_videos([vid])
@@ -60,30 +60,30 @@ class TestCreatevideo(TestCase):
         assert speakers[0].name != speakers[1].name
 
     def test_with_existing_speaker(self):
-        arnold = speaker(name=u'Arnold')
-        arnold.save()
-        speaker_names = [arnold.name, u'Phil']
+        carl = speaker(name=u'Carl Karsten')
+        carl.save()
+        speaker_names = [carl.name, u'Phil']
 
-        cat = category(name=u'foo3', slug=u'foo3')
+        cat = category(name=u'foo', slug=u'foo')
         cat.save()
 
         vid = {
             'state': 1,
-            'title': u'foo3',
-            'summary': u'foo3',
-            'source_url': u'http://example.com/3',
+            'title': u'foo',
+            'summary': u'foo',
+            'source_url': u'http://example.com/',
             'category': cat.id,
             'speakers': speaker_names}
         ret = create_videos([vid])
 
         eq_(ret[0].title, vid['title'])
         speakers = ret[0].speakers.order_by('name')[:]
-        eq_(speakers[0].name, arnold.name)
-        eq_(speakers[0].id, arnold.id)
-        eq_(speakers[1].name, u'Phil')
+        eq_(speakers[0].name, carl.name)
+        eq_(speakers[0].id, carl.id)
+        eq_(speakers[1].name, speaker_names[1])
 
     def test_video_with_tags(self):
-        cat = category(name=u'foo4', slug=u'foo4')
+        cat = category(name=u'foo', slug=u'foo')
         cat.save()
 
         t1 = tag(tag=u'tag1')
@@ -91,9 +91,9 @@ class TestCreatevideo(TestCase):
         tag_names = [t1.tag, u'tag2']
         vid = {
             'state': 1,
-            'title': u'foo4',
-            'summary': u'foo4',
-            'source_url': u'http://example.com/4',
+            'title': u'foo',
+            'summary': u'foo',
+            'source_url': u'http://example.com/',
             'category': cat.id,
             'tags': tag_names}
         ret = create_videos([vid])
@@ -102,4 +102,4 @@ class TestCreatevideo(TestCase):
         tags = ret[0].tags.order_by('tag')
         eq_(tags[0].tag, t1.tag)
         eq_(tags[0].id, t1.id)
-        eq_(tags[1].tag, u'tag2')
+        eq_(tags[1].tag, tag_names[1])
