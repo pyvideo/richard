@@ -16,27 +16,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#}
 {% extends "base.html" %}
+{% import "videos/video_display.html" as videodisplay with context %}
 {% block content %}
 
 <div class="row-fluid">
   <div id="videobox" class="span8">
-    <div class="videobox-inner">
-      {% if v.embed %}
-        {{ v.embed|safe }}
-      {% else %}
-        <video id="{{ v.slug }}">
-          {% if v.video_ogv_url %}
-            <source src="{{ v.video_ogv_url }}" type="video/ogv">
-          {% endif %}
-          {% if v.video_mp4_url %}
-            <source src="{{ v.video_mp4_url }}" type="video/mp4">
-          {% endif %}
-          {% if v.video_webm_url %}
-            <source src="{{ v.video_webm_url }}" type="video/webm">
-          {% endif %}
-        </video>
-      {% endif %}
-    </div>
+    {{ videodisplay.display(v) }}
 
     {% if v.summary %}
       <div class="section">

@@ -1,0 +1,46 @@
+{#
+# richard -- video index system
+# Copyright (C) 2012 richard contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-#}
+{% macro display(v) -%}
+  <div class="videobox-inner">
+    {% if 'youtube' in v.source_url %}
+      <script type="text/javascript" src="http://s3.www.universalsubtitles.org/embed.js">
+        ({
+          video_url: "{{ v.source_url }}",
+          video_config: {
+            width: 640,
+            height: 480
+          }
+        })
+      </script>
+    {% elif v.embed %}
+      {{ v.embed|safe }}
+    {% else %}
+      <video id="{{ v.slug }}">
+        {% if v.video_ogv_url %}
+          <source src="{{ v.video_ogv_url }}" type="video/ogv">
+        {% endif %}
+        {% if v.video_mp4_url %}
+          <source src="{{ v.video_mp4_url }}" type="video/mp4">
+        {% endif %}
+        {% if v.video_webm_url %}
+          <source src="{{ v.video_webm_url }}" type="video/webm">
+        {% endif %}
+      </video>
+    {% endif %}
+  </div>
+{% endmacro %}
