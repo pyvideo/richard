@@ -44,6 +44,8 @@ Documentation:
     Documentation is in the ``docs/`` directory including docs for
     installing, upgrading, deploying, contributing, ...
 
+    Also at: http://richard.readthedocs.org/
+
 IRC channel:
     ``richard`` on ``irc.freenode.net``
 
