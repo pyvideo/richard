@@ -20,7 +20,7 @@
   <ul class="nav nav-list">
     <li class="nav-header">Archives</li>
     {% for year in archives %}
-      <li class="{{ 'active' if year == activeyear }}"><a href="{{ url('news_archive_year', year=year) }}">{{ year }}</a></li>
+      <li class="{{ 'active' if year == activeyear }}"><a href="{{ url('sitenews-archive-year', year=year) }}">{{ year }}</a></li>
     {% endfor %}
   </ul>
 </div>

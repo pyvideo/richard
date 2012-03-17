@@ -22,13 +22,13 @@ urlpatterns = patterns(
 
     # news item
     url(r'entry/(?P<news_id>[0-9]+)/(?P<slug>[\w-]*)/?$',
-        'news', name='news'),
+        'news', name='sitenews-news'),
 
     # news archive for a year
     url(r'archives/(?P<year>[0-9]{4})/?$',
-        'news_archive_year', name='news_archive_year'),
+        'news_archive_year', name='sitenews-archive-year'),
 
     # news listing
     url(r'/?$',
-        'news_list', name='news_list'),
+        'news_list', name='sitenews-list'),
 )

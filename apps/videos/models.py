@@ -62,7 +62,7 @@ class Category(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('category', (self.pk, self.slug))
+        return ('videos-category', (self.pk, self.slug))
 
 
 class Speaker(models.Model):
@@ -77,7 +77,7 @@ class Speaker(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('speaker', (self.pk, self.slug))
+        return ('videos-speaker', (self.pk, self.slug))
 
 
 class Tag(models.Model):
@@ -166,7 +166,7 @@ class Video(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('video', (self.pk, self.slug))
+        return ('videos-video', (self.pk, self.slug))
 
     def save(self):
         self.slug = slugify(self.title[:49])

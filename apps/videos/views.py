@@ -19,7 +19,6 @@ import bleach
 
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
-from django.core import serializers
 import jingo
 
 
@@ -61,7 +60,7 @@ def speaker_list(request):
     ret = jingo.render(
         request, 'videos/speaker_list.html',
         {'title': utils.title(u'Speakers'),
-         'active_c': c,
+         'active_char': c,
          'speakers': speakers})
     return ret
 

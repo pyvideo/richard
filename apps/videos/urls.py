@@ -39,21 +39,21 @@ urlpatterns = patterns(
 
     # categories
     url(r'category/?$',
-        'category_list', name='category_list'),
+        'category_list', name='videos-category-list'),
     url(r'category/(?P<category_id>[0-9]+)/(?P<slug>[\w-]*)/?$',
-        'category', name='category'),
+        'category', name='videos-category'),
 
     # speakers
     url(r'speaker/$',
-        'speaker_list', name='speaker_list'),
+        'speaker_list', name='videos-speaker-list'),
     url(r'speaker/(?P<speaker_id>[0-9]+)/?$',
-        'speaker', name='speaker_no_slug'),
+        'speaker', name='videos-speaker-noslug'),
     url(r'speaker/(?P<speaker_id>[0-9]+)/(?P<slug>[\w-]*)/?$',
-        'speaker', name='speaker'),
+        'speaker', name='videos-speaker'),
 
     # videos
     url(r'video/(?P<video_id>[0-9]+)/(?P<slug>[\w-]*)/?$',
-        'video', name='video'),
+        'video', name='videos-video'),
 
     # search
     url(r'^search/?$',
@@ -61,9 +61,9 @@ urlpatterns = patterns(
             view_class=TitledSearchView,
             template='videos/search.html',
             form_class=ModelSearchForm),
-        name='haystack_search'),
+        name='haystack-search'),
 
-    # faux api
+    # faux api for carl
     url(r'^api/1.0/videos/urlforsource$',
-        'apiurlforsource', name='apiurlforsource'),
+        'apiurlforsource', name='videos-api-urlforsource'),
 )

@@ -20,5 +20,5 @@ from django.conf.urls.defaults import patterns, url
 urlpatterns = patterns(
     'pages.views',
 
-    url(r'(?P<page>[\w-]+)/?$', 'pages_view', name='pages_view'),
+    url(r'(?P<page>[\w-]+)/?$', 'pages_view', name='pages-page'),
     )

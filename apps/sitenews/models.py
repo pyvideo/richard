@@ -41,7 +41,7 @@ class SiteNews(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('news', (self.pk, self.slug))
+        return ('sitenews-news', (self.pk, self.slug))
 
     def __unicode__(self):
         return '<SiteNews: %s>' % self.title

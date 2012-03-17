@@ -35,16 +35,16 @@
       <div class="container">
         <a class="brand" href="{{ url('home') }}">{{ settings.SITE_TITLE }}</a>
         <ul class="nav nav-pills">
-          <li><a href="{{ url('category_list') }}">Categories</a></li>
-          <li><a href="{{ url('speaker_list') }}">Speakers</a></li>
+          <li><a href="{{ url('videos-category-list') }}">Categories</a></li>
+          <li><a href="{{ url('videos-speaker-list') }}">Speakers</a></li>
 
-          <li><a href="{{ url('haystack_search') }}">Search</a></li>
+          <li><a href="{{ url('haystack-search') }}">Search</a></li>
         </ul>
 
         <ul class="nav nav-pills pull-right">
-          <li><a href="{{ url('news_list') }}">News</a></li>
-          <li><a href="{{ url('pages_view', page='about') }}">About</a></li>
-          <li><a href="{{ url('pages_view', page='contact') }}">Contact</a></li>
+          <li><a href="{{ url('sitenews-list') }}">News</a></li>
+          <li><a href="{{ url('pages-page', page='about') }}">About</a></li>
+          <li><a href="{{ url('pages-page', page='contact') }}">Contact</a></li>
         </ul>
       </div>
     </div>
@@ -57,8 +57,8 @@
     {% block content %}{% endblock %}
 
     <div id="footer">
-      This site is powered
-      by <a href="http://github.com/willkg/richard">richard</a>.
+      This site is powered by
+      <a href="http://github.com/willkg/richard">richard</a>.
     </div>
   </div>
 </body>

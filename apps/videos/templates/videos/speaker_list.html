@@ -23,7 +23,7 @@
     <div class="pagination">
       <ul>
         {% for c in 'abcdefghijklmnopqrstuvwxyz' %}
-          <li class="{{ 'active' if c == active_c }}"><a href="{{ url('speaker_list') }}?character={{ c }}">{{ c.upper() }}</a></li>
+          <li class="{{ 'active' if c == active_c }}"><a href="{{ url('videos-speaker-list') }}?character={{ c }}">{{ c.upper() }}</a></li>
         {% endfor %}
       </ul>
     </div>
