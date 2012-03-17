@@ -20,13 +20,21 @@
 <div class="row-fluid">
   <div class="span12">
     <h1>List of speakers</h1>
-    <div class="pagination">
-      <ul>
-        {% for c in 'abcdefghijklmnopqrstuvwxyz' %}
-          <li class="{{ 'active' if c == active_c }}"><a href="{{ url('videos-speaker-list') }}?character={{ c }}">{{ c.upper() }}</a></li>
+  </div>
+</div>
+<div class="row-fluid">
+  <div class="span12">
+    <div class="btn-toolbar">
+      <div class="btn-group">
+        {% for c in chars %}
+        <a class="btn{{ ' btn-primary' if c == active_char }}" href="{{ url('videos-speaker-list') }}?character={{ c }}">{{ c.upper() }}</a>
         {% endfor %}
-      </ul>
+      </div>
     </div>
+  </div>
+</div>
+<div class="row-fluid">
+  <div class="span12">
     <ul>
       {% for s in speakers %}
         <li><a href="{{ s.get_absolute_url() }}">{{ s.name }}</a>

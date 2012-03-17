@@ -47,19 +47,24 @@ def category(request, category_id, slug):
 
 
 def speaker_list(request):
+    # TODO: Should cache this--no need to look it up every time.
+    qs = models.Speaker.objects.values_list('name', flat=True)
+    chars = list(set(sname[0].lower() for sname in qs))
+    chars.sort()
+
     c = request.GET.get('character', 'a')
     try:
-        if c not in 'abcdefghijklmnopqrstuvwxyz':
-            c = 'a'
+        if len(c) != 1 or c not in chars:
+            c = chars[0]
     except TypeError:
-        c = 'a'
+        c = chars[0]
 
-    # TODO: build list of "empty characters"
     speakers = models.Speaker.objects.filter(name__istartswith=c)
 
     ret = jingo.render(
         request, 'videos/speaker_list.html',
         {'title': utils.title(u'Speakers'),
+         'chars': chars,
          'active_char': c,
          'speakers': speakers})
     return ret
