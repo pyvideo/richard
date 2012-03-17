@@ -17,7 +17,7 @@
 -#}
 {% macro display(v) -%}
   <div class="videobox-inner">
-    {% if 'youtube' in v.source_url %}
+    {% if v.source_url and 'youtube' in v.source_url %}
       <script type="text/javascript" src="http://s3.www.universalsubtitles.org/embed.js">
         ({
           video_url: "{{ v.source_url }}",
