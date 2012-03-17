@@ -191,7 +191,7 @@ def create_speakers(speakers):
         try:
             s = Speaker.objects.get(name=name)
             ret.append(s)
-        except Speaker.DoesNotExist:
+        except (Speaker.DoesNotExist, Speaker.MultipleObjectsReturned):
             s = Speaker(name=name, slug=slugify(name))
             s.save()
             ret.append(s)
