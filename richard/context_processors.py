@@ -17,15 +17,10 @@
 from django.conf import settings
 from sitenews import models
 
-import datetime
-
 
 def base(request):
     """Adds basic things to the context"""
-    # TODO: Get this from cache.
-    now = datetime.datetime.now()
-    notifications = models.Notification.objects.filter(
-        start_date__lte=now, end_date__gte=now)
+    notifications = models.Notification.get_live_notifications()
 
     return {
         'settings': settings,

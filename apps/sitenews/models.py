@@ -17,6 +17,8 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 
+import datetime
+
 
 class SiteNews(models.Model):
     """
@@ -68,3 +70,10 @@ class Notification(models.Model):
 
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
+
+    @classmethod
+    def get_live_notifications(cls):
+        # TODO: Get this from cache.
+        now = datetime.datetime.now()
+        return Notification.objects.filter(
+            start_date__lte=now, end_date__gte=now)
