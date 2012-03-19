@@ -37,9 +37,11 @@
         <ul class="nav nav-pills">
           <li><a href="{{ url('videos-category-list') }}">Categories</a></li>
           <li><a href="{{ url('videos-speaker-list') }}">Speakers</a></li>
-
-          <li><a href="{{ url('haystack-search') }}">Search</a></li>
         </ul>
+        <form class="navbar-search pull-left" action="{{ url('haystack-search') }}">
+          <input type="hidden" name="models" value="videos.video">
+          <input type="text" class="search-query span2" name="q" placeholder="Search">
+        </form>
 
         <ul class="nav nav-pills pull-right">
           <li><a href="{{ url('sitenews-list') }}">News</a></li>
