@@ -49,3 +49,22 @@ class SiteNews(models.Model):
     def save(self):
         self.slug = slugify(self.title)
         super(SiteNews, self).save()
+
+
+class Notification(models.Model):
+    """
+    Allows you to add site-wide notifications which appear in a
+    notification bubble at the top of every page.
+    """
+    interjection = models.CharField(
+        max_length=20,
+        help_text=u'Short interjection like "Alert!", "Information!", '
+        '"Warning!", "Heads up!", "Whoops!"')
+
+    text = models.CharField(
+        max_length=200,
+        help_text=u'Use HTML. Keep the text short. Add a link to '
+        'sitenews for more information.')
+
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()

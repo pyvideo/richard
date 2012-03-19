@@ -50,7 +50,21 @@
     </div>
   </div>
 
+
   <div id="content" class="container">
+  {% if notifications -%}
+    <div class="row-fluid">
+      <div class="span12">
+    {% for n in notifications -%}
+      <div class="alert alert-info">
+        <i class="icon-info-sign"></i> <strong>{{ n.interjection }}</strong>
+        {{ n.text|safe }}
+      </div>
+    {%- endfor %}
+      </div>
+    </div>
+  {%- endif %}
+
     {# TODO: messages #}
     {# TODO: breadcrumbs #}
 

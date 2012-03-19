@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.contrib import admin
-from sitenews.models import SiteNews
+from sitenews.models import SiteNews, Notification
 
 
 class SiteNewsAdmin(admin.ModelAdmin):
@@ -23,3 +23,10 @@ class SiteNewsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(SiteNews, SiteNewsAdmin)
+
+
+class NotificationAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(Notification, NotificationAdmin)
