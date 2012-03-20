@@ -53,12 +53,22 @@ class CategoryViewsTest(ViewTestCase):
 
     def test_speaker_list(self):
         """Test the view of the listing of all speakers."""
-        pass
-        #url = reverse('videos-speaker-list')
+        url = reverse('videos-speaker-list')
 
-        # FIXME fails with no speakers in the DB
-        #self.assert_HTTP_200(url)
-        #self.assert_used_templates(url, ["videos/speaker_list.html"])
+        self.assert_HTTP_200(url)
+        self.assert_used_templates(url, ["videos/speaker_list.html"])
+
+    def test_speaker_list_character(self):
+        """
+        Test the view of the listing of all speakers whose names start
+        with certain character.
+        """
+        url = reverse('videos-speaker-list')
+        self.client.get(url, 
+                        {'character': 'r'})
+
+        self.assert_HTTP_200(url)
+        self.assert_used_templates(url, ["videos/speaker_list.html"])
 
     def test_speaker(self):
         """Test the view of a individual speaker."""
