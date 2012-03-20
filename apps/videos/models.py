@@ -14,6 +14,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
+
+from django.conf import settings
 from django.db import models
 from django.template.defaultfilters import slugify
 
@@ -99,6 +102,8 @@ class Video(models.Model):
         (STATE_DRAFT, u'Draft'),
         )
 
+    LOCAL_THUMBNAIL_PATH = 'video/%d.jpg'
+
     # TODO: this shouldn't default to null--this should default to
     # draft
     state = models.IntegerField(choices=STATE_CHOICES, null=True)
@@ -172,6 +177,14 @@ class Video(models.Model):
         self.slug = slugify(self.title[:49])
         super(Video, self).save()
 
+    def get_thumbnail_url(self):
+        """Use a local image if it exists, otherwise fall back to the
+        remote image url."""
+        local_path = self.LOCAL_THUMBNAIL_PATH % self.pk
+        if os.path.exists(os.path.join(settings.MEDIA_ROOT, local_path)):
+            return os.path.join(settings.MEDIA_URL, local_path)
+        else:
+            return self.thumbnail_url
 
 
 class RelatedUrl(models.Model):

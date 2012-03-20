@@ -18,7 +18,7 @@
 {% macro video_summary(v) -%}
   <div class="row-fluid section">
     <div class="span2">
-      <a href="{{ v.get_absolute_url() }}" class="thumbnail"><img src="{% if v.thumbnail_url %}{{ v.thumbnail_url }}{% else %}{{ settings.STATIC_URL }}no_thumbnail.png{% endif %}"></a>
+      <a href="{{ v.get_absolute_url() }}" class="thumbnail"><img src="{% if v.get_thumbnail_url() %}{{ v.get_thumbnail_url() }}{% else %}{{ settings.STATIC_URL }}no_thumbnail.png{% endif %}"></a>
     </div>
 
     <div class="span7">
