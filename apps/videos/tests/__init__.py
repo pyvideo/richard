@@ -14,8 +14,31 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from videos.models import CategoryKind, Category, Speaker, Tag, Video
+from functools import wraps
 from django.template.defaultfilters import slugify
+
+from videos.models import CategoryKind, Category, Speaker, Tag, Video
+
+
+def with_save(func):
+    """
+    Decorates the given modelmaker adding the `save` keyword argument.
+
+    If save is provided and its `True`, the created model will be
+    saved after its creation.
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        save = kwargs.pop('save', False)
+
+        model = func(*args, **kwargs)
+
+        if save:
+            model.save()
+
+        return model
+    
+    return wrapper
 
 
 def category_kind(**kwargs):
@@ -23,31 +46,38 @@ def category_kind(**kwargs):
         'name': 'foo'
         }
     defaults.update(kwargs)
+
     return CategoryKind(**defaults)
 
 
+@with_save
 def category(**kwargs):
     defaults = {
         'name': 'Nameless category',
         'title': 'Nameless category 2012'
         }
     defaults.update(kwargs)
+
     if 'slug' not in defaults:
         defaults['slug'] = slugify(defaults['name'])
     if 'kind' not in defaults:
         ck = category_kind()
         ck.save()
         defaults['kind'] = ck
+
     return Category(**defaults)
 
 
+@with_save
 def speaker(**kwargs):
     defaults = {
         'name': 'Ben Guaraldi'
         }
     defaults.update(kwargs)
+
     if 'slug' not in defaults:
         defaults['slug'] = slugify(defaults['name'])
+
     return Speaker(**defaults)
 
 
@@ -56,16 +86,20 @@ def tag(**kwargs):
         'tag': 'tagless'
         }
     defaults.update(kwargs)
+
     return Tag(**defaults)
 
 
+@with_save
 def video(**kwargs):
     defaults = {
         'title': 'How to build a video index site in 3 weeks',
         }
     defaults.update(kwargs)
+
     if 'category' not in defaults:
         cat = category()
         cat.save()
         defaults['category'] = cat
-    return Video(**kwargs)
+
+    return Video(**defaults)

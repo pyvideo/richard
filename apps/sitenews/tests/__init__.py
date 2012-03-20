@@ -40,6 +40,7 @@ def with_save(func):
     
     return wrapper
 
+
 @with_save
 def sitenews(**kw):
     """Builds a SiteNews object with appropriate defaults"""
