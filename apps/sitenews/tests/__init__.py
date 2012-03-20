@@ -14,16 +14,43 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import datetime
+from datetime import datetime
+from functools import wraps
+
 from sitenews import models
 
 
+def with_save(func):
+    """
+    Decorates the given modelmaker adding the `save` keyword argument.
+
+    If save is provided and its `True`, the created model will be
+    saved after its creation.
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        save = kwargs.pop('save', False)
+
+        model = func(*args, **kwargs)
+
+        if save:
+            model.save()
+
+        return model
+    
+    return wrapper
+
+@with_save
 def sitenews_maker(**kw):
     """Builds a SiteNews object with appropriate defaults"""
     defaults = dict(created=datetime.now(), updated=datetime.now())
     defaults.update(kw)
+
+    if 'title' not in kw:
+        defaults['title'] = u'Title'
     if 'author' not in kw:
         defaults['author'] = u'Joe'
     if 'summary' not in kw:
         defaults['summary'] = u'Summary: ' + defaults['title']
-    return models.SiteNews(**kw)
+
+    return models.SiteNews(**defaults)
