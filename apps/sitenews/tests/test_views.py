@@ -18,7 +18,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase, Client
 from datetime import datetime
 
-from . import sitenews_maker
+from . import sitenews
 
 
 class ViewTestCase(TestCase):
@@ -50,11 +50,17 @@ class ViewTestCase(TestCase):
 class SitenewsViewsTest(ViewTestCase):
     """Tests for the ``sitenews`` apps views."""
 
+    def test_news_list(self):
+        """Test the list of latest news."""
+        url = reverse('sitenews-list')
+
+        self.assert_HTTP_200(url)
+        self.assert_used_templates(url, ["sitenews/news_list.html"])
+
     def test_news(self):
         """Test the view of an individual news view."""
-        news = sitenews_maker(pk=1,
-                              title='Test',
-                              save=True)
+        news = sitenews(title='Test',
+                        save=True)
         url = news.get_absolute_url()
 
         self.assert_HTTP_200(url)
@@ -62,10 +68,8 @@ class SitenewsViewsTest(ViewTestCase):
 
     def test_news_raise_404_when_does_not_exist(self):
         """Test that trying to view a non-existent news raises a 404 error."""
-        news = sitenews_maker(pk=2,
-                              title='Test',
-                              save=False)
-        url = news.get_absolute_url()
+        url = reverse('sitenews-news',
+                      args=(1234, 'random-slug'))
 
         self.assert_HTTP_404(url)
 
@@ -73,13 +77,6 @@ class SitenewsViewsTest(ViewTestCase):
         """Test the view of current year's archive."""
         url = reverse('sitenews-archive-year', 
                       kwargs={'year': datetime.now().year})
-
-        self.assert_HTTP_200(url)
-        self.assert_used_templates(url, ["sitenews/news_list.html"])
-
-    def test_news_list(self):
-        """Test the list of latest news."""
-        url = reverse('sitenews-list')
 
         self.assert_HTTP_200(url)
         self.assert_used_templates(url, ["sitenews/news_list.html"])

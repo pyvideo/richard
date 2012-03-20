@@ -41,7 +41,7 @@ def with_save(func):
     return wrapper
 
 @with_save
-def sitenews_maker(**kw):
+def sitenews(**kw):
     """Builds a SiteNews object with appropriate defaults"""
     defaults = dict(created=datetime.now(), updated=datetime.now())
     defaults.update(kw)
