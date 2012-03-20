@@ -40,7 +40,7 @@
         </ul>
         <form class="navbar-search pull-left" action="{{ url('haystack-search') }}">
           <input type="hidden" name="models" value="videos.video">
-          <input type="text" class="search-query span2" name="q" placeholder="Search">
+          <input type="text" class="search-query span2" name="q" placeholder="Search" value="{{ query }}">
         </form>
 
         <ul class="nav nav-pills pull-right">
