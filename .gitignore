@@ -1,5 +1,7 @@
 *.pyc
 *~
+.env
+*.db
 richard/settings_local.py
 
 docs/_build/
