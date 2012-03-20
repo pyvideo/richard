@@ -20,8 +20,8 @@ from . import category, speaker, video
 from richard.tests.utils import ViewTestCase
 
 
-class CategoryViewsTest(ViewTestCase):
-    """Tests for the ``videos`` app's category related views."""
+class VideosViewsTest(ViewTestCase):
+    """Tests for the ``videos`` app."""
 
     # category 
 
@@ -30,20 +30,23 @@ class CategoryViewsTest(ViewTestCase):
         url = reverse('videos-category-list')
 
         self.assert_HTTP_200(url)
-        self.assert_used_templates(url, ["videos/category_list.html"])
+        self.assert_used_templates(url, ['videos/category_list.html'])
         
     def test_category(self):
-        """Test the view of an individual category."""
+        """Test the view of an category."""
         cat = category(name='Test',
                        title='Test Category',
                        save=True)
         url = cat.get_absolute_url()
 
         self.assert_HTTP_200(url)
-        self.assert_used_templates(url, ["videos/category.html"])
+        self.assert_used_templates(url, ['videos/category.html'])
 
     def test_category_raise_404_when_does_not_exist(self):
-        """Test that trying to view a non-existent video raises a 404 error."""
+        """
+        Test that trying to view a non-existent category returns 
+        a HTTP 404 error.
+        """
         url = reverse('videos-category',
                       args=(1234, 'slug'))
 
@@ -56,7 +59,7 @@ class CategoryViewsTest(ViewTestCase):
         url = reverse('videos-speaker-list')
 
         self.assert_HTTP_200(url)
-        self.assert_used_templates(url, ["videos/speaker_list.html"])
+        self.assert_used_templates(url, ['videos/speaker_list.html'])
 
     def test_speaker_list_character(self):
         """
@@ -68,38 +71,38 @@ class CategoryViewsTest(ViewTestCase):
                         {'character': 'r'})
 
         self.assert_HTTP_200(url)
-        self.assert_used_templates(url, ["videos/speaker_list.html"])
+        self.assert_used_templates(url, ['videos/speaker_list.html'])
 
     def test_speaker(self):
-        """Test the view of a individual speaker."""
+        """Test the view of a speaker."""
         spe = speaker(name='Random Speaker',
                       save=True,)
         # `url.get_absolute_url` returns the URL with the PK and the slug
         url = spe.get_absolute_url()
 
         self.assert_HTTP_200(url)
-        self.assert_used_templates(url, ["videos/speaker.html"])
+        self.assert_used_templates(url, ['videos/speaker.html'])
 
     def test_speaker_noslug(self):
-        """Test the view of a individual speaker without providing the slug."""
+        """Test the view of a speaker without providing the slug."""
         spe = speaker(name='Random Speaker',
                       save=True,)
         url = reverse('videos-speaker-noslug',
                       kwargs={'speaker_id': spe.pk})
 
         self.assert_HTTP_200(url)
-        self.assert_used_templates(url, ["videos/speaker.html"])
+        self.assert_used_templates(url, ['videos/speaker.html'])
 
     # videos
 
     def test_video(self):
-        """Test the view of a individual video."""
+        """Test the view of a video."""
         vid = video(title='',
                     save=True)
         url = vid.get_absolute_url()
 
         self.assert_HTTP_200(url)
-        self.assert_used_templates(url, ["videos/video.html"])
+        self.assert_used_templates(url, ['videos/video.html'])
 
     # search
 
@@ -108,13 +111,3 @@ class CategoryViewsTest(ViewTestCase):
         url = reverse('haystack-search')
 
         self.assert_HTTP_200(url)
-
-    # API
-
-    # TODO
-    def test_api(self):
-        """Test the api view."""
-        pass
-        #url = reverse('videos-api-urlforsource')
-
-        #self.assert_HTTP_200(url)
