@@ -15,30 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from functools import wraps
 
 from sitenews import models
-
-
-def with_save(func):
-    """
-    Decorates the given modelmaker adding the `save` keyword argument.
-
-    If save is provided and its `True`, the created model will be
-    saved after its creation.
-    """
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        save = kwargs.pop('save', False)
-
-        model = func(*args, **kwargs)
-
-        if save:
-            model.save()
-
-        return model
-    
-    return wrapper
+from richard.tests.utils import with_save
 
 
 @with_save

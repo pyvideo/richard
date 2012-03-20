@@ -14,31 +14,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from functools import wraps
 from django.template.defaultfilters import slugify
 
 from videos.models import CategoryKind, Category, Speaker, Tag, Video
-
-
-def with_save(func):
-    """
-    Decorates the given modelmaker adding the `save` keyword argument.
-
-    If save is provided and its `True`, the created model will be
-    saved after its creation.
-    """
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        save = kwargs.pop('save', False)
-
-        model = func(*args, **kwargs)
-
-        if save:
-            model.save()
-
-        return model
-    
-    return wrapper
+from richard.tests.utils import with_save
 
 
 def category_kind(**kwargs):

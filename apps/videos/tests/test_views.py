@@ -15,35 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.core.urlresolvers import reverse
-from django.test import TestCase, Client
-#from datetime import datetime
 
 from . import category, speaker, video
-
-class ViewTestCase(TestCase):
-    """Helper class for testing views."""
-
-    def setUp(self):
-        self.client = Client()
-    
-    def assert_HTTP_200(self, url):
-        """Assert that the given URL returns a 200 HTTP code."""
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-
-    def assert_HTTP_404(self, url):
-        """Assert that the given URL returns a 404 HTTP code."""
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 404)
-
-    def assert_used_templates(self, url, templates):
-        """
-        Assert that every template in ``templates`` list was rendered 
-        after hitting ``url``.
-        """
-        response = self.client.get(url)
-        for template in templates:
-            self.assertTemplateUsed(response, template)
+from richard.tests.utils import ViewTestCase
 
 
 class CategoryViewsTest(ViewTestCase):
