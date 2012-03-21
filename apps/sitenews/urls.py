@@ -21,7 +21,7 @@ urlpatterns = patterns(
     'sitenews.views',
 
     # news item
-    url(r'entry/(?P<news_id>[0-9]+)/(?P<slug>[\w-]*)/?$',
+    url(r'entry/(?P<pk>\d+)/(?P<slug>[\w-]*)/?$',
         'news', name='sitenews-news'),
 
     # news archive for a year
