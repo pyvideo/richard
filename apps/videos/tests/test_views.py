@@ -61,16 +61,40 @@ class VideosViewsTest(ViewTestCase):
         self.assert_HTTP_200(url)
         self.assert_used_templates(url, ['videos/speaker_list.html'])
 
+    def test_speaker_list_empty_character(self):
+        """
+        Test the view of the listing of all speakers given a empty
+        `character` GET parameter. It should fallback to showing the 
+        speakers starting from the lowest possible character.
+        """
+        url = reverse('videos-speaker-list')
+
+        self.assert_HTTP_200(url, 
+                             {'character': ''})
+        self.assert_used_templates(url, ['videos/speaker_list.html'])
+
     def test_speaker_list_character(self):
         """
         Test the view of the listing of all speakers whose names start
         with certain character.
         """
         url = reverse('videos-speaker-list')
-        self.client.get(url, 
-                        {'character': 'r'})
+                        
 
-        self.assert_HTTP_200(url)
+        self.assert_HTTP_200(url,
+                             {'character': 'r'})
+        self.assert_used_templates(url, ['videos/speaker_list.html'])
+
+    def test_speaker_list_not_string_character(self):
+        """
+        Test the view of the listing of all speakers giving an invalid
+        character. The view should fallback to showing the speakers starting
+        from the lowest possible character.
+        """
+        url = reverse('videos-speaker-list')
+
+        self.assert_HTTP_200(url,
+                             {'character': 42})
         self.assert_used_templates(url, ['videos/speaker_list.html'])
 
     def test_speaker(self):

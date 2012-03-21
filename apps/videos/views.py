@@ -49,13 +49,13 @@ def speaker_list(request):
     chars.sort()
 
     c = request.GET.get('character', 'a')
+
+    # make sure that there are speakers in the DB
     if chars:
         if len(c) != 1 or c not in chars:
             c = chars[0]
-        speakers = models.Speaker.objects.filter(name__istartswith=c)
-    else:
-        # no Speakers in DB
-        speakers = models.Speaker.objects.none()
+
+    speakers = models.Speaker.objects.filter(name__istartswith=c)
 
     ret = render(
         request, 'videos/speaker_list.html',
