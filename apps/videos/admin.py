@@ -26,7 +26,10 @@ admin.site.register(CategoryKind, CategoryKindAdmin)
 
 
 class VideoAdmin(admin.ModelAdmin):
-    pass
+    date_hierarchy = 'recorded'
+    list_display = ('title', 'category', 'state')
+    list_filter = ('state', 'category')
+    search_fields = ('title', )
 
 
 admin.site.register(Video, VideoAdmin)
