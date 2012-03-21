@@ -60,6 +60,7 @@ def speaker(**kwargs):
     return Speaker(**defaults)
 
 
+@with_save
 def tag(**kwargs):
     defaults = {
         'tag': 'tagless'
