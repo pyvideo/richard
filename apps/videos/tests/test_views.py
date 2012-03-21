@@ -54,7 +54,7 @@ class VideosViewsTest(ViewTestCase):
 
     # speaker
 
-    def test_speaker_list(self):
+    def test_speaker_list_with_no_speakers_in_database(self):
         """Test the view of the listing of all speakers."""
         url = reverse('videos-speaker-list')
 
@@ -67,6 +67,8 @@ class VideosViewsTest(ViewTestCase):
         `character` GET parameter. It should fallback to showing the 
         speakers starting from the lowest possible character.
         """
+        speaker(name='Random Speaker', 
+                save=True,)
         url = reverse('videos-speaker-list')
 
         self.assert_HTTP_200(url, 
@@ -78,8 +80,9 @@ class VideosViewsTest(ViewTestCase):
         Test the view of the listing of all speakers whose names start
         with certain character.
         """
+        speaker(name='Random Speaker', 
+                save=True,)
         url = reverse('videos-speaker-list')
-                        
 
         self.assert_HTTP_200(url,
                              {'character': 'r'})
@@ -91,8 +94,9 @@ class VideosViewsTest(ViewTestCase):
         character argument. The view should fallback to showing the 
         speakers starting from the lowest possible character.
         """
+        speaker(name='Random Speaker', 
+                save=True,)
         url = reverse('videos-speaker-list')
-                        
 
         self.assert_HTTP_200(url,
                              {'character': 'richard'})
@@ -104,6 +108,8 @@ class VideosViewsTest(ViewTestCase):
         character argument. The view should fallback to showing the 
         speakers starting from the lowest possible character.
         """
+        speaker(name='Random Speaker', 
+                save=True,)
         url = reverse('videos-speaker-list')
 
         self.assert_HTTP_200(url,
