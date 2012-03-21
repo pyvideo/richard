@@ -48,9 +48,9 @@ class SiteNews(models.Model):
     def __unicode__(self):
         return '<SiteNews: %s>' % self.title
 
-    def save(self):
+    def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
-        super(SiteNews, self).save()
+        super(SiteNews, self).save(*args, **kwargs)
 
 
 class Notification(models.Model):

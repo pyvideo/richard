@@ -168,9 +168,9 @@ class Video(models.Model):
     def get_absolute_url(self):
         return ('videos-video', (self.pk, self.slug))
 
-    def save(self):
+    def save(self, *args, **kwargs):
         self.slug = slugify(self.title[:49])
-        super(Video, self).save()
+        super(Video, self).save(*args, **kwargs)
 
 
 
