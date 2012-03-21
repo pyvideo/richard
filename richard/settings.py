@@ -134,6 +134,10 @@ MIDDLEWARE_CLASSES = (
 
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # This should probably be last. It catches 404 errors, then checks
+    # to see if we should be redirecting the url.
+    'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
 )
 
 ROOT_URLCONF = 'richard.urls'
@@ -169,6 +173,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    'django.contrib.redirects',
     'haystack',
 
     # Uncomment the next line to enable admin documentation:
