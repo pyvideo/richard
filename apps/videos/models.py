@@ -102,7 +102,7 @@ class Video(models.Model):
         (STATE_DRAFT, u'Draft'),
         )
 
-    LOCAL_THUMBNAIL_PATH = 'video/%d.jpg'
+    LOCAL_THUMBNAIL_PATH = 'video/thumbnails/%d.jpg'
 
     # TODO: this shouldn't default to null--this should default to
     # draft
@@ -178,13 +178,19 @@ class Video(models.Model):
         super(Video, self).save()
 
     def get_thumbnail_url(self):
-        """Use a local image if it exists, otherwise fall back to the
-        remote image url."""
+        """Find a thumbnail for this video in the following order:
+
+        1. use a local image
+        2. use the remote image in `thumbnail_url`
+        3. show a placeholder image
+        """
+        no_thumbnail = settings.STATIC_URL + 'no_thumbnail.png'
+
         local_path = self.LOCAL_THUMBNAIL_PATH % self.pk
         if os.path.exists(os.path.join(settings.MEDIA_ROOT, local_path)):
-            return os.path.join(settings.MEDIA_URL, local_path)
+            return settings.MEDIA_URL + local_path
         else:
-            return self.thumbnail_url
+            return self.thumbnail_url or no_thumbnail
 
 
 class RelatedUrl(models.Model):
