@@ -27,6 +27,9 @@ USE_HTML_HELP_TEXT = "Use HTML."
 class CategoryKind(models.Model):
     name = models.CharField(max_length=40)
 
+    def __unicode__(self):
+        return '<CategoryKind %s>' % self.name
+
 
 class Category(models.Model):
     kind = models.ForeignKey(CategoryKind)
@@ -47,7 +50,7 @@ class Category(models.Model):
         'conference, this would be the url for the conference '
         'web-site.')
     start_date = models.DateField(
-        null=True,
+        blank=True, null=True,
         help_text='If the category was an event, then this is the start '
         'date for the event.')
 
@@ -62,6 +65,7 @@ class Category(models.Model):
 
     class Meta(object):
         ordering = ["name", "title"]
+        verbose_name_plural = 'Categories'
 
     @models.permalink
     def get_absolute_url(self):

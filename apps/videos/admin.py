@@ -15,7 +15,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.contrib import admin
-from videos.models import Video, Category, Speaker
+from videos.models import Video, Category, Speaker, CategoryKind
+
+
+class CategoryKindAdmin(admin.ModelAdmin):
+    list_display = ('name', )
+
+
+admin.site.register(CategoryKind, CategoryKindAdmin)
 
 
 class VideoAdmin(admin.ModelAdmin):
@@ -26,14 +33,21 @@ admin.site.register(Video, VideoAdmin)
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('title', 'linked_url')
+    search_fields = ('name', 'title', 'description')
+
+    def linked_url(self, obj):
+        return '<a href="%s">%s</a>' % (obj.url, obj.url)
+    linked_url.allow_tags = True
+    linked_url.short_description = 'URL'
 
 
 admin.site.register(Category, CategoryAdmin)
 
 
 class SpeakerAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('name', )
+    search_fields = ('name', )
 
 
 admin.site.register(Speaker, SpeakerAdmin)
