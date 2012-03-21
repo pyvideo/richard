@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from functools import wraps
-from django.test import TestCase, Client
+from django.test import TestCase
 
 
 def with_save(func):
@@ -42,15 +42,31 @@ def with_save(func):
 class ViewTestCase(TestCase):
     """Helper class for testing views."""
 
-    def assert_HTTP_200(self, url):
-        """Assert that the given URL returns a 200 HTTP code."""
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+    def _assert_get_HTTP(self, url, data, status_code):
+        """Assert that the given URL returns `status_code` HTTP code."""
+        response = self.client.get(url, data)
+        self.assertEqual(response.status_code, 
+                         status_code)
 
-    def assert_HTTP_404(self, url):
-        """Assert that the given URL returns a 404 HTTP code."""
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 404)
+    def assert_HTTP_200(self, url, data={}):
+        """
+        Assert that the given URL returns a 200 HTTP code
+        whit a GET request.
+        
+        Optionally, a dict with arguments for the request can be
+        given.
+        """
+        self._assert_get_HTTP(url, data, 200)
+
+    def assert_HTTP_404(self, url, data={}):
+        """
+        Assert that the given URL returns a 404 HTTP code
+        whit a GET request.
+        
+        Optionally, a dict with arguments for the request can be
+        given.
+        """
+        self._assert_get_HTTP(url, data, 404)
 
     def assert_used_templates(self, url, templates):
         """
