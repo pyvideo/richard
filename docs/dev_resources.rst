@@ -59,13 +59,12 @@ Requirements / environments / deployment
   requirements. This makes it easier to specify different kinds of
   environments like development and deployment.
 
-  pip creates a virtual environment, reads the requirements files,
-  downloads requirements, and installs them into the virtual
-  environment.
+  pip reads the requirements files, downloads requirements, and installs
+  them into the virtual environment.
 
   It works pretty well except when PyPI is down.
 
-  We may revisit this later when/if we run into problems.
+  We may revisit this later if this becomes an annoying problem.
 
 
 Documentation
@@ -117,6 +116,10 @@ Django / nose / jinja2 / haystack / whoosh
   tests and also provides some nice scaffolding for building tests and
   organizing them.
 
+  I additionally use `nose-progressive
+  <http://pypi.python.org/pypi/nose-progressive/>`_ because then the test
+  output is easier to read.
+
 * `jingo <https://github.com/jbalogh/jingo>`_ and
   `jinja2 <http://jinja.pocoo.org/>`_
 
@@ -148,3 +151,17 @@ HtML / CSS / JavaScript
   These are great references for learning HTML, CSS and
   JavaScript. Highly recommended reading before you jump into the
   user-interface related code.
+
+
+Video and Universal Subtitles
+=============================
+
+* `Using HTML5 audio and video
+  <https://developer.mozilla.org/en/Using_HTML5_audio_and_video>`_
+  covers HTML5 video tag.
+
+* `Universal Subtitles <http://www.universalsubtitles.org/>`_ and
+  `Universal Subtitles wiki <https://github.com/pculture/unisubs/wiki/>`_
+
+  This is the subtitling system we're using. Their wiki covers embedding,
+  wrapping, and the API.

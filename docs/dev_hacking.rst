@@ -6,16 +6,16 @@ This covers how to clone richard and set it up for easy hacking.
 
 .. Note::
 
-   Richard is pretty new and is under heavy development. As such, the
+   richard is pretty new and is under heavy development. As such, the
    documentation for it sucks and the installation guide may have as
-   much of a chance of helping you install Richard as it does helping
+   much of a chance of helping you install richard as it does helping
    you make a quiche.
 
    I'm really sorry about that, but I'm still bootstrapping the
    project.
 
 
-Richard requires a bunch of stuff to run. I'm going to talk about this
+richard requires a bunch of stuff to run. I'm going to talk about this
 stuff in two groups:
 
 1. stuff that you should install with your package manager
@@ -52,17 +52,31 @@ Python packages to install
 Now you need to install some other things all of which are specified
 in the requirements files provided.
 
-Using pip, create a virtual environment and install everything into
-it::
+Create a virtual environment::
 
-    $ pip install -E ./venv/ -r requirements/development.txt
+    $ cd your_site
+    $ virtualenv ./venv/
+
+Activate the virtual environment::
+
+    $ . ./venv/bin/activate
+
+Use pip to install the development requirements::
+
+    $ pip install -r richard/requirements/development.txt
 
 .. Note::
 
-   This created a virtual environment. You'll need to use that virtual
-   environment to run richard. To activate the virtual environment, do::
+   pip installed the requirements into the virtual environment. You'll need
+   to activate this virtual environment in order to run richard.  To activate
+   the virtual environment, do::
 
        $ . ./venv/bin/activate
+
+.. Note::
+
+   If you want to use virtualenvwrapper or want to set things up differently,
+   feel free to do so!
 
 
 Setting up the database
@@ -75,6 +89,7 @@ For example, to create a database named ``richard`` with a user named
 
     $ mysql -u root -p
     mysql> CREATE DATABASE richard;
+    mysql> CREATE USER richard@localhost IDENTIFIED BY 'password';
     mysql> GRANT ALL ON richard.* TO richard@localhost IDENTIFIED BY
         'password';
 
@@ -87,9 +102,10 @@ that, too. For example::
         BY 'password';
 
 
-.. todo:: how to create the initial schema
+.. Note::
 
-.. todo:: how to load sample data
+   If you want to use postgres or some other system, then please do and
+   let me know if it works!
 
 
 Configuration
@@ -103,7 +119,7 @@ instance. To do that:
 1. create a file ``richard/settings_local.py``
 2. add configuration for your instance in that file
 
-If you're developing on Richard, you can use this sample
+If you're developing on richard, you can use this sample
 ``settings_local.py`` which uses database settings from the example
 database setup::
 
@@ -131,13 +147,30 @@ Make sure to set a ``SECRET_KEY``::
 .. todo:: list configuration settings that should be in settings_local.py
 
 
-Creating tables
-===============
+Setting up database schema and creating admin user
+==================================================
 
-After doing the configuration, you need to build the database tables. Run::
+To set up the database schema and create the admin user, run::
 
     $ ./manage.py syncdb
 
-After creating the tables, Django will ask you if you want to create a superuser.
-Do that now. That's the account you'll use for the admin.
+The admin user account you create here can be used to log into the richard
+admin section.
 
+
+Setting up sample data (optional)
+=================================
+
+If you want to set up some initial data, do::
+
+    $ ./manage.py loaddata sample_data.json
+
+This is useful to see how the site works.
+
+
+Running richard
+===============
+
+To run richard, make sure your virtual environment is activated and then::
+
+    $ ./manage.py runserver

@@ -24,7 +24,7 @@ Here's what's there:
 
 **richard/requirements/**
 
-    .txt files that you use with pip to install richard's
+    ``.txt`` files that you use with pip to install richard's
     requirements.
 
 **richard/richard/**

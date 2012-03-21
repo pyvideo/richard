@@ -4,9 +4,9 @@
 
 .. Note::
 
-   Richard is pretty new and is under heavy development. As such, the
+   richard is pretty new and is under heavy development. As such, the
    documentation for it sucks and the installation guide may have as
-   much of a chance of helping you install Richard as it does helping
+   much of a chance of helping you install richard as it does helping
    you make a quiche.
 
    I'm really sorry about that, but I'm still bootstrapping the
@@ -15,7 +15,7 @@
    If you have thoughts on better instructions, let me know.
 
 
-Richard requires a bunch of stuff to run. I'm going to talk about this
+richard requires a bunch of stuff to run. I'm going to talk about this
 stuff in two groups:
 
 1. stuff that you should install with your package manager
@@ -52,7 +52,7 @@ Setting up a directory structure
 Your site is an instance of richard with configuration, templates, and
 data that's specific to your site.
 
-I suggest something like the following::
+I suggest a directory hierarchy along the lines of the following::
 
     your_site/       <-- your site directory
     |- bin/          <-- directory for your .wsgi file
@@ -93,18 +93,32 @@ Python packages to install
 Now you need to install some other things all of which are specified
 in the requirements files provided.
 
-Using pip, create a virtual environment and install everything into
-it::
+Create a virtual environment::
 
-    $ pip install -E ./venv/ -r richard/requirements/base.txt
+    $ cd your_site
+    $ virtualenv ./venv/
+
+Activate the virtual environment::
+
+    $ . ./venv/bin/activate
+
+Use pip to install the requirements::
+
+    $ pip install -r richard/requirements/base.txt
 
 
 .. Note::
 
-   This created a virtual environment. You'll need to use that virtual
-   environment to run Richard. To activate the virtual environment, do::
+   pip installed the requirements into the virtual environment. You'll need
+   to activate this virtual environment in order to run richard.  To activate
+   the virtual environment, do::
 
        $ . ./venv/bin/activate
+
+.. Note::
+
+   If you want to use virtualenvwrapper or want to set things up differently,
+   feel free to do so!
 
 
 Setting up the database
@@ -121,19 +135,21 @@ For example, to create a database named ``richard`` with a user named
     mysql> GRANT ALL ON richard.* TO richard@localhost IDENTIFIED BY
         'password';
 
-(Optional) If you're a developer and plan to run the test suite,
-you'll also need to add permissions to the test database. The test
-database has the same name as the database prepended with ``test_``.
-For example::
+.. Note::
 
-    $ mysql -u root -p
-    mysql> GRANT ALL ON test_richard.* TO richard@localhost IDENTIFIED
-        BY 'password';
+   (Optional) If you're a developer and plan to run the test suite,
+   you'll also need to add permissions to the test database. The test
+   database has the same name as the database prepended with ``test_``.
+   For example::
 
+       $ mysql -u root -p
+       mysql> GRANT ALL ON test_richard.* TO richard@localhost IDENTIFIED
+           BY 'password';
 
-.. todo:: how to create the initial schema
+.. Note::
 
-.. todo:: how to load sample data
+   If you want to use postgres or some other system, then please do and
+   let me know if it works!
 
 
 Configuration
@@ -153,9 +169,16 @@ Make sure to set a ``SECRET_KEY``::
 
 .. todo:: list configuration settings that should be in settings file
 
-.. todo:: create admin user
 
-.. todo:: template for production deployments
+Setting up database schema and creating admin user
+==================================================
+
+To set up the database schema and create the admin user, run::
+
+    $ ./manage.py syncdb
+
+The admin user account you create here can be used to log into the richard
+admin section.
 
 
 Setting up sample data (optional)
@@ -163,7 +186,9 @@ Setting up sample data (optional)
 
 If you want to set up some initial data, do::
 
-    ./manage.py loaddata sample_data.json
+    $ ./manage.py loaddata sample_data.json
+
+This is useful to see how the site works.
 
 
 Setting up your server
@@ -180,9 +205,9 @@ A sample ``.wsgi`` file is in ``richard/`` in the repository.
 Nginx and gunicorn
 ------------------
 
-Create a file ``/etc/nginx/sites-available/your-site``::
+Create a file ``/etc/nginx/sites-available/your-site``:
 
-.. todo:: finish writing this
+.. todo:: finish writing nginx/gunicorn setup
 
 
 Your favorite server combo here!
@@ -195,4 +220,3 @@ Templates
 =========
 
 .. todo:: write up instructions for templates
-
