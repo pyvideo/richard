@@ -188,13 +188,8 @@ def create_speakers(speakers):
 
     for name in speakers:
         name = name.strip()
-        try:
-            s = Speaker.objects.get(name=name)
-            ret.append(s)
-        except (Speaker.DoesNotExist, Speaker.MultipleObjectsReturned):
-            s = Speaker(name=name, slug=slugify(name))
-            s.save()
-            ret.append(s)
+        s, _ = Speaker.objects.get_or_create(name=name, slug=slugify(name))
+        ret.append(s)
     return ret
 
 
@@ -203,13 +198,8 @@ def create_tags(tags):
 
     for tag in tags:
         tag = tag.strip()
-        try:
-            t = Tag.objects.get(tag=tag)
-            ret.append(t)
-        except Tag.DoesNotExist:
-            t = Tag(tag=tag)
-            t.save()
-            ret.append(t)
+        t, _ = Tag.objects.get_or_create(tag=tag)
+        ret.append(t)
     return ret
 
 class BadVideoError(Exception):
@@ -222,37 +212,28 @@ def create_videos(data):
         if not 'source_url' in mem:
             raise BadVideoError('missing source_url')
 
-        try:
-            v = Video.objects.get(source_url=mem['source_url'])
+        if Video.objects.filter(source_url=mem['source_url']).exists():
             continue
 
-        except Video.DoesNotExist:
-            # Fix category
-            cat = Category.objects.get(pk=mem['category'])
-            mem['category'] = cat
+        # Fix category
+        cat = Category.objects.get(pk=mem['category'])
+        mem['category'] = cat
 
-            # TODO: convert dates from strings here
+        # TODO: convert dates from strings here
 
-            # TODO: switch to use .pop()
+        # Take out speakers and tags
+        speakers = mem.pop('speakers', [])
+        tags = mem.pop('tags', [])
 
-            # Take out speakers and tags
-            speakers = mem.get('speakers', [])
-            tags = mem.get('tags', [])
+        v = Video.objects.create(**mem)
 
-            for badthing in ('tags', 'speakers'):
-                if badthing in mem:
-                    del mem[badthing]
+        # Add speakers and tags
+        for s in create_speakers(speakers):
+            v.speakers.add(s)
+        for t in create_tags(tags):
+            v.tags.add(t)
 
-            v = Video(**mem)
-            v.save()
-
-            # Add speakers and tags
-            for s in create_speakers(speakers):
-                v.speakers.add(s)
-            for t in create_tags(tags):
-                v.tags.add(t)
-
-            v.save()
-            created.append(v)
+        v.save()
+        created.append(v)
     return created
 
