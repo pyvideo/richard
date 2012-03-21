@@ -42,9 +42,6 @@ def with_save(func):
 class ViewTestCase(TestCase):
     """Helper class for testing views."""
 
-    def setUp(self):
-        self.client = Client()
-    
     def assert_HTTP_200(self, url):
         """Assert that the given URL returns a 200 HTTP code."""
         response = self.client.get(url)
