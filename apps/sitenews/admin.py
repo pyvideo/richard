@@ -19,14 +19,18 @@ from sitenews.models import SiteNews, Notification
 
 
 class SiteNewsAdmin(admin.ModelAdmin):
-    pass
+    date_hierarchy = 'updated'
+    list_display = ('title', 'author', 'created')
+    list_filter = ('author', )
+    search_fields = ('title', 'summary', 'content')
 
 
 admin.site.register(SiteNews, SiteNewsAdmin)
 
 
 class NotificationAdmin(admin.ModelAdmin):
-    pass
+    date_hierarchy = 'start_date'
+    list_display = ('interjection', 'start_date', 'end_date')
 
 
 admin.site.register(Notification, NotificationAdmin)
