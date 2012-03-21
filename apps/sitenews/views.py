@@ -26,11 +26,11 @@ def get_years():
 
 
 class NewsList(ArchiveIndexView):
-    # TODO paginate this
     model = models.SiteNews
     template_name = 'sitenews/news_list.html'
     context_object_name = 'items'
     date_field = 'updated'
+    paginate_by = 5
 
     def get_context_data(self, **kwargs):
         context = super(NewsList, self).get_context_data(**kwargs)
