@@ -14,8 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.shortcuts import get_object_or_404
-import jingo
+from django.shortcuts import get_object_or_404, render
 
 from sitenews import models
 from richard import utils
@@ -29,7 +28,7 @@ def news_list(request):
     # TODO: paginate this
     items = models.SiteNews.objects.all()[0:10]
 
-    ret = jingo.render(
+    ret = render(
         request, 'sitenews/news_list.html',
         {'title': utils.title(u'News'),
          'items': items,
@@ -40,7 +39,7 @@ def news_list(request):
 def news(request, news_id, slug):
     item = get_object_or_404(models.SiteNews, pk=news_id)
 
-    ret = jingo.render(
+    ret = render(
         request, 'sitenews/news.html',
         {'title': utils.title(u'News: %s' % item.title),
          'item': item,
@@ -52,7 +51,7 @@ def news_archive_year(request, year):
     year = int(year)
     items = models.SiteNews.objects.filter(updated__year=year)
 
-    ret = jingo.render(
+    ret = render(
         request, 'sitenews/news_list.html',
         {'title': utils.title(u'News: %s' % year),
          'items': items,
