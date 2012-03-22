@@ -31,9 +31,9 @@
           {{ item.summary|safe }}
         </div>
         <div class="meta">
-          Author: {{ item.author }}
-          Created: {{ item.created }}
-          Updated: {{ item.updated }}
+          Author: {{ item.author }} |
+          Created: {{ item.created|datetime }} |
+          Updated: {{ item.updated|datetime }} |
           <a href="{{ item.get_absolute_url() }}">Permalink</a>
         </div>
       </div>
