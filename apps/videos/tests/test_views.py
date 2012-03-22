@@ -30,7 +30,8 @@ class VideosViewsTest(ViewTestCase):
         url = reverse('videos-category-list')
 
         self.assert_HTTP_200(url)
-        self.assert_used_templates(url, ['videos/category_list.html'])
+        self.assert_used_templates(url, 
+                                   templates=['videos/category_list.html'])
         
     def test_category(self):
         """Test the view of an category."""
@@ -40,7 +41,8 @@ class VideosViewsTest(ViewTestCase):
         url = cat.get_absolute_url()
 
         self.assert_HTTP_200(url)
-        self.assert_used_templates(url, ['videos/category.html'])
+        self.assert_used_templates(url, 
+                                   templates=['videos/category.html'])
 
     def test_category_raise_404_when_does_not_exist(self):
         """
@@ -59,7 +61,8 @@ class VideosViewsTest(ViewTestCase):
         url = reverse('videos-speaker-list')
 
         self.assert_HTTP_200(url)
-        self.assert_used_templates(url, ['videos/speaker_list.html'])
+        self.assert_used_templates(url, 
+                                   templates=['videos/speaker_list.html'])
 
     def test_speaker_list_empty_character(self):
         """
@@ -76,7 +79,9 @@ class VideosViewsTest(ViewTestCase):
         data = {'character': ''}
         
         self.assert_HTTP_200(url, data) 
-        self.assert_used_templates(url, data,['videos/speaker_list.html'])
+        self.assert_used_templates(url, 
+                                   data,
+                                   templates=['videos/speaker_list.html'])
         self.assert_contains(url, data, text=spe.name)
 
     def test_speaker_list_character(self):
@@ -93,7 +98,9 @@ class VideosViewsTest(ViewTestCase):
         data = {'character': 'r'} 
 
         self.assert_HTTP_200(url, data)
-        self.assert_used_templates(url, data, templates=['videos/speaker_list.html'])
+        self.assert_used_templates(url, 
+                                   data, 
+                                   templates=['videos/speaker_list.html'])
         self.assert_contains(url, data, text=spe.name)
 
     def test_speaker_list_character_with_string(self):
@@ -111,7 +118,9 @@ class VideosViewsTest(ViewTestCase):
         data = {'character': 'richard'}
 
         self.assert_HTTP_200(url, data)
-        self.assert_used_templates(url, data, ['videos/speaker_list.html'])
+        self.assert_used_templates(url, 
+                                   data, 
+                                   templates=['videos/speaker_list.html'])
         self.assert_contains(url, data, text=spe.name)
 
     def test_speaker_list_not_string_character(self):
@@ -129,7 +138,9 @@ class VideosViewsTest(ViewTestCase):
         data = {'character': 42}
 
         self.assert_HTTP_200(url, data)
-        self.assert_used_templates(url, data, ['videos/speaker_list.html'])
+        self.assert_used_templates(url, 
+                                   data, 
+                                   templates=['videos/speaker_list.html'])
         self.assert_contains(url, data, text=spe.name)
 
     def test_speaker(self):
@@ -140,7 +151,8 @@ class VideosViewsTest(ViewTestCase):
         url = spe.get_absolute_url()
 
         self.assert_HTTP_200(url)
-        self.assert_used_templates(url, ['videos/speaker.html'])
+        self.assert_used_templates(url, 
+                                   templates=['videos/speaker.html'])
 
     def test_speaker_noslug(self):
         """Test the view of a speaker without providing the slug."""
@@ -150,7 +162,8 @@ class VideosViewsTest(ViewTestCase):
                       kwargs={'speaker_id': spe.pk})
 
         self.assert_HTTP_200(url)
-        self.assert_used_templates(url, ['videos/speaker.html'])
+        self.assert_used_templates(url, 
+                                   templates=['videos/speaker.html'])
 
     # videos
 
@@ -161,7 +174,8 @@ class VideosViewsTest(ViewTestCase):
         url = vid.get_absolute_url()
 
         self.assert_HTTP_200(url)
-        self.assert_used_templates(url, ['videos/video.html'])
+        self.assert_used_templates(url, 
+                                   templates=['videos/video.html'])
 
     # search
 

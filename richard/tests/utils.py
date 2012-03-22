@@ -16,6 +16,7 @@
 
 from functools import wraps
 from django.test import TestCase
+from nose.tools import eq_
 
 
 def with_save(func):
@@ -44,11 +45,12 @@ class ViewTestCase(TestCase):
 
     def _assert_get_HTTP(self, url, data, status_code):
         """Assert that the given URL returns `status_code` HTTP code."""
-        response = self.client.get(url, data)
-        self.assertEqual(response.status_code, 
-                         status_code)
+        data = data if data is not None else {}
 
-    def assert_HTTP_200(self, url, data={}):
+        response = self.client.get(url, data)
+        eq_(response.status_code, status_code)
+
+    def assert_HTTP_200(self, url, data=None):
         """
         Assert that the given URL returns a 200 HTTP code
         whit a GET request.
@@ -58,7 +60,7 @@ class ViewTestCase(TestCase):
         """
         self._assert_get_HTTP(url, data, 200)
 
-    def assert_HTTP_404(self, url, data={}):
+    def assert_HTTP_404(self, url, data=None):
         """
         Assert that the given URL returns a 404 HTTP code
         whit a GET request.
@@ -68,19 +70,25 @@ class ViewTestCase(TestCase):
         """
         self._assert_get_HTTP(url, data, 404)
 
-    def assert_used_templates(self, url, data={}, templates=[]):
+    def assert_used_templates(self, url, data=None, templates=None):
         """
         Assert that every template in ``templates`` list was rendered 
         after hitting ``url``.
         """
+        data = data if data is not None else {}
+        if templates is None:
+            return
+
         response = self.client.get(url)
         for template in templates:
             self.assertTemplateUsed(response, template)
 
-    def assert_contains(self, url , data={}, text=''):
+    def assert_contains(self, url , data=None, text=''):
         """
         Assert that requesting the given URL with `data` as GET parameters
         contains `text`.
         """
+        data = data if data is not None else {}
+
         response = self.client.get(url, data)
         self.assertContains(response, text)

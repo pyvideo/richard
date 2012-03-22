@@ -29,7 +29,8 @@ class SitenewsViewsTest(ViewTestCase):
         url = reverse('sitenews-list')
 
         self.assert_HTTP_200(url)
-        self.assert_used_templates(url, ['sitenews/news_list.html'])
+        self.assert_used_templates(url, 
+                                   templates=['sitenews/news_list.html'])
 
     def test_news(self):
         """Test the view of a news."""
@@ -38,7 +39,8 @@ class SitenewsViewsTest(ViewTestCase):
         url = news.get_absolute_url()
 
         self.assert_HTTP_200(url)
-        self.assert_used_templates(url, ['sitenews/news.html'])
+        self.assert_used_templates(url, 
+                                   templates=['sitenews/news.html'])
 
     def test_news_raise_404_when_does_not_exist(self):
         """
@@ -56,4 +58,5 @@ class SitenewsViewsTest(ViewTestCase):
                       kwargs={'year': datetime.now().year})
 
         self.assert_HTTP_200(url)
-        self.assert_used_templates(url, ['sitenews/news_list.html'])
+        self.assert_used_templates(url, 
+                                   templates=['sitenews/news_list.html'])

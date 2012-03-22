@@ -29,4 +29,5 @@ class PagesTest(ViewTestCase):
                           kwargs={'page': page},)
 
             self.assert_HTTP_200(url)
-            self.assert_used_templates(url, ['pages/%s.html' % page])
+            self.assert_used_templates(url, 
+                                       templates=['pages/%s.html' % page])

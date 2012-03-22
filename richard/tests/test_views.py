@@ -26,4 +26,5 @@ class RichardViewsTest(ViewTestCase):
         url = reverse('home')
 
         self.assert_HTTP_200(url)
-        self.assert_used_templates(url, ['home.html'])
+        self.assert_used_templates(url, 
+                                   templates=['home.html'])
