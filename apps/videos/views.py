@@ -18,8 +18,7 @@ import bleach
 
 
 from django.http import Http404, HttpResponse
-from django.shortcuts import get_object_or_404
-import jingo
+from django.shortcuts import get_object_or_404, render
 
 
 from richard import utils
@@ -29,7 +28,7 @@ from videos import models
 def category_list(request):
     category_kinds = models.CategoryKind.objects.all()
 
-    ret = jingo.render(
+    ret = render(
         request, 'videos/category_list.html',
         {'title': utils.title(u'Categories'),
          'kinds': category_kinds})
@@ -39,7 +38,7 @@ def category_list(request):
 def category(request, category_id, slug):
     obj = get_object_or_404(models.Category, pk=category_id)
 
-    ret = jingo.render(
+    ret = render(
         request, 'videos/category.html',
         {'title': utils.title(obj.title),
          'category': obj})
@@ -61,7 +60,7 @@ def speaker_list(request):
 
     speakers = models.Speaker.objects.filter(name__istartswith=c)
 
-    ret = jingo.render(
+    ret = render(
         request, 'videos/speaker_list.html',
         {'title': utils.title(u'Speakers'),
          'chars': chars,
@@ -73,7 +72,7 @@ def speaker_list(request):
 def speaker(request, speaker_id, slug=None):
     obj = get_object_or_404(models.Speaker, pk=speaker_id)
 
-    ret = jingo.render(
+    ret = render(
         request, 'videos/speaker.html',
         {'title': utils.title(obj.name),
          'speaker': obj})
@@ -90,7 +89,7 @@ def video(request, video_id, slug):
         meta.append(('description', 
                      bleach.clean(obj.summary, tags=[], strip=True)))
 
-    ret = jingo.render(
+    ret = render(
         request, 'videos/video.html',
         {'title': utils.title(obj.title),
          'meta': meta,

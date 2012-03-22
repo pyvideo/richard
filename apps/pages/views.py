@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import jingo
+from django.shortcuts import render
 
 def pages_view(request, page):
-    return jingo.render( request, 'pages/%s.html' % page, {})
+    return render( request, 'pages/%s.html' % page, {})

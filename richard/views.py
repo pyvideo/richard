@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.conf import settings
-import jingo
+from django.shortcuts import render
 
 
 from videos.models import CategoryKind
@@ -26,7 +26,7 @@ def home(request):
     category_list = CategoryKind.objects.all()
     news_list = SiteNews.objects.all()[:5]
 
-    ret = jingo.render(
+    ret = render(
         request, 'home.html',
         {'title': settings.SITE_TITLE,
          'kinds': category_list,

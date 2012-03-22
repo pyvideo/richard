@@ -14,8 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.shortcuts import get_object_or_404
-import jingo
+from django.views.generic.dates import ArchiveIndexView, YearArchiveView
+from django.views.generic.detail import DetailView
 
 from sitenews import models
 from richard import utils
@@ -25,37 +25,51 @@ def get_years():
     return [d.year for d in models.SiteNews.objects.dates('updated', 'year')]
 
 
-def news_list(request):
-    # TODO: paginate this
-    items = models.SiteNews.objects.all()[0:10]
+class NewsList(ArchiveIndexView):
+    model = models.SiteNews
+    template_name = 'sitenews/news_list.html'
+    context_object_name = 'items'
+    date_field = 'updated'
+    paginate_by = 5
 
-    ret = jingo.render(
-        request, 'sitenews/news_list.html',
-        {'title': utils.title(u'News'),
-         'items': items,
-         'archives': get_years()})
-    return ret
-
-
-def news(request, news_id, slug):
-    item = get_object_or_404(models.SiteNews, pk=news_id)
-
-    ret = jingo.render(
-        request, 'sitenews/news.html',
-        {'title': utils.title(u'News: %s' % item.title),
-         'item': item,
-         'archives': get_years()})
-    return ret
+    def get_context_data(self, **kwargs):
+        context = super(NewsList, self).get_context_data(**kwargs)
+        context['archives'] = get_years()
+        context['title'] = utils.title(u'News')
+        return context
 
 
-def news_archive_year(request, year):
-    year = int(year)
-    items = models.SiteNews.objects.filter(updated__year=year)
+news_list = NewsList.as_view()
 
-    ret = jingo.render(
-        request, 'sitenews/news_list.html',
-        {'title': utils.title(u'News: %s' % year),
-         'items': items,
-         'archives': get_years(),
-         'activeyear': year})
-    return ret
+
+class NewsDetail(DetailView):
+    model = models.SiteNews
+    template_name = 'sitenews/news.html'
+    context_object_name = 'item'
+
+    def get_context_data(self, **kwargs):
+        context = super(NewsDetail, self).get_context_data(**kwargs)
+        context['archives'] = get_years()
+        context['title'] = utils.title(u'News: %s' % self.object.title)
+        return context
+
+
+news = NewsDetail.as_view()
+
+
+class NewsYear(YearArchiveView):
+    model = models.SiteNews
+    template_name = 'sitenews/news_list.html'
+    context_object_name = 'items'
+    date_field = 'updated'
+    make_object_list = True
+
+    def get_context_data(self, **kwargs):
+        context = super(YearArchiveView, self).get_context_data(**kwargs)
+        context['archives'] = get_years()
+        context['title'] = utils.title(u'News: %s' % self.get_year())
+        context['activeyear'] = int(self.get_year())
+        return context
+
+
+news_archive_year = NewsYear.as_view()
