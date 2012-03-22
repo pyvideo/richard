@@ -15,25 +15,64 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.contrib import admin
-from videos.models import Video, Category, Speaker
+from django.contrib.admin import SimpleListFilter
+from django.utils.translation import ugettext_lazy as _
+
+from videos.models import Video, Category, Speaker, CategoryKind
+
+
+class NeedsEditingFilter(SimpleListFilter):
+    """Filter objects whether there is something in their whiteboard field or not."""
+    title = _('needs editing')
+    parameter_name = 'needs_editing'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('0', _('No')),
+            ('1', _('Yes')),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == '0':
+            return queryset.filter(whiteboard__exact='')
+        if self.value() == '1':
+            return queryset.exclude(whiteboard__exact='')
+
+
+class CategoryKindAdmin(admin.ModelAdmin):
+    list_display = ('name', )
+
+
+admin.site.register(CategoryKind, CategoryKindAdmin)
 
 
 class VideoAdmin(admin.ModelAdmin):
-    pass
+    date_hierarchy = 'recorded'
+    list_display = ('title', 'category', 'state')
+    list_filter = (NeedsEditingFilter, 'state', 'category')
+    search_fields = ('title', )
 
 
 admin.site.register(Video, VideoAdmin)
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('title', 'linked_url')
+    list_filter = (NeedsEditingFilter, )
+    search_fields = ('name', 'title', 'description')
+
+    def linked_url(self, obj):
+        return '<a href="%s">%s</a>' % (obj.url, obj.url)
+    linked_url.allow_tags = True
+    linked_url.short_description = 'URL'
 
 
 admin.site.register(Category, CategoryAdmin)
 
 
 class SpeakerAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('name', )
+    search_fields = ('name', )
 
 
 admin.site.register(Speaker, SpeakerAdmin)

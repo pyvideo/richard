@@ -40,6 +40,7 @@ class SiteNews(models.Model):
     class Meta(object):
         get_latest_by = "updated"
         ordering = ["-updated"]
+        verbose_name = verbose_name_plural = 'Site news'
 
     @models.permalink
     def get_absolute_url(self):

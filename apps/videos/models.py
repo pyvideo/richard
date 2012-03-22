@@ -27,6 +27,9 @@ USE_HTML_HELP_TEXT = "Use HTML."
 class CategoryKind(models.Model):
     name = models.CharField(max_length=40)
 
+    def __unicode__(self):
+        return '<CategoryKind %s>' % self.name
+
 
 class Category(models.Model):
     kind = models.ForeignKey(CategoryKind)
@@ -47,7 +50,7 @@ class Category(models.Model):
         'conference, this would be the url for the conference '
         'web-site.')
     start_date = models.DateField(
-        null=True,
+        blank=True, null=True,
         help_text='If the category was an event, then this is the start '
         'date for the event.')
 
@@ -62,6 +65,7 @@ class Category(models.Model):
 
     class Meta(object):
         ordering = ["name", "title"]
+        verbose_name_plural = 'Categories'
 
     @models.permalink
     def get_absolute_url(self):
@@ -104,9 +108,7 @@ class Video(models.Model):
 
     LOCAL_THUMBNAIL_PATH = 'video/thumbnails/%d.jpg'
 
-    # TODO: this shouldn't default to null--this should default to
-    # draft
-    state = models.IntegerField(choices=STATE_CHOICES, null=True)
+    state = models.IntegerField(choices=STATE_CHOICES, default=STATE_DRAFT)
 
     title = models.CharField(max_length=255)
     summary = models.TextField(blank=True, default=u'',
@@ -124,13 +126,13 @@ class Video(models.Model):
     # text for copyright/license--for now it's loose form.
     # if null, use source video link.
     # TODO: rename this to license
-    copyright_text = models.TextField(null=True)
+    copyright_text = models.TextField(null=True, blank=True)
 
     # embed for flash player things
     embed = models.TextField(null=True, blank=True)
 
     # url for the thumbnail
-    thumbnail_url = models.URLField(max_length=255, null=True)
+    thumbnail_url = models.URLField(max_length=255, null=True, blank=True)
 
     # TODO: fix this--there should be one duration in seconds and then
     # each video type should have a filesize
@@ -138,21 +140,21 @@ class Video(models.Model):
     # TODO: add video_m4v
 
     # these are downloadable urls
-    video_ogv_length = models.IntegerField(null=True)
-    video_ogv_url = models.URLField(max_length=255, null=True)
-    video_mp4_length = models.IntegerField(null=True)
-    video_mp4_url = models.URLField(max_length=255, null=True)
-    video_webm_length = models.IntegerField(null=True)
-    video_webm_url = models.URLField(max_length=255, null=True)
+    video_ogv_length = models.IntegerField(null=True, blank=True)
+    video_ogv_url = models.URLField(max_length=255, null=True, blank=True)
+    video_mp4_length = models.IntegerField(null=True, blank=True)
+    video_mp4_url = models.URLField(max_length=255, null=True, blank=True)
+    video_webm_length = models.IntegerField(null=True, blank=True)
+    video_webm_url = models.URLField(max_length=255, null=True, blank=True)
 
     # source url in case we need to find things again
-    source_url = models.URLField(max_length=255, null=True)
+    source_url = models.URLField(max_length=255, null=True, blank=True)
 
     # whiteboard for editor notes
     whiteboard = models.CharField(max_length=255, blank=True, default=u'')
 
     # when the video was originally recorded
-    recorded = models.DateField(null=True)
+    recorded = models.DateField(null=True, blank=True)
 
     # when the video was added to this site
     added = models.DateTimeField(auto_now_add=True)
