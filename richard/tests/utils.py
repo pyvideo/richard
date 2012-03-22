@@ -68,7 +68,7 @@ class ViewTestCase(TestCase):
         """
         self._assert_get_HTTP(url, data, 404)
 
-    def assert_used_templates(self, url, templates):
+    def assert_used_templates(self, url, data={}, templates=[]):
         """
         Assert that every template in ``templates`` list was rendered 
         after hitting ``url``.
@@ -76,3 +76,11 @@ class ViewTestCase(TestCase):
         response = self.client.get(url)
         for template in templates:
             self.assertTemplateUsed(response, template)
+
+    def assert_contains(self, url , data={}, text=''):
+        """
+        Assert that requesting the given URL with `data` as GET parameters
+        contains `text`.
+        """
+        response = self.client.get(url, data)
+        self.assertContains(response, text)

@@ -69,24 +69,32 @@ class VideosViewsTest(ViewTestCase):
         """
         speaker(name='Random Speaker', 
                 save=True,)
-        url = reverse('videos-speaker-list')
+        spe = speaker(name='Another Speaker', 
+                      save=True,)
 
-        self.assert_HTTP_200(url, 
-                             {'character': ''})
-        self.assert_used_templates(url, ['videos/speaker_list.html'])
+        url = reverse('videos-speaker-list')
+        data = {'character': ''}
+        
+        self.assert_HTTP_200(url, data) 
+        self.assert_used_templates(url, data,['videos/speaker_list.html'])
+        self.assert_contains(url, data, text=spe.name)
 
     def test_speaker_list_character(self):
         """
         Test the view of the listing of all speakers whose names start
         with certain character.
         """
-        speaker(name='Random Speaker', 
+        speaker(name='Another Speaker', 
                 save=True,)
-        url = reverse('videos-speaker-list')
+        spe = speaker(name='Random Speaker', 
+                      save=True,)
 
-        self.assert_HTTP_200(url,
-                             {'character': 'r'})
-        self.assert_used_templates(url, ['videos/speaker_list.html'])
+        url = reverse('videos-speaker-list')
+        data = {'character': 'r'} 
+
+        self.assert_HTTP_200(url, data)
+        self.assert_used_templates(url, data, templates=['videos/speaker_list.html'])
+        self.assert_contains(url, data, text=spe.name)
 
     def test_speaker_list_character_with_string(self):
         """
@@ -96,11 +104,15 @@ class VideosViewsTest(ViewTestCase):
         """
         speaker(name='Random Speaker', 
                 save=True,)
-        url = reverse('videos-speaker-list')
+        spe = speaker(name='Another Speaker', 
+                      save=True,)
 
-        self.assert_HTTP_200(url,
-                             {'character': 'richard'})
-        self.assert_used_templates(url, ['videos/speaker_list.html'])
+        url = reverse('videos-speaker-list')
+        data = {'character': 'richard'}
+
+        self.assert_HTTP_200(url, data)
+        self.assert_used_templates(url, data, ['videos/speaker_list.html'])
+        self.assert_contains(url, data, text=spe.name)
 
     def test_speaker_list_not_string_character(self):
         """
@@ -110,11 +122,15 @@ class VideosViewsTest(ViewTestCase):
         """
         speaker(name='Random Speaker', 
                 save=True,)
-        url = reverse('videos-speaker-list')
+        spe = speaker(name='Another Speaker', 
+                      save=True,)
 
-        self.assert_HTTP_200(url,
-                             {'character': 42})
-        self.assert_used_templates(url, ['videos/speaker_list.html'])
+        url = reverse('videos-speaker-list')
+        data = {'character': 42}
+
+        self.assert_HTTP_200(url, data)
+        self.assert_used_templates(url, data, ['videos/speaker_list.html'])
+        self.assert_contains(url, data, text=spe.name)
 
     def test_speaker(self):
         """Test the view of a speaker."""
