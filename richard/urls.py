@@ -14,7 +14,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from django.conf import settings
 from django.conf.urls import patterns, include, url
+from django.conf.urls.static import static
 
 # enable the admin
 from django.contrib import admin
@@ -30,4 +32,4 @@ urlpatterns = patterns(
     url(r'news/', include('sitenews.urls')),
     url(r'pages/', include('pages.urls')),
     url(r'', include('videos.urls')),
-)
+) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
