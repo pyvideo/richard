@@ -19,11 +19,39 @@
     }
   },
   {
+    "model": "videos.Category",
+    "pk": 2,
+    "fields": {
+      "kind": 1,
+      "name": "PyCon",
+      "title": "PyCon 2012",
+      "description": "PyCon 2012 in Santa Clara, CA",
+      "url": "http://us.pycon.org/2012/",
+      "slug": "pycon-2012"
+    }
+  },
+  {
     "pk": 1,
     "model": "videos.Speaker",
     "fields": {
       "name": "Jacob Kaplan-Moss",
       "slug": "jacob-kaplan-moss"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "videos.speaker",
+    "fields": {
+      "name": "Jessica McKellar",
+      "slug": "jessica-mckellar"
+    }
+  },
+  {
+    "pk": 3,
+    "model": "videos.speaker",
+    "fields": {
+      "name": "Asheesh Laroia",
+      "slug": "asheesh-laroia"
     }
   },
   {
@@ -66,5 +94,37 @@
       "thumbnail_url": "http://a.images.blip.tv/Pycon-PyCon2011WritingGreatDocumentation902.png", 
       "slug": "pycon-2011-writing-great-documentation"
     }
-  } 
+  },
+  {
+    "pk": 2,
+    "model": "videos.video",
+    "fields": {
+      "category": 2,
+      "whiteboard": "",
+      "speakers": [
+        2,
+        3
+      ],
+      "title": "Diversity in practice: How the Boston Python User Group grew to 1700 people and over 15% women",
+      "quality_notes": "",
+      "recorded": "2012-03-11",
+      "state": 1,
+      "updated": "2012-03-13T16:15:17Z",
+      "added": "2012-03-13T16:15:17Z",
+      "video_mp4_length": null,
+      "description": "",
+      "video_mp4_url": null,
+      "tags": [],
+      "copyright_text": "",
+      "source_url": "https://www.youtube.com/watch?v=QrITN6GZDu4",
+      "video_webm_url": null,
+      "video_ogv_length": null,
+      "slug": "diversity-in-practice-how-the-boston-python-user",
+      "video_ogv_url": null,
+      "video_webm_length": null,
+      "summary": "<p>How do you bring more women into programming communities with long-term, measurable results? In this talk we'll analyze our successful effort, the Boston Python Workshop, which brought over 200 women into Boston's Python community this year. We'll talk about lessons learned running the workshop, the dramatic effect it has had on the local user group, and how to run a workshop in your city.</p>",
+      "thumbnail_url": "http://img.youtube.com/vi/QrITN6GZDu4/hqdefault.jpg",
+      "embed": "<object width=\"425\" height=\"344\"><param name=\"movie\" value=\"http://www.youtube.com/v/QrITN6GZDu4&amp;hl=en&amp;fs=1\"><param name=\"allowFullScreen\" value=\"true\"><param name=\"allowscriptaccess\" value=\"always\"><embed src=\"http://www.youtube.com/v/QrITN6GZDu4&amp;hl=en&amp;fs=1\" allowscriptaccess=\"always\" height=\"344\" width=\"425\" allowfullscreen=\"true\" type=\"application/x-shockwave-flash\"></embed></object>"
+    }
+  }
 ]
