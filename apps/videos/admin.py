@@ -51,6 +51,7 @@ class VideoAdmin(admin.ModelAdmin):
     list_display = ('title', 'category', 'state')
     list_filter = (NeedsEditingFilter, 'state', 'category')
     search_fields = ('title', )
+    filter_horizontal = ('tags', 'speakers', )
 
 
 admin.site.register(Video, VideoAdmin)
