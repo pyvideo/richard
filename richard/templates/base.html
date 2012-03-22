@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="{{ settings.STATIC_URL }}bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="{{ settings.STATIC_URL }}bootstrap/css/bootstrap-responsive.min.css">
   <link rel="stylesheet" href="{{ settings.STATIC_URL }}css/richard.css">
-  <title>{% block title %}{{ title }}{% endblock %}</title>
+  <title>{% block title %}{{ page_title() }}{% endblock %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 {% if meta %}
   {% for meta_name, meta_content in meta %}

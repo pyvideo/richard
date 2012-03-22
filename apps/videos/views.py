@@ -21,7 +21,6 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, render
 
 
-from richard import utils
 from videos import models
 
 
@@ -30,8 +29,7 @@ def category_list(request):
 
     ret = render(
         request, 'videos/category_list.html',
-        {'title': utils.title(u'Categories'),
-         'kinds': category_kinds})
+        {'kinds': category_kinds})
     return ret
 
 
@@ -40,8 +38,7 @@ def category(request, category_id, slug):
 
     ret = render(
         request, 'videos/category.html',
-        {'title': utils.title(obj.title),
-         'category': obj})
+        {'category': obj})
     return ret
 
 
@@ -62,8 +59,7 @@ def speaker_list(request):
 
     ret = render(
         request, 'videos/speaker_list.html',
-        {'title': utils.title(u'Speakers'),
-         'chars': chars,
+        {'chars': chars,
          'active_char': c,
          'speakers': speakers})
     return ret
@@ -74,8 +70,7 @@ def speaker(request, speaker_id, slug=None):
 
     ret = render(
         request, 'videos/speaker.html',
-        {'title': utils.title(obj.name),
-         'speaker': obj})
+        {'speaker': obj})
     return ret
 
 
@@ -91,8 +86,7 @@ def video(request, video_id, slug):
 
     ret = render(
         request, 'videos/video.html',
-        {'title': utils.title(obj.title),
-         'meta': meta,
+        {'meta': meta,
          'v': obj})
     return ret
 

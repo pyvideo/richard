@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#}
 {% extends "base.html" %}
+{% block title %}{{ page_title(v.title) }}{% endblock %}
 {% import "videos/video_display.html" as videodisplay with context %}
 {% block content %}
 

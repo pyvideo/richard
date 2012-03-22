@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.conf import settings
+from jingo import register
+
 from sitenews import models
 
 
@@ -27,3 +29,12 @@ def base(request):
         'settings': settings,
         'notifications': notifications
         }
+
+
+@register.function
+def page_title(s=None):
+    if s is None:
+        return settings.SITE_TITLE
+    if len(s) > 80:
+        s = s[:80] + u'...'
+    return u'%s - %s' % (settings.SITE_TITLE, s)
