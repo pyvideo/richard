@@ -205,6 +205,14 @@ class Video(models.Model):
         else:
             return self.thumbnail_url or no_thumbnail
 
+    @property
+    def thumbnail_width(self):
+        return settings.VIDEO_THUMBNAIL_SIZE[0]
+
+    @property
+    def thumbnail_height(self):
+        return settings.VIDEO_THUMBNAIL_SIZE[1]
+
     def is_live(self):
         return self.state == self.STATE_LIVE
 
