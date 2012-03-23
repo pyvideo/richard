@@ -89,9 +89,6 @@ class Speaker(models.Model):
     def get_absolute_url(self):
         return ('videos-speaker', (self.pk, self.slug))
 
-    def get_live_videos(self):
-        return self.video_set.filter(state=Video.STATE_LIVE)
-
 
 class Tag(models.Model):
     tag = models.CharField(max_length=30)
@@ -101,6 +98,12 @@ class Tag(models.Model):
 
     class Meta(object):
         ordering = ['tag']
+
+
+class VideoManager(models.Manager):
+
+    def live(self):
+        return self.get_query_set().filter(state=Video.STATE_LIVE)
 
 
 class Video(models.Model):
@@ -169,6 +172,8 @@ class Video(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     slug = models.SlugField(unique=True)
+
+    objects = VideoManager()
 
     def __unicode__(self):
         return '<Video %s (%s)>' % (self.title[:30], self.category)
