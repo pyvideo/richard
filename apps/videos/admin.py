@@ -51,7 +51,9 @@ class VideoAdmin(admin.ModelAdmin):
     list_display = ('title', 'category', 'state')
     list_filter = (NeedsEditingFilter, 'state', 'category')
     search_fields = ('title', )
+    radio_fields = {'state': admin.HORIZONTAL}
     filter_horizontal = ('tags', 'speakers', )
+    save_on_top = True
 
 
 admin.site.register(Video, VideoAdmin)
