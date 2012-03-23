@@ -23,6 +23,7 @@ class SiteNewsAdmin(admin.ModelAdmin):
     list_display = ('title', 'author', 'created')
     list_filter = ('author', )
     search_fields = ('title', 'summary', 'content')
+    prepopulated_fields = {'slug': ('title',)}
 
 
 admin.site.register(SiteNews, SiteNewsAdmin)
