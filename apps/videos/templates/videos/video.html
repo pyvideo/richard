@@ -48,6 +48,10 @@
 
   <div class="span4">
     <div id="sidebar" class="well">
+      {% if request.user.is_staff %}
+        <a href="{{ url('admin:videos_video_change', v.id) }}"><i class="icon-edit"></i> edit</a>
+      {% endif %}
+
       <h2>{{ v.title }}</h2>
       <dl>
         <dt>Category</dt>

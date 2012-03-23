@@ -23,6 +23,7 @@ def base(request):
     notifications = models.Notification.get_live_notifications()
 
     return {
+        'request': request,
         'settings': settings,
         'notifications': notifications
         }
