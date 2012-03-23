@@ -19,6 +19,13 @@
 {% import "videos/video_display.html" as videodisplay with context %}
 {% block content %}
 
+{% if not v.is_live() %}
+<div class="alert alert-error">
+  <i class="icon-warning-sign"></i> <strong>Note:</strong>
+  This video is in <strong>draft</strong> mode--it is not live.
+</div>
+{% endif %}
+
 <div class="row-fluid">
   <div id="videobox" class="span8">
     {{ videodisplay.display(v) }}

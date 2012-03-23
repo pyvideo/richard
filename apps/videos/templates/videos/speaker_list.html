@@ -38,7 +38,7 @@
     <ul>
       {% for s in speakers %}
         <li><a href="{{ s.get_absolute_url() }}">{{ s.name }}</a>
-          ({{ s.video_set.count() }})</li>
+          ({{ s.get_live_videos().count() }})</li>
       {% endfor %}
     </ul>
   </div>

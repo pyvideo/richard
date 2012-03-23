@@ -33,7 +33,7 @@
   </div>
 </div>
 
-{% for v in category.video_set.all() %}
+{% for v in category.get_live_videos() %}
   {{ macros.video_summary(v) }}
 {% endfor %}
 {% endblock %}

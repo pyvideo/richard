@@ -71,6 +71,9 @@ class Category(models.Model):
     def get_absolute_url(self):
         return ('videos-category', (self.pk, self.slug))
 
+    def get_live_videos(self):
+        return self.video_set.filter(state=Video.STATE_LIVE)
+
 
 class Speaker(models.Model):
     name = models.CharField(max_length=255)
@@ -85,6 +88,9 @@ class Speaker(models.Model):
     @models.permalink
     def get_absolute_url(self):
         return ('videos-speaker', (self.pk, self.slug))
+
+    def get_live_videos(self):
+        return self.video_set.filter(state=Video.STATE_LIVE)
 
 
 class Tag(models.Model):
@@ -193,6 +199,9 @@ class Video(models.Model):
             return settings.MEDIA_URL + local_path
         else:
             return self.thumbnail_url or no_thumbnail
+
+    def is_live(self):
+        return self.state == self.STATE_LIVE
 
 
 class RelatedUrl(models.Model):
