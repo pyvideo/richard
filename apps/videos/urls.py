@@ -17,21 +17,6 @@
 from django.conf.urls.defaults import patterns, url
 from haystack.views import SearchView, search_view_factory
 from haystack.forms import ModelSearchForm
-from richard import utils
-
-
-class TitledSearchView(SearchView):
-    def extra_context(self):
-        # TODO: Not sure why .extra_context() kicks up an
-        # AttributeError here, but SearchView.extra_context() returns
-        # an empty dict anyhow, so I'll use that for now.
-        # 
-        # extra = super(SearchView, self).extra_context()
-        if self.query:
-            title = u'Search: ' + self.query
-        else:
-            title = u'Search'
-        return {'title': utils.title(title)}
 
 
 urlpatterns = patterns(
@@ -58,7 +43,7 @@ urlpatterns = patterns(
     # search
     url(r'^search/?$',
         search_view_factory(
-            view_class=TitledSearchView,
+            view_class=SearchView,
             template='videos/search.html',
             form_class=ModelSearchForm),
         name='haystack-search'),

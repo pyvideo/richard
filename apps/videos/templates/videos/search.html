@@ -16,6 +16,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#}
 {% extends "base.html" %}
+{% block title %}
+  {% if query %}
+    {{ page_title('Search: ' + query) }}
+  {% else %}
+    {{ page_title('Search') }}
+  {% endif %}
+{% endblock %}
 {% import "videos/macros.html" as macros with context %}
 {% block content %}
 <div class="row-fluid">

@@ -18,7 +18,6 @@ from django.views.generic.dates import ArchiveIndexView, YearArchiveView
 from django.views.generic.detail import DetailView
 
 from sitenews import models
-from richard import utils
 
 
 def get_years():
@@ -35,7 +34,6 @@ class NewsList(ArchiveIndexView):
     def get_context_data(self, **kwargs):
         context = super(NewsList, self).get_context_data(**kwargs)
         context['archives'] = get_years()
-        context['title'] = utils.title(u'News')
         return context
 
 
@@ -50,7 +48,6 @@ class NewsDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(NewsDetail, self).get_context_data(**kwargs)
         context['archives'] = get_years()
-        context['title'] = utils.title(u'News: %s' % self.object.title)
         return context
 
 
@@ -67,7 +64,6 @@ class NewsYear(YearArchiveView):
     def get_context_data(self, **kwargs):
         context = super(YearArchiveView, self).get_context_data(**kwargs)
         context['archives'] = get_years()
-        context['title'] = utils.title(u'News: %s' % self.get_year())
         context['activeyear'] = int(self.get_year())
         return context
 

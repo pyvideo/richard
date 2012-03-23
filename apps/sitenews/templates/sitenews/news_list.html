@@ -16,6 +16,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#}
 {% extends "base.html" %}
+{% block title %}
+  {% if activeyear %}
+    {{ page_title('News: %d'|format(activeyear)) }}
+  {% else %}
+    {{ page_title('News') }}
+  {% endif %}
+{% endblock %}
 {% import "sitenews/macros.html" as macros %}
 {% block content %}
 <div class="row-fluid">
