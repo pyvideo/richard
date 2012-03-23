@@ -115,9 +115,9 @@ class Video(models.Model):
                                help_text=USE_HTML_HELP_TEXT)
     description = models.TextField(blank=True, default=u'',
                                    help_text=USE_HTML_HELP_TEXT)
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, blank=True)
     category = models.ForeignKey(Category)
-    speakers = models.ManyToManyField(Speaker)
+    speakers = models.ManyToManyField(Speaker, blank=True)
 
     # notes for quality issues (audio or video) in the video
     quality_notes = models.TextField(blank=True, default=u'',
