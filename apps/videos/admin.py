@@ -54,6 +54,7 @@ class VideoAdmin(admin.ModelAdmin):
     radio_fields = {'state': admin.HORIZONTAL}
     filter_horizontal = ('tags', 'speakers', )
     save_on_top = True
+    prepopulated_fields = {'slug': ('title',)}
 
 
 admin.site.register(Video, VideoAdmin)
@@ -68,6 +69,7 @@ class CategoryAdmin(admin.ModelAdmin):
         return '<a href="%s">%s</a>' % (obj.url, obj.url)
     linked_url.allow_tags = True
     linked_url.short_description = 'URL'
+    prepopulated_fields = {'slug': ('title',)}
 
 
 admin.site.register(Category, CategoryAdmin)
@@ -76,6 +78,7 @@ admin.site.register(Category, CategoryAdmin)
 class SpeakerAdmin(admin.ModelAdmin):
     list_display = ('name', )
     search_fields = ('name', )
+    prepopulated_fields = {'slug': ('name',)}
 
 
 admin.site.register(Speaker, SpeakerAdmin)
