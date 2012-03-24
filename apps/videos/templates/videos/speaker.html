@@ -17,6 +17,12 @@
 -#}
 {% extends "base.html" %}
 {% block title %}{{ page_title(speaker.name) }}{% endblock %}
+
+{% block additional_head %}
+  {{ super() }}
+  <link rel="alternate" type="application/rss+xml" href="{{ url('videos-speaker-feed', speaker_id=speaker.pk, slug=speaker.slug) }}" />
+{% endblock %}
+
 {% import "videos/macros.html" as macros with context %}
 {% block content %}
 

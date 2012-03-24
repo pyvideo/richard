@@ -17,6 +17,12 @@
 -#}
 {% extends "base.html" %}
 {% block title %}{{ page_title(category.title) }}{% endblock %}
+
+{% block additional_head %}
+  {{ super() }}
+  <link rel="alternate" type="application/rss+xml" href="{{ url('videos-category-feed', category_id=category.pk, slug=category.slug) }}" />
+{% endblock %}
+
 {% import "videos/macros.html" as macros with context %}
 {% block content %}
 
