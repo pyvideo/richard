@@ -14,27 +14,68 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from datetime import datetime, time
+
 from django.contrib.syndication.views import Feed
+from django.core.urlresolvers import reverse
 from django.utils.feedgenerator import Rss201rev2Feed
 
+from videos.models import Video
 
-class BaseVideoFeed(Feed):
-    """Base feed for MRSS-supprting feeds holding videos"""
-    feed_type = Rss201rev2Feed
 
-    title_template = None
-    description_template = None
-
-    def root_attributes(self):
-        attrs = super(BaseVideoFeed, self).root_attributes()
-        attrs['xmlns:media'] = 'http://search.yahoo.com/mrss/'
+class MediaRSSFeed(Rss201rev2Feed):
+    """Implements parts of the Media RSS specification.
+    
+    http://www.rssboard.org/media-rss
+    """
+    def rss_attributes(self):
+        attrs = super(MediaRSSFeed, self).rss_attributes()
+        attrs[u'xmlns:media'] = u'http://search.yahoo.com/mrss/'
         return attrs
 
-    def ttl(self):
-        return u'500'
+    def add_item_elements(self, handler, item):
+        super(MediaRSSFeed, self).add_item_elements(handler, item)
 
-    def item_title(self, video):
-        return video.summary
+        if 'enclosures' in item:
+            group = len(item['enclosures']) > 1
+            if group:
+                handler.startElement(u'media:group', {})
+
+            for e in item['enclosures']:
+                data = {u'url': e['url']}
+                handler.addQuickElement(u'media:content', '', data)
+
+            if group:
+                handler.endElement(u'media:group')
+
+        if 'title' in item:
+            handler.addQuickElement(u'media:title', item['title'])
+        if 'description' in item:
+            handler.addQuickElement(u'media:description', item['description'])
+        if 'keywords' in item:
+            handler.addQuickElement(u"media:keywords", item['keywords'])
+
+        for name, attrs in item.get('media', []).items():
+            handler.addQuickElement(u'media:%s' % name, '', attrs)
+
+
+class VideoFeed(Feed):
+    feed_type = MediaRSSFeed
+    title = "Videos"
+    description = "Updates on changes and additions to SITE."
+    ttl = 500
+
+    def link(self, obj):
+        return reverse('videos-feed')
+
+    # item_categories -- category + tags?
+    # item_copyright
+
+    def items(self):
+        return Video.objects.live()[:10]
+
+    def item_title(self, item):
+        return item.title
 
     def item_description(self, video):
         desc = []
@@ -46,6 +87,13 @@ class BaseVideoFeed(Feed):
             desc.append(video.description)
         return u'\n'.join(desc)
 
+    def item_pubdate(self, video):
+        # pubdate needs to be a datetime object, recorded is just a date
+        if video.recorded:
+            return datetime.combine(video.recorded, time())
+        else:
+            return None
+
     def item_link(self, video):
         return video.get_absolute_url()
 
@@ -54,39 +102,25 @@ class BaseVideoFeed(Feed):
         # a better way to do that with MRSS
         return u','.join([s.name for s in video.speakers.all()])
 
-    # item_enclosure_url
-    # item_enclosure_length (in bytes)
-    # item_enclosure_mime_type
-    
-    def item_pubdate(self, video):
-        return video.recorded
+    # MediaRSS specific
 
-    # item_categories -- category + tags?
-    # item_copyright
+    def item_enclosures(self, item):
+        # TODO the Video model should tell us what sources are available
+        sources = ('source', 'video_ogv', 'video_mp4', 'video_webm', )
+        enclosures = []
 
-    def add_item_elements(self, handler, video):
-        super(BaseVideoFeed, self).add_item_elements(handler, item)
+        for source in sources:
+            field = source + '_url'
+            if getattr(item, field):
+                enclosures.append({'url': getattr(item, field)})
 
-        if 'media:title' in item:
-            handler.addQuickElement(u"media:title", item['title'])
-        if 'media:description' in item:
-            handler.addQuickElement(u"media:description", item['description'])
+        return enclosures
 
-        if 'content_url' in item:
-            content = dict(url=item['content_url'])
-            if 'content_width' in item:
-                content['width'] = str(item['content_width'])
-            if 'content_height' in item:
-                content['height'] = str(item['content_height'])
-            handler.addQuickElement(u"media:content", '', content)
-        
-        if 'thumbnail_url' in item:
-            thumbnail = dict(url=item['thumbnail_url'])
-            if 'thumbnail_width' in item:
-                thumbnail['width'] = str(item['thumbnail_width'])
-            if 'thumbnail_height' in item:
-                thumbnail['height'] = str(item['thumbnail_height'])
-            handler.addQuickElement(u"media:thumbnail", '', thumbnail)
+    def item_media(self, item):
+        # TODO no point in including a 'no thumbnail' image
+        return {'thumbnail': {'url': item.get_thumbnail_url()}}
 
-        if 'keywords' in item:
-            handler.addQuickElement(u"media:keywords", item['keywords'])
+    def item_extra_kwargs(self, item):
+        # provides us with an API similar to the rest of the Feed class
+        return {'enclosures': self.item_enclosures(item),
+                'media': self.item_media(item)}
