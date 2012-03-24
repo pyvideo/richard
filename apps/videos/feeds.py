@@ -18,9 +18,10 @@ from datetime import datetime, time
 
 from django.contrib.syndication.views import Feed
 from django.core.urlresolvers import reverse
+from django.shortcuts import get_object_or_404
 from django.utils.feedgenerator import Rss201rev2Feed
 
-from videos.models import Video
+from videos.models import Video, Speaker
 
 
 class MediaRSSFeed(Rss201rev2Feed):
@@ -62,7 +63,6 @@ class MediaRSSFeed(Rss201rev2Feed):
 class VideoFeed(Feed):
     feed_type = MediaRSSFeed
     title = "Videos"
-    description = "Updates on changes and additions to SITE."
     ttl = 500
 
     def link(self, obj):
@@ -124,3 +124,21 @@ class VideoFeed(Feed):
         # provides us with an API similar to the rest of the Feed class
         return {'enclosures': self.item_enclosures(item),
                 'media': self.item_media(item)}
+
+
+class SpeakerVideosFeed(VideoFeed):
+    """Videos of a single speaker."""
+    description = ''
+
+    def link(self, speaker):
+        return reverse('videos-speaker-feed',
+                        kwargs={'speaker_id': speaker.pk, 'slug': speaker.slug})
+
+    def title(self, speaker):
+        return 'Videos of %s' % speaker.name
+
+    def get_object(self, request, speaker_id, slug):
+        return get_object_or_404(Speaker, pk=speaker_id)
+
+    def items(self, speaker):
+        return speaker.video_set.live()
