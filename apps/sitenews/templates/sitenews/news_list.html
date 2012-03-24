@@ -23,6 +23,12 @@
     {{ page_title('News') }}
   {% endif %}
 {% endblock %}
+
+{% block additional_head %}
+  {{ super() }}
+  <link rel="alternate" type="application/rss+xml" href="{{ url('sitenews-feed') }}" />
+{% endblock %}
+
 {% import "sitenews/macros.html" as macros %}
 {% block content %}
 <div class="row-fluid">

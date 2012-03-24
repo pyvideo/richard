@@ -14,27 +14,31 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.conf.urls.defaults import patterns, url
+from django.contrib.syndication.views import Feed
+from django.core.urlresolvers import reverse
 
-from sitenews.feeds import NewsFeed
+from sitenews.models import SiteNews
 
 
-urlpatterns = patterns(
-    'sitenews.views',
+class NewsFeed(Feed):
 
-    # news item
-    url(r'entry/(?P<pk>\d+)/(?P<slug>[\w-]*)/?$',
-        'news', name='sitenews-news'),
+    def link(self):
+        return reverse('sitenews-feed')
 
-    # news archive for a year
-    url(r'archives/(?P<year>[0-9]{4})/?$',
-        'news_archive_year', name='sitenews-archive-year'),
+    def items(self):
+        return SiteNews.objects.all()
 
-    # feed
-    url(r'rss/?$',
-        NewsFeed(), name='sitenews-feed'),
+    def item_title(self, item):
+        return item.title
 
-    # news listing
-    url(r'/?$',
-        'news_list', name='sitenews-list'),
-)
+    def item_description(self, item):
+        return item.content
+
+    def item_link(self, item):
+        return item.get_absolute_url()
+
+    def item_author_name(self, item):
+        return item.author
+
+    def item_pubdate(self, item):
+        return item.created
