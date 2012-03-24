@@ -21,12 +21,12 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.utils.feedgenerator import Rss201rev2Feed
 
-from videos.models import Video, Speaker
+from videos.models import Speaker, Category
 
 
 class MediaRSSFeed(Rss201rev2Feed):
     """Implements parts of the Media RSS specification.
-    
+
     http://www.rssboard.org/media-rss
     """
     def rss_attributes(self):
@@ -60,19 +60,12 @@ class MediaRSSFeed(Rss201rev2Feed):
             handler.addQuickElement(u'media:%s' % name, '', attrs)
 
 
-class VideoFeed(Feed):
+class BaseVideoFeed(Feed):
     feed_type = MediaRSSFeed
-    title = "Videos"
     ttl = 500
-
-    def link(self, obj):
-        return reverse('videos-feed')
 
     # item_categories -- category + tags?
     # item_copyright
-
-    def items(self):
-        return Video.objects.live()[:10]
 
     def item_title(self, item):
         return item.title
@@ -126,10 +119,24 @@ class VideoFeed(Feed):
                 'media': self.item_media(item)}
 
 
-class SpeakerVideosFeed(VideoFeed):
-    """Videos of a single speaker."""
-    description = ''
+class CategoryVideosFeed(BaseVideoFeed):
+    """Videos of a single category, e.g. of a conference."""
+    def link(self, category):
+        return reverse('videos-category-feed',
+                        kwargs={'category_id': category.pk, 'slug': category.slug})
 
+    def title(self, category):
+        return 'Videos of %s' % category.name
+
+    def get_object(self, request, category_id, slug):
+        return get_object_or_404(Category, pk=category_id)
+
+    def items(self, category):
+        return category.video_set.live()
+
+
+class SpeakerVideosFeed(BaseVideoFeed):
+    """Videos of a single speaker."""
     def link(self, speaker):
         return reverse('videos-speaker-feed',
                         kwargs={'speaker_id': speaker.pk, 'slug': speaker.slug})

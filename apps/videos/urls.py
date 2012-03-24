@@ -18,7 +18,7 @@ from django.conf.urls.defaults import patterns, url
 from haystack.views import SearchView, search_view_factory
 from haystack.forms import ModelSearchForm
 
-from videos.feeds import VideoFeed, SpeakerVideosFeed
+from videos.feeds import CategoryVideosFeed, SpeakerVideosFeed
 
 
 urlpatterns = patterns(
@@ -29,6 +29,8 @@ urlpatterns = patterns(
         'category_list', name='videos-category-list'),
     url(r'category/(?P<category_id>[0-9]+)/(?P<slug>[\w-]*)/?$',
         'category', name='videos-category'),
+    url(r'category/(?P<category_id>[0-9]+)/(?P<slug>[\w-]*)/rss/?$',
+        CategoryVideosFeed(), name='videos-category-feed'),
 
     # speakers
     url(r'speaker/$',
@@ -41,7 +43,6 @@ urlpatterns = patterns(
         SpeakerVideosFeed(), name='videos-speaker-feed'),
 
     # videos
-    url(r'video/rss/?$', VideoFeed(), name='videos-feed'),
     url(r'video/(?P<video_id>[0-9]+)/(?P<slug>[\w-]*)/?$',
         'video', name='videos-video'),
 
