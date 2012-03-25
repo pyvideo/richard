@@ -18,6 +18,8 @@
 {% macro display(v) -%}
   <div class="videobox-inner">
     {% if v.source_url and 'youtube' in v.source_url %}
+      {# Fix floats in unisubs widget that are not cleared #}
+      <div class="clearfix">
       <script type="text/javascript" src="http://s3.www.universalsubtitles.org/embed.js">
         ({
           video_url: "{{ v.source_url }}",
@@ -28,6 +30,7 @@
           }
         })
       </script>
+      </div>
     {% elif v.embed %}
       {{ v.embed|safe }}
     {% else %}
