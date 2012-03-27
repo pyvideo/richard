@@ -26,7 +26,7 @@ To run the tests with nose-progressive::
 Add new tests
 =============
 
-Tests for apps go in ``richard/app/APPNAME/tests/``.
+Tests for apps go in ``richard/apps/APPNAME/tests/``.
 
 Tests for richard project go in ``richard/richard/tests/``.
 
