@@ -1,9 +1,8 @@
-# django==1.4a1
+django==1.4
 Jinja2
 MySQL-python
 whoosh
 -e git://github.com/jbalogh/jingo.git#egg=jingo
 -e git://github.com/toastdriven/django-haystack.git@master#egg=django-haystack
 bleach
--e svn+http://code.djangoproject.com/svn/django/trunk#egg=Django
 requests
