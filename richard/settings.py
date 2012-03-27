@@ -160,6 +160,7 @@ JINGO_EXCLUDE_APPS = (
     'debug_toolbar',
     'django.contrib.admin',
     'admin',
+    'registration',
 )
 
 JINGO_CONFIG = {

@@ -34,7 +34,7 @@
   </div>
 </div>
 
-{% for v in category.get_live_videos() %}
+{% for v in category.video_set.live() %}
   {{ macros.video_summary(v) }}
 {% endfor %}
 {% endblock %}

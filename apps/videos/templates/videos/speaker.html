@@ -32,7 +32,7 @@
   </div>
 </div>
 
-{% for v in speaker.get_live_videos() %}
+{% for v in speaker.video_set.live() %}
   {{ macros.video_summary(v) }}
 {% endfor %}
 {% endblock %}
