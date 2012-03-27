@@ -31,8 +31,6 @@ system/package manager:
 * Python 2.6 or 2.7
 * pip
 * virtualenv
-* MySQL Server
-* MySQL client headers
 
 
 On Debian, this translates to::
@@ -40,10 +38,7 @@ On Debian, this translates to::
     apt-get install \
         python \
         python-pip \
-        python-virtualenv \
-        mysql-server \
-        mysql-client \
-        libmysqlclient-dev
+        python-virtualenv
 
 
 Python packages to install
@@ -82,30 +77,13 @@ Use pip to install the development requirements::
 Setting up the database
 =======================
 
-You need to create a database and a user for that database.
-
-For example, to create a database named ``richard`` with a user named
-``richard`` with password ``password``, you'd do::
-
-    $ mysql -u root -p
-    mysql> CREATE DATABASE richard;
-    mysql> CREATE USER richard@localhost IDENTIFIED BY 'password';
-    mysql> GRANT ALL ON richard.* TO richard@localhost IDENTIFIED BY
-        'password';
-
-The test suite uses a separate database that has the same name as the
-database prepended with ``test_``. You need to give your user access to
-that, too. For example::
-
-    $ mysql -u root -p
-    mysql> GRANT ALL ON test_richard.* TO richard@localhost IDENTIFIED
-        BY 'password';
-
+To get started quickly you can use SQLite. It does not require any setup,
+Django will handle things for you.
 
 .. Note::
 
-   If you want to use postgres or some other system, then please do and
-   let me know if it works!
+   richard is known to work under MySQL. If you want to use postgres or
+   some other system, then please do and let me know if it works!
 
 
 Configuration
@@ -128,13 +106,12 @@ database setup::
 
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'richard',
-            'USER': 'richard',
-            'PASSWORD': 'password',
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'path/to/database.file',
+            'USER': '',
+            'PASSWORD': '',
             'HOST': '',
-            'PORT': '',
-            'OPTIONS': {'init_command': 'SET storage_engine=InnoDB'},
+            'PORT': ''
         }
     }
 
