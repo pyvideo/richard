@@ -51,7 +51,7 @@ class MediaRSSFeed(Rss201rev2Feed):
         if 'title' in item:
             handler.addQuickElement(u'media:title', item['title'])
         if 'description' in item:
-            handler.addQuickElement(u'media:description', item['description'])
+            handler.addQuickElement(u'media:description', item['description'], {'type': 'html'})
         if 'keywords' in item:
             handler.addQuickElement(u"media:keywords", item['keywords'])
 
