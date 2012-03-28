@@ -116,6 +116,22 @@ class BaseVideoFeed(Feed):
         return {'enclosures': self.item_enclosures(item),
                 'media': self.item_media(item)}
 
+    # RSS enclosure (fallback if MediaRSS is not supported by the client)
+    # This uses the first format that is available, according to the
+    # MEDIA_PREFERENCE setting.
+
+    def item_enclosure_url(self, item):
+        fmt = item.get_available_formats()[0]
+        return fmt['url']
+
+    def item_enclosure_length(self, item):
+        fmt = item.get_available_formats()[0]
+        return fmt['length']
+
+    def item_enclosure_mime_type(self, item):
+        fmt = item.get_available_formats()[0]
+        return fmt['mime_type']
+
 
 class CategoryVideosFeed(BaseVideoFeed):
     """Videos of a single category, e.g. of a conference."""
