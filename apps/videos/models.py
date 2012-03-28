@@ -208,6 +208,18 @@ class Video(models.Model):
     def is_live(self):
         return self.state == self.STATE_LIVE
 
+    def get_available_formats(self):
+        """Return available formats ordered according to the MEDIA_PREFERENCE
+        setting."""
+        result = []
+        for fmt in settings.MEDIA_PREFERENCE:
+            url = getattr(self, 'video_%s_url' % fmt)
+            length = getattr(self, 'video_%s_length' % fmt)
+            if url:
+                result.append({'url': url, 'length': length,
+                                'mime_type': 'video/%s' % fmt})
+        return result
+
 
 class RelatedUrl(models.Model):
     video = models.ForeignKey(Video, related_name='related_urls')

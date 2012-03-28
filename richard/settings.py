@@ -221,6 +221,8 @@ LOGGING = {
 
 VIDEO_THUMBNAIL_SIZE = (160, 120)
 
+MEDIA_PREFERENCE = ('ogv', 'webm', 'mp4', )
+
 try:
     from richard.settings_local import *    
 except ImportError:

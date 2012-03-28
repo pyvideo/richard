@@ -43,8 +43,7 @@ class MediaRSSFeed(Rss201rev2Feed):
                 handler.startElement(u'media:group', {})
 
             for e in item['enclosures']:
-                data = {u'url': e['url']}
-                handler.addQuickElement(u'media:content', '', data)
+                handler.addQuickElement(u'media:content', '', e)
 
             if group:
                 handler.endElement(u'media:group')
@@ -98,14 +97,13 @@ class BaseVideoFeed(Feed):
     # MediaRSS specific
 
     def item_enclosures(self, item):
-        # TODO the Video model should tell us what sources are available
-        sources = ('source', 'video_ogv', 'video_mp4', 'video_webm', )
         enclosures = []
+        for fmt in item.get_available_formats():
+            data = {'url': fmt['url'], 'type': fmt['mime_type']}
+            if fmt['length']:
+                data['fileSize'] = str(fmt['length'])
 
-        for source in sources:
-            field = source + '_url'
-            if getattr(item, field):
-                enclosures.append({'url': getattr(item, field)})
+            enclosures.append(data)
 
         return enclosures
 
