@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 from django.utils.translation import ugettext_lazy as _
 
-from videos.models import Video, Category, Speaker, CategoryKind
+from videos.models import Video, Category, Speaker, CategoryKind, Tag
 
 
 class WhiteboardFilter(SimpleListFilter):
@@ -82,3 +82,11 @@ class SpeakerAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Speaker, SpeakerAdmin)
+
+
+class TagAdmin(admin.ModelAdmin):
+    list_display = ('tag', )
+    search_fields = ('tag', )
+
+
+admin.site.register(Tag, TagAdmin)
