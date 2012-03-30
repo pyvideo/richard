@@ -1,6 +1,6 @@
-=====================
- Install for hacking
-=====================
+================================
+ Installing richard for hacking
+================================
 
 This covers how to clone richard and set it up for easy hacking.
 
