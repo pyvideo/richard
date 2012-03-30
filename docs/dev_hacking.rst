@@ -41,6 +41,14 @@ On Debian, this translates to::
         python-virtualenv
 
 
+Getting richard
+===============
+
+Clone the repository from github::
+
+    $ git clone git://github.com/willkg/richard.git
+
+
 Python packages to install
 ==========================
 
@@ -49,7 +57,7 @@ in the requirements files provided.
 
 Create a virtual environment::
 
-    $ cd your_site
+    $ cd richard
     $ virtualenv ./venv/
 
 Activate the virtual environment::
@@ -58,7 +66,7 @@ Activate the virtual environment::
 
 Use pip to install the development requirements::
 
-    $ pip install -r richard/requirements/development.txt
+    $ pip install -r requirements/development.txt
 
 .. Note::
 
