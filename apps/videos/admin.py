@@ -21,10 +21,10 @@ from django.utils.translation import ugettext_lazy as _
 from videos.models import Video, Category, Speaker, CategoryKind
 
 
-class NeedsEditingFilter(SimpleListFilter):
-    """Filter objects whether there is something in their whiteboard field or not."""
-    title = _('needs editing')
-    parameter_name = 'needs_editing'
+class WhiteboardFilter(SimpleListFilter):
+    """Filter objects with whiteboard bits"""
+    title = _('whiteboard')
+    parameter_name = 'whiteboard'
 
     def lookups(self, request, model_admin):
         return (
@@ -48,11 +48,11 @@ admin.site.register(CategoryKind, CategoryKindAdmin)
 
 class VideoAdmin(admin.ModelAdmin):
     date_hierarchy = 'recorded'
-    list_display = ('title', 'category', 'state')
-    list_filter = (NeedsEditingFilter, 'state', 'category')
-    search_fields = ('title', )
+    list_display = ('title', 'category', 'whiteboard', 'state')
+    list_filter = (WhiteboardFilter, 'state', 'category')
+    search_fields = ('title',)
     radio_fields = {'state': admin.HORIZONTAL}
-    filter_horizontal = ('tags', 'speakers', )
+    filter_horizontal = ('tags', 'speakers',)
     save_on_top = True
     prepopulated_fields = {'slug': ('title',)}
 
@@ -61,8 +61,8 @@ admin.site.register(Video, VideoAdmin)
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'linked_url')
-    list_filter = (NeedsEditingFilter, )
+    list_display = ('title', 'linked_url', 'whiteboard')
+    list_filter = (WhiteboardFilter,)
     search_fields = ('name', 'title', 'description')
 
     def linked_url(self, obj):
