@@ -27,15 +27,15 @@ This guide is split into two parts:
     need to know about the project to help out.
 
 
-Documentation todo
-==================
-
-.. todolist::
-
-
 Indices and tables
 ==================
 
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+
+Documentation todo
+==================
+
+.. todolist::
