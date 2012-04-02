@@ -5,7 +5,7 @@
 richard is a video index site.
 
 It's pretty basic at the moment. I'm adding functionality as I need it for
-`<http://pyvideo.org>`_. If you're looking at this or using it at this
+`<http://pyvideo.org/>`_. If you're looking at this or using it at this
 stage, then you're either a friend of mine or you're intrigued by the
 future possibilities.
 
@@ -38,6 +38,17 @@ Future things:
   videos
 
 
+Versions
+========
+
+There is no released version of richard, yet. If you look at the commit
+history, you'll see we're moving along with functionality. When we hit
+a critical mass of important bits, we'll do a round of polish and release
+a 0.1. Until then, if you want to use it, you should use it from git master.
+
+And join us on the IRC channel!
+
+
 Project details
 ===============
 
@@ -54,7 +65,7 @@ Documentation:
     Most recent docs are at: http://richard.readthedocs.org/
 
 IRC channel:
-    ``richard`` on ``irc.freenode.net``
+    ``#richard`` on ``irc.freenode.net``
 
 
 Want to help?
