@@ -16,6 +16,7 @@
 
 from datetime import datetime, time
 
+from django.conf import settings
 from django.contrib.syndication.views import Feed
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
@@ -48,10 +49,6 @@ class MediaRSSFeed(Rss201rev2Feed):
             if group:
                 handler.endElement(u'media:group')
 
-        if 'title' in item:
-            handler.addQuickElement(u'media:title', item['title'])
-        if 'description' in item:
-            handler.addQuickElement(u'media:description', item['description'], {'type': 'html'})
         if 'keywords' in item:
             handler.addQuickElement(u"media:keywords", item['keywords'])
 
@@ -140,7 +137,7 @@ class CategoryVideosFeed(BaseVideoFeed):
                         kwargs={'category_id': category.pk, 'slug': category.slug})
 
     def title(self, category):
-        return 'Videos of %s' % category.name
+        return u'%s: Videos of %s' % (settings.SITE_TITLE, category.name)
 
     def get_object(self, request, category_id, slug):
         return get_object_or_404(Category, pk=category_id)
@@ -156,7 +153,7 @@ class SpeakerVideosFeed(BaseVideoFeed):
                         kwargs={'speaker_id': speaker.pk, 'slug': speaker.slug})
 
     def title(self, speaker):
-        return 'Videos of %s' % speaker.name
+        return u'%s: Videos of %s' % (settings.SITE_TITLE, speaker.name)
 
     def get_object(self, request, speaker_id, slug):
         return get_object_or_404(Speaker, pk=speaker_id)
