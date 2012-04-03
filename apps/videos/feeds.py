@@ -38,16 +38,11 @@ class MediaRSSFeed(Rss201rev2Feed):
     def add_item_elements(self, handler, item):
         super(MediaRSSFeed, self).add_item_elements(handler, item)
 
-        if 'enclosures' in item:
-            group = len(item['enclosures']) > 1
-            if group:
-                handler.startElement(u'media:group', {})
-
+        if 'enclosures' in item and len(item['enclosures']) > 1:
+            handler.startElement(u'media:group', {})
             for e in item['enclosures']:
                 handler.addQuickElement(u'media:content', '', e)
-
-            if group:
-                handler.endElement(u'media:group')
+            handler.endElement(u'media:group')
 
         if 'keywords' in item:
             handler.addQuickElement(u"media:keywords", item['keywords'])
