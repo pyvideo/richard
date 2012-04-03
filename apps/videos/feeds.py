@@ -118,16 +118,25 @@ class BaseVideoFeed(Feed):
     # MEDIA_PREFERENCE setting.
 
     def item_enclosure_url(self, item):
-        fmt = item.get_available_formats()[0]
-        return fmt['url']
+        fmt = item.get_available_formats()
+        if fmt:
+            return fmt[0]['url']
+        else:
+            return None
 
     def item_enclosure_length(self, item):
-        fmt = item.get_available_formats()[0]
-        return fmt['length']
+        fmt = item.get_available_formats()
+        if fmt:
+            return fmt[0]['length']
+        else:
+            return None
 
     def item_enclosure_mime_type(self, item):
-        fmt = item.get_available_formats()[0]
-        return fmt['mime_type']
+        fmt = item.get_available_formats()
+        if fmt:
+            return fmt[0]['mime_type']
+        else:
+            return None
 
 
 class CategoryVideosFeed(BaseVideoFeed):

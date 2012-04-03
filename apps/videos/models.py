@@ -209,10 +209,18 @@ class Video(models.Model):
         return self.state == self.STATE_LIVE
 
     def get_available_formats(self):
-        """Return available formats ordered according to the MEDIA_PREFERENCE
-        setting."""
+        """Return formats ordered by MEDIA_PREFERENCE setting.
+
+        Looks through all video_url/video_length fields on the model and
+        selects those that are available, i.e. that have a value. The
+        elements in the returned list are ordered by their format.
+        """
         result = []
         for fmt in settings.MEDIA_PREFERENCE:
+            # skip unsupported formats
+            if not hasattr(self, 'video_%s_url' % fmt):
+                continue
+
             url = getattr(self, 'video_%s_url' % fmt)
             length = getattr(self, 'video_%s_length' % fmt)
             if url:
