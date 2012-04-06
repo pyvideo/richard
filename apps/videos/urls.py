@@ -27,23 +27,21 @@ urlpatterns = patterns(
     # categories
     url(r'category/?$',
         'category_list', name='videos-category-list'),
+    url(r'category/(?P<category_id>[0-9]+)(?:/(?P<slug>[\w-]*))?/?$',
+        'category', name='videos-category'),
     url(r'category/(?P<category_id>[0-9]+)(?:/(?P<slug>[\w-]*))?/rss/?$',
         CategoryVideosFeed(), name='videos-category-feed'),
-    url(r'category/(?P<category_id>[0-9]+)/(?P<slug>[\w-]*)/?$',
-        'category', name='videos-category'),
 
     # speakers
     url(r'speaker/$',
         'speaker_list', name='videos-speaker-list'),
-    url(r'speaker/(?P<speaker_id>[0-9]+)/?$',
-        'speaker', name='videos-speaker-noslug'),
+    url(r'speaker/(?P<speaker_id>[0-9]+)(?:/(?P<slug>[\w-]*))?/?$',
+        'speaker', name='videos-speaker'),
     url(r'speaker/(?P<speaker_id>[0-9]+)(?:/(?P<slug>[\w-]*))?/rss/?$',
         SpeakerVideosFeed(), name='videos-speaker-feed'),
-    url(r'speaker/(?P<speaker_id>[0-9]+)/(?P<slug>[\w-]*)/?$',
-        'speaker', name='videos-speaker'),
 
     # videos
-    url(r'video/(?P<video_id>[0-9]+)/(?P<slug>[\w-]*)/?$',
+    url(r'video/(?P<video_id>[0-9]+)(?:/(?P<slug>[\w-]*))?/?$',
         'video', name='videos-video'),
 
     # search

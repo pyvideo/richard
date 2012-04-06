@@ -25,24 +25,50 @@ class VideosViewsTest(ViewTestCase):
 
     # category 
 
-    def test_category_list(self):
+    def test_category_list_empty(self):
         """Test the view of the listing of all categories."""
         url = reverse('videos-category-list')
 
         self.assert_HTTP_200(url)
-        self.assert_used_templates(url, 
-                                   templates=['videos/category_list.html'])
+        self.assert_used_templates(
+            url, templates=['videos/category_list.html'])
+
+    def test_category_list_with_categories(self):
+        """Test the view of the listing of all categories."""
+        category(save=True)
+        category(save=True)
+        category(save=True)
+
+        url = reverse('videos-category-list')
+
+        self.assert_HTTP_200(url)
+        self.assert_used_templates(
+            url, templates=['videos/category_list.html'])
         
-    def test_category(self):
+    def test_category_urls(self):
         """Test the view of an category."""
-        cat = category(name='Test',
-                       title='Test Category',
-                       save=True)
+        cat = category(save=True)
         url = cat.get_absolute_url()
 
         self.assert_HTTP_200(url)
-        self.assert_used_templates(url, 
-                                   templates=['videos/category.html'])
+        self.assert_used_templates(
+            url, templates=['videos/category.html'])
+
+        # with slug and /
+        url = u'/category/%s/%s/' % (cat.id, cat.slug)
+        self.assert_HTTP_200(url)
+
+        # with slug and no /
+        url = u'/category/%s/%s' % (cat.id, cat.slug)
+        self.assert_HTTP_200(url)
+
+        # no slug and /
+        url = u'/category/%s/' % cat.id
+        self.assert_HTTP_200(url)
+
+        # no slug and no /
+        url = u'/category/%s' % cat.id
+        self.assert_HTTP_200(url)
 
     def test_category_raise_404_when_does_not_exist(self):
         """
@@ -143,39 +169,59 @@ class VideosViewsTest(ViewTestCase):
                                    templates=['videos/speaker_list.html'])
         self.assert_contains(url, data, text=spe.name)
 
-    def test_speaker(self):
+    def test_speaker_urls(self):
         """Test the view of a speaker."""
-        spe = speaker(name='Random Speaker',
-                      save=True,)
+        spe = speaker(name='Random Speaker', save=True)
+
         # `url.get_absolute_url` returns the URL with the PK and the slug
         url = spe.get_absolute_url()
 
         self.assert_HTTP_200(url)
-        self.assert_used_templates(url, 
-                                   templates=['videos/speaker.html'])
+        self.assert_used_templates(
+            url, templates=['videos/speaker.html'])
 
-    def test_speaker_noslug(self):
-        """Test the view of a speaker without providing the slug."""
-        spe = speaker(name='Random Speaker',
-                      save=True,)
-        url = reverse('videos-speaker-noslug',
-                      kwargs={'speaker_id': spe.pk})
-
+        # with slug and /
+        url = u'/speaker/%s/%s/' % (spe.id, spe.slug)
         self.assert_HTTP_200(url)
-        self.assert_used_templates(url, 
-                                   templates=['videos/speaker.html'])
+
+        # with slug and no /
+        url = u'/speaker/%s/%s' % (spe.id, spe.slug)
+        self.assert_HTTP_200(url)
+
+        # no slug and /
+        url = u'/speaker/%s/' % spe.id
+        self.assert_HTTP_200(url)
+
+        # no slug and no /
+        url = u'/speaker/%s' % spe.id
+        self.assert_HTTP_200(url)
 
     # videos
 
-    def test_video(self):
+    def test_video_urls(self):
         """Test the view of a video."""
-        vid = video(title='',
-                    save=True)
+        vid = video(save=True)
         url = vid.get_absolute_url()
 
         self.assert_HTTP_200(url)
-        self.assert_used_templates(url, 
-                                   templates=['videos/video.html'])
+        self.assert_used_templates(
+            url, templates=['videos/video.html'])
+
+        # with slug and /
+        url = u'/video/%s/%s/' % (vid.id, vid.slug)
+        self.assert_HTTP_200(url)
+
+        # with slug and no /
+        url = u'/video/%s/%s' % (vid.id, vid.slug)
+        self.assert_HTTP_200(url)
+
+        # no slug and /
+        url = u'/video/%s/' % vid.id
+        self.assert_HTTP_200(url)
+
+        # no slug and no /
+        url = u'/video/%s' % vid.id
+        self.assert_HTTP_200(url)
 
     # search
 

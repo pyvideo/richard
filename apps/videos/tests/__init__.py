@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import uuid
+
 from django.template.defaultfilters import slugify
 
 from videos.models import CategoryKind, Category, Speaker, Tag, Video
@@ -31,12 +33,13 @@ def category_kind(**kwargs):
 
 @with_save
 def category(**kwargs):
-    defaults = {
-        'name': 'Nameless category',
-        'title': 'Nameless category 2012'
-        }
+    defaults = {}
     defaults.update(kwargs)
 
+    if 'name' not in defaults:
+        defaults['name'] = str(uuid.uuid4())
+    if 'title' not in defaults:
+        defaults['title'] = defaults['name'] + u' 2012'
     if 'slug' not in defaults:
         defaults['slug'] = slugify(defaults['name'])
     if 'kind' not in defaults:
