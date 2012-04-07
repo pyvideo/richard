@@ -223,9 +223,14 @@ class Video(models.Model):
 
             url = getattr(self, 'video_%s_url' % fmt)
             length = getattr(self, 'video_%s_length' % fmt)
+            try:
+                mime_type = MIMETYPES_MAP[fmt]
+            except KeyError:
+                raise LookupError('No mimetype registered for "%s"' % fmt)
+
             if url:
                 result.append({'url': url, 'length': length,
-                                'mime_type': 'video/%s' % fmt})
+                                'mime_type': mime_type})
         return result
 
 
@@ -292,3 +297,10 @@ def create_videos(data):
         created.append(v)
     return created
 
+
+MIMETYPES_MAP = {
+    'ogv': 'video/ogg',
+    'mp4': 'video/mp4',
+    'webm': 'video/webm',
+    'flv': 'video/x-flv'
+}

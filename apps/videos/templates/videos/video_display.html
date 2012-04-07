@@ -33,7 +33,7 @@
     {% else %}
       <video id="{{ v.slug }}">
         {% if v.video_ogv_url %}
-          <source src="{{ v.video_ogv_url }}" type="video/ogv">
+          <source src="{{ v.video_ogv_url }}" type="video/ogg">
         {% endif %}
         {% if v.video_mp4_url %}
           <source src="{{ v.video_mp4_url }}" type="video/mp4">
