@@ -141,7 +141,7 @@ class CategoryVideosFeed(BaseVideoFeed):
                         kwargs={'category_id': category.pk, 'slug': category.slug})
 
     def title(self, category):
-        return u'%s: Videos of %s' % (settings.SITE_TITLE, category.name)
+        return u'%s: Videos of %s' % (settings.SITE_TITLE, category.title)
 
     def get_object(self, request, category_id, slug):
         return get_object_or_404(Category, pk=category_id)
