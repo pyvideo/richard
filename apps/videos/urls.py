@@ -61,6 +61,8 @@ urlpatterns = patterns(
             template='videos/search.html',
             form_class=ModelSearchForm),
         name='haystack-search'),
+    url(r'^search/xml/?$',
+        'opensearch', name='opensearch'),
 
     # faux api for carl
     url(r'^api/1.0/videos/urlforsource$',

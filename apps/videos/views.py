@@ -17,6 +17,7 @@
 import bleach
 
 
+from django.contrib.sites.models import Site
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, render
 
@@ -88,6 +89,14 @@ def video(request, video_id, slug):
         request, 'videos/video.html',
         {'meta': meta,
          'v': obj})
+    return ret
+
+
+def opensearch(request):
+    ret = render(
+        request, 'videos/opensearch.xml',
+        {'site': Site.objects.get_current()},
+        content_type='application/opensearchdescription+xml')
     return ret
 
 
