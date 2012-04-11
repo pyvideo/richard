@@ -197,7 +197,7 @@ class Video(models.Model):
         2. use the remote image in `thumbnail_url`
         3. show a placeholder image
         """
-        no_thumbnail = settings.STATIC_URL + 'no_thumbnail.png'
+        no_thumbnail = settings.STATIC_URL + 'img/no_thumbnail.png'
 
         local_path = self.LOCAL_THUMBNAIL_PATH % self.pk
         if os.path.exists(os.path.join(settings.MEDIA_ROOT, local_path)):
