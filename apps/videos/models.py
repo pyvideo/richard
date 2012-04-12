@@ -28,6 +28,9 @@ class CategoryKind(models.Model):
     name = models.CharField(max_length=40)
 
     def __unicode__(self):
+        return self.name
+
+    def __repr__(self):
         return '<CategoryKind %s>' % self.name
 
 
@@ -61,6 +64,9 @@ class Category(models.Model):
     slug = models.SlugField(unique=True)
 
     def __unicode__(self):
+        return self.title
+
+    def __repr__(self):
         return '<Category %s>' % self.title
 
     class Meta(object):
@@ -80,6 +86,9 @@ class Speaker(models.Model):
     slug = models.SlugField(unique=True)
 
     def __unicode__(self):
+        return self.name
+
+    def __repr__(self):
         return '<Speaker %s: %s>' % (self.id, self.name)
 
     class Meta(object):
@@ -94,6 +103,9 @@ class Tag(models.Model):
     tag = models.CharField(max_length=30)
 
     def __unicode__(self):
+        return self.tag
+
+    def __repr__(self):
         return '<Tag %s>' % self.tag
 
     class Meta(object):
@@ -176,6 +188,9 @@ class Video(models.Model):
     objects = VideoManager()
 
     def __unicode__(self):
+        return self.title
+
+    def __repr__(self):
         return '<Video %s (%s)>' % (self.title[:30], self.category)
 
     class Meta(object):
@@ -248,6 +263,9 @@ class RelatedUrl(models.Model):
     description = models.CharField(max_length=255, blank=True, default=u'')
 
     def __unicode__(self):
+        return self.url
+
+    def __repr__(self):
         return '<URL %s>' % self.url
 
 

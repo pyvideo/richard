@@ -47,6 +47,9 @@ class SiteNews(models.Model):
         return ('sitenews-news', (self.pk, self.slug))
 
     def __unicode__(self):
+        return self.title
+
+    def __repr__(self):
         return '<SiteNews: %s>' % self.title
 
     def save(self, *args, **kwargs):
