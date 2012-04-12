@@ -17,6 +17,7 @@
 from django.core.urlresolvers import reverse
 
 from richard.tests.utils import ViewTestCase
+from sitenews.tests import notification
 
 
 class RichardViewsTest(ViewTestCase):
@@ -28,3 +29,12 @@ class RichardViewsTest(ViewTestCase):
         self.assert_HTTP_200(url)
         self.assert_used_templates(url, 
                                    templates=['home.html'])
+
+    def test_notifications_on_home(self):
+        """Test that notifications are displayed on the homepage."""
+        notification(text=u'1, 2, 3 - test', save=True)
+        notification(text=u'Just a test.', save=True)
+
+        url = reverse('home')
+        self.assert_contains(url, text='1, 2, 3 - test')
+        self.assert_contains(url, text='Just a test.')
