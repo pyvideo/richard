@@ -18,6 +18,7 @@ from django.core.urlresolvers import reverse
 
 from . import category, speaker, video
 from richard.tests.utils import ViewTestCase
+from videos.models import Video
 
 
 class VideosViewsTest(ViewTestCase):
@@ -222,6 +223,32 @@ class VideosViewsTest(ViewTestCase):
         # no slug and no /
         url = u'/video/%s' % vid.id
         self.assert_HTTP_200(url)
+
+    def test_active_video_category_and_speaker_page(self):
+        """Active video should shows up on category and speaker pages."""
+        vid = video(state=Video.STATE_LIVE, save=True)
+        vid.speakers.add(speaker(save=True))
+        category_url = vid.category.get_absolute_url()
+
+        res = self.client.get(category_url)
+        self.assertContains(res, vid.title)
+
+        for s in vid.speakers.all():
+            resp = self.client.get(s.get_absolute_url())
+            self.assertContains(resp, vid.title)
+
+    def test_inactive_video_category_and_speaker_page(self):
+        """Inactive video should not show up on category and speaker pages."""
+        vid = video(save=True)
+        vid.speakers.add(speaker(save=True))
+        category_url = vid.category.get_absolute_url()
+
+        res = self.client.get(category_url)
+        self.assertNotContains(res, vid.title)
+
+        for s in vid.speakers.all():
+            resp = self.client.get(s.get_absolute_url())
+            self.assertNotContains(resp, vid.title)
 
     # search
 
