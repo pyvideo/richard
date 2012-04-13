@@ -27,26 +27,44 @@ from videos.models import Video
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
-        make_option('--overwrite', action='store_true', dest='overwrite', default=False,
-            help='Overwrite existing thumbnails.'),
+        make_option('--overwrite', action='store_true', dest='overwrite',
+                    default=False,
+                    help='Overwrite existing thumbnails.'),
     )
     help = 'Fetch thumbnails of all videos and store them locally'
 
     def handle(self, *args, **options):
-        # Make PIL only a dependency for this command, not the rest of richard
+        verbose = int(options.get('verbosity'))
+
+        # Make PIL only a dependency for this command, not the rest of
+        # richard
         try:
             from PIL import Image
         except ImportError:
             raise CommandError('PIL is required for this command.')
 
+        root = os.path.join(settings.MEDIA_ROOT, Video.LOCAL_THUMBNAIL_PATH)
+        root = os.path.dirname(root)
+        if not os.path.exists(root):
+            os.mkdir(root)
+
         fetched = 0
         videos = Video.objects.exclude(thumbnail_url='')
-        for v in videos:
+        total = len(videos)
+
+        for ind, v in enumerate(videos):
             # Don't overwrite existing thumbnails unless we were told so
             path = Video.LOCAL_THUMBNAIL_PATH % v.pk
-            if (not options.get('overwrite') and
-                os.path.exists(os.path.join(settings.MEDIA_ROOT, path))):
+            if ((not options.get('overwrite') and
+                 os.path.exists(os.path.join(settings.MEDIA_ROOT, path)))):
+                if verbose:
+                    self.stdout.write('%d/%d: Skipping %s (%s)\n' % (
+                            ind, total, path, v.title))
                 continue
+
+            if verbose:
+                self.stdout.write('%d/%d: Fetching %s (%s)\n' % (
+                        ind, total, path, v.title))
 
             res = requests.get(v.thumbnail_url)
             data = StringIO.StringIO(res.content)
@@ -57,5 +75,5 @@ class Command(BaseCommand):
             del image
             fetched += 1
 
-        if int(options.get('verbosity')) > 0:
+        if verbose:
             self.stdout.write('Fetched %d images\n' % fetched)
