@@ -14,11 +14,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.conf.urls.defaults import patterns, url
+from django.conf.urls.defaults import patterns, url, include
 from haystack.views import SearchView, search_view_factory
 from haystack.forms import ModelSearchForm
+from tastypie.api import Api
 
+from videos.api import VideoResource, SpeakerResource, CategoryResource
 from videos.feeds import CategoryVideosFeed, SpeakerVideosFeed
+
+
+v1_api = Api(api_name='v1')
+v1_api.register(VideoResource())
+v1_api.register(SpeakerResource())
+v1_api.register(CategoryResource())
 
 
 urlpatterns = patterns(
@@ -55,4 +63,6 @@ urlpatterns = patterns(
     # faux api for carl
     url(r'^api/1.0/videos/urlforsource$',
         'apiurlforsource', name='videos-api-urlforsource'),
+
+    (r'^api/', include(v1_api.urls)),
 )
