@@ -29,7 +29,7 @@ urlpatterns = patterns(
 
     url(r'^admin/', include(admin.site.urls)),
 
-    url(r'news/', include('sitenews.urls')),
-    url(r'pages/', include('pages.urls')),
+    url(r'^news/', include('sitenews.urls')),
+    url(r'^pages/', include('pages.urls')),
     url(r'', include('videos.urls')),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

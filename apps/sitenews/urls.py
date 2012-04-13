@@ -23,18 +23,18 @@ urlpatterns = patterns(
     'sitenews.views',
 
     # news item
-    url(r'entry/(?P<pk>\d+)/(?P<slug>[\w-]*)/?$',
+    url(r'^entry/(?P<pk>\d+)/(?P<slug>[\w-]*)/?$',
         'news', name='sitenews-news'),
 
     # news archive for a year
-    url(r'archives/(?P<year>[0-9]{4})/?$',
+    url(r'^archives/(?P<year>[0-9]{4})/?$',
         'news_archive_year', name='sitenews-archive-year'),
 
     # feed
-    url(r'rss/?$',
+    url(r'^rss/?$',
         NewsFeed(), name='sitenews-feed'),
 
     # news listing
-    url(r'/?$',
+    url(r'^/?$',
         'news_list', name='sitenews-list'),
 )
