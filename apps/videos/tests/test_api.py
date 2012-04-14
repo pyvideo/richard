@@ -15,9 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import json
+from functools import partial
 
+from django.contrib.auth.models import User
 from django.test import TestCase
 from nose.tools import eq_
+from tastypie.models import ApiKey
 
 from . import video, speaker, category
 from videos.models import Video
@@ -25,11 +28,28 @@ from videos.models import Video
 
 class TestApi(TestCase):
 
+    def setUp(self):
+        """Create superuser with API key."""
+        user = User.objects.create_superuser(
+            username='api_user', email='api@example.com', password='password')
+        user.save()
+        ApiKey.objects.create(user=user)
+
+        header = 'ApiKey %s:%s' % (user.username, user.api_key.key)
+        self.auth_post = partial(self.client.post, HTTP_AUTHORIZATION=header)
+        self.auth_get = partial(self.client.get, HTTP_AUTHORIZATION=header)
+
     def test_get_video(self):
         """Test that a video can be retrieved."""
         vid = video(state=Video.STATE_LIVE, save=True)
 
+        # anonymous user
         resp = self.client.get('/api/v1/video/%d/' % vid.pk, {'format': 'json'})
+        eq_(resp.status_code, 200)
+        eq_(json.loads(resp.content)['title'], vid.title)
+
+        # authenticated user
+        resp = self.auth_get('/api/v1/video/%d/' % vid.pk, {'format': 'json'})
         eq_(resp.status_code, 200)
         eq_(json.loads(resp.content)['title'], vid.title)
 
@@ -48,3 +68,36 @@ class TestApi(TestCase):
         resp = self.client.get('/api/v1/category/%d/' % cat.pk, {'format': 'json'})
         eq_(resp.status_code, 200)
         eq_(json.loads(resp.content)['name'], cat.name)
+
+    def test_post_video(self):
+        """Test that authenticated user can create videos."""
+        cat = category(save=True)
+        s = speaker(save=True)
+        data = {'title': 'Creating delicious APIs for Django apps since 2010.',
+                'category': '/api/v1/category/%d/' % cat.pk,
+                'speakers': ['/api/v1/speaker/%d/' % s.pk],
+                'state': Video.STATE_LIVE}
+
+        resp = self.auth_post('/api/v1/video/', json.dumps(data),
+                                content_type='application/json')
+        eq_(resp.status_code, 201)
+
+        # Get the created video
+        resp = self.auth_get(resp['Location'], {'format': 'json'})
+        eq_(resp.status_code, 200)
+        eq_(json.loads(resp.content)['title'], data['title'])
+
+        vid = Video.objects.get(title=data['title'])
+        eq_(vid.title, data['title'])
+        eq_(list(vid.speakers.values_list('pk', flat=True)), [s.pk])
+
+    def test_read_only(self):
+        """Test that not authenticated users can't write."""
+        cat = category(save=True)
+        data = {'title': 'Creating delicious APIs for Django apps since 2010.',
+                'category': '/api/v1/category/%d/' % cat.pk,
+                'state': Video.STATE_LIVE}
+
+        resp = self.client.post('/api/v1/video/', json.dumps(data),
+                                content_type='application/json')
+        eq_(resp.status_code, 401)

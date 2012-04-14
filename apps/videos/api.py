@@ -14,16 +14,46 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from tastypie import fields
+from tastypie.authentication import (ApiKeyAuthentication, Authentication,
+                                        MultiAuthentication)
+from tastypie.authorization import Authorization
 from tastypie.resources import ModelResource
 
 from videos.models import Video, Speaker, Category
 
 
+class AdminAuthorization(Authorization):
+    """Only admins get write access to resources."""
+
+    def is_authorized(self, request, object=None):
+        # Always allow read-access
+        if request.method in ('GET', 'OPTIONS', 'HEAD'):
+            return True
+
+        if not hasattr(request, 'user'):
+            return False
+
+        return request.user.is_staff
+
+
+def get_authentication():
+    """Authenticate users with API key, but let all others though too.
+
+    Authorization will handle the permissions.
+    """
+    return MultiAuthentication(ApiKeyAuthentication(), Authentication())
+
+
 class VideoResource(ModelResource):
+    category = fields.ToOneField('videos.api.CategoryResource', 'category')
+    speakers = fields.ToManyField('videos.api.SpeakerResource', 'speakers')
 
     class Meta:
         queryset = Video.objects.live()
         resource_name = 'video'
+        authentication = get_authentication()
+        authorization = AdminAuthorization()
 
 
 class SpeakerResource(ModelResource):
@@ -31,6 +61,8 @@ class SpeakerResource(ModelResource):
     class Meta:
         queryset = Speaker.objects.all()
         resource_name = 'speaker'
+        authentication = get_authentication()
+        authorization = AdminAuthorization()
 
 
 class CategoryResource(ModelResource):
@@ -38,3 +70,5 @@ class CategoryResource(ModelResource):
     class Meta:
         queryset = Category.objects.all()
         resource_name = 'category'
+        authentication = get_authentication()
+        authorization = AdminAuthorization()
