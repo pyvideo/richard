@@ -15,11 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import bleach
-
+import json
 
 from django.contrib.sites.models import Site
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, render
+from haystack.query import SearchQuerySet
 
 
 from videos import models
@@ -98,6 +99,18 @@ def opensearch(request):
         {'site': Site.objects.get_current()},
         content_type='application/opensearchdescription+xml')
     return ret
+
+
+def opensearch_autocomplete(request):
+    """Return autocompletions for a search query.
+    
+    Implements the OpenSearch suggestions extension.
+    """
+    query = request.GET.get('q', '')
+    matches = SearchQuerySet().filter(title_auto=query)
+    result = [query, [r.object.title for r in matches]]
+
+    return JSONResponse(json.dumps(result))
 
 
 # TODO: Move this elsewhere

@@ -63,6 +63,8 @@ urlpatterns = patterns(
         name='haystack-search'),
     url(r'^search/xml/?$',
         'opensearch', name='opensearch'),
+    url(r'^search/autocomplete/$',
+        'opensearch_autocomplete', name='haystack-autocomplete'),
 
     # faux api for carl
     url(r'^api/1.0/videos/urlforsource$',

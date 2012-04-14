@@ -3,4 +3,6 @@
     <ShortName>{{ settings.SITE_TITLE }}</ShortName>
     <Description>Find videos on {{ settings.SITE_TITLE }}.</Description>
     <Url type="text/html" template="http://{{ site }}{{ url('haystack-search') }}?q={searchTerms}"/>
+    <Url type="application/x-suggestions+json"
+         template="http://{{ site }}{{ url('haystack-autocomplete') }}?q={searchTerms}"/>
 </OpenSearchDescription>
