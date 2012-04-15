@@ -4,6 +4,7 @@ MySQL-python
 whoosh
 -e git://github.com/jbalogh/jingo.git#egg=jingo
 -e git://github.com/toastdriven/django-haystack.git@master#egg=django-haystack
+-e git://github.com/toastdriven/django-tastypie.git@master#egg=django-tastypie
 bleach
 requests
 south
