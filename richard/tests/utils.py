@@ -79,11 +79,11 @@ class ViewTestCase(TestCase):
         if templates is None:
             return
 
-        response = self.client.get(url)
+        response = self.client.get(url, data)
         for template in templates:
             self.assertTemplateUsed(response, template)
 
-    def assert_contains(self, url , data=None, text=''):
+    def assert_contains(self, url, data=None, text=''):
         """
         Assert that requesting the given URL with `data` as GET parameters
         contains `text`.
