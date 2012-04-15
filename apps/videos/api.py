@@ -20,7 +20,7 @@ from tastypie.authentication import (ApiKeyAuthentication, Authentication,
 from tastypie.authorization import Authorization
 from tastypie.resources import ModelResource
 
-from videos.models import Video, Speaker, Category
+from videos.models import Video, Speaker, Category, Tag
 
 
 class AdminAuthorization(Authorization):
@@ -48,12 +48,23 @@ def get_authentication():
 class VideoResource(ModelResource):
     category = fields.ToOneField('videos.api.CategoryResource', 'category')
     speakers = fields.ToManyField('videos.api.SpeakerResource', 'speakers')
+    tags = fields.ToManyField('videos.api.TagResource', 'tags')
 
     class Meta:
         queryset = Video.objects.live()
         resource_name = 'video'
         authentication = get_authentication()
         authorization = AdminAuthorization()
+
+    def hydrate(self, bundle):
+        """Allow to pass in the actual names of tags and speakers."""
+        l = [Tag.objects.get_or_create(tag=x)[0] for x in bundle.data.get('tags')]
+        bundle.data['tags'] = l
+
+        l = [Speaker.objects.get_or_create(name=x)[0] for x in bundle.data.get('speakers')]
+        bundle.data['speakers'] = l
+
+        return bundle
 
 
 class SpeakerResource(ModelResource):
@@ -70,5 +81,14 @@ class CategoryResource(ModelResource):
     class Meta:
         queryset = Category.objects.all()
         resource_name = 'category'
+        authentication = get_authentication()
+        authorization = AdminAuthorization()
+
+
+class TagResource(ModelResource):
+
+    class Meta:
+        queryset = Tag.objects.all()
+        resource_name = 'tag'
         authentication = get_authentication()
         authorization = AdminAuthorization()

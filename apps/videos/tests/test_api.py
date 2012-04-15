@@ -72,10 +72,11 @@ class TestApi(TestCase):
     def test_post_video(self):
         """Test that authenticated user can create videos."""
         cat = category(save=True)
-        s = speaker(save=True)
+
         data = {'title': 'Creating delicious APIs for Django apps since 2010.',
                 'category': '/api/v1/category/%d/' % cat.pk,
-                'speakers': ['/api/v1/speaker/%d/' % s.pk],
+                'speakers': ['Guido'],
+                'tags': ['django', 'api'],
                 'state': Video.STATE_LIVE}
 
         resp = self.auth_post('/api/v1/video/', json.dumps(data),
@@ -89,7 +90,8 @@ class TestApi(TestCase):
 
         vid = Video.objects.get(title=data['title'])
         eq_(vid.title, data['title'])
-        eq_(list(vid.speakers.values_list('pk', flat=True)), [s.pk])
+        eq_(list(vid.speakers.values_list('name', flat=True)), ['Guido'])
+        eq_(sorted(vid.tags.values_list('tag', flat=True)), [u'api', u'django'])
 
     def test_read_only(self):
         """Test that not authenticated users can't write."""
