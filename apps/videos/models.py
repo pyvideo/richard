@@ -178,6 +178,8 @@ class Video(models.Model):
     video_mp4_url = models.URLField(max_length=255, null=True, blank=True)
     video_webm_length = models.IntegerField(null=True, blank=True)
     video_webm_url = models.URLField(max_length=255, null=True, blank=True)
+    video_flv_length = models.IntegerField(null=True, blank=True)
+    video_flv_url = models.URLField(max_length=255, null=True, blank=True)
 
     # source url in case we need to find things again
     source_url = models.URLField(max_length=255, null=True, blank=True)

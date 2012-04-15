@@ -41,6 +41,9 @@
         {% if v.video_webm_url %}
           <source src="{{ v.video_webm_url }}" type="video/webm">
         {% endif %}
+        {% if v.video_flv_url %}
+          <source src="{{ v.video_flv_url }}" type="video/x-flv">
+        {% endif %}
       </video>
     {% endif %}
   </div>
