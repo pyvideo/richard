@@ -59,8 +59,8 @@ class Category(models.Model):
         help_text='If the category was an event, then this is the start '
         'date for the event.')
 
-    whiteboard = models.TextField(
-        blank=True, default=u'',
+    whiteboard = models.CharField(
+        blank=True, max_length=255, default=u'',
         help_text='Editor notes for this category.')
 
     slug = models.SlugField(unique=True)
