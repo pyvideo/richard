@@ -58,11 +58,11 @@ class VideoResource(ModelResource):
 
     def hydrate(self, bundle):
         """Allow to pass in the actual names of tags and speakers."""
-        l = [Tag.objects.get_or_create(tag=x)[0] for x in bundle.data.get('tags')]
-        bundle.data['tags'] = l
+        bundle.data['tags'] = [Tag.objects.get_or_create(tag=x)[0]
+                               for x in bundle.data.get('tags')]
 
-        l = [Speaker.objects.get_or_create(name=x)[0] for x in bundle.data.get('speakers')]
-        bundle.data['speakers'] = l
+        bundle.data['speakers'] = [Speaker.objects.get_or_create(name=x)[0]
+                                   for x in bundle.data.get('speakers')]
 
         return bundle
 
