@@ -18,7 +18,9 @@ import os
 
 from django.conf import settings
 from django.db import models
-from django.template.defaultfilters import slugify
+
+
+from videos.utils import generate_unique_slug
 
 
 USE_HTML_HELP_TEXT = "Use HTML."
@@ -69,6 +71,11 @@ class Category(models.Model):
     def __repr__(self):
         return '<Category %s>' % self.title
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = generate_unique_slug(self, u'title', u'slug')
+        super(Category, self).save(*args, **kwargs)
+
     class Meta(object):
         ordering = ["name", "title"]
         verbose_name_plural = 'Categories'
@@ -90,6 +97,11 @@ class Speaker(models.Model):
 
     def __repr__(self):
         return '<Speaker %s: %s>' % (self.id, self.name)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = generate_unique_slug(self, u'name', u'slug')
+        super(Speaker, self).save(*args, **kwargs)
 
     class Meta(object):
         ordering = ['name']
@@ -113,7 +125,6 @@ class Tag(models.Model):
 
 
 class VideoManager(models.Manager):
-
     def live(self):
         return self.get_query_set().filter(state=Video.STATE_LIVE)
 
@@ -193,6 +204,11 @@ class Video(models.Model):
     def __repr__(self):
         return '<Video %s (%s)>' % (self.title[:30], self.category)
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = generate_unique_slug(self, u'title', u'slug')
+        super(Video, self).save(*args, **kwargs)
+
     class Meta(object):
         get_latest_by = 'recorded'
         ordering = ['-recorded', 'title']
@@ -200,10 +216,6 @@ class Video(models.Model):
     @models.permalink
     def get_absolute_url(self):
         return ('videos-video', (self.pk, self.slug))
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.title[:49])
-        super(Video, self).save(*args, **kwargs)
 
     def get_thumbnail_url(self):
         """Find a thumbnail for this video in the following order:
@@ -274,7 +286,7 @@ def create_speakers(speakers):
 
     for name in speakers:
         name = name.strip()
-        s, _ = Speaker.objects.get_or_create(name=name, slug=slugify(name))
+        s, _ = Speaker.objects.get_or_create(name=name)
         ret.append(s)
     return ret
 
