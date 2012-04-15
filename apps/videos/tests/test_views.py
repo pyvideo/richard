@@ -224,31 +224,45 @@ class VideosViewsTest(ViewTestCase):
         url = u'/video/%s' % vid.id
         self.assert_HTTP_200(url)
 
-    def test_active_video_category_and_speaker_page(self):
-        """Active video should shows up on category and speaker pages."""
+    def test_active_video_speaker_page(self):
+        """Active video should show up on it's speaker's page."""
+        s = speaker(save=True)
         vid = video(state=Video.STATE_LIVE, save=True)
-        vid.speakers.add(speaker(save=True))
+        vid.speakers.add(s)
+
+        speaker_url = s.get_absolute_url()
+
+        resp = self.client.get(speaker_url)
+        assert vid.title in resp.content
+
+    def test_active_video_category_page(self):
+        """Active video should shows up on category page."""
+        vid = video(state=Video.STATE_LIVE, save=True)
+
         category_url = vid.category.get_absolute_url()
 
-        res = self.client.get(category_url)
-        self.assertContains(res, vid.title)
+        resp = self.client.get(category_url)
+        assert vid.title in resp.content
 
-        for s in vid.speakers.all():
-            resp = self.client.get(s.get_absolute_url())
-            self.assertContains(resp, vid.title)
-
-    def test_inactive_video_category_and_speaker_page(self):
-        """Inactive video should not show up on category and speaker pages."""
+    def test_inactive_video_category_page(self):
+        """Inactive video should not show up on category page."""
         vid = video(save=True)
-        vid.speakers.add(speaker(save=True))
+
         category_url = vid.category.get_absolute_url()
 
-        res = self.client.get(category_url)
-        self.assertNotContains(res, vid.title)
+        resp = self.client.get(category_url)
+        assert vid.title not in resp.content
 
-        for s in vid.speakers.all():
-            resp = self.client.get(s.get_absolute_url())
-            self.assertNotContains(resp, vid.title)
+    def test_inactive_video_speaker_page(self):
+        """Inactive video should not show up on it's speaker's page."""
+        s = speaker(save=True)
+        vid = video(save=True)
+        vid.speakers.add(s)
+
+        speaker_url = s.get_absolute_url()
+
+        resp = self.client.get(speaker_url)
+        assert vid.title not in resp.content
 
     # search
 

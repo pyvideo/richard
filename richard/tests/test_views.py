@@ -32,9 +32,9 @@ class RichardViewsTest(ViewTestCase):
 
     def test_notifications_on_home(self):
         """Test that notifications are displayed on the homepage."""
-        notification(text=u'1, 2, 3 - test', save=True)
-        notification(text=u'Just a test.', save=True)
+        n1 = notification(text=u'1, 2, 3 - test', save=True)
+        n2 = notification(text=u'Just a test.', save=True)
 
-        url = reverse('home')
-        self.assert_contains(url, text='1, 2, 3 - test')
-        self.assert_contains(url, text='Just a test.')
+        resp = self.client.get(reverse('home'))
+        assert n1.text in resp.content
+        assert n2.text in resp.content

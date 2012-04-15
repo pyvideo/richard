@@ -49,8 +49,6 @@ class TestNotification(TestCase):
         end = datetime.now() + timedelta(days=3)
         n = notification(start_date=start, end_date=end, save=True)
 
-        eq_(len(Notification.get_live_notifications()), 0)
-
         start = datetime.now() - timedelta(days=2)
         end = datetime.now() - timedelta(days=1)
         n = notification(start_date=start, end_date=end, save=True)
