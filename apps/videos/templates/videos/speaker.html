@@ -28,6 +28,10 @@
 
 <div class="row-fluid">
   <div class="span12">
+    {% if user.is_staff %}
+      <a href="{{ url('admin:videos_speaker_change', speaker.id) }}"><i class="icon-edit"></i> edit</a>
+    {% endif %}
+
     <h1>{{ speaker.name }}</h1>
   </div>
 </div>
