@@ -136,6 +136,10 @@ Django / nose / jinja2 / haystack / whoosh
 
   You can pick something different and change ``settings_local.py`` with
   the appropriate configuration.
+
+* `south <http://south.aerocode.org/>`_
+
+  South manages schema and data migrations independent on the database.
   
 
 HtML / CSS / JavaScript

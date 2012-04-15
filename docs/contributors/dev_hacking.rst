@@ -137,7 +137,7 @@ Setting up database schema and creating admin user
 
 To set up the database schema and create the admin user, run::
 
-    $ ./manage.py syncdb
+    $ ./manage.py syncdb --migrate
 
 The admin user account you create here can be used to log into the richard
 admin section.

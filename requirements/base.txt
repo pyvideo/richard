@@ -6,3 +6,4 @@ whoosh
 -e git://github.com/toastdriven/django-haystack.git@master#egg=django-haystack
 bleach
 requests
+south
