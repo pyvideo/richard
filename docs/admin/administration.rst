@@ -118,3 +118,10 @@ Do this to update the index::
 
     ./manage.py rebuild_index
 
+You probably want to either put this in a cron job or run it after
+making any data changes.
+
+.. Warning::
+
+   This deletes the index, then rebuilds it. Thus there will be a
+   period of time during which search on your site will kind of suck.
