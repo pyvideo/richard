@@ -151,11 +151,3 @@ If you want to set up some initial data, do::
     $ ./manage.py loaddata sample_data.json
 
 This is useful to see how the site works.
-
-
-Running richard
-===============
-
-To run richard, make sure your virtual environment is activated and then::
-
-    $ ./manage.py runserver

@@ -26,14 +26,32 @@ To run the tests with nose-progressive::
 Add new tests
 =============
 
+Locations
+---------
+
 Tests for apps go in ``richard/apps/APPNAME/tests/``.
 
 Tests for richard project go in ``richard/richard/tests/``.
 
+
+Conventions
+-----------
+
 Modules should be named ``test_*.py``.
 
-Functions should be named ``test_*``.
+Classes should be named ``Test*`` and should extend Django's
+``UnitTest`` class.
 
-Classes should be named ``Test*``.
+Functions and methods should be named ``test_*``.
+
+Use the non-camel-case versions of ``assertXyz`` and friends if they
+exist, but it's probably better to use nose's ``eq_`` and Python's
+``assert``.
 
 See existing tests for examples.
+
+We're not shooting for 100% code coverage---only write tests that are
+compelling.
+
+Make sure tests are documented and it's clear what's being tested and
+how.

@@ -7,7 +7,10 @@
 
    dev_contribute
    dev_hacking
-   dev_layout
+   dev_running
    dev_testing
+   dev_docs
+   dev_updating
+   dev_layout
    dev_conventions
    dev_resources
