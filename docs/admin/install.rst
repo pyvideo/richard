@@ -163,6 +163,22 @@ You can either copy that into ``your_site`` and edit it there or
 create a ``settings_site.py`` file, import the defaults and override
 the ones you want to override.
 
+In its default configuration, richard uses SQLite. To use your MySQL database,
+you need to override the configuration with::
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'richard',
+            'USER': 'richard',
+            'PASSWORD': 'richard',
+            'HOST': '',
+            'PORT': '',
+            'OPTIONS': {'init_command': 'SET storage_engine=InnoDB'},
+        }
+    }
+
+
 Make sure to set a ``SECRET_KEY``::
 
     # Make this unique, and don't share it with anybody.

@@ -85,8 +85,8 @@ Use pip to install the development requirements::
 Setting up the database
 =======================
 
-To get started quickly you can use SQLite. It does not require any setup,
-Django will handle things for you.
+By default richard uses SQLite. It does not require any setup, Django will
+handle things for you.
 
 .. Note::
 
@@ -104,25 +104,6 @@ instance. To do that:
 
 1. create a file ``richard/settings_local.py``
 2. add configuration for your instance in that file
-
-If you're developing on richard, you can use this sample
-``settings_local.py`` which uses database settings from the example
-database setup::
-
-    DEBUG = True
-    TEMPLATE_DEBUG = True
-
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'path/to/database.file',
-            'USER': '',
-            'PASSWORD': '',
-            'HOST': '',
-            'PORT': ''
-        }
-    }
-
 
 Make sure to set a ``SECRET_KEY``::
 
