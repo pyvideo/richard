@@ -55,6 +55,9 @@ Project details
 Code:
     https://github.com/willkg/richard
 
+    .. image:: https://secure.travis-ci.org/willkg/richard.png
+       :target: http://travis-ci.org/willkg/richard
+
 Issue tracker:
     https://github.com/willkg/richard/issues
 

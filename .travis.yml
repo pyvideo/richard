@@ -1,0 +1,7 @@
+language: python
+script: python manage.py test
+install:
+  - pip install -r requirements/base.txt --use-mirrors
+  - pip install django_nose --use-mirrors
+notifications:
+  irc: "irc.freenode.org#richard"
