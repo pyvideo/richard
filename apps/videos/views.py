@@ -109,7 +109,7 @@ def opensearch_suggestions(request):
     """
     query = request.GET.get('q', '')
     matches = SearchQuerySet().filter(title_auto=query)
-    result = [query, [r.object.title for r in matches]]
+    result = [query, list(matches.values_list('title_auto', flat=True))]
 
     return JSONResponse(json.dumps(result))
 
