@@ -66,6 +66,13 @@ class VideoResource(ModelResource):
 
         return bundle
 
+    def apply_authorization_limits(self, request, object_list):
+        """Only authenticated users can see videos in draft status."""
+        if hasattr(request, 'user') and request.user.is_staff:
+            return Video.objects.all()
+
+        return object_list
+
 
 class SpeakerResource(ModelResource):
 

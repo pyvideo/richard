@@ -103,3 +103,26 @@ class TestApi(TestCase):
         resp = self.client.post('/api/v1/video/', json.dumps(data),
                                 content_type='application/json')
         eq_(resp.status_code, 401)
+
+    def test_only_live_videos_for_anonymous_users(self):
+        """Test that not authenticated users can't see draft videos."""
+        vid_live = video(state=Video.STATE_LIVE, title=u'Foo', save=True)
+        vid_draft = video(state=Video.STATE_DRAFT, title=u'Bar', save=True)
+
+        resp = self.client.get('/api/v1/video/',
+                               content_type='application/json')
+
+        data = json.loads(resp.content)
+        eq_(len(data['objects']), 1)
+        eq_(data['objects'][0]['title'], vid_live.title)
+
+    def test_all_videos_for_admins(self):
+        """Test that admins can see all videos."""
+        vid_live = video(state=Video.STATE_LIVE, title=u'Foo', save=True)
+        vid_draft = video(state=Video.STATE_DRAFT, title=u'Bar', save=True)
+
+        resp = self.auth_get('/api/v1/video/',
+                             content_type='application/json')
+
+        data = json.loads(resp.content)
+        eq_(len(data['objects']), 2)
