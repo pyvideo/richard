@@ -27,7 +27,7 @@ class VideoIndex(indexes.SearchIndex, indexes.Indexable):
     tags = indexes.MultiValueField()
     speakers = indexes.MultiValueField()
 
-    # Used for autocompletion in opensearch
+    # Used for suggestions in opensearch
     title_auto = indexes.EdgeNgramField(model_attr='title')
 
     def prepare(self, obj):

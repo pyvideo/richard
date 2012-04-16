@@ -224,6 +224,8 @@ VIDEO_THUMBNAIL_SIZE = (160, 120)
 
 MEDIA_PREFERENCE = ('ogv', 'webm', 'mp4', 'flv',)
 
+OPENSEARCH_ENABLE_SUGGESTIONS = False
+
 try:
     from richard.settings_local import *    
 except ImportError:

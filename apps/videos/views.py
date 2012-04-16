@@ -94,6 +94,7 @@ def video(request, video_id, slug):
 
 
 def opensearch(request):
+    """Return opensearch description document."""
     ret = render(
         request, 'videos/opensearch.xml',
         {'site': Site.objects.get_current()},
@@ -101,8 +102,8 @@ def opensearch(request):
     return ret
 
 
-def opensearch_autocomplete(request):
-    """Return autocompletions for a search query.
+def opensearch_suggestions(request):
+    """Return suggestions for a search query.
     
     Implements the OpenSearch suggestions extension.
     """

@@ -244,7 +244,7 @@ class TestVideos(TestCase):
 
     def test_opensearch_description(self):
         """Test the opensearch description view."""
-        url = reverse('opensearch')
+        url = reverse('videos-opensearch')
 
         resp = self.client.get(url)
         eq_(resp.status_code, 200)
