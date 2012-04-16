@@ -1,5 +1,8 @@
 language: python
 script: python manage.py test
+python:
+  - "2.6"
+  - "2.7"
 install:
   - pip install -r requirements/base.txt --use-mirrors
   - pip install django_nose --use-mirrors
