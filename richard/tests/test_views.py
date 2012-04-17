@@ -15,20 +15,21 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.core.urlresolvers import reverse
+from django.test import TestCase
+from nose.tools import eq_
 
-from richard.tests.utils import ViewTestCase
 from sitenews.tests import notification
 
 
-class RichardViewsTest(ViewTestCase):
+class RichardViewsTest(TestCase):
     """Tests for the project's views."""
 
     def test_home(self):
         url = reverse('home')
 
-        self.assert_HTTP_200(url)
-        self.assert_used_templates(url, 
-                                   templates=['home.html'])
+        resp = self.client.get(url)
+        eq_(resp.status_code, 200)
+        self.assertTemplateUsed(resp, 'home.html')
 
     def test_notifications_on_home(self):
         """Test that notifications are displayed on the homepage."""
