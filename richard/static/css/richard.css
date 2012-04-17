@@ -1,3 +1,7 @@
+a.feed:before {
+  content:url(/static/img/rss_feed.png);
+}
+
 .news-item {
   padding-top: 10px;
   padding-bottom: 15px;
