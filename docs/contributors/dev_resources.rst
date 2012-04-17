@@ -100,8 +100,8 @@ Tools
   <https://github.com/jbalogh/check>`_.
 
 
-Django / nose / jinja2 / haystack / whoosh
-==========================================
+Django / nose / jinja2 / haystack / whoosh / tastypie
+=====================================================
 
 * `Django <https://www.djangoproject.com/>`_
 
@@ -141,6 +141,12 @@ Django / nose / jinja2 / haystack / whoosh
 
   South manages schema and data migrations independent on the database.
   
+* `tastypie <http://tastypieapi.org/>`_
+
+  tastypie provides us with a RESTful API that can be used to retrieve
+  videos programmatically and can ease importing many videos for site
+  admins.
+
 
 HtML / CSS / JavaScript
 =======================
