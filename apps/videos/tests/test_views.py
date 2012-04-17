@@ -15,13 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.core.urlresolvers import reverse
+from django.test import TestCase
+
+from nose.tools import eq_
 
 from . import category, speaker, video
-from richard.tests.utils import ViewTestCase
 from videos.models import Video
 
 
-class VideosViewsTest(ViewTestCase):
+class TestVideos(TestCase):
     """Tests for the ``videos`` app."""
 
     # category 
@@ -30,9 +32,9 @@ class VideosViewsTest(ViewTestCase):
         """Test the view of the listing of all categories."""
         url = reverse('videos-category-list')
 
-        self.assert_HTTP_200(url)
-        self.assert_used_templates(
-            url, templates=['videos/category_list.html'])
+        resp = self.client.get(url)
+        eq_(resp.status_code, 200)
+        self.assertTemplateUsed(resp, 'videos/category_list.html')
 
     def test_category_list_with_categories(self):
         """Test the view of the listing of all categories."""
@@ -42,34 +44,26 @@ class VideosViewsTest(ViewTestCase):
 
         url = reverse('videos-category-list')
 
-        self.assert_HTTP_200(url)
-        self.assert_used_templates(
-            url, templates=['videos/category_list.html'])
+        resp = self.client.get(url)
+        eq_(resp.status_code, 200)
+        self.assertTemplateUsed(resp, 'videos/category_list.html')
         
     def test_category_urls(self):
         """Test the view of an category."""
         cat = category(save=True)
-        url = cat.get_absolute_url()
 
-        self.assert_HTTP_200(url)
-        self.assert_used_templates(
-            url, templates=['videos/category.html'])
+        cases = [
+            cat.get_absolute_url(),
+            u'/category/%s/%s/' % (cat.id, cat.slug),   # with slug and /
+            u'/category/%s/%s' % (cat.id, cat.slug),    # with slug and no /
+            u'/category/%s/' % cat.id,                  # no slug and /
+            u'/category/%s' % cat.id,                   # no slug and no /
+        ]
 
-        # with slug and /
-        url = u'/category/%s/%s/' % (cat.id, cat.slug)
-        self.assert_HTTP_200(url)
-
-        # with slug and no /
-        url = u'/category/%s/%s' % (cat.id, cat.slug)
-        self.assert_HTTP_200(url)
-
-        # no slug and /
-        url = u'/category/%s/' % cat.id
-        self.assert_HTTP_200(url)
-
-        # no slug and no /
-        url = u'/category/%s' % cat.id
-        self.assert_HTTP_200(url)
+        for url in cases:
+            resp = self.client.get(url)
+            eq_(resp.status_code, 200)
+            self.assertTemplateUsed(resp, 'videos/category.html')
 
     def test_category_raise_404_when_does_not_exist(self):
         """
@@ -79,7 +73,8 @@ class VideosViewsTest(ViewTestCase):
         url = reverse('videos-category',
                       args=(1234, 'slug'))
 
-        self.assert_HTTP_404(url)
+        resp = self.client.get(url)
+        eq_(resp.status_code, 404)
 
     # speaker
 
@@ -87,9 +82,9 @@ class VideosViewsTest(ViewTestCase):
         """Test the view of the listing of all speakers."""
         url = reverse('videos-speaker-list')
 
-        self.assert_HTTP_200(url)
-        self.assert_used_templates(url, 
-                                   templates=['videos/speaker_list.html'])
+        resp = self.client.get(url)
+        eq_(resp.status_code, 200)
+        self.assertTemplateUsed(resp, 'videos/speaker_list.html')
 
     def test_speaker_list_empty_character(self):
         """
@@ -97,38 +92,34 @@ class VideosViewsTest(ViewTestCase):
         `character` GET parameter. It should fallback to showing the 
         speakers starting from the lowest possible character.
         """
-        speaker(name='Random Speaker', 
-                save=True,)
-        spe = speaker(name='Another Speaker', 
-                      save=True,)
+        s1 = speaker(name=u'Random Speaker', save=True)
+        s2= speaker(name=u'Another Speaker', save=True)
 
         url = reverse('videos-speaker-list')
         data = {'character': ''}
         
-        self.assert_HTTP_200(url, data) 
-        self.assert_used_templates(url, 
-                                   data,
-                                   templates=['videos/speaker_list.html'])
-        self.assert_contains(url, data, text=spe.name)
+        resp = self.client.get(url, data)
+        eq_(resp.status_code, 200)
+        self.assertTemplateUsed(resp, 'videos/speaker_list.html')
+        assert s1.name not in resp.content
+        assert s2.name in resp.content
 
     def test_speaker_list_character(self):
         """
         Test the view of the listing of all speakers whose names start
         with certain character.
         """
-        speaker(name='Another Speaker', 
-                save=True,)
-        spe = speaker(name='Random Speaker', 
-                      save=True,)
+        s1 = speaker(name=u'Another Speaker', save=True)
+        s2 = speaker(name=u'Random Speaker', save=True)
 
         url = reverse('videos-speaker-list')
         data = {'character': 'r'} 
 
-        self.assert_HTTP_200(url, data)
-        self.assert_used_templates(url, 
-                                   data, 
-                                   templates=['videos/speaker_list.html'])
-        self.assert_contains(url, data, text=spe.name)
+        resp = self.client.get(url, data)
+        eq_(resp.status_code, 200)
+        self.assertTemplateUsed(resp, 'videos/speaker_list.html')
+        assert s1.name not in resp.content
+        assert s2.name in resp.content
 
     def test_speaker_list_character_with_string(self):
         """
@@ -136,19 +127,17 @@ class VideosViewsTest(ViewTestCase):
         character argument. The view should fallback to showing the 
         speakers starting from the lowest possible character.
         """
-        speaker(name='Random Speaker', 
-                save=True,)
-        spe = speaker(name='Another Speaker', 
-                      save=True,)
+        s1 = speaker(name=u'Random Speaker', save=True)
+        s2 = speaker(name=u'Another Speaker', save=True)
 
         url = reverse('videos-speaker-list')
         data = {'character': 'richard'}
 
-        self.assert_HTTP_200(url, data)
-        self.assert_used_templates(url, 
-                                   data, 
-                                   templates=['videos/speaker_list.html'])
-        self.assert_contains(url, data, text=spe.name)
+        resp = self.client.get(url, data)
+        eq_(resp.status_code, 200)
+        self.assertTemplateUsed(resp, 'videos/speaker_list.html')
+        assert s1.name not in resp.content
+        assert s2.name in resp.content
 
     def test_speaker_list_not_string_character(self):
         """
@@ -156,73 +145,53 @@ class VideosViewsTest(ViewTestCase):
         character argument. The view should fallback to showing the 
         speakers starting from the lowest possible character.
         """
-        speaker(name='Random Speaker', 
-                save=True,)
-        spe = speaker(name='Another Speaker', 
-                      save=True,)
+        s1 = speaker(name=u'Random Speaker', save=True)
+        s2 = speaker(name=u'Another Speaker', save=True)
 
         url = reverse('videos-speaker-list')
         data = {'character': 42}
 
-        self.assert_HTTP_200(url, data)
-        self.assert_used_templates(url, 
-                                   data, 
-                                   templates=['videos/speaker_list.html'])
-        self.assert_contains(url, data, text=spe.name)
+        resp = self.client.get(url, data)
+        eq_(resp.status_code, 200)
+        self.assertTemplateUsed(resp, 'videos/speaker_list.html')
+        assert s1.name not in resp.content
+        assert s2.name in resp.content
 
     def test_speaker_urls(self):
         """Test the view of a speaker."""
-        spe = speaker(name='Random Speaker', save=True)
+        spe = speaker(name=u'Random Speaker', save=True)
 
-        # `url.get_absolute_url` returns the URL with the PK and the slug
-        url = spe.get_absolute_url()
+        cases = [
+            spe.get_absolute_url(),     # returns the URL with pk and slug
+            u'/speaker/%s/%s/' % (spe.id, spe.slug),    # with slug and /
+            u'/speaker/%s/%s' % (spe.id, spe.slug),     # with slug and no /
+            u'/speaker/%s/' % spe.id,                   # no slug and /
+            u'/speaker/%s' % spe.id,                    # no slug and no /
+        ]
 
-        self.assert_HTTP_200(url)
-        self.assert_used_templates(
-            url, templates=['videos/speaker.html'])
-
-        # with slug and /
-        url = u'/speaker/%s/%s/' % (spe.id, spe.slug)
-        self.assert_HTTP_200(url)
-
-        # with slug and no /
-        url = u'/speaker/%s/%s' % (spe.id, spe.slug)
-        self.assert_HTTP_200(url)
-
-        # no slug and /
-        url = u'/speaker/%s/' % spe.id
-        self.assert_HTTP_200(url)
-
-        # no slug and no /
-        url = u'/speaker/%s' % spe.id
-        self.assert_HTTP_200(url)
+        for url in cases:
+            resp = self.client.get(url)
+            eq_(resp.status_code, 200)
+            self.assertTemplateUsed(resp, 'videos/speaker.html')
 
     # videos
 
     def test_video_urls(self):
         """Test the view of a video."""
         vid = video(save=True)
-        url = vid.get_absolute_url()
 
-        self.assert_HTTP_200(url)
-        self.assert_used_templates(
-            url, templates=['videos/video.html'])
+        cases = [
+            vid.get_absolute_url(),
+            u'/video/%s/%s/' % (vid.id, vid.slug),  # with slug and /
+            u'/video/%s/%s' % (vid.id, vid.slug),   # with slug and no /
+            u'/video/%s/' % vid.id,                 # no slug and /
+            u'/video/%s' % vid.id,                  # no slug and no /
+        ]
 
-        # with slug and /
-        url = u'/video/%s/%s/' % (vid.id, vid.slug)
-        self.assert_HTTP_200(url)
-
-        # with slug and no /
-        url = u'/video/%s/%s' % (vid.id, vid.slug)
-        self.assert_HTTP_200(url)
-
-        # no slug and /
-        url = u'/video/%s/' % vid.id
-        self.assert_HTTP_200(url)
-
-        # no slug and no /
-        url = u'/video/%s' % vid.id
-        self.assert_HTTP_200(url)
+        for url in cases:
+            resp = self.client.get(url)
+            eq_(resp.status_code, 200)
+            self.assertTemplateUsed(resp, 'videos/video.html')
 
     def test_active_video_speaker_page(self):
         """Active video should show up on it's speaker's page."""
@@ -270,4 +239,5 @@ class VideosViewsTest(ViewTestCase):
         """Test the search view."""
         url = reverse('haystack-search')
 
-        self.assert_HTTP_200(url)
+        resp = self.client.get(url)
+        eq_(resp.status_code, 200)

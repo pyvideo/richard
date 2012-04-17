@@ -15,11 +15,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.core.urlresolvers import reverse
+from django.test import TestCase
+from nose.tools import eq_
 
-from richard.tests.utils import ViewTestCase
 
-
-class PagesTest(ViewTestCase):
+class TestPages(TestCase):
     """Tests for the ``pages`` apps views."""
 
     def test_pages(self):
@@ -28,6 +28,6 @@ class PagesTest(ViewTestCase):
             url = reverse('pages-page', 
                           kwargs={'page': page},)
 
-            self.assert_HTTP_200(url)
-            self.assert_used_templates(url, 
-                                       templates=['pages/%s.html' % page])
+            resp = self.client.get(url)
+            eq_(resp.status_code, 200)
+            self.assertTemplateUsed(resp, 'pages/%s.html' % page)

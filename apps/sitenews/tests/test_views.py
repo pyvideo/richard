@@ -14,49 +14,50 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.core.urlresolvers import reverse
 from datetime import datetime
 
+from django.core.urlresolvers import reverse
+from django.test import TestCase
+from nose.tools import eq_
+
 from . import sitenews
-from richard.tests.utils import ViewTestCase
 
 
-class SitenewsViewsTest(ViewTestCase):
+class TestSitenews(TestCase):
     """Tests for the ``sitenews`` apps views."""
 
     def test_news_list(self):
         """Test the list of latest news."""
         url = reverse('sitenews-list')
 
-        self.assert_HTTP_200(url)
-        self.assert_used_templates(url, 
-                                   templates=['sitenews/news_list.html'])
+        resp = self.client.get(url)
+        eq_(resp.status_code, 200)
+        self.assertTemplateUsed(resp, 'sitenews/news_list.html')
 
     def test_news(self):
         """Test the view of a news."""
-        news = sitenews(title='Test',
-                        save=True)
+        news = sitenews(save=True)
         url = news.get_absolute_url()
 
-        self.assert_HTTP_200(url)
-        self.assert_used_templates(url, 
-                                   templates=['sitenews/news.html'])
+        resp = self.client.get(url)
+        eq_(resp.status_code, 200)
+        self.assertTemplateUsed(resp, 'sitenews/news.html')
 
     def test_news_raise_404_when_does_not_exist(self):
         """
         Test that trying to view a non-existent news raises returns 
         an HTTP 404 error.
         """
-        url = reverse('sitenews-news',
-                      args=(1234, 'random-slug'))
+        url = reverse('sitenews-news', args=(1234, 'random-slug'))
 
-        self.assert_HTTP_404(url)
+        resp = self.client.get(url)
+        eq_(resp.status_code, 404)
 
     def test_news_archive_year(self):
         """Test the view of current year's archive."""
         url = reverse('sitenews-archive-year', 
                       kwargs={'year': datetime.now().year})
 
-        self.assert_HTTP_200(url)
-        self.assert_used_templates(url, 
-                                   templates=['sitenews/news_list.html'])
+        resp = self.client.get(url)
+        eq_(resp.status_code, 200)
+        self.assertTemplateUsed(resp, 'sitenews/news_list.html')
