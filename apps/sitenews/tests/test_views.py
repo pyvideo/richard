@@ -28,6 +28,7 @@ class TestSitenews(TestCase):
 
     def test_news_list(self):
         """Test the list of latest news."""
+        sitenews(save=True)
         url = reverse('sitenews-list')
 
         resp = self.client.get(url)
@@ -55,6 +56,7 @@ class TestSitenews(TestCase):
 
     def test_news_archive_year(self):
         """Test the view of current year's archive."""
+        sitenews(save=True)
         url = reverse('sitenews-archive-year', 
                       kwargs={'year': datetime.now().year})
 
