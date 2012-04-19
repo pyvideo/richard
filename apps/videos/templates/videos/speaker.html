@@ -27,7 +27,11 @@
 {% block content %}
 
 <div class="page-header">
-  <h1>{{ speaker.name }}</h1>
+  <h1>{{ speaker.name }}
+    {% if user.is_staff %}
+      <small><a href="{{ url('admin:videos_speaker_change', speaker.id) }}"><i class="icon-edit"></i> edit</a></small>
+    {% endif %}
+  </h1>
 </div>
 
 <div class="row-fluid">
@@ -35,9 +39,7 @@
     <h2>Videos</h2>
   </div>
   <div class="span3">
-    {% if user.is_staff %}
-      <a href="{{ url('admin:videos_speaker_change', speaker.id) }}"><i class="icon-edit"></i> edit</a>
-    {% endif %}
+    <a class="feed" href="{{ url('videos-speaker-feed', speaker_id=speaker.pk, slug=speaker.slug) }}"> feed</a>
   </div>
 </div>
 
