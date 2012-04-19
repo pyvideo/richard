@@ -25,6 +25,10 @@
 {% endblock %}
 {% import "videos/macros.html" as macros with context %}
 {% block content %}
+<div class="page-header">
+  <h1>Search</h1>
+</div>
+
 <div class="row-fluid">
   <div class="span12">
     <form class="well form-search" method="get" action="/search/">
@@ -38,7 +42,7 @@
 {% if query %}
 <div class="row-fluid">
   <div class="span12">
-    <h3>Results</h3>
+    <h2>Results</h2>
   </div>
 </div>
   {% for result in page.object_list %}
@@ -46,7 +50,9 @@
   {% else %}
     <div class="row-fluid">
       <div class="span12">
-        No results
+        <div class="section">
+          No results
+        </div>
       </div>
     </div>
   {% endfor %}

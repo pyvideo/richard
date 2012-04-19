@@ -41,8 +41,11 @@
           <dt>{{ kind.name }}</dt>
           <dd>
             <ul>
-              {% for cat in kind.category_set.all() %}
-                <li><a href="{{ cat.get_absolute_url() }}">{{ cat.title }}</a></li>
+              {% for cat in kind.category_set.order_by('-start_date') %}
+                <li>
+                  <a href="{{ cat.get_absolute_url() }}">{{ cat.title }}</a>
+                  ({{ cat.video_set.count() }})
+                </li>
               {% endfor %}
             </ul>
           </dd>
@@ -52,37 +55,26 @@
   </div>
 
   <div class="span8">
-    <div class="row-fluid">
-      <div class="span9">
-        <h2>Site news</h2>
-      </div>
-      <div class="span3">
-        <p>
-          <a class="feed" href="{{ url('sitenews-feed') }}"> feed</a>
-        </p>
-      </div>
-    </div>
-    <div class="row-fluid">
-      <div class="span12">
-        {% for item in news %}
-          <div class="news-item">
-            <div>
-              <h3><a href="{{ item.get_absolute_url() }}">{{ item.title | safe }}</a></h3>
-            </div>
-            <div>
-              {{ item.summary | safe }}
-            </div>
-            <div>
-              Author: {{ item.author }} |
-              Created: {{ item.created|datetime }} |
-              Updated: {{ item.updated|datetime }} |
-              <a href="{{ item.get_absolute_url() }}">Permalink</a>
-            </div>
-          </div>
-        {% endfor %}
-      </div>
-    </div>
-  </div>
+    <h2>Site news
+      <small><a class="feed" href="{{ url('sitenews-feed') }}"> feed</a></small>
+    </h2>
 
+    {% for item in news %}
+      <div class="news-item">
+        <div>
+          <h3><a href="{{ item.get_absolute_url() }}">{{ item.title|safe }}</a></h3>
+        </div>
+        <div>
+          {{ item.summary|safe }}
+        </div>
+        <div>
+          Author: {{ item.author }} |
+          Created: {{ item.created|datetime }} |
+          Updated: {{ item.updated|datetime }} |
+          <a href="{{ item.get_absolute_url() }}">Permalink</a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}

@@ -18,6 +18,11 @@
 {% extends "base.html" %}
 {% block title %}{{ page_title('Categories') }}{% endblock %}
 {% block content %}
+
+<div class="page-header">
+  <h1>Categories</h1>
+</div>
+
 <div class="row-fluid">
   <div class="span12">
     {% for kind in kinds %}

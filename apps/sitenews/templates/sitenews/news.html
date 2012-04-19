@@ -19,25 +19,38 @@
 {% block title %}{{ page_title('News: ' + item.title) }}{% endblock %}
 {% import "sitenews/macros.html" as macros %}
 {% block content %}
+<div class="page-header">
+  <h1>Site news</h1>
+</div>
+
 <div class="row-fluid">
   <div class="span2">
     {{ macros.archivebar(archives) }}
   </div>
 
   <div class="span10">
-    <div class="section">
-      <h1>{{ item.title }}</h1>
-      <div class="summary">
-        {{ item.summary|safe }}
+    <div class="row-fluid">
+      <div class="span9">
+        <div class="news-item">
+          <h2>{{ item.title }}</h2>
+          <div class="summary">
+            {{ item.summary|safe }}
+          </div>
+          <div class="content">
+            {{ item.content|safe }}
+          </div>
+          <div class="meta">
+            Author: {{ item.author }} |
+            Created: {{ item.created|datetime }} |
+            Updated: {{ item.updated|datetime }} |
+            <a href="{{ item.get_absolute_url() }}">Permalink</a>
+          </div>
+        </div>
       </div>
-      <div class="content">
-        {{ item.content|safe }}
-      </div>
-      <div class="meta">
-        Author: {{ item.author }} |
-        Created: {{ item.created|datetime }} |
-        Updated: {{ item.updated|datetime }} |
-        <a href="{{ item.get_absolute_url() }}">Permalink</a>
+      <div class="span3">
+        <p>
+          <a class="feed" href="{{ url('sitenews-feed') }}"> feed</a>
+        </p>
       </div>
     </div>
   </div>

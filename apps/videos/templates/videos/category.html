@@ -26,13 +26,16 @@
 {% import "videos/macros.html" as macros with context %}
 {% block content %}
 
+<div class="page-header">
+  <h1>{{ category.title }}
+    {% if user.is_staff %}
+      <small><a href="{{ url('admin:videos_category_change', category.id) }}"><i class="icon-edit"></i> edit</a></small>
+    {% endif %}
+  </h1>
+</div>
+
 <div class="row-fluid">
   <div class="span9">
-    {% if user.is_staff %}
-      <a href="{{ url('admin:videos_category_change', category.id) }}"><i class="icon-edit"></i> edit</a>
-    {% endif %}
-
-    <h1>{{ category.title }}</h1>
     {% if category.url %}
     <p>
       <a href="{{ category.url }}">{{ category.url }}</a>
@@ -43,9 +46,8 @@
     </p>
   </div>
   <div class="span3">
-    <p>
-      <a class="feed" href="{{ url('videos-category-feed', category_id=category.pk, slug=category.slug) }}"> feed</a>
-    </p>
+    <a class="feed" href="{{ url('videos-category-feed', category_id=category.pk, slug=category.slug) }}"> feed</a>
+
   </div>
 </div>
 
