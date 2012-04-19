@@ -93,7 +93,15 @@ class TestApi(TestCase):
         eq_(list(vid.speakers.values_list('name', flat=True)), ['Guido'])
         eq_(sorted(vid.tags.values_list('tag', flat=True)), [u'api', u'django'])
 
-    def test_read_only(self):
+    def test_post_video_no_data(self):
+        """Test that an attempt to create a video without data is rejected."""
+        data = {}
+
+        resp = self.auth_post('/api/v1/video/', json.dumps(data),
+                              content_type='application/json')
+        eq_(resp.status_code, 404)
+
+    def test_post_video_not_authenticated(self):
         """Test that not authenticated users can't write."""
         cat = category(save=True)
         data = {'title': 'Creating delicious APIs for Django apps since 2010.',
