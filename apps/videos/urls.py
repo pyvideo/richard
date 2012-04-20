@@ -64,6 +64,8 @@ urlpatterns = patterns(
         name='haystack-search'),
     url(r'^search/xml/?$',
         'opensearch', name='videos-opensearch'),
+    url(r'^search/suggestions/$',
+        'opensearch_suggestions', name='videos-opensearch-suggestions'),
 
     # faux api for carl
     url(r'^api/1.0/videos/urlforsource$',
@@ -71,9 +73,3 @@ urlpatterns = patterns(
 
     (r'^api/', include(v1_api.urls)),
 )
-
-if settings.OPENSEARCH_ENABLE_SUGGESTIONS:
-    urlpatterns += patterns(
-        'videos.views',
-        url(r'^search/suggestions/$',
-            'opensearch_suggestions', name='videos-opensearch-suggestions'))

@@ -17,6 +17,7 @@
 import bleach
 import json
 
+from django.conf import settings
 from django.contrib.sites.models import Site
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, render
@@ -107,6 +108,9 @@ def opensearch_suggestions(request):
     
     Implements the OpenSearch suggestions extension.
     """
+    if not settings.OPENSEARCH_ENABLE_SUGGESTIONS:
+        raise Http404
+
     query = request.GET.get('q', '')
     sqs = (SearchQuerySet().filter(title_auto=query)
                            .values_list('title_auto', flat=True))

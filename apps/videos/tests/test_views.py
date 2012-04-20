@@ -22,6 +22,7 @@ from django.conf import settings
 from django.core import management
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+from django.test.utils import override_settings
 
 from nose.tools import eq_
 
@@ -263,6 +264,15 @@ class TestVideos(TestCase):
         resp = self.client.get(url)
         eq_(resp.status_code, 200)
 
+    @override_settings(OPENSEARCH_ENABLE_SUGGESTIONS=True)
+    def test_opensearch_description_with_suggestions(self):
+        """Test the opensearch description view."""
+        url = reverse('videos-opensearch')
+
+        resp = self.client.get(url)
+        eq_(resp.status_code, 200)
+
+    @override_settings(OPENSEARCH_ENABLE_SUGGESTIONS=True)
     def test_opensearch_suggestions(self):
         """Test the opensearch suggestions view."""
         video(title='introduction to pypy', save=True)
@@ -279,3 +289,10 @@ class TestVideos(TestCase):
         eq_(data[0], 'test')
         eq_(set(data[1]),
             set(['django testing', 'Speedily Practical Large-Scale Tests']))
+
+    def test_opensearch_suggestions_disabled(self):
+        """Test that when suggestions are disabled, the view does nothing."""
+        url = reverse('videos-opensearch-suggestions')
+
+        response = self.client.get(url, {'q': 'test'})
+        eq_(response.status_code, 404)

@@ -11,5 +11,3 @@ HAYSTACK_CONNECTIONS = {
         'PATH': os.path.join(SITE_ROOT, '_test_whoosh_index'),
     },
 }
-
-OPENSEARCH_ENABLE_SUGGESTIONS = True
