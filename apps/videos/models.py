@@ -18,6 +18,7 @@ import os
 
 from django.conf import settings
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 
 from videos.utils import generate_unique_slug
@@ -29,11 +30,15 @@ MIMETYPES_MAP = {
     'webm': 'video/webm',
     'flv': 'video/x-flv'
 }
-USE_HTML_HELP_TEXT = "Use HTML."
+USE_HTML_HELP_TEXT = _(u'Use HTML.')
 
 
 class CategoryKind(models.Model):
     name = models.CharField(max_length=40)
+
+    class Meta(object):
+        verbose_name = _(u'category kind')
+        verbose_name_plural = _(u'category kinds')
 
     def __unicode__(self):
         return self.name
@@ -47,27 +52,27 @@ class Category(models.Model):
 
     name = models.CharField(
         max_length=255,
-        help_text=u'The name of the category. e.g. PyCon')
+        help_text=_(u'The name of the category. e.g. PyCon'))
     title = models.CharField(
         max_length=255,
-        help_text=u'The complete title for the category. e.g. '
-        'PyCon 2010')
+        help_text=_(u'The complete title for the category. e.g. '
+        'PyCon 2010'))
     description = models.TextField(
         blank=True, default=u'',
         help_text=USE_HTML_HELP_TEXT)
     url = models.URLField(
         blank=True, default=u'',
-        help_text=u'URL for the category. e.g. If this category was a '
+        help_text=_(u'URL for the category. e.g. If this category was a '
         'conference, this would be the url for the conference '
-        'web-site.')
+        'web-site.'))
     start_date = models.DateField(
         blank=True, null=True,
-        help_text=u'If the category was an event, then this is the start '
-        'date for the event.')
+        help_text=_(u'If the category was an event, then this is the start '
+        'date for the event.'))
 
     whiteboard = models.CharField(
         blank=True, max_length=255, default=u'',
-        help_text=u'Editor notes for this category.')
+        help_text=_(u'Editor notes for this category.'))
 
     slug = models.SlugField(unique=True)
 
@@ -84,7 +89,8 @@ class Category(models.Model):
 
     class Meta(object):
         ordering = ["name", "title"]
-        verbose_name_plural = u'Categories'
+        verbose_name = _(u'category')
+        verbose_name_plural = _(u'categories')
 
     @models.permalink
     def get_absolute_url(self):
@@ -111,6 +117,8 @@ class Speaker(models.Model):
 
     class Meta(object):
         ordering = ['name']
+        verbose_name = _(u'speaker')
+        verbose_name_plural = _(u'speakers')
 
     @models.permalink
     def get_absolute_url(self):
@@ -128,6 +136,8 @@ class Tag(models.Model):
 
     class Meta(object):
         ordering = ['tag']
+        verbose_name = _(u'tag')
+        verbose_name_plural = _(u'tags')
 
 
 class VideoManager(models.Manager):
@@ -221,6 +231,8 @@ class Video(models.Model):
     class Meta(object):
         get_latest_by = 'recorded'
         ordering = ['-recorded', 'title']
+        verbose_name = _(u'video')
+        verbose_name_plural = _(u'videos')
 
     @models.permalink
     def get_absolute_url(self):

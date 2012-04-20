@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 import datetime
 
@@ -26,8 +27,8 @@ class SiteNews(models.Model):
     in the same style.
     """
     title = models.CharField(max_length=50)
-    summary = models.TextField(help_text=u'Two sentences. Use HTML.')
-    content = models.TextField(help_text=u'Use HTML.')
+    summary = models.TextField(help_text=_(u'Two sentences. Use HTML.'))
+    content = models.TextField(help_text=_(u'Use HTML.'))
     # TODO: make this a django user instead?
     author = models.CharField(max_length=50)
 
@@ -39,7 +40,9 @@ class SiteNews(models.Model):
     class Meta(object):
         get_latest_by = "updated"
         ordering = ["-updated"]
-        verbose_name = verbose_name_plural = u'Site news'
+        # TODO make both translation independent from each other
+        verbose_name = _(u'site news')
+        verbose_name_plural = _(u'site news')
 
     @models.permalink
     def get_absolute_url(self):
@@ -59,16 +62,20 @@ class Notification(models.Model):
     """
     interjection = models.CharField(
         max_length=20,
-        help_text=u'Short interjection like "Alert!", "Information!", '
-        '"Warning!", "Heads up!", "Whoops!"')
+        help_text=_(u'Short interjection like "Alert!", "Information!", '
+        '"Warning!", "Heads up!", "Whoops!"'))
 
     text = models.CharField(
         max_length=200,
-        help_text=u'Use HTML. Keep the text short. Add a link to '
-        'sitenews for more information.')
+        help_text=_(u'Use HTML. Keep the text short. Add a link to '
+        'sitenews for more information.'))
 
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
+
+    class Meta(object):
+        verbose_name = _(u'notification')
+        verbose_name_plural = _(u'notifications')
 
     @classmethod
     def get_live_notifications(cls):

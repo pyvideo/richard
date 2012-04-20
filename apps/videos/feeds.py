@@ -21,6 +21,8 @@ from django.contrib.syndication.views import Feed
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.utils.feedgenerator import Rss201rev2Feed
+from django.utils.translation import ugettext as _
+
 
 from videos.models import Speaker, Category
 
@@ -141,7 +143,8 @@ class CategoryVideosFeed(BaseVideoFeed):
                         kwargs={'category_id': category.pk, 'slug': category.slug})
 
     def title(self, category):
-        return u'%s: Videos of %s' % (settings.SITE_TITLE, category.title)
+        return _(u'{site_title}: Videos of {category}').format(
+            site_title=settings.SITE_TITLE, category=category.title)
 
     def get_object(self, request, category_id, slug):
         return get_object_or_404(Category, pk=category_id)
@@ -157,7 +160,8 @@ class SpeakerVideosFeed(BaseVideoFeed):
                         kwargs={'speaker_id': speaker.pk, 'slug': speaker.slug})
 
     def title(self, speaker):
-        return u'%s: Videos of %s' % (settings.SITE_TITLE, speaker.name)
+        return _(u'{site_title}: Videos of {speaker}').format(
+            site_title=settings.SITE_TITLE, speaker=speaker.name)
 
     def get_object(self, request, speaker_id, slug):
         return get_object_or_404(Speaker, pk=speaker_id)
