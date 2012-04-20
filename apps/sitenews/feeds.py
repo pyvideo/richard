@@ -32,7 +32,7 @@ class NewsFeed(Feed):
         return item.title
 
     def item_description(self, item):
-        return item.content
+        return item.summary + item.content
 
     def item_link(self, item):
         return item.get_absolute_url()

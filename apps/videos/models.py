@@ -23,6 +23,12 @@ from django.db import models
 from videos.utils import generate_unique_slug
 
 
+MIMETYPES_MAP = {
+    'ogv': 'video/ogg',
+    'mp4': 'video/mp4',
+    'webm': 'video/webm',
+    'flv': 'video/x-flv'
+}
 USE_HTML_HELP_TEXT = "Use HTML."
 
 
@@ -33,7 +39,7 @@ class CategoryKind(models.Model):
         return self.name
 
     def __repr__(self):
-        return '<CategoryKind %s>' % self.name
+        return '<CategoryKind %s>' % self.name.encode('ascii', 'ignore')
 
 
 class Category(models.Model):
@@ -41,27 +47,27 @@ class Category(models.Model):
 
     name = models.CharField(
         max_length=255,
-        help_text='The name of the category. e.g. PyCon')
+        help_text=u'The name of the category. e.g. PyCon')
     title = models.CharField(
         max_length=255,
-        help_text='The complete title for the category. e.g. '
+        help_text=u'The complete title for the category. e.g. '
         'PyCon 2010')
     description = models.TextField(
         blank=True, default=u'',
         help_text=USE_HTML_HELP_TEXT)
     url = models.URLField(
         blank=True, default=u'',
-        help_text='URL for the category. e.g. If this category was a '
+        help_text=u'URL for the category. e.g. If this category was a '
         'conference, this would be the url for the conference '
         'web-site.')
     start_date = models.DateField(
         blank=True, null=True,
-        help_text='If the category was an event, then this is the start '
+        help_text=u'If the category was an event, then this is the start '
         'date for the event.')
 
     whiteboard = models.CharField(
         blank=True, max_length=255, default=u'',
-        help_text='Editor notes for this category.')
+        help_text=u'Editor notes for this category.')
 
     slug = models.SlugField(unique=True)
 
@@ -69,7 +75,7 @@ class Category(models.Model):
         return self.title
 
     def __repr__(self):
-        return '<Category %s>' % self.title
+        return '<Category %s>' % self.title.encode('ascii', 'ignore')
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -78,7 +84,7 @@ class Category(models.Model):
 
     class Meta(object):
         ordering = ["name", "title"]
-        verbose_name_plural = 'Categories'
+        verbose_name_plural = u'Categories'
 
     @models.permalink
     def get_absolute_url(self):
@@ -96,7 +102,7 @@ class Speaker(models.Model):
         return self.name
 
     def __repr__(self):
-        return '<Speaker %s: %s>' % (self.id, self.name)
+        return '<Speaker %s: %s>' % (self.id, self.name.encode('ascii', 'ignore'))
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -118,7 +124,7 @@ class Tag(models.Model):
         return self.tag
 
     def __repr__(self):
-        return '<Tag %s>' % self.tag
+        return '<Tag %s>' % self.tag.encode('ascii', 'ignore')
 
     class Meta(object):
         ordering = ['tag']
@@ -204,7 +210,8 @@ class Video(models.Model):
         return self.title
 
     def __repr__(self):
-        return '<Video %s (%s)>' % (self.title[:30], self.category)
+        return '<Video %s (%s)>' % (self.title[:30].encode('ascii', 'ignore'),
+                                    self.category)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -336,11 +343,3 @@ def create_videos(data):
         v.save()
         created.append(v)
     return created
-
-
-MIMETYPES_MAP = {
-    'ogv': 'video/ogg',
-    'mp4': 'video/mp4',
-    'webm': 'video/webm',
-    'flv': 'video/x-flv'
-}

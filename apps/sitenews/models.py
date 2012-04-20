@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.db import models
-from django.template.defaultfilters import slugify
 
 import datetime
 
@@ -27,8 +26,8 @@ class SiteNews(models.Model):
     in the same style.
     """
     title = models.CharField(max_length=50)
-    summary = models.TextField(help_text='Two sentences. Use HTML.')
-    content = models.TextField(help_text='Use HTML.')
+    summary = models.TextField(help_text=u'Two sentences. Use HTML.')
+    content = models.TextField(help_text=u'Use HTML.')
     # TODO: make this a django user instead?
     author = models.CharField(max_length=50)
 
@@ -40,7 +39,7 @@ class SiteNews(models.Model):
     class Meta(object):
         get_latest_by = "updated"
         ordering = ["-updated"]
-        verbose_name = verbose_name_plural = 'Site news'
+        verbose_name = verbose_name_plural = u'Site news'
 
     @models.permalink
     def get_absolute_url(self):
@@ -50,7 +49,7 @@ class SiteNews(models.Model):
         return self.title
 
     def __repr__(self):
-        return '<SiteNews: %s>' % self.title
+        return '<SiteNews: %s>' % self.title.encode('ascii', 'ignore')
 
 
 class Notification(models.Model):

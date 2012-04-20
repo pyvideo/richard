@@ -47,7 +47,7 @@ class MediaRSSFeed(Rss201rev2Feed):
         if 'keywords' in item:
             handler.addQuickElement(u"media:keywords", item['keywords'])
 
-        for name, attrs in item.get('media', []).items():
+        for name, attrs in item.get('media', {}).items():
             handler.addQuickElement(u'media:%s' % name, '', attrs)
 
 
