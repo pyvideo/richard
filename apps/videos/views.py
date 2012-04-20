@@ -108,8 +108,9 @@ def opensearch_suggestions(request):
     Implements the OpenSearch suggestions extension.
     """
     query = request.GET.get('q', '')
-    matches = SearchQuerySet().filter(title_auto=query)
-    result = [query, list(matches.values_list('title_auto', flat=True))]
+    sqs = (SearchQuerySet().filter(title_auto=query)
+                           .values_list('title_auto', flat=True))
+    result = [query, list(sqs)]
 
     return JSONResponse(json.dumps(result))
 

@@ -14,6 +14,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
+import json
+import shutil
+
+from django.conf import settings
+from django.core import management
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
@@ -25,6 +31,14 @@ from videos.models import Video
 
 class TestVideos(TestCase):
     """Tests for the ``videos`` app."""
+
+    def tearDown(self):
+        """Remove the search index after each test run.
+
+        The path is set in richard/settings_test.py."""
+        path = settings.HAYSTACK_CONNECTIONS['default']['PATH']
+        if os.path.exists(path):
+            shutil.rmtree(path)
 
     # category 
 
@@ -248,3 +262,20 @@ class TestVideos(TestCase):
 
         resp = self.client.get(url)
         eq_(resp.status_code, 200)
+
+    def test_opensearch_suggestions(self):
+        """Test the opensearch suggestions view."""
+        video(title='introduction to pypy', save=True)
+        video(title='django testing', save=True)
+        video(title='pycon 2012 keynote', save=True)
+        video(title='Speedily Practical Large-Scale Tests', save=True)
+        management.call_command('rebuild_index', interactive=False)
+
+        url = reverse('videos-opensearch-suggestions')
+
+        response = self.client.get(url, {'q': 'test'})
+        eq_(response.status_code, 200)
+        data = json.loads(response.content)
+        eq_(data[0], 'test')
+        eq_(set(data[1]),
+            set(['django testing', 'Speedily Practical Large-Scale Tests']))
