@@ -15,10 +15,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import bleach
+import json
 
-
+from django.conf import settings
+from django.contrib.sites.models import Site
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, render
+from haystack.query import SearchQuerySet
 
 
 from videos import models
@@ -89,6 +92,31 @@ def video(request, video_id, slug):
         {'meta': meta,
          'v': obj})
     return ret
+
+
+def opensearch(request):
+    """Return opensearch description document."""
+    ret = render(
+        request, 'videos/opensearch.xml',
+        {'site': Site.objects.get_current()},
+        content_type='application/opensearchdescription+xml')
+    return ret
+
+
+def opensearch_suggestions(request):
+    """Return suggestions for a search query.
+    
+    Implements the OpenSearch suggestions extension.
+    """
+    if not settings.OPENSEARCH_ENABLE_SUGGESTIONS:
+        raise Http404
+
+    query = request.GET.get('q', '')
+    sqs = (SearchQuerySet().filter(title_auto=query)
+                           .values_list('title_auto', flat=True))
+    result = [query, list(sqs)]
+
+    return JSONResponse(json.dumps(result))
 
 
 # TODO: Move this elsewhere

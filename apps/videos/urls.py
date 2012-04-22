@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from django.conf import settings
 from django.conf.urls.defaults import patterns, url, include
 from haystack.views import SearchView, search_view_factory
 from haystack.forms import ModelSearchForm
@@ -61,6 +62,10 @@ urlpatterns = patterns(
             template='videos/search.html',
             form_class=ModelSearchForm),
         name='haystack-search'),
+    url(r'^search/xml/?$',
+        'opensearch', name='videos-opensearch'),
+    url(r'^search/suggestions/$',
+        'opensearch_suggestions', name='videos-opensearch-suggestions'),
 
     # faux api for carl
     url(r'^api/1.0/videos/urlforsource$',
