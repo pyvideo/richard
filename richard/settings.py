@@ -184,10 +184,14 @@ INSTALLED_APPS = (
     'videos',
     'sitenews',
     'pages',
-
-    # Test apps
-    'django_nose',
 )
+
+try:
+    # Add django_nose for testing but only if nose is installed.
+    import nose
+    INSTALLED_APPS = tuple(list(INSTALLED_APPS) + ['django_nose'])
+except ImportError:
+    pass
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
