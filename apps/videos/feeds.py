@@ -93,12 +93,13 @@ class BaseVideoFeed(Feed):
     def item_enclosures(self, item):
         enclosures = []
         for fmt in item.get_available_formats():
-            data = {'url': fmt['url'], 'type': fmt['mime_type']}
-            if fmt['length']:
+            data = {'url': fmt['url']}
+            if fmt.get('mime_type'):
+                data['mime_type'] = fmt['mime_type']
+            if fmt.get('length'):
                 data['fileSize'] = str(fmt['length'])
 
             enclosures.append(data)
-
         return enclosures
 
     def item_media(self, item):
@@ -124,14 +125,14 @@ class BaseVideoFeed(Feed):
     def item_enclosure_length(self, item):
         fmt = item.get_available_formats()
         if fmt:
-            return fmt[0]['length']
+            return fmt[0].get('length')
         else:
             return None
 
     def item_enclosure_mime_type(self, item):
         fmt = item.get_available_formats()
         if fmt:
-            return fmt[0]['mime_type']
+            return fmt[0].get('mime_type')
         else:
             return None
 

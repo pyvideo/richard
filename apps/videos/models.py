@@ -287,6 +287,17 @@ class Video(models.Model):
             if url:
                 result.append({'url': url, 'length': length,
                                 'mime_type': mime_type})
+
+        # Now we do this goofy thing where if this is a YouTube video
+        # we add it to the list of available formats. That's because
+        # this gets used to build the enclosures for a feed and we
+        # want to make sure this works with Miro.
+        #
+        # We put it last in the list because most options are better
+        # than this one.
+        if self.source_url and 'youtube' in self.source_url.lower():
+            result.append({'url': self.source_url, 'mime_type': 'video/flv'})
+
         return result
 
 
