@@ -39,3 +39,10 @@ class RichardViewsTest(TestCase):
         resp = self.client.get(reverse('home'))
         assert n1.text in resp.content
         assert n2.text in resp.content
+
+    def test_stats(self):
+        """Test the statistics page."""
+        url = reverse('stats')
+
+        resp = self.client.get(url)
+        eq_(resp.status_code, 200)
