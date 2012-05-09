@@ -60,3 +60,22 @@ function HTML5SeekVideo(time) {
 
   waitForMetadata();
 }
+
+function updateVideoOffset(embed_type) {
+  if (embed_type === "undefined") {
+    return;
+  }
+
+  var config = parseLocationHash();
+  if (typeof(config.t) === "undefined") {
+    return;
+  }
+
+  var time = parseTime(config.t);
+
+  if (embed_type === "unisubs") {
+    UnisubsSeekVideo(time);
+  } else if (embed_type === "html5") {
+    HTML5SeekVideo(time);
+  }
+}
