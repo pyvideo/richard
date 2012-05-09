@@ -43,3 +43,20 @@ function UnisubsSeekVideo(time) {
   var w = unisubs.widget.Widget.getAllWidgets()[0];
   w.playAt(time);
 }
+
+// Seek to specified time in the video and start playing.
+function HTML5SeekVideo(time) {
+  var v = document.getElementsByTagName("video")[0];
+
+  function waitForMetadata() {
+    if (v.readyState >= 1) {
+      v.currentTime = time;
+      v.play();
+	  return;
+	}
+
+    setTimeout(waitForMetadata, 500);
+  }
+
+  waitForMetadata();
+}

@@ -39,7 +39,7 @@
     {% elif v.embed %}
       {{ v.embed|safe }}
     {% else %}
-      <video id="{{ v.slug }}">
+      <video id="{{ v.slug }}" controls>
         {% if v.video_ogv_url %}
           <source src="{{ v.video_ogv_url }}" type="video/ogg">
         {% endif %}
@@ -53,6 +53,14 @@
           <source src="{{ v.video_flv_url }}" type="video/x-flv">
         {% endif %}
       </video>
+      <script type="text/javascript" src="{{ settings.STATIC_URL }}videos/js/videos.js"></script>
+      <script type="text/javascript">
+        var config = parseLocationHash();
+
+        if (typeof(config.t) !== "undefined") {
+          HTML5SeekVideo(parseTime(config.t));
+        }
+      </script>
     {% endif %}
   </div>
 {% endmacro %}
