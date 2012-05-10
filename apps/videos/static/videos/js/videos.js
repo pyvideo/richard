@@ -2,12 +2,12 @@
 // Example: '#t=3m&foo=bar' returns {t: '3m', foo: 'bar'}
 // TODO: error handling
 function parseLocationHash() {
-  var parts = window.location.hash.slice(1).split('&'),
-	  result = {};
+  var parts = window.location.hash.slice(1).split('&');
+  var result = {};
 
   for (var i = 0, length = parts.length; i < length; i++) {
-	var tuple = parts[i].split('=');
-	result[tuple[0]] = tuple[1];
+    var tuple = parts[i].split('=');
+    result[tuple[0]] = tuple[1];
   }
 
   return result;
@@ -36,8 +36,8 @@ function UnisubsSeekVideo(time) {
   // FIXME: this does not mean the player/video is ready! I hope we
   //        find a better way to do this.
   if (typeof(unisubs) === "undefined") {
-	setTimeout(function() { UnisubsSeekVideo(time); }, 1000);
-	return;
+    setTimeout(function() { UnisubsSeekVideo(time); }, 1000);
+    return;
   }
 
   var w = unisubs.widget.Widget.getAllWidgets()[0];
@@ -52,8 +52,8 @@ function HTML5SeekVideo(time) {
     if (v.readyState >= 1) {
       v.currentTime = time;
       v.play();
-	  return;
-	}
+      return;
+    }
 
     setTimeout(waitForMetadata, 500);
   }

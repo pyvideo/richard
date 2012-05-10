@@ -87,10 +87,22 @@ def video(request, video_id, slug):
         meta.append(('description', 
                      bleach.clean(obj.summary, tags=[], strip=True)))
 
+    # Figure out how we're going to embed the video.
+    # This is used by JavaScript code to seek to a specific video position.
+
+    if obj.source_url and 'youtube' in obj.source_url:
+        # Universal Subtitles is hardcoded for YouTube videos
+        embed_type = 'unisubs'
+    elif obj.embed:
+        embed_type = 'custom'
+    else:
+        embed_type = 'html5'
+
     ret = render(
         request, 'videos/video.html',
         {'meta': meta,
-         'v': obj})
+         'v': obj,
+         'embed_type': embed_type})
     return ret
 
 

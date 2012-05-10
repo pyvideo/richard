@@ -28,9 +28,6 @@
           }
         })
       </script>
-      <script type="text/javascript">
-        var embed_type = 'unisubs';
-      </script>
     {% elif v.embed %}
       {{ v.embed|safe }}
     {% else %}
@@ -48,15 +45,6 @@
           <source src="{{ v.video_flv_url }}" type="video/x-flv">
         {% endif %}
       </video>
-      <script type="text/javascript">
-        var embed_type = 'html5';
-      </script>
     {% endif %}
-
-    <script type="text/javascript" src="{{ settings.STATIC_URL }}videos/js/videos.js"></script>
-    <script type="text/javascript">
-      window.addEventListener('hashchange', function() { updateVideoOffset(embed_type); }, false);
-      updateVideoOffset(embed_type);
-    </script>
   </div>
 {% endmacro %}
