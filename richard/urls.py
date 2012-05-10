@@ -26,6 +26,7 @@ urlpatterns = patterns(
     '',
 
     url(r'^$', 'richard.views.home', name='home'),
+    url(r'^stats/$', 'richard.views.stats', name='stats'),
 
     url(r'^admin/', include(admin.site.urls)),
 

@@ -1,0 +1,80 @@
+{#
+# richard -- video index system
+# Copyright (C) 2012 richard contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-#}
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page-header">
+  <h1>{{ video_count }} video{{ 's' if video_count != 0 }} indexed</h2>
+</div>
+
+<div class="row-fluid">
+  <div class="span4">
+    <div class="well">
+      <p class="stats-number">
+        <strong>{{ category_count }}</strong>
+        <em>categor{{ 'y' if category_count == 1 else 'ies' }}</em>
+      </p>
+      <ul>
+      {% for cat in category_top5 %}
+        <li>
+          <a href="{{ cat.get_absolute_url() }}">{{ cat }}</a>
+          (<strong>{{ cat.count }}&nbsp;videos</strong>)
+        </li>
+      {% endfor %}
+      </ul>
+      <a href="{{ url('videos-category-list') }}">All categories</a>
+    </div>
+  </div>
+
+  <div class="span4">
+    <div class="well">
+      <p class="stats-number">
+        <strong>{{ speaker_count }}</strong>
+        <em>speaker{{ 's' if speaker_count != 1 }}</em>
+      </p>
+      <ul>
+      {% for s in speaker_top5 %}
+        <li>
+          <a href="{{ s.get_absolute_url() }}">{{ s }}</a>
+          (<strong>{{ s.count }}&nbsp;videos</strong>)
+        </li>
+      {% endfor %}
+      </ul>
+      <a href="{{ url('videos-speaker-list') }}">All speakers</a>
+    </div>
+  </div>
+
+  <div class="span4">
+    <div class="well">
+      <p class="stats-number">
+        <strong>{{ tag_count }}</strong>
+        <em>tag{{ 's' if tag_count != 1 }}</em>
+      </p>
+      {% for tag in tag_top5 %}
+        <li>
+          {{ tag }}
+          (<strong>{{ tag.count }}&nbsp;videos</strong>)
+        </li>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
