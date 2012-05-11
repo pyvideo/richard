@@ -28,9 +28,13 @@
 
 <div class="page-header">
   <h1>{{ category.title }}
-    {% if user.is_staff %}
-      <small><a href="{{ url('admin:videos_category_change', category.id) }}"><i class="icon-edit"></i> edit</a></small>
-    {% endif %}
+    <small>
+      {% set video_count = category.video_set.live()|length %}
+      ({{ video_count }} Video{{ 's' if video_count != 1 else '' }})
+      {% if user.is_staff %}
+        <a href="{{ url('admin:videos_category_change', category.id) }}"><i class="icon-edit"></i> edit</a>
+      {% endif %}
+    </small>
   </h1>
 </div>
 
