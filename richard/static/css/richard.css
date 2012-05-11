@@ -30,3 +30,7 @@ div#footer {
   font-style: normal;
   font-size: 1.1em;
 }
+
+.navbar-inner {
+  border-radius: 0px;
+}
