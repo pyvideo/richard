@@ -56,7 +56,7 @@
   </div>
 </div>
 
-{% for v in category.video_set.live() %}
+{% for v in videos %}
   {{ macros.video_summary(v) }}
 {% endfor %}
 {% endblock %}

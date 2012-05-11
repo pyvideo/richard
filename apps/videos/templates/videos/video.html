@@ -73,8 +73,9 @@
 
         <dt>Speakers</dt>
         <dd>
-          {% if v.speakers.all() %}
-            {% for s in v.speakers.all() %}
+          {% set speakers = v.speakers.all() %}
+          {% if speakers %}
+            {% for s in speakers %}
               <div><a href="{{ s.get_absolute_url() }}">{{ s.name }}</a></div>
             {% endfor %}
           {% else %}
@@ -100,8 +101,9 @@
 
         <dt>Tags</dt>
         <dd>
-          {% if v.tags %}
-            {% for t in v.tags.all() %}
+          {% set tags = v.tags.all() %}
+          {% if tags %}
+            {% for t in tags %}
               {{ t.tag }}
             {% endfor %}
           {% else %}

@@ -29,9 +29,7 @@
       <h2>{{ kind.name }}</h2>
       <ul>
         {% for cat in kind.category_set.all() %}
-          {% if cat.kind == kind %}
-            <li><a href="{{ cat.get_absolute_url() }}">{{ cat.title }}</a></li>
-          {% endif %}
+          <li><a href="{{ cat.get_absolute_url() }}">{{ cat.title }}</a></li>
         {% endfor %}
       </ul>
     {% endfor %}

@@ -43,7 +43,7 @@
   </div>
 </div>
 
-{% for v in speaker.video_set.live() %}
+{% for v in videos %}
   {{ macros.video_summary(v) }}
 {% endfor %}
 {% endblock %}

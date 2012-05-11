@@ -17,6 +17,7 @@
 import bleach
 import json
 
+from django.db.models import Count
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.http import Http404, HttpResponse
@@ -39,9 +40,13 @@ def category_list(request):
 def category(request, category_id, slug):
     obj = get_object_or_404(models.Category, pk=category_id)
 
+    videos = (obj.video_set.live().select_related('category')
+                                  .prefetch_related('speakers'))
+
     ret = render(
         request, 'videos/category.html',
-        {'category': obj})
+        {'category': obj,
+         'videos': videos})
     return ret
 
 
@@ -58,7 +63,8 @@ def speaker_list(request):
         if len(c) != 1 or c not in chars:
             c = chars[0]
 
-    speakers = models.Speaker.objects.filter(name__istartswith=c)
+    speakers = (models.Speaker.objects.filter(name__istartswith=c)
+                                      .annotate(video_count=Count('video')))
 
     ret = render(
         request, 'videos/speaker_list.html',
@@ -71,9 +77,13 @@ def speaker_list(request):
 def speaker(request, speaker_id, slug=None):
     obj = get_object_or_404(models.Speaker, pk=speaker_id)
 
+    videos = (obj.video_set.live().select_related('category')
+                                  .prefetch_related('speakers'))
+
     ret = render(
         request, 'videos/speaker.html',
-        {'speaker': obj})
+        {'speaker': obj,
+         'videos': videos})
     return ret
 
 
