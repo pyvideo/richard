@@ -15,15 +15,18 @@ function parseLocationHash() {
 
 // Parse time string and return the value in seconds.
 // Example: '3m16s' returns 196
-// TODO: error handling
 function parseTime(value) {
   var time = 0;
 
-  var minutes = value.split('m');
-  var seconds = minutes.slice(-1)[0].split('s');
+  try {
+    var minutes = value.split('m');
+    var seconds = minutes.slice(-1)[0].split('s');
 
-  time = minutes.length > 1 ? parseInt(minutes[0]) * 60 : 0;
-  time += seconds.length > 1 ? parseInt(seconds[0]) : 0;
+    time = minutes.length > 1 ? parseInt(minutes[0], 10) * 60 : 0;
+    time += seconds.length > 1 ? parseInt(seconds[0], 10) : 0;
+  } catch (error) {
+    // if parsing the time string fails, just fall back to 0
+  }
 
   return time;
 }
@@ -40,13 +43,22 @@ function UnisubsSeekVideo(time) {
     return;
   }
 
-  var w = unisubs.widget.Widget.getAllWidgets()[0];
-  w.playAt(time);
+  var widgets = unisubs.widget.Widget.getAllWidgets();
+
+  if (widgets.length > 0) {
+    widgets[0].playAt(time);
+  }
 }
 
 // Seek to specified time in the video and start playing.
 function HTML5SeekVideo(time) {
-  var v = document.getElementsByTagName("video")[0];
+  var elements = $("video");
+
+  if (elements.length === 0) {
+    return;
+  }
+
+  var v = elements[0];
 
   function waitForMetadata() {
     if (v.readyState >= 1) {
@@ -62,7 +74,8 @@ function HTML5SeekVideo(time) {
 }
 
 function updateVideoOffset(embed_type) {
-  if (embed_type === "undefined") {
+  // Only UniversalSubtitles and HTML5 players are supported
+  if ($.inArray(embed_type, ["unisubs", "html5"]) === -1) {
     return;
   }
 
