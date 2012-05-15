@@ -28,9 +28,12 @@
 
 <div class="page-header">
   <h1>{{ speaker.name }}
-    {% if user.is_staff %}
-      <small><a href="{{ url('admin:videos_speaker_change', speaker.id) }}"><i class="icon-edit"></i> edit</a></small>
-    {% endif %}
+    <small>
+      ({{ videos|length }} Video{{ 's' if videos|length != 1 else '' }})
+      {% if user.is_staff %}
+        <a href="{{ url('admin:videos_speaker_change', speaker.id) }}"><i class="icon-edit"></i> edit</a>
+      {% endif %}
+    </small>
   </h1>
 </div>
 
