@@ -26,12 +26,14 @@ from sitenews.models import SiteNews
 def home(request):
     category_list = CategoryKind.objects.all()
     news_list = SiteNews.objects.all()[:5]
+    video_count = Video.objects.live().count()
 
     ret = render(
         request, 'home.html',
         {'title': settings.SITE_TITLE,
          'kinds': category_list,
-         'news': news_list})
+         'news': news_list,
+         'video_count': video_count})
     return ret
 
 

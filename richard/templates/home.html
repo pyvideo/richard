@@ -23,8 +23,8 @@
     <div class="hero-unit">
       <h1>{{ settings.SITE_TITLE }}</h1>
       <p>
-        This site is an index of video that exists in various places making
-        it easier to find.
+        This site indexes videos that exist in various places and makes them easier to find.
+        {{ video_count }} video{{ 's' if video_count != 1 else '' }} so far.
       </p>
       <p>
         <a class="btn btn-primary btn-large" href="{{ url('pages-page', page='about') }}">Learn more</a>
