@@ -28,24 +28,19 @@ Things that you should install with your package manager
 ========================================================
 
 You need the following things all of which should be provided by your
-system/package manager:
+system's package manager:
 
 * Python 2.6 or 2.7
 * pip
 * virtualenv
-* MySQL Server
-* MySQL client headers
 
 
 On Debian, this translates to::
 
-    apt-get install \
-        python \
-        python-pip \
-        python-virtualenv \
-        mysql-server \
-        mysql-client \
-        libmysqlclient-dev
+    $ apt-get install \
+          python \
+          python-pip \
+          python-virtualenv
 
 
 Setting up a directory structure
@@ -123,8 +118,78 @@ Use pip to install the requirements::
    feel free to do so!
 
 
+Configuration
+=============
+
+Default configuration for the project is in
+``richard/richard/settings.py``.
+
+You can either copy that into ``your_site`` and edit it there or
+create a ``settings_site.py`` file, import the defaults and override
+the ones you want to override.
+
+Make sure to set a ``SECRET_KEY``::
+
+    # Make this unique, and don't share it with anybody.
+    SECRET_KEY = 'long secret key'
+
+
+.. todo:: list configuration settings that should be in settings file
+
+
+Setting up database
+===================
+
+Now you need to set up a database where richard will store its data.
+
+* :ref:`install-chapter-mysql-db`
+* :ref:`install-chapter-sqlite-db`
+* :ref:`install-chapter-postgres-db`
+
+We're really sorry if the database you want to use with richard isn't
+in that list. If you need help, we'll do what we can. See
+:ref:`contribute-project-details` for how to contact us for help.
+
+
+.. _install-chapter-sqlite-db:
+
+Setting up the database (sqlite)
+--------------------------------
+
+.. Warning::
+
+   We don't encourage you to use sqlite for production, but if you
+   must, you must.
+
+
+Setting up sqlite is easy because the configuration for it is already
+in the settings.py file. If you like the defaults, you're done!
+
+
+.. _install-chapter-mysql-db:
+
 Setting up the database (mysql)
-===============================
+-------------------------------
+
+Requirements
+^^^^^^^^^^^^
+
+You need the following things from your system's package manager:
+
+* MySQL Server
+* MySQL client headers
+
+On Debian, this translates to::
+
+    $ apt-get install mysql-server mysql-client libmysqlclient-dev
+
+You'll also need some Python packages::
+
+    $ pip install -r requirements/mysql_backend.txt
+
+
+Creating database
+^^^^^^^^^^^^^^^^^
 
 You need to create a database and a user for that database.
 
@@ -148,23 +213,13 @@ For example, to create a database named ``richard`` with a user named
        mysql> GRANT ALL ON test_richard.* TO richard@localhost IDENTIFIED
            BY 'password';
 
-.. Note::
-
-   If you want to use postgres or some other system, then please do and
-   let me know if it works!
-
 
 Configuration
-=============
+^^^^^^^^^^^^^
 
-Default configuration for the project is in ``richard/richard/settings.py``.
-
-You can either copy that into ``your_site`` and edit it there or
-create a ``settings_site.py`` file, import the defaults and override
-the ones you want to override.
-
-In its default configuration, richard uses SQLite. To use your MySQL database,
-you need to override the configuration with::
+In its default configuration, richard uses SQLite. To use your MySQL
+database, edit your ``settings.py`` file and change the ``DATABASES``
+configuration to something like this::
 
     DATABASES = {
         'default': {
@@ -179,13 +234,13 @@ you need to override the configuration with::
     }
 
 
-Make sure to set a ``SECRET_KEY``::
+.. _install-chapter-postgres-db:
 
-    # Make this unique, and don't share it with anybody.
-    SECRET_KEY = 'long secret key'
+Setting up the database (postgresql)
+------------------------------------
 
+.. todo:: Write setup for postgres.
 
-.. todo:: list configuration settings that should be in settings file
 
 
 Setting up database schema and creating admin user
@@ -195,22 +250,12 @@ To set up the database schema and create the admin user, run::
 
     $ ./manage.py syncdb
 
-The admin user account you create here can be used to log into the richard
-admin section.
+The admin user account you create here can be used to log into the
+richard admin section.
 
 
-Setting up sample data (optional)
-=================================
-
-If you want to set up some initial data, do::
-
-    $ ./manage.py loaddata sample_data.json
-
-This is useful to see how the site works.
-
-
-Setting up your server
-======================
+Setting up your web server
+==========================
 
 Apache and mod_wsgi
 -------------------

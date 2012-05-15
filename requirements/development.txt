@@ -1,5 +1,6 @@
--r ./base.txt
+# This holds development requirements.
 
+-r ./base.txt
 nose
 -e git://github.com/jbalogh/django-nose.git#egg=django-nose
 Pygments

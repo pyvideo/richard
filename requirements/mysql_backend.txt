@@ -1,0 +1,5 @@
+# This holds mysql-specific requirements.
+
+-r ./base.txt
+
+MySQL-python

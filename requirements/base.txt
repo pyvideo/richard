@@ -1,11 +1,15 @@
 django==1.4
 Jinja2
-MySQL-python
 whoosh
--e git://github.com/jbalogh/jingo.git#egg=jingo
--e git://github.com/toastdriven/django-haystack.git@master#egg=django-haystack
-# We're using a specific version here because we need the MultiAuthentication feature, but newer commits break tests
--e git://github.com/toastdriven/django-tastypie.git@5e8850434ef1c8672b0a22953bd7cc0def6347f8#egg=django-tastypie
 bleach
 requests
 south
+-e git://github.com/jbalogh/jingo.git#egg=jingo
+
+# We're using 2.0 alpha or 2.0 beta or something, so until 2.0 is released, we're
+# pulling from master.
+-e git://github.com/toastdriven/django-haystack.git@master#egg=django-haystack
+
+# We're using a specific version here because we need the MultiAuthentication
+# feature, but newer commits break tests.
+-e git://github.com/toastdriven/django-tastypie.git@5e8850434ef1c8672b0a22953bd7cc0def6347f8#egg=django-tastypie

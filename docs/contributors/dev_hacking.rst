@@ -35,10 +35,10 @@ system/package manager:
 
 On Debian, this translates to::
 
-    apt-get install \
-        python \
-        python-pip \
-        python-virtualenv
+    $ apt-get install \
+          python \
+          python-pip \
+          python-virtualenv
 
 
 Getting richard
@@ -60,19 +60,21 @@ Create a virtual environment::
     $ cd richard
     $ virtualenv ./venv/
 
-Activate the virtual environment::
-
-    $ . ./venv/bin/activate
-
 Use pip to install the development requirements::
 
-    $ pip install -r requirements/development.txt
+    $ ./venv/bin/pip install -r requirements/development.txt
 
 .. Note::
 
    pip installed the requirements into the virtual environment. You'll need
-   to activate this virtual environment in order to run richard.  To activate
-   the virtual environment, do::
+   to use the virtualenv versions of ``python``, ``pip`` and friends which
+   will be in ``./venv/bin/``.
+
+   Alternatively, you can activate the virtual environment which puts the
+   virtual environment's versions of ``python``, ``pip`` and friends to the
+   front of your ``$PATH``.
+
+   To activate the virtual environment, do::
 
        $ . ./venv/bin/activate
 
