@@ -184,10 +184,7 @@ INSTALLED_APPS = (
     'videos',
     'sitenews',
     'pages',
-    'sampledata',
-
-    # Test apps
-    'django_nose',
+    'suggestions',
 )
 
 try:

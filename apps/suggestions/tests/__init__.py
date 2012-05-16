@@ -14,24 +14,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.conf import settings
-from django.conf.urls import patterns, include, url
-from django.conf.urls.static import static
+from richard.tests.utils import with_save
+from suggestions.models import Suggestion
 
-# enable the admin
-from django.contrib import admin
-admin.autodiscover()
 
-urlpatterns = patterns(
-    '',
+@with_save
+def suggestion(**kwargs):
+    defaults = {}
+    defaults.update(kwargs)
 
-    url(r'^$', 'richard.views.home', name='home'),
-    url(r'^stats/$', 'richard.views.stats', name='stats'),
+    if 'name' not in defaults:
+        defaults['name'] = u'Add pycon conference 2042'
+    if 'url' not in defaults:
+        defaults['url'] = u'https://us.pycon.org/2012/'
 
-    url(r'^admin/', include(admin.site.urls)),
-
-    url(r'^news/', include('sitenews.urls')),
-    url(r'^pages/', include('pages.urls')),
-    url(r'^suggestions/', include('suggestions.urls')),
-    url(r'', include('videos.urls')),
-) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    return Suggestion(**defaults)

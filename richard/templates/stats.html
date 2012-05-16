@@ -79,4 +79,28 @@
   </div>
 </div>
 
+<div class="row-fluid">
+  <div class="span4">
+    <div class="well">
+      <p class="stats-number">
+        <strong>{{ suggestions|length }}</strong>
+        <em>open suggestion{{ 's' if suggestions|length != 1 }}</em>
+      </p>
+      <ul>
+      {% for s in suggestions %}
+        <li>
+          {{ s }}
+          {% if s.state == 0 %}
+            (<strong>New</strong>)
+          {% elif s.state == 1 %}
+            (<strong>In progress</strong>)
+          {% endif %}
+        </li>
+      {% endfor %}
+      </ul>
+      <a href="{{ url('suggestions-list') }}">All suggestions</a>
+    </div>
+  </div>
+</div>
+
 {% endblock %}

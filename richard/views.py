@@ -21,6 +21,7 @@ from django.shortcuts import render
 
 from videos.models import CategoryKind, Video, Category, Speaker, Tag
 from sitenews.models import SiteNews
+from suggestions.models import Suggestion
 
 
 def home(request):
@@ -59,6 +60,10 @@ def stats(request):
     tag_count = Tag.objects.count()
     tag_top5 = most_videos(Tag)[:5]
 
+    open_states = (Suggestion.STATE_NEW, Suggestion.STATE_IN_PROGRESS)
+    suggestions = (Suggestion.objects.filter(state__in=open_states)
+                                     .order_by('-state'))
+
     ret = render(
         request, 'stats.html',
         {'video_count': video_count,
@@ -67,5 +72,6 @@ def stats(request):
          'speaker_count': speaker_count,
          'speaker_top5': speaker_top5,
          'tag_count': tag_count,
-         'tag_top5': tag_top5})
+         'tag_top5': tag_top5,
+         'suggestions': suggestions})
     return ret

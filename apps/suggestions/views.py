@@ -14,24 +14,21 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.conf import settings
-from django.conf.urls import patterns, include, url
-from django.conf.urls.static import static
+from django.shortcuts import render
 
-# enable the admin
-from django.contrib import admin
-admin.autodiscover()
+from suggestions.models import Suggestion
 
-urlpatterns = patterns(
-    '',
 
-    url(r'^$', 'richard.views.home', name='home'),
-    url(r'^stats/$', 'richard.views.stats', name='stats'),
+def overview(request):
+    """Show a list of all accepted suggestions and their status."""
+    open_states = (Suggestion.STATE_NEW, Suggestion.STATE_IN_PROGRESS)
+    resolved_states = (Suggestion.STATE_COMPLETED, Suggestion.STATE_REJECTED)
 
-    url(r'^admin/', include(admin.site.urls)),
+    open_objs = Suggestion.objects.filter(state__in=open_states)
+    resolved_objs = Suggestion.objects.filter(state__in=resolved_states)
 
-    url(r'^news/', include('sitenews.urls')),
-    url(r'^pages/', include('pages.urls')),
-    url(r'^suggestions/', include('suggestions.urls')),
-    url(r'', include('videos.urls')),
-) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    ret = render(
+        request, 'suggestions/list.html',
+        {'open_suggestions': open_objs,
+         'resolved_suggestions': resolved_objs})
+    return ret

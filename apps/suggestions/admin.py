@@ -14,24 +14,17 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.conf import settings
-from django.conf.urls import patterns, include, url
-from django.conf.urls.static import static
-
-# enable the admin
 from django.contrib import admin
-admin.autodiscover()
 
-urlpatterns = patterns(
-    '',
+from suggestions.models import Suggestion
 
-    url(r'^$', 'richard.views.home', name='home'),
-    url(r'^stats/$', 'richard.views.stats', name='stats'),
 
-    url(r'^admin/', include(admin.site.urls)),
+class SuggestionAdmin(admin.ModelAdmin):
+    date_hierarchy = 'submitted'
+    list_display = ('state', 'name', 'url', 'submitted',)
+    list_filter = ('state',)
+    search_fields = ('name', 'url',)
+    radio_fields = {'state': admin.HORIZONTAL}
 
-    url(r'^news/', include('sitenews.urls')),
-    url(r'^pages/', include('pages.urls')),
-    url(r'^suggestions/', include('suggestions.urls')),
-    url(r'', include('videos.urls')),
-) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+admin.site.register(Suggestion, SuggestionAdmin)
