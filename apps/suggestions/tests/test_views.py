@@ -45,3 +45,13 @@ class TestSuggestions(TestCase):
         eq_(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'suggestions/list.html')
         assert s.name not in resp.content
+
+    def test_submit(self):
+        """Test that submitting a suggestion works."""
+        url = reverse('suggestions-submit')
+
+        resp = self.client.post(url, {'name': u'Add boston user group',
+                                      'url': u'http://meetup.bostonpython.com/'},
+                                follow=True)
+        eq_(resp.status_code, 200)
+        assert Suggestion.objects.filter(name=u'Add boston user group').exists()

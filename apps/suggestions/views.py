@@ -16,6 +16,7 @@
 
 from django.shortcuts import render
 
+from suggestions.forms import SuggestionForm
 from suggestions.models import Suggestion
 
 
@@ -31,4 +32,22 @@ def overview(request):
         request, 'suggestions/list.html',
         {'open_suggestions': open_objs,
          'resolved_suggestions': resolved_objs})
+    return ret
+
+
+def submit(request):
+    """Submit a new suggestion."""
+    success = False
+    if request.method == 'POST':
+        form = SuggestionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            success = True
+    else:
+        form = SuggestionForm()
+
+    ret = render(
+        request, 'suggestions/submit_form.html',
+        {'form': form,
+         'success': success})
     return ret

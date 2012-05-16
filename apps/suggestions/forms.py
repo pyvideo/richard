@@ -14,12 +14,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.conf.urls import patterns, url
+from django.forms import ModelForm
+
+from suggestions.models import Suggestion
 
 
-urlpatterns = patterns(
-    'suggestions.views',
-
-    url(r'^$', 'overview', name='suggestions-list'),
-    url(r'^submit/$', 'submit', name='suggestions-submit'),
-)
+class SuggestionForm(ModelForm):
+    class Meta:
+        model = Suggestion
+        fields = ('name', 'url', 'comment',)

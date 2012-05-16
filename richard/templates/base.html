@@ -39,6 +39,7 @@
         <ul class="nav nav-pills">
           <li><a href="{{ url('videos-category-list') }}">Categories</a></li>
           <li><a href="{{ url('videos-speaker-list') }}">Speakers</a></li>
+          <li><a href="#" id="submitSuggestion">Submit</a></li>
         </ul>
         <form class="navbar-search pull-left" action="{{ url('haystack-search') }}">
           <input type="hidden" name="models" value="videos.video">
@@ -82,7 +83,10 @@
   </div>
 
   <script type="text/javascript" src="{{ settings.STATIC_URL }}js/jquery-1.7.2.min.js"></script>
+  <script type="text/javascript" src="{{ settings.STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
   {% block additional_body %}
   {% endblock %}
+
+  {% include 'suggestions/submit.html' %}
 </body>
 </html>
