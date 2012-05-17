@@ -22,6 +22,7 @@ from videos.models import CategoryKind, Category, Speaker, Tag, Video
 from richard.tests.utils import with_save
 
 
+@with_save
 def category_kind(**kwargs):
     defaults = {
         'name': 'foo'
