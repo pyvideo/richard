@@ -31,7 +31,7 @@
     {% elif v.embed %}
       {{ v.embed|safe }}
     {% else %}
-      <video id="{{ v.slug }}">
+      <video id="{{ v.slug }}" controls>
         {% if v.video_ogv_url %}
           <source src="{{ v.video_ogv_url }}" type="video/ogg">
         {% endif %}

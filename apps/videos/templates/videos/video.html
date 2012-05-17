@@ -142,3 +142,19 @@
 </div>
 
 {% endblock %}
+
+{% block additional_body %}
+  {{ super() }}
+
+  <script type="text/javascript" src="{{ settings.STATIC_URL }}videos/js/videos.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      // react to changes after page load
+      $(window).on('hashchange', function() {
+        updateVideoOffset('{{ embed_type }}');
+      });
+
+      updateVideoOffset('{{ embed_type }}');
+    });
+  </script>
+{% endblock %}
