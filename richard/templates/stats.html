@@ -67,12 +67,14 @@
         <strong>{{ tag_count }}</strong>
         <em>tag{{ 's' if tag_count != 1 }}</em>
       </p>
+      <ul>
       {% for tag in tag_top5 %}
         <li>
           {{ tag }}
           (<strong>{{ tag.count }}&nbsp;videos</strong>)
         </li>
       {% endfor %}
+      </ul>
     </div>
   </div>
 </div>
