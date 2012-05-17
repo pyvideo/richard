@@ -25,6 +25,8 @@ class Command(NoArgsCommand):
     def handle(self, *args, **options):
         for app_name in settings.INSTALLED_APPS:
             try:
-                import_module('%s.sampledata' % app_name)
+                mod = import_module('%s.sampledata' % app_name)
+                if hasattr(mod, 'run'):
+                    mod.run()
             except ImportError:
                 pass # No sampledata module

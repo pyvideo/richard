@@ -17,9 +17,10 @@
 from sitenews.tests import sitenews
 
 
-sitenews(title=u'Welcome to my index!',
-         summary=u'<p>I just created this site.</p>',
-         content=u'Yay!',
-         author=u'site admin',
-         slug='first-post',
-         save=True)
+def run():
+    sitenews(title=u'Welcome to my index!',
+             summary=u'<p>I just created this site.</p>',
+             content=u'Yay!',
+             author=u'site admin',
+             slug='first-post',
+             save=True)
