@@ -185,7 +185,7 @@ On Debian, this translates to::
 
 You'll also need some Python packages::
 
-    $ pip install -r requirements/mysql_backend.txt
+    $ pip install -r richard/requirements/mysql_backend.txt
 
 
 Creating database
@@ -252,6 +252,14 @@ To set up the database schema and create the admin user, run::
 
 The admin user account you create here can be used to log into the
 richard admin section.
+
+Then run::
+
+    $ ./manage.py migrate
+
+This sets up the rest of the database tables and also creates the save point
+for migrations making it possible to upgrade your richard instance in the
+future.
 
 
 Setting up your web server
