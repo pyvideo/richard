@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from django.db import transaction
 from django.conf import settings
 from django.core.management.base import NoArgsCommand
 from django.utils.importlib import import_module
@@ -27,6 +28,7 @@ class Command(NoArgsCommand):
             try:
                 mod = import_module('%s.sampledata' % app_name)
                 if hasattr(mod, 'run'):
-                    mod.run()
+                    with transaction.commit_on_success():
+                        mod.run()
             except ImportError:
                 pass # No sampledata module
