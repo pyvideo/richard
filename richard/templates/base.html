@@ -37,8 +37,15 @@
       <div class="container">
         <a class="brand" href="{{ url('home') }}">{{ settings.SITE_TITLE }}</a>
         <ul class="nav nav-pills">
-          <li><a href="{{ url('videos-category-list') }}">Categories</a></li>
-          <li><a href="{{ url('videos-speaker-list') }}">Speakers</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              Browse <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="{{ url('videos-category-list') }}">Categories</a></li>
+              <li><a href="{{ url('videos-speaker-list') }}">Speakers</a></li>
+            </ul>
+          </li>
           <li><a href="#" id="submitSuggestion">Submit</a></li>
         </ul>
         <form class="navbar-search pull-left" action="{{ url('haystack-search') }}">
