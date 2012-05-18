@@ -11,6 +11,7 @@ directory tree like this::
    |- richard/       -- richard django project
    \- apps/
       |- pages/      -- code for "about", "contac", etc pages
+      |- sampledata/ -- code for loading sampledata from apps
       |- sitenews/   -- code for sitenews
       \- videos/     -- code for videos and search
 
@@ -39,6 +40,11 @@ Here's what's there:
 
         Like django.contrib.flatpages except that nothing is in the
         database---it's all done with templates.
+
+    **sampledata**
+
+        Small utility app that will load sample data from other apps
+        for development.
 
     **sitenews**
 

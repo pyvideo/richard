@@ -131,6 +131,6 @@ Setting up sample data (optional)
 
 If you want to set up some initial data, do::
 
-    $ ./manage.py loaddata sample_data.json
+    $ ./manage.py load_sampledata
 
 This is useful to see how the site works.
