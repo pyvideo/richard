@@ -28,7 +28,9 @@ class Command(NoArgsCommand):
             try:
                 mod = import_module('%s.sampledata' % app_name)
                 if hasattr(mod, 'run'):
+                    print "Loading sample data for %s..." % app_name
                     with transaction.commit_on_success():
                         mod.run()
             except ImportError:
                 pass # No sampledata module
+        print "Done!"
