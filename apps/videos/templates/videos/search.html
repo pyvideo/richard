@@ -58,15 +58,25 @@
   {% endfor %}
 
   {% if page.has_previous() or page.has_next() %}
-    <div class="row-fluid">
-      <div class="span12">
-        <div class="section">
-          {% if page.has_previous() %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number() }}">{% endif %}&laquo; Previous{% if page.has_previous() %}</a>{% endif %}
-          |
-          {% if page.has_next() %}<a href="?q={{ query }}&amp;page={{ page.next_page_number() }}">{% endif %}Next &raquo;{% if page.has_next() %}</a>{% endif %}
-        </div>
-      </div>
-    </div>
+<div class="row-fluid">
+	<div class="span12 centered">
+		<div class="pager">
+			<ul>
+			{% if page.has_previous() %}
+				<li><a href="?q={{ query }}&amp;page={{ page.previous_page_number() }}">&laquo; Previous</a></li>
+			{% else %}
+				<li class="disabled"><a>&laquo;Previous</a></li>
+			{% endif %}
+			
+			{% if page.has_next() %}
+				<li><a href="?q={{ query }}&amp;page={{ page.next_page_number() }}"> Next &raquo;</a></li>
+			{% else %}
+				<li class="disabled"><a>Next&raquo;</a></li>
+			{% endif %}
+			</ul>
+		</div>
+	</div>
+</div>
   {% endif %}
 {% else %}
   {# Show some example queries to run, maybe query syntax, something else? #}
