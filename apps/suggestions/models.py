@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from datetime import datetime
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -64,3 +65,10 @@ class Suggestion(models.Model):
     class Meta(object):
         verbose_name = _(u'suggestion')
         verbose_name_plural = _(u'suggestions')
+
+    def save(self, *args, **kwargs):
+        """When the suggestion is closed, set the resolved date."""
+        if self.state in (Suggestion.STATE_COMPLETED, Suggestion.STATE_REJECTED):
+            self.resolved = datetime.now()
+
+        super(Suggestion, self).save(*args, **kwargs)

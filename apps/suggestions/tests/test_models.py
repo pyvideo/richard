@@ -14,18 +14,28 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.contrib import admin
+from django.test import TestCase
 
+from . import suggestion
 from suggestions.models import Suggestion
 
 
-class SuggestionAdmin(admin.ModelAdmin):
-    date_hierarchy = 'submitted'
-    list_display = ('state', 'name', 'url', 'submitted', 'resolved',)
-    list_filter = ('state',)
-    search_fields = ('name', 'url',)
-    radio_fields = {'state': admin.HORIZONTAL}
-    exclude = ('resolved',)
+class TestSuggestion(TestCase):
 
+    def test_resolved_date_set_upon_save(self):
+        """Test that the date is set when the suggestion is closed."""
+        s = suggestion(save=True)
+        assert s.resolved is None
 
-admin.site.register(Suggestion, SuggestionAdmin)
+        s.state = Suggestion.STATE_COMPLETED
+        s.save()
+        assert s.resolved is not None
+
+    def test_no_resolved_date_for_open_states(self):
+        """Test that the date is not set when the state is not closed."""
+        s = suggestion(save=True)
+        assert s.resolved is None
+
+        s.state = Suggestion.STATE_IN_PROGRESS
+        s.save()
+        assert s.resolved is None
