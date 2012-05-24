@@ -34,3 +34,7 @@ div#footer {
 .navbar-inner {
   border-radius: 0px;
 }
+
+.centered {
+  text-align: center;
+}
