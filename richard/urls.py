@@ -30,8 +30,8 @@ urlpatterns = patterns(
 
     url(r'^admin/', include(admin.site.urls)),
 
-    url(r'^news/', include('sitenews.urls')),
-    url(r'^pages/', include('pages.urls')),
-    url(r'^suggestions/', include('suggestions.urls')),
-    url(r'', include('videos.urls')),
+    url(r'^news/', include('richard.sitenews.urls')),
+    url(r'^pages/', include('richard.pages.urls')),
+    url(r'^suggestions/', include('richard.suggestions.urls')),
+    url(r'', include('richard.videos.urls')),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

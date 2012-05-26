@@ -14,10 +14,6 @@ SITE_ROOT = os.path.dirname(os.path.dirname(__file__))
 # root is this directory
 ROOT = os.path.dirname(__file__)
 
-# add the apps/ directory to the path
-sys.path.append(os.path.join(os.path.dirname(ROOT), 'apps'))
-
-
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -178,13 +174,11 @@ INSTALLED_APPS = (
     'south',
     'tastypie',
 
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
-
-    'videos',
-    'sitenews',
-    'pages',
-    'suggestions',
+    'richard.videos',
+    'richard.sitenews',
+    'richard.pages',
+    'richard.sampledata',
+    'richard.suggestions',
 )
 
 try:

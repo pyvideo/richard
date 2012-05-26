@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # richard -- video index system
 # Copyright (C) 2012 richard contributors.  See AUTHORS.
 #
@@ -16,13 +14,31 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import sys
+from django.contrib.syndication.views import Feed
+from django.core.urlresolvers import reverse
+
+from richard.sitenews.models import SiteNews
 
 
-if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "richard.settings")
+class NewsFeed(Feed):
 
-    from django.core.management import execute_from_command_line
+    def link(self):
+        return reverse('sitenews-feed')
 
-    execute_from_command_line(sys.argv)
+    def items(self):
+        return SiteNews.objects.all()
+
+    def item_title(self, item):
+        return item.title
+
+    def item_description(self, item):
+        return item.summary + item.content
+
+    def item_link(self, item):
+        return item.get_absolute_url()
+
+    def item_author_name(self, item):
+        return item.author
+
+    def item_pubdate(self, item):
+        return item.created

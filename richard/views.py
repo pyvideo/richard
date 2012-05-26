@@ -19,9 +19,9 @@ from django.db.models import Count
 from django.shortcuts import render
 
 
-from videos.models import CategoryKind, Video, Category, Speaker, Tag
-from sitenews.models import SiteNews
-from suggestions.models import Suggestion
+from richard.videos.models import CategoryKind, Video, Category, Speaker, Tag
+from richard.sitenews.models import SiteNews
+from richard.suggestions.models import Suggestion
 
 
 def home(request):

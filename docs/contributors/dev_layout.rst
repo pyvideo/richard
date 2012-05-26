@@ -8,8 +8,7 @@ directory tree like this::
    richard
    |- docs/          -- documentation
    |- requirements/  -- requirements files for pip
-   |- richard/       -- richard django project
-   \- apps/
+   \- richard/       -- richard django project
       |- pages/      -- code for "about", "contac", etc pages
       |- sampledata/ -- code for loading sampledata from apps
       |- sitenews/   -- code for sitenews
@@ -30,11 +29,8 @@ Here's what's there:
 
 **richard/richard/**
 
-    This is the "Django project" part of the project.
-
-**richard/apps/**
-
-    This is where the "Django apps" go. There are a few:
+    This is the "Django project" part of the project and where the
+    "Django apps" go. There are a few:
 
     **pages**
 

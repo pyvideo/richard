@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # richard -- video index system
 # Copyright (C) 2012 richard contributors.  See AUTHORS.
 #
@@ -16,13 +14,28 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import sys
+from django.test import TestCase
+
+from richard.suggestions.tests import suggestion
+from richard.suggestions.models import Suggestion
 
 
-if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "richard.settings")
+class TestSuggestion(TestCase):
 
-    from django.core.management import execute_from_command_line
+    def test_resolved_date_set_upon_save(self):
+        """Test that the date is set when the suggestion is closed."""
+        s = suggestion(save=True)
+        assert s.resolved is None
 
-    execute_from_command_line(sys.argv)
+        s.state = Suggestion.STATE_COMPLETED
+        s.save()
+        assert s.resolved is not None
+
+    def test_no_resolved_date_for_open_states(self):
+        """Test that the date is not set when the state is not closed."""
+        s = suggestion(save=True)
+        assert s.resolved is None
+
+        s.state = Suggestion.STATE_IN_PROGRESS
+        s.save()
+        assert s.resolved is None

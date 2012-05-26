@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # richard -- video index system
 # Copyright (C) 2012 richard contributors.  See AUTHORS.
 #
@@ -16,13 +14,25 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import sys
+from django.contrib import admin
+
+from richard.sitenews.models import SiteNews, Notification
 
 
-if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "richard.settings")
+class SiteNewsAdmin(admin.ModelAdmin):
+    date_hierarchy = 'updated'
+    list_display = ('title', 'author', 'created')
+    list_filter = ('author', )
+    search_fields = ('title', 'summary', 'content')
+    prepopulated_fields = {'slug': ('title',)}
 
-    from django.core.management import execute_from_command_line
 
-    execute_from_command_line(sys.argv)
+admin.site.register(SiteNews, SiteNewsAdmin)
+
+
+class NotificationAdmin(admin.ModelAdmin):
+    date_hierarchy = 'start_date'
+    list_display = ('interjection', 'start_date', 'end_date')
+
+
+admin.site.register(Notification, NotificationAdmin)

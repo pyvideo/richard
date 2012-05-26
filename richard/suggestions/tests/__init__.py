@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # richard -- video index system
 # Copyright (C) 2012 richard contributors.  See AUTHORS.
 #
@@ -16,13 +14,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import sys
+from richard.tests.utils import with_save
+from richard.suggestions.models import Suggestion
 
 
-if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "richard.settings")
+@with_save
+def suggestion(**kwargs):
+    defaults = {}
+    defaults.update(kwargs)
 
-    from django.core.management import execute_from_command_line
+    if 'name' not in defaults:
+        defaults['name'] = u'Add pycon conference 2042'
+    if 'url' not in defaults:
+        defaults['url'] = u'https://us.pycon.org/2012/'
 
-    execute_from_command_line(sys.argv)
+    return Suggestion(**defaults)

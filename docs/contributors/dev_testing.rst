@@ -29,7 +29,7 @@ Add new tests
 Locations
 ---------
 
-Tests for apps go in ``richard/apps/APPNAME/tests/``.
+Tests for apps go in ``richard/richard/APPNAME/tests/``.
 
 Tests for richard project go in ``richard/richard/tests/``.
 

@@ -18,7 +18,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from nose.tools import eq_
 
-from sitenews.tests import notification
+from richard.sitenews.tests import notification
 
 
 class RichardViewsTest(TestCase):

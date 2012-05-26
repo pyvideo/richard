@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # richard -- video index system
 # Copyright (C) 2012 richard contributors.  See AUTHORS.
 #
@@ -16,13 +14,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import sys
+from django.conf.urls import patterns, url
 
 
-if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "richard.settings")
+urlpatterns = patterns(
+    'richard.suggestions.views',
 
-    from django.core.management import execute_from_command_line
-
-    execute_from_command_line(sys.argv)
+    url(r'^$', 'overview', name='suggestions-list'),
+    url(r'^submit/$', 'submit', name='suggestions-submit'),
+)

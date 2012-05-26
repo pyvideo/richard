@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # richard -- video index system
 # Copyright (C) 2012 richard contributors.  See AUTHORS.
 #
@@ -16,13 +14,27 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import sys
+from django.conf.urls.defaults import patterns, url
+
+from richard.sitenews.feeds import NewsFeed
 
 
-if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "richard.settings")
+urlpatterns = patterns(
+    'richard.sitenews.views',
 
-    from django.core.management import execute_from_command_line
+    # news item
+    url(r'^entry/(?P<pk>\d+)/(?P<slug>[\w-]*)/?$',
+        'news', name='sitenews-news'),
 
-    execute_from_command_line(sys.argv)
+    # news archive for a year
+    url(r'^archives/(?P<year>[0-9]{4})/?$',
+        'news_archive_year', name='sitenews-archive-year'),
+
+    # feed
+    url(r'^rss/?$',
+        NewsFeed(), name='sitenews-feed'),
+
+    # news listing
+    url(r'^/?$',
+        'news_list', name='sitenews-list'),
+)

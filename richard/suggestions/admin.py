@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # richard -- video index system
 # Copyright (C) 2012 richard contributors.  See AUTHORS.
 #
@@ -16,13 +14,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import sys
+from django.contrib import admin
+
+from richard.suggestions.models import Suggestion
 
 
-if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "richard.settings")
+class SuggestionAdmin(admin.ModelAdmin):
+    date_hierarchy = 'submitted'
+    list_display = ('state', 'name', 'url', 'submitted', 'resolved',)
+    list_filter = ('state',)
+    search_fields = ('name', 'url',)
+    radio_fields = {'state': admin.HORIZONTAL}
+    exclude = ('resolved',)
 
-    from django.core.management import execute_from_command_line
 
-    execute_from_command_line(sys.argv)
+admin.site.register(Suggestion, SuggestionAdmin)
