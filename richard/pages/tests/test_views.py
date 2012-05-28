@@ -22,12 +22,10 @@ from nose.tools import eq_
 class TestPages(TestCase):
     """Tests for the ``pages`` apps views."""
 
-    def test_pages(self):
-        """Test a individual page."""
-        for page in ['about', 'contact']:
-            url = reverse('pages-page', 
-                          kwargs={'page': page},)
+    def test_about_page(self):
+        """Test about page"""
+        url = reverse('pages-page', kwargs={'page': 'about'},)
 
-            resp = self.client.get(url)
-            eq_(resp.status_code, 200)
-            self.assertTemplateUsed(resp, 'pages/%s.html' % page)
+        resp = self.client.get(url)
+        eq_(resp.status_code, 200)
+        self.assertTemplateUsed(resp, 'pages/about.html')
