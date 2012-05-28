@@ -46,7 +46,6 @@
               <li><a href="{{ url('videos-speaker-list') }}">Speakers</a></li>
             </ul>
           </li>
-          <li><a href="#" id="submitSuggestion">Submit</a></li>
         </ul>
         <form class="navbar-search pull-left" action="{{ url('haystack-search') }}">
           <input type="hidden" name="models" value="videos.video">
@@ -55,9 +54,9 @@
 
         <ul class="nav nav-pills pull-right">
           <li><a href="{{ url('sitenews-list') }}">News</a></li>
-          <li><a href="{{ url('pages-page', page='about') }}">About</a></li>
+          <li><a href="#" id="submitSuggestion">Submit</a></li>
           <li><a href="{{ url('stats') }}">Stats</a></li>
-          <li><a href="{{ url('pages-page', page='contact') }}">Contact</a></li>
+          <li><a href="{{ url('pages-page', page='about') }}">About</a></li>
         </ul>
       </div>
     </div>
