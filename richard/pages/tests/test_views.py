@@ -29,3 +29,10 @@ class TestPages(TestCase):
         resp = self.client.get(url)
         eq_(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'pages/about.html')
+
+    def test_nonexistent_page_throws_404(self):
+        """Test that a page without matching template returns 404"""
+        url = reverse('pages-page', kwargs={'page': 'doesnotexist'})
+
+        resp = self.client.get(url)
+        eq_(resp.status_code, 404)

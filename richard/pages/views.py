@@ -14,7 +14,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from django.http import Http404
 from django.shortcuts import render
+from django.template import TemplateDoesNotExist
 
 def pages_view(request, page):
-    return render( request, 'pages/%s.html' % page, {})
+    try:
+        return render(request, 'pages/%s.html' % page, {})
+    except TemplateDoesNotExist:
+        raise Http404
