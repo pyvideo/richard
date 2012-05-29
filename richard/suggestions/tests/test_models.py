@@ -39,3 +39,12 @@ class TestSuggestion(TestCase):
         s.state = Suggestion.STATE_IN_PROGRESS
         s.save()
         assert s.resolved is None
+
+    def test_wipe_resolved_date_when_reopened(self):
+        """Test that date is reset when the suggestion is reopened."""
+        s = suggestion(save=True, state=Suggestion.STATE_COMPLETED)
+        assert s.resolved is not None
+
+        s.state = Suggestion.STATE_NEW
+        s.save()
+        assert s.resolved is None

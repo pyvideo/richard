@@ -29,6 +29,9 @@ class Suggestion(models.Model):
     STATE_REJECTED = 3
     STATE_SPAM = 4
 
+    RESOLVED_STATES = (STATE_COMPLETED, STATE_REJECTED)
+    OPEN_STATES = (STATE_NEW, STATE_IN_PROGRESS)
+
     STATE_CHOICES = (
         (STATE_NEW, _(u'New')),
         (STATE_IN_PROGRESS, _(u'In progress')),
@@ -68,7 +71,10 @@ class Suggestion(models.Model):
 
     def save(self, *args, **kwargs):
         """When the suggestion is closed, set the resolved date."""
-        if self.state in (Suggestion.STATE_COMPLETED, Suggestion.STATE_REJECTED):
+        if self.state in Suggestion.RESOLVED_STATES:
             self.resolved = datetime.now()
+        else:
+            # Reset resolved date when the suggestion is reopened
+            self.resolved = None
 
         super(Suggestion, self).save(*args, **kwargs)

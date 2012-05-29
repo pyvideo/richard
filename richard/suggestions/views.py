@@ -22,11 +22,8 @@ from richard.suggestions.models import Suggestion
 
 def overview(request):
     """Show a list of all accepted suggestions and their status."""
-    open_states = (Suggestion.STATE_NEW, Suggestion.STATE_IN_PROGRESS)
-    resolved_states = (Suggestion.STATE_COMPLETED, Suggestion.STATE_REJECTED)
-
-    open_objs = Suggestion.objects.filter(state__in=open_states)
-    resolved_objs = Suggestion.objects.filter(state__in=resolved_states)
+    open_objs = Suggestion.objects.filter(state__in=Suggestion.OPEN_STATES)
+    resolved_objs = Suggestion.objects.filter(state__in=Suggestion.RESOLVED_STATES)
 
     ret = render(
         request, 'suggestions/list.html',
