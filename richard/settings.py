@@ -158,7 +158,8 @@ JINGO_EXCLUDE_APPS = (
     'registration',
 )
 
-JINGO_CONFIG = {
+JINJA_CONFIG = {
+    'extensions': ['jinja2.ext.with_']
 }
 
 INSTALLED_APPS = (

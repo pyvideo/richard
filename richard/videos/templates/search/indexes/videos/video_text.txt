@@ -17,3 +17,7 @@
 {% for t in object.tags.all() %}
   {{ t.tag }}
 {% endfor %}
+
+{% for u in object.related_urls.all() %}
+  {{ u.url }} {{ u.description }}
+{% endfor %}

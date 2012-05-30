@@ -18,7 +18,8 @@ from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 from django.utils.translation import ugettext_lazy as _
 
-from richard.videos.models import Video, Category, Speaker, CategoryKind, Tag
+from richard.videos.models import (Video, Category, Speaker, CategoryKind, Tag,
+                                   RelatedUrl)
 
 
 class WhiteboardFilter(SimpleListFilter):
@@ -46,6 +47,10 @@ class CategoryKindAdmin(admin.ModelAdmin):
 admin.site.register(CategoryKind, CategoryKindAdmin)
 
 
+class RelatedUrlInline(admin.TabularInline):
+    model = RelatedUrl
+
+
 class VideoAdmin(admin.ModelAdmin):
     date_hierarchy = 'recorded'
     list_display = ('title', 'category', 'whiteboard', 'state')
@@ -55,6 +60,7 @@ class VideoAdmin(admin.ModelAdmin):
     filter_horizontal = ('tags', 'speakers',)
     save_on_top = True
     prepopulated_fields = {'slug': ('title',)}
+    inlines = [RelatedUrlInline]
 
 
 admin.site.register(Video, VideoAdmin)
