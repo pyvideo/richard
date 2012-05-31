@@ -16,6 +16,7 @@
 
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+from django.test.utils import override_settings
 from nose.tools import eq_
 
 
@@ -33,6 +34,14 @@ class TestPages(TestCase):
     def test_nonexistent_page_throws_404(self):
         """Test that a page without matching template returns 404"""
         url = reverse('pages-page', kwargs={'page': 'doesnotexist'})
+
+        resp = self.client.get(url)
+        eq_(resp.status_code, 404)
+
+    @override_settings(PAGES=[])
+    def test_page_without_template_throws_404(self):
+        """Test that a registered page without template returns 404"""
+        url = reverse('pages-page', kwargs={'page': 'about'},)
 
         resp = self.client.get(url)
         eq_(resp.status_code, 404)

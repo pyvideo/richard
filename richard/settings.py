@@ -225,6 +225,8 @@ MEDIA_PREFERENCE = ('ogv', 'webm', 'mp4', 'flv',)
 
 OPENSEARCH_ENABLE_SUGGESTIONS = False
 
+PAGES = ['about']
+
 try:
     from richard.settings_local import *    
 except ImportError:

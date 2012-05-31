@@ -14,12 +14,23 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from django.conf import settings
 from django.http import Http404
 from django.shortcuts import render
 from django.template import TemplateDoesNotExist
 
+
 def pages_view(request, page):
-    try:
-        return render(request, 'pages/%s.html' % page, {})
-    except TemplateDoesNotExist:
-        raise Http404
+    """Show a simple page.
+
+    Only pages that are defined in the PAGES setting will be shown, otherwise
+    return a 404.
+    """
+    if page in settings.PAGES:
+        try:
+            return render(request, 'pages/%s.html' % page, {})
+        except TemplateDoesNotExist:
+            # there is no template for this page, raise a 404 below
+            pass
+
+    raise Http404
