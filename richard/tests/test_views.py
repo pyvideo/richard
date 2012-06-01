@@ -19,6 +19,7 @@ from django.test import TestCase
 from nose.tools import eq_
 
 from richard.sitenews.tests import notification
+from richard.videos.tests import category, speaker, video
 
 
 class RichardViewsTest(TestCase):
@@ -45,4 +46,13 @@ class RichardViewsTest(TestCase):
         url = reverse('stats')
 
         resp = self.client.get(url)
+        eq_(resp.status_code, 200)
+
+    def test_sitemap(self):
+        """Test for the sitemap.xml"""
+        category(save=True)
+        speaker(save=True)
+        video(save=True)
+
+        resp = self.client.get('/sitemap.xml')
         eq_(resp.status_code, 200)

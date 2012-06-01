@@ -156,6 +156,9 @@ JINGO_EXCLUDE_APPS = (
     'django.contrib.admin',
     'admin',
     'registration',
+    # This is the template name passed to jingo that is used to derive the app
+    # name and check if it should be excluded.
+    'sitemap.xml',
 )
 
 JINGO_CONFIG = {
@@ -170,6 +173,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.redirects',
+    'django.contrib.sitemaps',
     'haystack',
     'south',
     'tastypie',

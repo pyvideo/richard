@@ -291,3 +291,10 @@ Templates
 =========
 
 .. todo:: write up instructions for templates
+
+
+Sitemap
+=======
+
+.. todo:: explain how to either point to sitemap in robots.txt or ping google,
+          document how this works with other search engines

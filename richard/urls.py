@@ -22,11 +22,24 @@ from django.conf.urls.static import static
 from django.contrib import admin
 admin.autodiscover()
 
+from richard.pages.sitemaps import PageSitemap
+from richard.videos.sitemaps import (CategorySitemap, SpeakerSitemap,
+                                     VideoSitemap)
+
+
+sitemaps = {
+    'page': PageSitemap,
+    'category': CategorySitemap,
+    'speaker': SpeakerSitemap,
+    'video': VideoSitemap
+}
+
 urlpatterns = patterns(
     '',
 
     url(r'^$', 'richard.views.home', name='home'),
     url(r'^stats/$', 'richard.views.stats', name='stats'),
+    (r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
 
     url(r'^admin/', include(admin.site.urls)),
 
