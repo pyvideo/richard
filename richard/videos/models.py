@@ -96,9 +96,6 @@ class Category(models.Model):
     def get_absolute_url(self):
         return ('videos-category', (self.pk, self.slug))
 
-    def get_live_videos(self):
-        return self.video_set.filter(state=Video.STATE_LIVE)
-
 
 class Speaker(models.Model):
     name = models.CharField(max_length=255)
