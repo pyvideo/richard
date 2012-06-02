@@ -10,21 +10,40 @@ a website that indexes video that's hosted on other sites like YouTube,
 Vimeo, blip.tv, etc.
 
 
-The guide
-=========
+Part 1: Site Administrator's Guide
+==================================
 
-This guide is split into two parts:
+This guide is for site administrators and covers everything you need
+to know to run a richard-based video index site.
 
-:doc:`Part 1: Administrator's Guide <admin/index>`
+.. toctree::
+   :maxdepth: 1
 
-    This guide is for site administrators and covers everything
-    you need to know to run a richard-based video index site.
+   admin/install
+   admin/upgrade
+   admin/performance
+   admin/administration
 
-:doc:`Part 2: Contributor's Guide <contributors/index>`
 
-    This guide is for current and future contributors. richard is
-    a Free Software project and this guide covers everything you
-    need to know about the project to help out.
+Part 2: Contributor's Guide
+===========================
+
+This guide is for current and future contributors. richard is a Free
+Software project and this guide covers everything you need to know
+about the project to help out.
+
+.. toctree::
+   :maxdepth: 1
+
+   contributors/dev_contribute
+   contributors/dev_hacking
+   contributors/dev_running
+   contributors/dev_testing
+   contributors/dev_docs
+   contributors/dev_updating
+   contributors/dev_layout
+   contributors/dev_conventions
+   contributors/dev_resources
 
 
 Indices and tables

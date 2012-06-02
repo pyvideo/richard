@@ -131,7 +131,7 @@ Adding static pages
 ===================
 
 The "About" page is a static page. Our system lets you add pages as
-you so desire. To add a page::
+you so desire. To add a page:
 
 1. Create the page as a Jinja2 template file in
    ``templates/pages/<page-name>``.

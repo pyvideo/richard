@@ -14,7 +14,7 @@
 
    If you have thoughts on better instructions, let us know on the irc
    channel or write up an issue in the tracker.  See the
-   :doc:`Contributor's Guide <../contributors/index>` for more details.
+   :doc:`Contributor's Guide <../index>` for more details.
 
 
 richard requires a bunch of stuff to run. I'm going to talk about this
