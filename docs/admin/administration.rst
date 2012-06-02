@@ -125,3 +125,43 @@ making any data changes.
 
    This deletes the index, then rebuilds it. Thus there will be a
    period of time during which search on your site will kind of suck.
+
+
+Adding static pages
+===================
+
+The "About" page is a static page. Our system lets you add pages as
+you so desire. To add a page::
+
+1. Create the page as a Jinja2 template file in
+   ``templates/pages/<page-name>``.
+
+   For example, if I wanted to create a page for contact information,
+   I'd create ``templates/pages/contact.html`` which would have in it::
+
+       {% extends "base.html" %}
+       {% block title %}{{ page_title('About') }}{% endblock %}
+       {% block content %}
+       
+       <div class="page-header">
+         <h1>Contact information</h1>
+       </div>
+
+       <div class="row-fluid">
+         <div class="span12">
+           <p>
+             If you have problems with this site, send email to
+             joe@example.com.
+           </p>
+         </div>
+       </div>
+       {% endblock %}
+
+2. Add that page to ``PAGES`` in your settings file.
+
+   Using the above example, we'd change ``PAGES`` to::
+
+       PAGEs = ['about', 'contact']
+
+   Now our contact page is available at the url
+   ``http://example.com/pages/contact``.
