@@ -2,6 +2,8 @@
  Making it faster
 ==================
 
+.. contents::
+
 django-staticgenerator
 ======================
 

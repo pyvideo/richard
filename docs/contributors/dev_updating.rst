@@ -30,6 +30,7 @@ migrations.
 
 To migrate your database to the latest schema, do::
 
+    $ ./manage.py syncdb
     $ ./manage.py migrate
 
 

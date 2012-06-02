@@ -16,6 +16,7 @@
    channel or write up an issue in the tracker.  See the
    :doc:`Contributor's Guide <../index>` for more details.
 
+.. contents::
 
 richard requires a bunch of stuff to run. I'm going to talk about this
 stuff in two groups:

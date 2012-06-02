@@ -15,6 +15,9 @@ This covers how to clone richard and set it up for easy hacking.
    project.
 
 
+.. contents::
+
+
 richard requires a bunch of stuff to run. I'm going to talk about this
 stuff in two groups:
 

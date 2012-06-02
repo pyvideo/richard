@@ -2,6 +2,9 @@
  Tests
 =======
 
+.. contents::
+
+
 Testing requirements
 ====================
 

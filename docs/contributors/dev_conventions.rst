@@ -2,6 +2,8 @@
  Conventions
 =============
 
+.. contents::
+
 Python code
 ===========
 

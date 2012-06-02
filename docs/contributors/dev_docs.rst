@@ -2,6 +2,9 @@
  Documentation
 ===============
 
+.. contents::
+
+
 In the code
 ===========
 

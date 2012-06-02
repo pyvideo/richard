@@ -7,6 +7,8 @@
    The information in this chapter is likely to change as we spend
    more time on the admin side of things.
 
+.. contents::
+
 
 Changing the theme/style/look-n-feel
 ====================================
