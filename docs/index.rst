@@ -2,9 +2,6 @@
  Welcome to richard
 ====================
 
-About richard
-=============
-
 richard is a video indexing web application. It makes it easy to set up
 a website that indexes video that's hosted on other sites like YouTube,
 Vimeo, blip.tv, etc.
