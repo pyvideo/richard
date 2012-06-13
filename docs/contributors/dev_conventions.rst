@@ -2,7 +2,10 @@
  Conventions
 =============
 
+
 .. contents::
+   :local:
+
 
 Python code
 ===========

@@ -16,7 +16,10 @@
    channel or write up an issue in the tracker.  See the
    :doc:`Contributor's Guide <../index>` for more details.
 
+
 .. contents::
+   :local:
+
 
 richard requires a bunch of stuff to run. I'm going to talk about this
 stuff in two groups:
@@ -297,5 +300,17 @@ Templates
 Sitemap
 =======
 
-.. todo:: explain how to either point to sitemap in robots.txt or ping google,
-          document how this works with other search engines
+Your richard instance has a `sitemap.xml
+<http://www.sitemaps.org/>`_. This helps search engines find all the
+things on your richard instance.
+
+The url for the `sitemap.xml` file for your richard instance is
+``/sitemap.xml``.
+
+There are a few ways you can "advertise" your `sitemap.xml` file to
+search engines. Details are in `the sitemaps.org guide
+<http://www.sitemaps.org/protocol.html#informing>`_.
+
+We suggest you at least add this line to your `robots.txt`::
+
+    Sitemap: http://YOUR-DOMAIN/sitemap.xml

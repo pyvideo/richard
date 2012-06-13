@@ -6,6 +6,10 @@ If you're hacking on richard and running it from a git clone, then you'll
 need to do the following periodically.
 
 
+.. contents::
+   :local:
+
+
 Updating virtual environment
 ============================
 

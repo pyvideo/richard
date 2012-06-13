@@ -2,7 +2,9 @@
  Tests
 =======
 
+
 .. contents::
+   :local:
 
 
 Testing requirements

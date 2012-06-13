@@ -16,6 +16,7 @@ This covers how to clone richard and set it up for easy hacking.
 
 
 .. contents::
+   :local:
 
 
 richard requires a bunch of stuff to run. I'm going to talk about this

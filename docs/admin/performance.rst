@@ -3,6 +3,8 @@
 ==================
 
 .. contents::
+   :local:
+
 
 django-staticgenerator
 ======================

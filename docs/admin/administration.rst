@@ -7,7 +7,9 @@
    The information in this chapter is likely to change as we spend
    more time on the admin side of things.
 
+
 .. contents::
+   :local:
 
 
 Changing the theme/style/look-n-feel

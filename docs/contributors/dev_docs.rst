@@ -2,7 +2,9 @@
  Documentation
 ===============
 
+
 .. contents::
+   :local:
 
 
 In the code

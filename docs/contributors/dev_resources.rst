@@ -6,7 +6,9 @@ This chapter is a list of resources and notes that I thought would be
 helpful to new people who want to contribute to this software. There's
 also some design decisions and code conventions in here, too.
 
+
 .. contents::
+   :local:
 
 
 Project scaffolding
