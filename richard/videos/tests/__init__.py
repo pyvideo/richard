@@ -18,7 +18,8 @@ import uuid
 
 from django.template.defaultfilters import slugify
 
-from richard.videos.models import CategoryKind, Category, Speaker, Tag, Video
+from richard.videos.models import (CategoryKind, Category, Speaker, Tag,
+                                   Video, RelatedUrl)
 from richard.tests.utils import with_save
 
 
@@ -72,6 +73,11 @@ def tag(**kwargs):
     defaults.update(kwargs)
 
     return Tag(**defaults)
+
+
+@with_save
+def related_url(**kwargs):
+    return RelatedUrl(**kwargs)
 
 
 @with_save

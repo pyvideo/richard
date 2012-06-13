@@ -26,7 +26,7 @@ from django.test.utils import override_settings
 
 from nose.tools import eq_
 
-from richard.videos.tests import category, speaker, video
+from richard.videos.tests import category, speaker, video, related_url
 from richard.videos.models import Video
 
 
@@ -239,6 +239,16 @@ class TestVideos(TestCase):
 
         resp = self.client.get(speaker_url)
         assert vid.title not in resp.content
+
+    def test_related_url(self):
+        """Related urls should show up on the page."""
+        v = video(save=True)
+        rurl = related_url(video_id=v.id, url=u'http://example.com/foo',
+                           description=u'Example related url',
+                           save=True)
+
+        resp = self.client.get(v.get_absolute_url())
+        assert rurl.description in resp.content
 
 
 class TestVideoSearch(TestCase):
