@@ -308,3 +308,11 @@ class RelatedUrl(models.Model):
 
     def __repr__(self):
         return '<URL %s>' % self.url
+
+    def display(self):
+        """For showing the url
+
+        This reduces long urls to 50 characters for display.
+
+        """
+        return self.url[:50]

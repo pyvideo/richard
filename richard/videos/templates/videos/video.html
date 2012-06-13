@@ -44,27 +44,26 @@
       </div>
     {% endif %}
 
-    {% if v.description %}
-      <div class="section">
-        <h2>Description</h2>
-        {{ v.description|safe }}
-      </div>
-    {% endif %}
-
     {% with urls = v.related_urls.all() %}
       {% if urls %}
         <div class="section">
           <h2>Related URLs</h2>
           <ul>
           {% for u in urls %}
-            <li><a href="{{ u.url }}">{% if u.description %}{{ u.description }} ({{ u.url }}){% else %}{{ u.url }}{% endif %}</a></li>
+            <li><a href="{{ u.url }}">{% if u.description %}{{ u.description }} ({{ u.display() }}){% else %}{{ u.display() }}{% endif %}</a></li>
           {% endfor %}
           </ul>
         </div>
       {% endif %}
     {% endwith %}
-  </div>
 
+    {% if v.description %}
+      <div class="section">
+        <h2>Description</h2>
+        {{ v.description|safe }}
+      </div>
+    {% endif %}
+  </div>
 
   <div class="span4">
     <div id="sidebar" class="well">
