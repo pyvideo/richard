@@ -33,14 +33,6 @@ from richard.videos.models import Video
 class TestVideos(TestCase):
     """Tests for the ``videos`` app."""
 
-    def tearDown(self):
-        """Remove the search index after each test run.
-
-        The path is set in richard/settings_test.py."""
-        path = settings.HAYSTACK_CONNECTIONS['default']['PATH']
-        if os.path.exists(path):
-            shutil.rmtree(path)
-
     # category 
 
     def test_category_list_empty(self):
@@ -248,7 +240,15 @@ class TestVideos(TestCase):
         resp = self.client.get(speaker_url)
         assert vid.title not in resp.content
 
-    # search
+
+class TestVideoSearch(TestCase):
+    def tearDown(self):
+        """Remove the search index after each test run.
+
+        The path is set in richard/settings_test.py."""
+        path = settings.HAYSTACK_CONNECTIONS['default']['PATH']
+        if os.path.exists(path):
+            shutil.rmtree(path)
 
     def test_search(self):
         """Test the search view."""
