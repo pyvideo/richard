@@ -161,7 +161,8 @@ JINGO_EXCLUDE_APPS = (
     'sitemap.xml',
 )
 
-JINGO_CONFIG = {
+JINJA_CONFIG = {
+    'extensions': ['jinja2.ext.with_']
 }
 
 INSTALLED_APPS = (
