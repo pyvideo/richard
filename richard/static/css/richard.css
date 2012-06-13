@@ -38,3 +38,7 @@ div#footer {
 .centered {
   text-align: center;
 }
+
+.videobox-inner {
+  padding-bottom: 22px;
+}

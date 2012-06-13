@@ -137,6 +137,50 @@ Make sure to set a ``SECRET_KEY``::
     # Make this unique, and don't share it with anybody.
     SECRET_KEY = 'long secret key'
 
+Here are additional configuration settings:
+
+``PAGES``
+
+    List of strings indicating what content pages are available.
+
+    Default: ``PAGES = ['about']``
+
+    If you add new content pages, you need to add them to this
+    list. This allows them to show up on your site and show up in the
+    sitemap.
+
+
+``AMARA_SUPPORT``
+
+    True or False
+
+    Default: ``AMARA_SUPPORT = False``
+
+    Set this to ``True`` if you want to enable `Universal Subtitles
+    <http://www.universalsubtitles.org/en/>`_. For HTML5 and YouTube
+    embed videos using the old object embed code (not the new iframe
+    embed code), it'll wrap it in a widget that displays subtitles
+    that are hosted on the Universal Subtitles site.
+
+    Wait... What's Amara? PCF changed the name of something, but I
+    don't know whether it was the software or the service. So it's
+    either called Amara or Universal Subtitles.
+
+
+``VIDEO_THUMBNAIL_SIZE``
+
+    TODO - document this
+
+
+``MEDIA_PREFERENCE``
+
+    TODO - document this
+
+
+``OPENSEARCH_ENABLE_SUGGESTIONS``
+
+    TODO - document this
+
 
 ``API``
 

@@ -16,35 +16,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#}
 {% macro display(v) -%}
-  <div class="videobox-inner clearfix"> {# Fix floats in unisubs widget that are not cleared #}
-    {% if v.source_url and 'youtube' in v.source_url %}
-      <script type="text/javascript" src="http://s3.www.universalsubtitles.org/embed.js">
-        ({
-          video_url: "{{ v.source_url }}",
-          video_config: {
-            width: 640,
-            height: 480,
-            rel: 0
-          }
-        })
-      </script>
-    {% elif v.embed %}
-      {{ v.embed|safe }}
-    {% else %}
-      <video id="{{ v.slug }}" controls>
-        {% if v.video_ogv_url %}
-          <source src="{{ v.video_ogv_url }}" type="video/ogg">
-        {% endif %}
-        {% if v.video_mp4_url %}
-          <source src="{{ v.video_mp4_url }}" type="video/mp4">
-        {% endif %}
-        {% if v.video_webm_url %}
-          <source src="{{ v.video_webm_url }}" type="video/webm">
-        {% endif %}
-        {% if v.video_flv_url %}
-          <source src="{{ v.video_flv_url }}" type="video/x-flv">
-        {% endif %}
-      </video>
-    {% endif %}
+  {# Fix floats in unisubs widget that are not cleared #}
+  <div class="videobox-inner clearfix">
+    <video id="{{ v.slug }}" controls width="100%">
+      {% for media in v.get_available_formats(html5tag=True) %}
+        <source src="{{ media['url'] }}" type="{{ media['mime_type'] }}">
+      {% endfor %}
+      {% if v.embed %}
+        {{ v.embed|safe }}
+      {% endif %}
+    </video>
   </div>
 {% endmacro %}

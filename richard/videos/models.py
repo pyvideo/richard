@@ -261,12 +261,16 @@ class Video(models.Model):
     def is_live(self):
         return self.state == self.STATE_LIVE
 
-    def get_available_formats(self):
+    def get_available_formats(self, html5tag=False):
         """Return formats ordered by MEDIA_PREFERENCE setting.
 
         Looks through all video_url/video_length fields on the model and
         selects those that are available, i.e. that have a value. The
         elements in the returned list are ordered by their format.
+
+        :arg html5tag: True if this is being used in an html5 video
+            tag
+
         """
         result = []
         for fmt in settings.MEDIA_PREFERENCE:
@@ -285,15 +289,17 @@ class Video(models.Model):
                 result.append({'url': url, 'length': length,
                                 'mime_type': mime_type})
 
-        # Now we do this goofy thing where if this is a YouTube video
-        # we add it to the list of available formats. That's because
-        # this gets used to build the enclosures for a feed and we
-        # want to make sure this works with Miro.
-        #
-        # We put it last in the list because most options are better
-        # than this one.
-        if self.source_url and 'youtube' in self.source_url.lower():
-            result.append({'url': self.source_url, 'mime_type': 'video/flv'})
+        if not html5tag:
+            # Now we do this goofy thing where if this is a YouTube
+            # video we add it to the list of available formats. That's
+            # because this gets used to build the enclosures for a
+            # feed and we want to make sure this works with Miro.
+            #
+            # We put it last in the list because most options are
+            # better than this one.
+            if self.source_url and 'youtube' in self.source_url.lower():
+                result.append({'url': self.source_url,
+                               'mime_type': 'video/flv'})
 
         return result
 

@@ -152,7 +152,13 @@
     </div>
   </div>
 </div>
+{% endblock %}
 
+{% block additional_head %}
+  {% if settings['AMARA_SUPPORT'] %}
+    <script type="text/javascript" src="http://s3.www.universalsubtitles.org/js/unisubs-widgetizer.js"></script>
+    <script type="text/javascript" src="http://s3.www.universalsubtitles.org/js/widgetizer/widgetizerprimer.js"></script>
+  {% endif %}
 {% endblock %}
 
 {% block additional_body %}
