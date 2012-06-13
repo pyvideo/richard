@@ -22,6 +22,7 @@ from richard.videos.models import Category, Speaker, Video
 CategorySitemap = GenericSitemap({'queryset': Category.objects.all()})
 SpeakerSitemap = GenericSitemap({'queryset': Speaker.objects.all()})
 VideoSitemap = GenericSitemap({'queryset': Video.objects.live(),
-                               'date_field': 'updated'})
+                               'date_field': 'updated'},
+                              priority=0.8)
 
 # TODO add sitemap for tags once they have their own page
