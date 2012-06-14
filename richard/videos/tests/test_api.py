@@ -15,18 +15,38 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import json
-from functools import partial
+from functools import partial, wraps
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import TestCase
+from nose.plugins.skip import SkipTest
 from nose.tools import eq_
 from tastypie.models import ApiKey
 
 from richard.videos.tests import video, speaker, category
 from richard.videos.models import Video
+from richard.videos.urls import build_api_urls
+
+
+urlpatterns = build_api_urls()
+
+
+class TestNoApi(TestCase):
+    def test_api_disabled(self):
+        """Test that disabled api kicks up 404"""
+        if settings.API:
+            raise SkipTest
+
+        vid = video(state=Video.STATE_LIVE, save=True)
+
+        # anonymous user
+        resp = self.client.get('/api/v1/video/%d/' % vid.pk, {'format': 'json'})
+        eq_(resp.status_code, 404)
 
 
 class TestApi(TestCase):
+    urls = 'richard.videos.tests.test_api'
 
     def setUp(self):
         """Create superuser with API key."""

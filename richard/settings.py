@@ -232,6 +232,8 @@ OPENSEARCH_ENABLE_SUGGESTIONS = False
 
 PAGES = ['about']
 
+API = False
+
 try:
     from richard.settings_local import *    
 except ImportError:

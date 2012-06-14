@@ -19,6 +19,7 @@ from tastypie.authentication import (ApiKeyAuthentication, Authentication,
                                      MultiAuthentication)
 from tastypie.authorization import Authorization
 from tastypie.resources import ModelResource
+from tastypie.serializers import Serializer
 
 from richard.videos.models import Video, Speaker, Category, Tag
 
@@ -57,6 +58,7 @@ class VideoResource(ModelResource):
         resource_name = 'video'
         authentication = get_authentication()
         authorization = AdminAuthorization()
+        serializer = Serializer(formats=['json'])
 
     def hydrate(self, bundle):
         """Allow to pass in the actual names of tags and speakers."""
@@ -77,27 +79,69 @@ class VideoResource(ModelResource):
 
 
 class SpeakerResource(ModelResource):
+    videos = fields.ListField()
 
     class Meta:
         queryset = Speaker.objects.all()
         resource_name = 'speaker'
         authentication = get_authentication()
         authorization = AdminAuthorization()
+        serializer = Serializer(formats=['json'])
+
+    def dehydrate_videos(self, bundle):
+        video_set = bundle.obj.video_set
+        if hasattr(bundle.request, 'user') and bundle.request.user.is_staff:
+            video_set = video_set.all()
+        else:
+            video_set = video_set.live()
+
+        # TODO: fix url so it's not hard-coded
+        return [
+            '/api/v1/video/%d/' % vid
+            for vid in video_set.values_list('id', flat=True)]
 
 
 class CategoryResource(ModelResource):
+    videos = fields.ListField()
 
     class Meta:
         queryset = Category.objects.all()
         resource_name = 'category'
         authentication = get_authentication()
         authorization = AdminAuthorization()
+        serializer = Serializer(formats=['json'])
+
+    def dehydrate_videos(self, bundle):
+        video_set = bundle.obj.video_set
+        if hasattr(bundle.request, 'user') and bundle.request.user.is_staff:
+            video_set = video_set.all()
+        else:
+            video_set = video_set.live()
+
+        # TODO: fix url so it's not hard-coded
+        return [
+            '/api/v1/video/%d/' % vid
+            for vid in video_set.values_list('id', flat=True)]
 
 
 class TagResource(ModelResource):
+    videos = fields.ListField()
 
     class Meta:
         queryset = Tag.objects.all()
         resource_name = 'tag'
         authentication = get_authentication()
         authorization = AdminAuthorization()
+        serializer = Serializer(formats=['json'])
+
+    def dehydrate_videos(self, bundle):
+        video_set = bundle.obj.video_set
+        if hasattr(bundle.request, 'user') and bundle.request.user.is_staff:
+            video_set = video_set.all()
+        else:
+            video_set = video_set.live()
+
+        # TODO: fix url so it's not hard-coded
+        return [
+            '/api/v1/video/%d/' % vid
+            for vid in video_set.values_list('id', flat=True)]

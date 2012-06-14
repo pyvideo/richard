@@ -25,13 +25,6 @@ from richard.videos.api import (VideoResource, SpeakerResource,
 from richard.videos.feeds import CategoryVideosFeed, SpeakerVideosFeed
 
 
-v1_api = Api(api_name='v1')
-v1_api.register(VideoResource())
-v1_api.register(SpeakerResource())
-v1_api.register(CategoryResource())
-v1_api.register(TagResource())
-
-
 urlpatterns = patterns(
     'richard.videos.views',
 
@@ -70,6 +63,24 @@ urlpatterns = patterns(
     # faux api for carl
     url(r'^api/1.0/videos/urlforsource$',
         'apiurlforsource', name='videos-api-urlforsource'),
-
-    (r'^api/', include(v1_api.urls)),
 )
+
+
+def build_api_urls():
+    v1_api = Api(api_name='v1')
+    v1_api.register(VideoResource())
+    v1_api.register(SpeakerResource())
+    v1_api.register(CategoryResource())
+    v1_api.register(TagResource())
+
+    return patterns(
+        'richard.videos.views',
+
+        (r'^api/', include(v1_api.urls)),
+        )
+
+
+# API is disabled by default. To enable it, add ``API = True`` to your
+# settings.py file.
+if settings.API:
+    urlpatterns += build_api_urls()

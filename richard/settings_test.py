@@ -11,3 +11,7 @@ HAYSTACK_CONNECTIONS = {
         'PATH': os.path.join(SITE_ROOT, '_test_whoosh_index'),
     },
 }
+
+# This allows the "test_api_disabled" test to kick off. The other api
+# tests tweak things so they can run.
+API = False

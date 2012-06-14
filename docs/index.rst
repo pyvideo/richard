@@ -20,6 +20,7 @@ to know to run a richard-based video index site.
    admin/upgrade
    admin/performance
    admin/administration
+   admin/api
 
 
 Part 2: Contributor's Guide

@@ -138,6 +138,14 @@ Make sure to set a ``SECRET_KEY``::
     SECRET_KEY = 'long secret key'
 
 
+``API``
+
+    Defaults to False.
+
+    Set to True if you want to enable the API. See the
+    :ref:`api-chapter` for more details.
+
+
 .. todo:: list configuration settings that should be in settings file
 
 
