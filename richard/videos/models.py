@@ -30,7 +30,7 @@ MIMETYPES_MAP = {
     'webm': 'video/webm',
     'flv': 'video/x-flv'
 }
-USE_HTML_HELP_TEXT = _(u'Use HTML.')
+USE_HTML_HELP_TEXT = _(u'Use HTML. p, ul, ol, li, ...')
 
 
 class CategoryKind(models.Model):
