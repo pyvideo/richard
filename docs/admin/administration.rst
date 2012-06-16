@@ -53,13 +53,36 @@ Adding videos
 
 4. Fill out the information to add the video.
 
-   Keep it in DRAFT mode until you're done with it. This keeps it from
+
+Here are a couple of things to know that might help you:
+
+1. Keep it in DRAFT mode until you're done with it. This keeps it from
    showing up in any of the video lists, but you can still see the
    video if you go directly to its page.
 
-   Make sure to `save and continue editing` from time to time. After
+2. Make sure to `save and continue editing` from time to time. After
    doing that, you can click on `View on site` in the upper right hand
    corner and see what the video looks like on the site.
+
+3. The summary and description fields are in HTML. Use structure and
+   semantic tags like <p>, <ul>, <ol>, <li>, <a>, ...
+
+   Don't use formatting tags. Otherwise when you decide to change the
+   style of your site, you'll have to go through and change all the
+   summaries and descriptions, too.
+
+   Example::
+
+       <p>
+         This video covers how to use nose for unit testing. It follows
+         this outline:
+       </p>
+       <ul>
+         <li>test discovery
+         <li>writing tests
+         <li>nose helper tools
+       </ul>
+       ...
 
 
 Editing videos
