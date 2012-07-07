@@ -26,6 +26,41 @@ SITE_TITLE = u'richard'
 
 MANAGERS = ADMINS
 
+
+# =========================
+# Richard-specific settings
+# =========================
+
+# See the configuration documentation for more details on these
+# settings.
+
+# The (width, height) to use when you tell richard to pull down remote
+# thumbnails, resize them, and store them locally.
+VIDEO_THUMBNAIL_SIZE = (160, 120)
+
+# Order that media items get sorted.
+MEDIA_PREFERENCE = ('ogv', 'webm', 'mp4', 'flv',)
+
+# List of "static pages". See the documentation for setting up a page.
+PAGES = ['about']
+
+# Feed size for Newly Updated Videos feed.
+MAX_FEED_LENGTH = 30
+
+# Whether or not to enable opensearch suggestions for search.  Note:
+# Enabling this can cause a lot of work on your search system. If you
+# enable this, keep an eye on your system performance.
+OPENSEARCH_ENABLE_SUGGESTIONS = False
+
+# Whether or not to enable Amara Universal Subtitles site-wide.
+# http://www.universalsubtitles.org/en/
+AMARA_SUPPORT = False
+
+# Whether or not to enable the REST API. See the documentation for
+# more about the API.
+API = False
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -223,19 +258,6 @@ LOGGING = {
         },
     }
 }
-
-
-VIDEO_THUMBNAIL_SIZE = (160, 120)
-
-MEDIA_PREFERENCE = ('ogv', 'webm', 'mp4', 'flv',)
-
-OPENSEARCH_ENABLE_SUGGESTIONS = False
-
-AMARA_SUPPORT = False
-
-PAGES = ['about']
-
-API = False
 
 try:
     from richard.settings_local import *    

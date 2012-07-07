@@ -24,7 +24,7 @@ from django.utils.feedgenerator import Rss201rev2Feed
 from django.utils.translation import ugettext as _
 
 
-from richard.videos.models import Speaker, Category
+from richard.videos.models import Speaker, Category, Video
 
 
 class MediaRSSFeed(Rss201rev2Feed):
@@ -169,3 +169,17 @@ class SpeakerVideosFeed(BaseVideoFeed):
 
     def items(self, speaker):
         return speaker.video_set.live()
+
+
+class NewPostedVideoFeed(BaseVideoFeed):
+    """Feed for newly posted videos."""
+    def link(self):
+        return reverse('videos-new-feed')
+
+    def title(self):
+        return _(u'{site_title}: Newly posted videos').format(
+            site_title=settings.SITE_TITLE)
+
+    def items(self):
+        videos = Video.objects.live().order_by('-added')
+        return videos[:settings.MAX_FEED_LENGTH]

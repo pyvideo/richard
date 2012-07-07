@@ -22,7 +22,8 @@ from tastypie.api import Api
 
 from richard.videos.api import (VideoResource, SpeakerResource,
                                 CategoryResource, TagResource)
-from richard.videos.feeds import CategoryVideosFeed, SpeakerVideosFeed
+from richard.videos.feeds import (CategoryVideosFeed, SpeakerVideosFeed,
+                                  NewPostedVideoFeed)
 
 
 urlpatterns = patterns(
@@ -47,6 +48,7 @@ urlpatterns = patterns(
     # videos
     url(r'^video/(?P<video_id>[0-9]+)(?:/(?P<slug>[\w-]*))?/?$',
         'video', name='videos-video'),
+    url(r'^video/rss/?$', NewPostedVideoFeed(), name='videos-new-feed'),
 
     # search
     url(r'^search/?$',
