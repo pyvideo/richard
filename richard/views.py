@@ -19,21 +19,24 @@ from django.db.models import Count
 from django.shortcuts import render
 
 
-from richard.videos.models import CategoryKind, Video, Category, Speaker, Tag
+from richard.videos.models import Video, Category, Speaker, Tag
 from richard.sitenews.models import SiteNews
 from richard.suggestions.models import Suggestion
 
 
 def home(request):
-    category_list = CategoryKind.objects.all()
+    latest_categories = Category.objects.order_by('-start_date')[:5]
+    latest_videos = Video.objects.live().order_by('-added')[:5]
+
     news_list = SiteNews.objects.all()[:5]
     video_count = Video.objects.live().count()
 
     ret = render(
         request, 'home.html',
         {'title': settings.SITE_TITLE,
-         'kinds': category_list,
          'news': news_list,
+         'latest_categories': latest_categories,
+         'latest_videos': latest_videos,
          'video_count': video_count})
     return ret
 
