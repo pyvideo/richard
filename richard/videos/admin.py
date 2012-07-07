@@ -19,7 +19,7 @@ from django.contrib.admin import SimpleListFilter
 from django.utils.translation import ugettext_lazy as _
 
 from richard.videos.models import (Video, Category, Speaker, CategoryKind, Tag,
-                                   RelatedUrl)
+                                   Language, RelatedUrl)
 
 
 class WhiteboardFilter(SimpleListFilter):
@@ -41,7 +41,7 @@ class WhiteboardFilter(SimpleListFilter):
 
 
 class CategoryKindAdmin(admin.ModelAdmin):
-    list_display = ('name', )
+    list_display = ('name',)
 
 
 admin.site.register(CategoryKind, CategoryKindAdmin)
@@ -82,8 +82,8 @@ admin.site.register(Category, CategoryAdmin)
 
 
 class SpeakerAdmin(admin.ModelAdmin):
-    list_display = ('name', )
-    search_fields = ('name', )
+    list_display = ('name',)
+    search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
 
 
@@ -91,8 +91,16 @@ admin.site.register(Speaker, SpeakerAdmin)
 
 
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('tag', )
-    search_fields = ('tag', )
+    list_display = ('tag',)
+    search_fields = ('tag',)
 
 
 admin.site.register(Tag, TagAdmin)
+
+
+class LanguageAdmin(admin.ModelAdmin):
+    list_display = ('iso639_1', 'name')
+    search_fields = ('name',)
+
+
+admin.site.register(Language, LanguageAdmin)

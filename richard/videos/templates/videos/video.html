@@ -78,11 +78,6 @@
           <a href="{{ v.category.get_absolute_url() }}">{{ v.category.title }}</a>
         </dd>
 
-        {% if v.recorded %}
-          <dt>Recorded</dt>
-          <dd>{{ v.recorded | datetime }}</dd>
-        {% endif %}
-
         <dt>Speakers</dt>
         <dd>
           {% set speakers = v.speakers.all() %}
@@ -92,6 +87,40 @@
             {% endfor %}
           {% else %}
             Unknown
+          {% endif %}
+        </dd>
+
+        {% if v.language %}
+          <dt>Language</dt>
+          <dd>{{ v.language.name }}</dd>
+        {% endif %}
+
+        {% if v.recorded %}
+          <dt>Recorded</dt>
+          <dd>{{ v.recorded | datetime }}</dd>
+        {% endif %}
+
+        <dt>Tags</dt>
+        <dd>
+          {% set tags = v.tags.all() %}
+          {% if tags %}
+            {% for t in tags %}
+              {{ t.tag }}
+            {% endfor %}
+          {% else %}
+            No tags
+          {% endif %}
+        </dd>
+
+        <dt>Copyright</dt>
+        <dd>
+          {% if v.copyright_text %}
+            {{ v.copyright_text }}
+          {% elif v.source_url %}
+            See <a href="{{ v.source_url }}">source</a> for copyright
+            information.
+          {% else %}
+            Unknown.
           {% endif %}
         </dd>
 
@@ -111,36 +140,12 @@
           {% endif %}
         </dd>
 
-        <dt>Tags</dt>
-        <dd>
-          {% set tags = v.tags.all() %}
-          {% if tags %}
-            {% for t in tags %}
-              {{ t.tag }}
-            {% endfor %}
-          {% else %}
-            No tags
-          {% endif %}
-        </dd>
-
         <dt>Video origin</dt>
         <dd>
           {% if v.source_url %}
             <a href="{{ v.source_url }}">{{ v.source_url }}</a>
           {% else %}
             Unknown
-          {% endif %}
-        </dd>
-
-        <dt>Copyright</dt>
-        <dd>
-          {% if v.copyright_text %}
-            {{ v.copyright_text }}
-          {% elif v.source_url %}
-            See <a href="{{ v.source_url }}">source</a> for copyright
-            information.
-          {% else %}
-            Unknown.
           {% endif %}
         </dd>
 

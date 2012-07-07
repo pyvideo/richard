@@ -137,6 +137,14 @@ class Tag(models.Model):
         verbose_name_plural = _(u'tags')
 
 
+class Language(models.Model):
+    iso639_1 = models.CharField(max_length=3)
+    name = models.CharField(max_length=20)
+
+    def __unicode__(self):
+        return self.name
+
+
 class VideoManager(models.Manager):
     def live(self):
         return self.get_query_set().filter(state=Video.STATE_LIVE)
@@ -167,6 +175,9 @@ class Video(models.Model):
     # notes for quality issues (audio or video) in the video
     quality_notes = models.TextField(blank=True, default=u'',
                                      help_text=USE_HTML_HELP_TEXT)
+
+    # the primary language the video is in
+    language = models.ForeignKey(Language, null=True)
 
     # text for copyright/license--for now it's loose form.
     # if null, use source video link.

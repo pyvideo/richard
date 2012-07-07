@@ -1,0 +1,10 @@
+[
+  {
+    "model": "videos.Language",
+    "pk": 1,
+    "fields": {
+      "iso639_1": "en",
+      "name": "English"
+    }
+  }
+]
