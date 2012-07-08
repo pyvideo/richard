@@ -24,7 +24,7 @@ from nose.plugins.skip import SkipTest
 from nose.tools import eq_
 from tastypie.models import ApiKey
 
-from richard.videos.tests import video, speaker, category
+from richard.videos.tests import video, speaker, category, language, tag
 from richard.videos.models import Video
 from richard.videos.urls import build_api_urls
 
@@ -112,6 +112,39 @@ class TestApi(TestCase):
         eq_(vid.title, data['title'])
         eq_(list(vid.speakers.values_list('name', flat=True)), ['Guido'])
         eq_(sorted(vid.tags.values_list('tag', flat=True)), [u'api', u'django'])
+
+    def test_post_video_with_urls(self):
+        """Test that authenticated user can create videos."""
+        cat = category(save=True)
+        person = speaker(save=True)
+        tag1 = tag(save=True)
+        tag2 = tag(save=True)
+        lang = language(save=True)
+
+        data = {'title': 'Creating delicious APIs for Django apps since 2010.',
+                'category': '/api/v1/category/%d/' % cat.pk,
+                'speakers': ['/api/v1/speaker/%d/' % person.pk],
+                'tags': ['/api/v1/tag/%d/' % tag1.pk,
+                         '/api/v1/tag/%d/' % tag2.pk],
+                'language': lang.name,
+                'state': Video.STATE_LIVE}
+
+        resp = self.auth_post('/api/v1/video/', json.dumps(data),
+                                content_type='application/json')
+        eq_(resp.status_code, 201)
+
+        # Get the created video
+        resp = self.auth_get(resp['Location'], {'format': 'json'})
+        eq_(resp.status_code, 200)
+        eq_(json.loads(resp.content)['title'], data['title'])
+
+        # Verify the data
+        vid = Video.objects.get(title=data['title'])
+        eq_(vid.title, data['title'])
+        eq_(list(vid.speakers.values_list('name', flat=True)), [person.name])
+        eq_(sorted(vid.tags.values_list('tag', flat=True)),
+            sorted([tag1.tag, tag2.tag]))
+        eq_(vid.language.name, lang.name)
 
     def test_post_video_no_data(self):
         """Test that an attempt to create a video without data is rejected."""

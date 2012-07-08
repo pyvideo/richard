@@ -21,7 +21,7 @@ from tastypie.authorization import Authorization
 from tastypie.resources import ModelResource
 from tastypie.serializers import Serializer
 
-from richard.videos.models import Video, Speaker, Category, Tag
+from richard.videos.models import Video, Speaker, Category, Tag, Language
 
 
 class AdminAuthorization(Authorization):
@@ -46,6 +46,10 @@ def get_authentication():
     return MultiAuthentication(ApiKeyAuthentication(), Authentication())
 
 
+def get_id_from_url(url):
+    return int(url.rstrip('/').split('/')[-1])
+
+
 class VideoResource(ModelResource):
     category = fields.ToOneField('richard.videos.api.CategoryResource',
                                  'category')
@@ -61,13 +65,65 @@ class VideoResource(ModelResource):
         serializer = Serializer(formats=['json'])
 
     def hydrate(self, bundle):
-        """Allow to pass in the actual names of tags and speakers."""
-        bundle.data['tags'] = [Tag.objects.get_or_create(tag=x)[0]
-                               for x in bundle.data.get('tags', [])]
+        """Hydrate converts the json to an object."""
+        # Incoming tags can either be an API url or a tag name.
+        tags = bundle.data.get('tags', [])
+        for i, tag in enumerate(tags):
+            if '/' in tag:
+                # If there's a /, we assume it's an API url, pluck the
+                # id from the end, and that's the tag.
+                tag = get_id_from_url(tag)
+                tag = Tag.objects.get(pk=tag)
+            else:
+                tag = Tag.objects.get_or_create(tag=tag)[0]
+            tags[i] = tag
+        bundle.data['tags'] = tags
 
-        bundle.data['speakers'] = [Speaker.objects.get_or_create(name=x)[0]
-                                   for x in bundle.data.get('speakers', [])]
+        # Incoming speakers can either be an API url or a speaker
+        # name.
+        speakers = bundle.data.get('speakers', [])
+        for i, speaker in enumerate(speakers):
+            if '/' in speaker:
+                # If there's a /, we assume it's an API url, pluck the
+                # id from the end, and that's the speaker.
+                speaker = get_id_from_url(speaker)
+                speaker = Speaker.objects.get(pk=speaker)
+            else:
+                speaker = Speaker.objects.get_or_create(name=speaker)[0]
+            speakers[i] = speaker
+        bundle.data['speakers'] = speakers
 
+        # Incoming category can be either an API url or a category
+        # title (not a name!).
+        cat = bundle.data.get('category', None)
+        if cat is not None:
+            if '/' in cat:
+                # If there's a /, we assume it's an API url, pluck the
+                # id from the end, and that's the category.
+                cat = get_id_from_url(cat)
+                cat = Category.objects.get(pk=cat)
+            else:
+                cat = Category.objects.get_or_create(title=cat)[0]
+            bundle.data['category'] = cat
+
+        # Incoming language can only be a language name. We don't
+        # allow people to create languages via the API, so if it
+        # doesn't exist, we bail.
+        lang = bundle.data.get('language', None)
+        if lang is not None:
+            lang = Language.objects.get(name=lang)
+        bundle.obj.language = lang
+
+        return bundle
+
+    def dehydrate(self, bundle):
+        """Dehydrate converts the object to json."""
+        # Add language name or None
+        lang = bundle.obj.language
+        if lang == None:
+            bundle.data['language'] = None
+        else:
+            bundle.data['language'] = lang.name
         return bundle
 
     def apply_authorization_limits(self, request, object_list):

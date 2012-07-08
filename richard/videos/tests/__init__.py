@@ -19,7 +19,7 @@ import uuid
 from django.template.defaultfilters import slugify
 
 from richard.videos.models import (CategoryKind, Category, Speaker, Tag,
-                                   Video, RelatedUrl)
+                                   Video, RelatedUrl, Language)
 from richard.tests.utils import with_save
 
 
@@ -50,6 +50,16 @@ def category(**kwargs):
         defaults['kind'] = ck
 
     return Category(**defaults)
+
+
+@with_save
+def language(**kwargs):
+    defaults = {
+        'iso639_1': 'en',
+        'name': 'English'
+        }
+    defaults.update(kwargs)
+    return Language(**kwargs)
 
 
 @with_save
