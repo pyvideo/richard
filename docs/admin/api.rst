@@ -86,53 +86,58 @@ GET ``/api/v1/video/<VIDEO_ID>/``
 
 POST ``/api/v1/video/<VIDEO_ID>/``
 
-    Updates an existing video or creates a new one.
+    Updates an existing video.
 
-    Intersting things to keep in mind:
+POST ``/api/v1/video/``
 
-    * `state` - 1 for live, 2 for draft
+    Creates a new video.
 
-    * `tags` - list of tags or tag API resource urls
 
-      e.g.: ``["web", "django", "beard"]`` or
-      ``["/api/v1/tag/4/", "/api/v1/tag/19/"]``
+Intersting things to keep in mind when creating new videos or updating
+existing ones:
 
-      If you pass in tags and they don't exist, the API will create
-      them for you. If they do exist, the API will associate the video
-      with the existing tag objects. (Yay!)
+* `state` - 1 for live, 2 for draft
 
-    * `speakers` - list of speaker names or tag API resource urls
+* `tags` - list of tags or tag API resource urls
 
-      e.g.: ``["Carl Karsten", "Chris Webber"]`` or
-      ``["/api/v1/speaker/4/", "/api/v1/speaker/19/"]``
+  e.g.: ``["web", "django", "beard"]`` or
+  ``["/api/v1/tag/4/", "/api/v1/tag/19/"]``
 
-      If you pass in speaker names and they don't exist, the API will
-      create them for you. If they do exist, the API will associate
-      the video with the existing speaker objects. (Yay!)
+  If you pass in tags and they don't exist, the API will create them
+  for you. If they do exist, the API will associate the video with the
+  existing tag objects. (Yay!)
 
-    * `language` - the name of the language
+* `speakers` - list of speaker names or tag API resource urls
 
-      e.g.: ``"English"``
+  e.g.: ``["Carl Karsten", "Chris Webber"]`` or
+  ``["/api/v1/speaker/4/", "/api/v1/speaker/19/"]``
 
-      If the language doesn't exist, the API will waggle its finger at
-      you. (Oops!)
+  If you pass in speaker names and they don't exist, the API will
+  create them for you. If they do exist, the API will associate the
+  video with the existing speaker objects. (Yay!)
 
-    * `category` - the title of the category or category API resource
-      url
+* `language` - the name of the language
 
-      e.g.: ``"PyCon 2012"`` or ``"/api/v1/category/22/"``
+  e.g.: ``"English"``
 
-      The category must already exist. If it doesn't exist, the API
-      will waggle its finger at you. (Oops!)
+  If the language doesn't exist, the API will waggle its finger at
+  you. (Oops!)
 
-    * `summary` and `description` - the summary and description should
-      be in valid HTML
+* `category` - the title of the category or category API resource url
 
-    * `title` - just a string -- NOT in HTML
+  e.g.: ``"PyCon 2012"`` or ``"/api/v1/category/22/"``
 
-    Everything else should be self-explanatory. See the schema::
+  The category must already exist. If it doesn't exist, the API will
+  waggle its finger at you. (Oops!)
 
-        curl http://localhost:8000/api/v1/video/schema/
+* `summary` and `description` - the summary and description should be
+  in valid HTML
+
+* `title` - just a string -- NOT in HTML
+
+Everything else should be self-explanatory. See the schema::
+
+    curl http://localhost:8000/api/v1/video/schema/
 
 
 Category
