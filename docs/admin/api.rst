@@ -80,9 +80,59 @@ Videos
 
     Lists all the videos on the site.
 
-``/api/v1/video/<VIDEO_ID>/``
+GET ``/api/v1/video/<VIDEO_ID>/``
 
     Returns information for that specific video id.
+
+POST ``/api/v1/video/<VIDEO_ID>/``
+
+    Updates an existing video or creates a new one.
+
+    Intersting things to keep in mind:
+
+    * `state` - 1 for live, 2 for draft
+
+    * `tags` - list of tags or tag API resource urls
+
+      e.g.: ``["web", "django", "beard"]`` or
+      ``["/api/v1/tag/4/", "/api/v1/tag/19/"]``
+
+      If you pass in tags and they don't exist, the API will create
+      them for you. If they do exist, the API will associate the video
+      with the existing tag objects. (Yay!)
+
+    * `speakers` - list of speaker names or tag API resource urls
+
+      e.g.: ``["Carl Karsten", "Chris Webber"]`` or
+      ``["/api/v1/speaker/4/", "/api/v1/speaker/19/"]``
+
+      If you pass in speaker names and they don't exist, the API will
+      create them for you. If they do exist, the API will associate
+      the video with the existing speaker objects. (Yay!)
+
+    * `language` - the name of the language
+
+      e.g.: ``"English"``
+
+      If the language doesn't exist, the API will waggle its finger at
+      you. (Oops!)
+
+    * `category` - the title of the category or category API resource
+      url
+
+      e.g.: ``"PyCon 2012"`` or ``"/api/v1/category/22/"``
+
+      The category must already exist. If it doesn't exist, the API
+      will waggle its finger at you. (Oops!)
+
+    * `summary` and `description` - the summary and description should
+      be in valid HTML
+
+    * `title` - just a string -- NOT in HTML
+
+    Everything else should be self-explanatory. See the schema::
+
+        curl http://localhost:8000/api/v1/video/schema/
 
 
 Category
