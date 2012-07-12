@@ -21,7 +21,8 @@ from tastypie.authorization import Authorization
 from tastypie.resources import ModelResource
 from tastypie.serializers import Serializer
 
-from richard.videos.models import Video, Speaker, Category, Tag, Language
+from richard.videos.models import (Video, Speaker, Category, Tag, Language,
+                                   CategoryKind)
 
 
 class AdminAuthorization(Authorization):
@@ -69,13 +70,14 @@ class VideoResource(ModelResource):
         # Incoming tags can either be an API url or a tag name.
         tags = bundle.data.get('tags', [])
         for i, tag in enumerate(tags):
-            if '/' in tag:
-                # If there's a /, we assume it's an API url, pluck the
-                # id from the end, and that's the tag.
-                tag = get_id_from_url(tag)
-                tag = Tag.objects.get(pk=tag)
-            else:
-                tag = Tag.objects.get_or_create(tag=tag)[0]
+            if not isinstance(tag, Tag):
+                if '/' in tag:
+                    # If there's a /, we assume it's an API url, pluck the
+                    # id from the end, and that's the tag.
+                    tag = get_id_from_url(tag)
+                    tag = Tag.objects.get(pk=tag)
+                else:
+                    tag = Tag.objects.get_or_create(tag=tag)[0]
             tags[i] = tag
         bundle.data['tags'] = tags
 
@@ -83,13 +85,14 @@ class VideoResource(ModelResource):
         # name.
         speakers = bundle.data.get('speakers', [])
         for i, speaker in enumerate(speakers):
-            if '/' in speaker:
-                # If there's a /, we assume it's an API url, pluck the
-                # id from the end, and that's the speaker.
-                speaker = get_id_from_url(speaker)
-                speaker = Speaker.objects.get(pk=speaker)
-            else:
-                speaker = Speaker.objects.get_or_create(name=speaker)[0]
+            if not isinstance(speaker, Speaker):
+                if '/' in speaker:
+                    # If there's a /, we assume it's an API url, pluck the
+                    # id from the end, and that's the speaker.
+                    speaker = get_id_from_url(speaker)
+                    speaker = Speaker.objects.get(pk=speaker)
+                else:
+                    speaker = Speaker.objects.get_or_create(name=speaker)[0]
             speakers[i] = speaker
         bundle.data['speakers'] = speakers
 
@@ -97,13 +100,14 @@ class VideoResource(ModelResource):
         # title (not a name!).
         cat = bundle.data.get('category', None)
         if cat is not None:
-            if '/' in cat:
-                # If there's a /, we assume it's an API url, pluck the
-                # id from the end, and that's the category.
-                cat = get_id_from_url(cat)
-                cat = Category.objects.get(pk=cat)
-            else:
-                cat = Category.objects.get_or_create(title=cat)[0]
+            if not isinstance(cat, Category):
+                if '/' in cat:
+                    # If there's a /, we assume it's an API url, pluck the
+                    # id from the end, and that's the category.
+                    cat = get_id_from_url(cat)
+                    cat = Category.objects.get(pk=cat)
+                else:
+                    cat = Category.objects.get_or_create(title=cat)[0]
             bundle.data['category'] = cat
 
         # Incoming language can only be a language name. We don't
@@ -158,6 +162,7 @@ class SpeakerResource(ModelResource):
 
 
 class CategoryResource(ModelResource):
+
     videos = fields.ListField()
 
     class Meta:
@@ -166,6 +171,13 @@ class CategoryResource(ModelResource):
         authentication = get_authentication()
         authorization = AdminAuthorization()
         serializer = Serializer(formats=['json'])
+
+    def hydrate(self, bundle):
+        # Incoming kind must be a kind id.
+        kind = CategoryKind.objects.get(pk=bundle.data['kind'])
+        bundle.obj.kind_id = int(bundle.data['kind'])
+
+        return bundle
 
     def dehydrate_videos(self, bundle):
         video_set = bundle.obj.video_set
