@@ -21,6 +21,36 @@ The API is disabled by default. To enable the API, add this to your
     API = True
 
 
+API keys
+========
+
+Anonymous users have read-only access to all the data except videos
+that are in DRAFT status.
+
+Site admin can do that as well as with an API key:
+
+* see videos in DRAFT status
+* delete items
+* create items
+* update items
+
+richard uses `Tastypie
+<http://django-tastypie.readthedocs.org/en/latest/index.html>`_ to
+implement the API.
+
+To get an API key, you need to:
+
+1. log into the richard admin
+2. click on `Api keys` in the `Tastypie` section
+3. click on `Add api key` in the upper right
+4. select the user you want to add a key for in the drop down
+5. (completely not obvious step) click on `Save and continue editing`
+   button
+
+After doing that, your API key will be generated and will be in the
+box marked `Key`.
+
+
 Using the API
 =============
 
@@ -52,19 +82,6 @@ here. You need to provide two key/value pairs:
 
 * ``username`` - your richard site admin username
 * ``api_key`` - the api key for your account
-
-The api_key is generated in the richard admin area of the site in the
-`Tastypie` section under `Api keys`.
-
-Anonymous users have read-only access to all the data except videos
-that are in DRAFT status.
-
-Site admin can do that as well as:
-
-* see videos in DRAFT status
-* delete items
-* create items
-* update items
 
 .. _HTTP header: http://django-tastypie.readthedocs.org/en/latest/authentication_authorization.html#apikeyauthentication
 
