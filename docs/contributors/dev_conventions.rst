@@ -30,7 +30,9 @@ Minor caveats:
 HTML/Jinja2 templates
 =====================
 
-.. todo:: html/jinja2 template conventions
+http://mozweb.readthedocs.org/en/latest/coding.html#html
+
+We use the same HTML style conventions that Mozilla webdev does.
 
 
 CSS
@@ -42,7 +44,9 @@ CSS
 JavaScript
 ==========
 
-.. todo:: javascript conventions
+http://mozweb.readthedocs.org/en/latest/js-style.html
+
+We use the same JavaScript style conventions that Mozilla webdev does.
 
 
 Git
