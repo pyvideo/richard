@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import json
-from functools import partial, wraps
+from functools import partial
 
 from django.conf import settings
 from django.contrib.auth.models import User
