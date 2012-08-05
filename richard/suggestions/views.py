@@ -14,37 +14,30 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from richard.suggestions.forms import SuggestionForm
 from richard.suggestions.models import Suggestion
 
 
-def overview(request):
+def suggestions(request):
     """Show a list of all accepted suggestions and their status."""
-    open_objs = Suggestion.objects.filter(state__in=Suggestion.OPEN_STATES)
-    resolved_objs = Suggestion.objects.filter(state__in=Suggestion.RESOLVED_STATES)
-
-    ret = render(
-        request, 'suggestions/list.html',
-        {'open_suggestions': open_objs,
-         'resolved_suggestions': resolved_objs})
-    return ret
-
-
-def submit(request):
-    """Submit a new suggestion."""
-    success = False
     if request.method == 'POST':
         form = SuggestionForm(request.POST)
         if form.is_valid():
             form.save()
-            success = True
+            return redirect('suggestions-list')
     else:
         form = SuggestionForm()
 
+    open_objs = Suggestion.objects.filter(
+        state__in=Suggestion.OPEN_STATES)
+    resolved_objs = Suggestion.objects.filter(
+        state__in=Suggestion.RESOLVED_STATES)
+
     ret = render(
-        request, 'suggestions/submit_form.html',
+        request, 'suggestions/suggestions_list.html',
         {'form': form,
-         'success': success})
+         'open_suggestions': open_objs,
+         'resolved_suggestions': resolved_objs})
     return ret

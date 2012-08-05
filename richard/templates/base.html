@@ -54,7 +54,7 @@
 
         <ul class="nav nav-pills pull-right">
           <li><a href="{{ url('sitenews-list') }}">News</a></li>
-          <li><a href="#" id="submitSuggestion">Submit</a></li>
+          <li><a href="{{ url('suggestions-list') }}">Submit</a></li>
           <li><a href="{{ url('stats') }}">Stats</a></li>
           <li><a href="{{ url('pages-page', page='about') }}">About</a></li>
         </ul>
@@ -92,7 +92,5 @@
   <script type="text/javascript" src="{{ settings.STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
   {% block additional_body %}
   {% endblock %}
-
-  {% include 'suggestions/submit.html' %}
 </body>
 </html>

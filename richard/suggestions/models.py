@@ -44,13 +44,13 @@ class Suggestion(models.Model):
 
     name = models.CharField(
         max_length=128,
-        help_text=_(u'Name of conference/video'))
+        help_text=_(u'Name of video/collection of videos'))
     url = models.URLField(
         max_length=255,
-        help_text=_(u'Link to conference or specific video'))
+        help_text=_(u'Link to video/collection of videos'))
     comment = models.TextField(
         blank=True,
-        help_text=_(u'Additional information (optional)'))
+        help_text=_(u'Additional information, urls, etc (optional)'))
  
     whiteboard = models.CharField(
         max_length=255, blank=True, default=u'',

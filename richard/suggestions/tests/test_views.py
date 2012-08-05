@@ -33,7 +33,7 @@ class TestSuggestions(TestCase):
 
         resp = self.client.get(url)
         eq_(resp.status_code, 200)
-        self.assertTemplateUsed(resp, 'suggestions/list.html')
+        self.assertTemplateUsed(resp, 'suggestions/suggestions_list.html')
         assert s.name in resp.content
 
     def test_list_without_spam(self):
@@ -43,12 +43,12 @@ class TestSuggestions(TestCase):
 
         resp = self.client.get(url)
         eq_(resp.status_code, 200)
-        self.assertTemplateUsed(resp, 'suggestions/list.html')
+        self.assertTemplateUsed(resp, 'suggestions/suggestions_list.html')
         assert s.name not in resp.content
 
     def test_submit(self):
         """Test that submitting a suggestion works."""
-        url = reverse('suggestions-submit')
+        url = reverse('suggestions-list')
 
         resp = self.client.post(url, {'name': u'Add boston user group',
                                       'url': u'http://meetup.bostonpython.com/'},

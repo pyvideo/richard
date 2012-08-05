@@ -20,6 +20,5 @@ from django.conf.urls import patterns, url
 urlpatterns = patterns(
     'richard.suggestions.views',
 
-    url(r'^$', 'overview', name='suggestions-list'),
-    url(r'^submit/$', 'submit', name='suggestions-submit'),
+    url(r'^videos/?$', 'suggestions', name='suggestions-list'),
 )
