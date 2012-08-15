@@ -198,12 +198,16 @@ class Video(models.Model):
     # these are downloadable urls
     video_ogv_length = models.IntegerField(null=True, blank=True)
     video_ogv_url = models.URLField(max_length=255, null=True, blank=True)
+    video_ogv_download_only = models.BooleanField(default=False)
     video_mp4_length = models.IntegerField(null=True, blank=True)
     video_mp4_url = models.URLField(max_length=255, null=True, blank=True)
+    video_mp4_download_only = models.BooleanField(default=False)
     video_webm_length = models.IntegerField(null=True, blank=True)
     video_webm_url = models.URLField(max_length=255, null=True, blank=True)
+    video_webm_download_only = models.BooleanField(default=False)
     video_flv_length = models.IntegerField(null=True, blank=True)
     video_flv_url = models.URLField(max_length=255, null=True, blank=True)
+    video_flv_download_only = models.BooleanField(default=False)
 
     # source url in case we need to find things again
     source_url = models.URLField(max_length=255, null=True, blank=True)
@@ -291,6 +295,13 @@ class Video(models.Model):
 
             url = getattr(self, 'video_%s_url' % fmt)
             length = getattr(self, 'video_%s_length' % fmt)
+            download_only = getattr(self, 'video_%s_download_only' % fmt)
+
+            # If this is for html5 output and this url is for download
+            # only then we skip it.
+            if html5tag and download_only:
+                continue
+
             try:
                 mime_type = MIMETYPES_MAP[fmt]
             except KeyError:

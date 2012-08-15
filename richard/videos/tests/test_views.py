@@ -250,6 +250,20 @@ class TestVideos(TestCase):
         resp = self.client.get(v.get_absolute_url())
         assert rurl.description in resp.content
 
+    def test_download_only(self):
+        """Video urls marked as download-only shouldn't be in video tag."""
+        v = video(video_ogv_url='http://example.com/OGV_VIDEO',
+                  video_ogv_download_only=False,
+                  video_mp4_url='http://example.com/MP4_VIDEO',
+                  video_mp4_download_only=True,
+                  save=True)
+
+        resp = self.client.get(v.get_absolute_url())
+        # This shows up in video tag and in downloads area
+        eq_(resp.content.count('OGV_VIDEO'), 2)
+        # This only shows up in downloads area
+        eq_(resp.content.count('MP4_VIDEO'), 1)
+
 
 class TestVideoSearch(TestCase):
     def tearDown(self):
