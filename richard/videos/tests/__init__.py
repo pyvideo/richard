@@ -78,7 +78,7 @@ def speaker(**kwargs):
 @with_save
 def tag(**kwargs):
     defaults = {
-        'tag': 'tagless'
+        'tag': u'tagless'
         }
     defaults.update(kwargs)
 

@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from django.conf import settings
+
 from tastypie import fields
 from tastypie.authentication import (ApiKeyAuthentication, Authentication,
                                      MultiAuthentication)
@@ -29,14 +31,14 @@ class AdminAuthorization(Authorization):
     """Only admins get write access to resources."""
 
     def is_authorized(self, request, object=None):
+        if request.user.is_staff:
+            return True
+
         # Always allow read-access
         if request.method in ('GET', 'OPTIONS', 'HEAD'):
             return True
 
-        if not hasattr(request, 'user'):
-            return False
-
-        return request.user.is_staff
+        return False
 
 
 def get_authentication():
@@ -59,7 +61,7 @@ class VideoResource(ModelResource):
     tags = fields.ToManyField('richard.videos.api.TagResource', 'tags')
 
     class Meta:
-        queryset = Video.objects.live()
+        queryset = Video.objects.all()
         resource_name = 'video'
         authentication = get_authentication()
         authorization = AdminAuthorization()
@@ -67,17 +69,41 @@ class VideoResource(ModelResource):
 
     def hydrate(self, bundle):
         """Hydrate converts the json to an object."""
+        errors = {}
+
+        # Check slug
+        slug = bundle.data.get('slug')
+        if slug is not None:
+            try:
+                Video.objects.get(slug=slug)
+                errors['slug'] = 'slug "%s" is already used.' % slug
+            except Video.DoesNotExist:
+                pass
+
+        # Check state
+        state = bundle.data.get('state')
+        if state is not None:
+            valid_states = [Video.STATE_LIVE, Video.STATE_DRAFT]
+            try:
+                state = int(bundle.data['state'])
+                if state not in valid_states:
+                    errors['state'] = 'state should be in %s' % valid_states
+            except ValueError:
+                errors['state'] = 'state should be in %s' % valid_states
+        else:
+            bundle.data['state'] = 1
+
         # Incoming tags can either be an API url or a tag name.
         tags = bundle.data.get('tags', [])
         for i, tag in enumerate(tags):
-            if not isinstance(tag, Tag):
-                if '/' in tag:
-                    # If there's a /, we assume it's an API url, pluck the
-                    # id from the end, and that's the tag.
-                    tag = get_id_from_url(tag)
-                    tag = Tag.objects.get(pk=tag)
-                else:
-                    tag = Tag.objects.get_or_create(tag=tag)[0]
+            if not tag:
+                errors.setdefault('tags', []).append(
+                    'tags must be list of non-empty strings.')
+            elif tag.startswith('/api/v1/'):
+                tag = get_id_from_url(tag)
+                tag = Tag.objects.get(pk=tag)
+            else:
+                tag = Tag.objects.get_or_create(tag=tag)[0]
             tags[i] = tag
         bundle.data['tags'] = tags
 
@@ -85,14 +111,14 @@ class VideoResource(ModelResource):
         # name.
         speakers = bundle.data.get('speakers', [])
         for i, speaker in enumerate(speakers):
-            if not isinstance(speaker, Speaker):
-                if '/' in speaker:
-                    # If there's a /, we assume it's an API url, pluck the
-                    # id from the end, and that's the speaker.
-                    speaker = get_id_from_url(speaker)
-                    speaker = Speaker.objects.get(pk=speaker)
-                else:
-                    speaker = Speaker.objects.get_or_create(name=speaker)[0]
+            if not speaker:
+                errors.setdefault('speakers', []).append(
+                    'speakers must be list of non-empty strings.')
+            elif speaker.startswith('/api/v1/'):
+                speaker = get_id_from_url(speaker)
+                speaker = Speaker.objects.get(pk=speaker)
+            else:
+                speaker = Speaker.objects.get_or_create(name=speaker)[0]
             speakers[i] = speaker
         bundle.data['speakers'] = speakers
 
@@ -100,23 +126,47 @@ class VideoResource(ModelResource):
         # title (not a name!).
         cat = bundle.data.get('category', None)
         if cat is not None:
-            if not isinstance(cat, Category):
-                if '/' in cat:
-                    # If there's a /, we assume it's an API url, pluck the
-                    # id from the end, and that's the category.
+            try:
+                if cat.startswith('/api/v1/'):
                     cat = get_id_from_url(cat)
                     cat = Category.objects.get(pk=cat)
                 else:
-                    cat = Category.objects.get_or_create(title=cat)[0]
-            bundle.data['category'] = cat
+                    cat = Category.objects.get(title=cat)
+                bundle.data['category'] = cat
+            except Category.DoesNotExist:
+                errors['category'] = 'category "%s" does not exist.' % cat
+        else:
+            # FIXME: For some reason, if you don't pass in a category,
+            # it kicks up a 404 and not a 400 and the error gets
+            # stomped on.
+            errors['category'] = 'category is a required field.'
 
         # Incoming language can only be a language name. We don't
         # allow people to create languages via the API, so if it
         # doesn't exist, we bail.
         lang = bundle.data.get('language', None)
         if lang is not None:
-            lang = Language.objects.get(name=lang)
-        bundle.obj.language = lang
+            try:
+                lang = Language.objects.get(name=lang)
+                bundle.obj.language = lang
+            except Language.DoesNotExist:
+                errors['language'] = 'language "%s" does not exist.' % lang
+        else:
+            bundle.obj.language = lang
+
+        # Nix the 'updated' field since it get saved automatically.
+        if 'updated' in bundle.data:
+            del bundle.data['updated']
+
+        # If USE_TZ is False, then nix timezone bits---namely the Z at
+        # the end which makes Django cross.
+        if not settings.USE_TZ:
+            for mem in ('added', 'recorded'):
+                if mem in bundle.data and bundle.data[mem].endswith('Z'):
+                    bundle.data[mem] = bundle.data[mem][:-1]
+
+        if errors:
+            bundle.errors = errors
 
         return bundle
 
@@ -132,8 +182,8 @@ class VideoResource(ModelResource):
 
     def apply_authorization_limits(self, request, object_list):
         """Only authenticated users can see videos in draft status."""
-        if hasattr(request, 'user') and request.user.is_staff:
-            return Video.objects.all()
+        if not request.user.is_staff:
+            return object_list.filter(state=Video.STATE_LIVE)
 
         return object_list
 
@@ -173,9 +223,28 @@ class CategoryResource(ModelResource):
         serializer = Serializer(formats=['json'])
 
     def hydrate(self, bundle):
-        # Incoming kind must be a kind id.
-        kind = CategoryKind.objects.get(pk=bundle.data['kind'])
-        bundle.obj.kind_id = int(bundle.data['kind'])
+        errors = {}
+
+        if 'kind' not in bundle.data:
+            errors['kind'] = 'kind is a required field.'
+        else:
+            try:
+                bundle.obj.kind = CategoryKind.objects.get(
+                    pk=bundle.data['kind'])
+            except CategoryKind.DoesNotExist:
+                    errors['kind'] = ('"%s" is not a valid category kind.' %
+                                      bundle.data['kind'])
+
+        if 'slug' in bundle.data:
+            slug = bundle.data['slug']
+            try:
+                Category.objects.get(slug=slug)
+                errors['slug'] = 'slug "%s" is already used.' % slug
+            except Category.DoesNotExist:
+                pass
+
+        if errors:
+            bundle.errors = errors
 
         return bundle
 
