@@ -114,6 +114,8 @@ class VideoResource(ModelResource):
             if not speaker:
                 errors.setdefault('speakers', []).append(
                     'speakers must be list of non-empty strings.')
+            elif isinstance(speaker, Speaker):
+                continue
             elif speaker.startswith('/api/v1/'):
                 speaker = get_id_from_url(speaker)
                 speaker = Speaker.objects.get(pk=speaker)
