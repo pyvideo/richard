@@ -96,7 +96,9 @@ class VideoResource(ModelResource):
         # Incoming tags can either be an API url or a tag name.
         tags = bundle.data.get('tags', [])
         for i, tag in enumerate(tags):
-            if not tag:
+            if isinstance(tag, Tag):
+                continue
+            elif not tag:
                 errors.setdefault('tags', []).append(
                     'tags must be list of non-empty strings.')
             elif tag.startswith('/api/v1/'):
@@ -111,11 +113,11 @@ class VideoResource(ModelResource):
         # name.
         speakers = bundle.data.get('speakers', [])
         for i, speaker in enumerate(speakers):
-            if not speaker:
+            if isinstance(speaker, Speaker):
+                continue
+            elif not speaker:
                 errors.setdefault('speakers', []).append(
                     'speakers must be list of non-empty strings.')
-            elif isinstance(speaker, Speaker):
-                continue
             elif speaker.startswith('/api/v1/'):
                 speaker = get_id_from_url(speaker)
                 speaker = Speaker.objects.get(pk=speaker)
@@ -129,7 +131,9 @@ class VideoResource(ModelResource):
         cat = bundle.data.get('category', None)
         if cat is not None:
             try:
-                if cat.startswith('/api/v1/'):
+                if isinstance(cat, Category):
+                    pass
+                elif cat.startswith('/api/v1/'):
                     cat = get_id_from_url(cat)
                     cat = Category.objects.get(pk=cat)
                 else:
