@@ -165,6 +165,8 @@ MIDDLEWARE_CLASSES = (
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+    'richard.middleware.BrowserDetectMiddleware',
+
     # This should probably be last. It catches 404 errors, then checks
     # to see if we should be redirecting the url.
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',

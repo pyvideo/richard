@@ -29,7 +29,7 @@
 
 <div class="row-fluid">
   <div id="videobox" class="span8">
-    {{ videodisplay.display(v) }}
+    {{ videodisplay.display(embed, available_formats) }}
 
     {% if v.quality_notes %}
       <div class="alert alert-info">

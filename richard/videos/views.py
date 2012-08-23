@@ -108,11 +108,22 @@ def video(request, video_id, slug):
     else:
         embed_type = 'html5'
 
+    embed = obj.embed
+    available_formats = obj.get_available_formats(html5tag=True)
+
+    # For Firefox, we nix any non-free formats.
+    if request.BROWSER.name == 'Firefox':
+        available_formats = [
+            af for af in available_formats
+            if af['mime_type'].endswith(('ogg', 'ogv', 'webm'))]
+
     ret = render(
         request, 'videos/video.html',
         {'meta': meta,
          'v': obj,
-         'embed_type': embed_type})
+         'embed': embed,
+         'embed_type': embed_type,
+         'available_formats': available_formats})
     return ret
 
 
