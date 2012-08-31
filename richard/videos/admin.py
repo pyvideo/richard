@@ -47,6 +47,16 @@ class CategoryKindAdmin(admin.ModelAdmin):
 admin.site.register(CategoryKind, CategoryKindAdmin)
 
 
+def make_live(modeladmin, request, queryset):
+    queryset.update(state=1)
+make_live.short_description = 'Make live'
+
+
+def make_draft(modeladmin, request, queryset):
+    queryset.update(state=2)
+make_draft.short_description = 'Make draft'
+
+
 class RelatedUrlInline(admin.TabularInline):
     model = RelatedUrl
 
@@ -61,6 +71,7 @@ class VideoAdmin(admin.ModelAdmin):
     save_on_top = True
     prepopulated_fields = {'slug': ('title',)}
     inlines = [RelatedUrlInline]
+    actions = [make_live, make_draft]
 
 
 admin.site.register(Video, VideoAdmin)
