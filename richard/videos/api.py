@@ -64,14 +64,17 @@ class EnhancedModelResource(ModelResource):
         try:
             resp = super(EnhancedModelResource, self).dispatch(
                 request_type, request, **kwargs)
-        except Exception:
+        except Exception as exc:
             subject = 'API error: %s' % request.path
             try:
                 request_repr = repr(request)
             except:
                 request_repr = "Request repr() unavailable"
             the_trace = traceback.format_exc()
-            message = "%s\n\n%s" % (the_trace, request_repr)
+            resp_repr = 'Unknown response'
+            if hasattr(exc, 'response'):
+                resp_repr = repr(exc.response)
+            message = "%s\n\n%s\n\n%s" % (the_trace, request_repr, resp_repr)
             mail_admins(subject, message, fail_silently=True)
             raise
 
