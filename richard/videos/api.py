@@ -61,8 +61,20 @@ def get_id_from_url(url):
 
 class EnhancedModelResource(ModelResource):
     def dispatch(self, request_type, request, **kwargs):
-        resp = super(EnhancedModelResource, self).dispatch(
-            request_type, request, **kwargs)
+        try:
+            resp = super(EnhancedModelResource, self).dispatch(
+                request_type, request, **kwargs)
+        except Exception:
+            subject = 'API error: %s' % request.path
+            try:
+                request_repr = repr(request)
+            except:
+                request_repr = "Request repr() unavailable"
+            the_trace = traceback.format_exc()
+            message = "%s\n\n%s" % (the_trace, request_repr)
+            mail_admins(subject, message, fail_silently=True)
+            raise
+
         if not (200 <= resp.status_code <= 299):
             subject = 'API error: %s' % request.path
             try:
