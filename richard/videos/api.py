@@ -73,7 +73,8 @@ class EnhancedModelResource(ModelResource):
             the_trace = traceback.format_exc()
             resp_repr = 'Unknown response'
             if hasattr(exc, 'response'):
-                resp_repr = repr(exc.response)
+                resp_repr += ' %s' % repr(exc.response.__dict__)
+
             message = "%s\n\n%s\n\n%s" % (the_trace, request_repr, resp_repr)
             mail_admins(subject, message, fail_silently=True)
             raise
