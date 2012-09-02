@@ -71,16 +71,12 @@ class VideoResource(ModelResource):
         serializer = Serializer(formats=['json'])
 
     def raise_bad_request(self, bundle, errors):
-        try:
-            desired_format = self.determine_format(bundle.request)
-            serialized = self.serialize(bundle.request, errors, desired_format)
-            response = http.HttpBadRequest(
-                content=serialized,
-                content_type=build_content_type(desired_format))
-            raise ImmediateHttpResponse(response=response)
-        except Exception as exc:
-            print exc
-            raise
+        desired_format = self.determine_format(bundle.request)
+        serialized = self.serialize(bundle.request, errors, desired_format)
+        response = http.HttpBadRequest(
+            content=serialized,
+            content_type=build_content_type(desired_format))
+        raise ImmediateHttpResponse(response=response)
 
     def hydrate(self, bundle):
         """Hydrate converts the json to an object."""

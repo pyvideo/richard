@@ -387,7 +387,7 @@ class TestVideoPostAPI(TestAPIBase):
 
         resp = self.auth_post('/api/v1/video/', json.dumps(data),
                               content_type='application/json')
-        eq_(resp.status_code, 404)
+        eq_(resp.status_code, 400)
 
     def test_post_video_not_authenticated(self):
         """Test that not authenticated users can't write."""
