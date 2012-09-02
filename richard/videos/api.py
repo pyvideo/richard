@@ -14,7 +14,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import traceback
+
 from django.conf import settings
+from django.core.mail import mail_admins
 
 from tastypie import fields
 from tastypie import http
@@ -69,6 +72,23 @@ class VideoResource(ModelResource):
         authentication = get_authentication()
         authorization = AdminAuthorization()
         serializer = Serializer(formats=['json'])
+
+    def dispatch(self, request_type, request, **kwargs):
+        resp = super(VideoResource, self).dispatch(request_type, request, **kwargs)
+        if not (200 <= resp.status_code <= 299):
+            subject = 'API error: %s' % request.path
+            try:
+                request_repr = repr(request)
+            except:
+                request_repr = "Request repr() unavailable"
+            try:
+                resp_repr = repr(resp)
+            except:
+                resp_repr = "Response repr() unavailable"
+            the_trace = '\n'.join(traceback.format_stack())
+            message = "%s\n\n%s\n\n%s" % (the_trace, request_repr, resp_repr)
+            mail_admins(subject, message, fail_silently=True)
+        return resp
 
     def raise_bad_request(self, bundle, errors):
         desired_format = self.determine_format(bundle.request)
