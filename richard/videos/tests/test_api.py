@@ -327,16 +327,13 @@ class TestVideoPostAPI(TestAPIBase):
                                 content_type='application/json')
         eq_(resp.status_code, 201)
 
-    # See FIXME in api.py and uncomment this out when that's fixed.
-    #
-    # def test_post_with_no_category(self):
-    #     """Test that lack of category is rejected"""
-    #     data = {'title': 'test1',
-    #             'state': Video.STATE_DRAFT}
-    #
-    #     resp = self.auth_post('/api/v1/video/', json.dumps(data),
-    #                             content_type='application/json')
-    #     eq_(resp.status_code, 400)
+    def test_post_with_no_category(self):
+        """Test that lack of category is rejected"""
+        data = {'title': 'test1',
+                'state': Video.STATE_DRAFT}
+        resp = self.auth_post('/api/v1/video/', json.dumps(data),
+                                content_type='application/json')
+        eq_(resp.status_code, 400)
 
     def test_post_with_bad_language(self):
         """Test that a bad state is rejected"""

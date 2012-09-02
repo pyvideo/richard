@@ -17,11 +17,14 @@
 from django.conf import settings
 
 from tastypie import fields
+from tastypie import http
 from tastypie.authentication import (ApiKeyAuthentication, Authentication,
                                      MultiAuthentication)
 from tastypie.authorization import Authorization
+from tastypie.exceptions import ImmediateHttpResponse
 from tastypie.resources import ModelResource
 from tastypie.serializers import Serializer
+from tastypie.utils.mime import build_content_type
 
 from richard.videos.models import (Video, Speaker, Category, Tag, Language,
                                    CategoryKind)
@@ -66,6 +69,18 @@ class VideoResource(ModelResource):
         authentication = get_authentication()
         authorization = AdminAuthorization()
         serializer = Serializer(formats=['json'])
+
+    def raise_bad_request(self, bundle, errors):
+        try:
+            desired_format = self.determine_format(bundle.request)
+            serialized = self.serialize(bundle.request, errors, desired_format)
+            response = http.HttpBadRequest(
+                content=serialized,
+                content_type=build_content_type(desired_format))
+            raise ImmediateHttpResponse(response=response)
+        except Exception as exc:
+            print exc
+            raise
 
     def hydrate(self, bundle):
         """Hydrate converts the json to an object."""
@@ -141,11 +156,10 @@ class VideoResource(ModelResource):
                 bundle.data['category'] = cat
             except Category.DoesNotExist:
                 errors['category'] = 'category "%s" does not exist.' % cat
+                return self.raise_bad_request(bundle, errors)
         else:
-            # FIXME: For some reason, if you don't pass in a category,
-            # it kicks up a 404 and not a 400 and the error gets
-            # stomped on.
             errors['category'] = 'category is a required field.'
+            return self.raise_bad_request(bundle, errors)
 
         # Incoming language can only be a language name. We don't
         # allow people to create languages via the API, so if it
