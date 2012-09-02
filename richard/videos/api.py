@@ -59,22 +59,10 @@ def get_id_from_url(url):
     return int(url.rstrip('/').split('/')[-1])
 
 
-class VideoResource(ModelResource):
-    category = fields.ToOneField('richard.videos.api.CategoryResource',
-                                 'category')
-    speakers = fields.ToManyField('richard.videos.api.SpeakerResource',
-                                  'speakers')
-    tags = fields.ToManyField('richard.videos.api.TagResource', 'tags')
-
-    class Meta:
-        queryset = Video.objects.all()
-        resource_name = 'video'
-        authentication = get_authentication()
-        authorization = AdminAuthorization()
-        serializer = Serializer(formats=['json'])
-
+class EnhancedModelResource(ModelResource):
     def dispatch(self, request_type, request, **kwargs):
-        resp = super(VideoResource, self).dispatch(request_type, request, **kwargs)
+        resp = super(EnhancedModelResource, self).dispatch(
+            request_type, request, **kwargs)
         if not (200 <= resp.status_code <= 299):
             subject = 'API error: %s' % request.path
             try:
@@ -97,6 +85,21 @@ class VideoResource(ModelResource):
             content=serialized,
             content_type=build_content_type(desired_format))
         raise ImmediateHttpResponse(response=response)
+
+
+class VideoResource(EnhancedModelResource):
+    category = fields.ToOneField('richard.videos.api.CategoryResource',
+                                 'category')
+    speakers = fields.ToManyField('richard.videos.api.SpeakerResource',
+                                  'speakers')
+    tags = fields.ToManyField('richard.videos.api.TagResource', 'tags')
+
+    class Meta:
+        queryset = Video.objects.all()
+        resource_name = 'video'
+        authentication = get_authentication()
+        authorization = AdminAuthorization()
+        serializer = Serializer(formats=['json'])
 
     def hydrate(self, bundle):
         """Hydrate converts the json to an object."""
@@ -224,7 +227,7 @@ class VideoResource(ModelResource):
         return object_list
 
 
-class SpeakerResource(ModelResource):
+class SpeakerResource(EnhancedModelResource):
     videos = fields.ListField()
 
     class Meta:
@@ -247,8 +250,7 @@ class SpeakerResource(ModelResource):
             for vid in video_set.values_list('id', flat=True)]
 
 
-class CategoryResource(ModelResource):
-
+class CategoryResource(EnhancedModelResource):
     videos = fields.ListField()
 
     class Meta:
@@ -297,7 +299,7 @@ class CategoryResource(ModelResource):
             for vid in video_set.values_list('id', flat=True)]
 
 
-class TagResource(ModelResource):
+class TagResource(EnhancedModelResource):
     videos = fields.ListField()
 
     class Meta:
