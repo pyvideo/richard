@@ -5,8 +5,9 @@
 # richard/settings_local.py module.
 # ===================================================
 
-import sys
+import imp
 import os
+import sys
 
 # site_root is the parent directory
 SITE_ROOT = os.path.dirname(os.path.dirname(__file__))
@@ -224,8 +225,8 @@ INSTALLED_APPS = (
 )
 
 try:
-    # Add django_nose for testing but only if nose is installed.
-    import nose
+    # Add django_nose for testing but only if it's installed.
+    imp.find_module('django_nose')
     INSTALLED_APPS = tuple(list(INSTALLED_APPS) + ['django_nose'])
 except ImportError:
     pass
