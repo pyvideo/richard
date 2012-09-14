@@ -57,6 +57,7 @@ class TestAPIBase(TestCase):
 
         header = 'ApiKey %s:%s' % (user.username, user.api_key.key)
         self.auth_post = partial(self.client.post, HTTP_AUTHORIZATION=header)
+        self.auth_put = partial(self.client.put, HTTP_AUTHORIZATION=header)
         self.auth_get = partial(self.client.get, HTTP_AUTHORIZATION=header)
 
 
@@ -164,6 +165,53 @@ class TestVideoPostAPI(TestAPIBase):
 
         resp = self.auth_post('/api/v1/video/', json.dumps(data),
                                 content_type='application/json')
+        eq_(resp.status_code, 400)
+
+    def test_put_with_slug_and_id(self):
+        """Test that passing in a slug and id with a PUT works."""
+        cat = category(save=True)
+        v = video(title='test1', slug='test1', save=True)
+
+        data = {'id': v.pk,
+                'slug': v.slug,
+                'title': 'test1',
+                'category': '/api/v1/category/%d/' % cat.pk,
+                'state': Video.STATE_DRAFT}
+
+        resp = self.auth_put('/api/v1/video/%d/' % v.pk,
+                             json.dumps(data),
+                             content_type='application/json')
+        eq_(resp.status_code, 204)
+
+    def test_put_with_mismatched_slug_and_id(self):
+        """Test that a mismatched slug and id with a PUT fails."""
+        cat = category(save=True)
+        v = video(title='test1', slug='test1', save=True)
+
+        data = {'id': v.pk,
+                'slug': 'ou812',
+                'title': 'test1',
+                'category': '/api/v1/category/%d/' % cat.pk,
+                'state': Video.STATE_DRAFT}
+
+        resp = self.auth_put('/api/v1/video/%d/' % v.pk,
+                             json.dumps(data),
+                             content_type='application/json')
+        eq_(resp.status_code, 400)
+
+    def test_put_with_slug_and_no_id(self):
+        """Test that a slug but no id with a PUT fails."""
+        cat = category(save=True)
+        v = video(title='test1', slug='test1', save=True)
+
+        data = {'slug': v.slug,
+                'title': 'test1',
+                'category': '/api/v1/category/%d/' % cat.pk,
+                'state': Video.STATE_DRAFT}
+
+        resp = self.auth_put('/api/v1/video/%d/' % v.pk,
+                             json.dumps(data),
+                             content_type='application/json')
         eq_(resp.status_code, 400)
 
     def test_post_with_tag_name(self):

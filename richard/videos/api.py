@@ -125,11 +125,24 @@ class VideoResource(EnhancedModelResource):
         # Check slug
         slug = bundle.data.get('slug')
         if slug is not None:
-            try:
-                Video.objects.get(slug=slug)
-                errors['slug'] = 'slug "%s" is already used.' % slug
-            except Video.DoesNotExist:
-                pass
+            if bundle.request.method == 'POST':
+                try:
+                    Video.objects.get(slug=slug)
+                    errors['slug'] = 'slug "%s" is already used.' % slug
+                except Video.DoesNotExist:
+                    pass
+            elif bundle.request.method == 'PUT':
+                id_ = bundle.data.get('id')
+                if id_ is None:
+                    # TODO: Figure out if it's possible to enter this
+                    # case.
+                    errors['slug'] = 'PUT, but id is None.'
+                else:
+                    try:
+                        Video.objects.get(pk=id_, slug=slug)
+                    except Video.DoesNotExist:
+                        errors['slug'] = ('Video with id %d does not have '
+                                          'slug %s.' % (id_, slug))
 
         # Check state
         state = bundle.data.get('state')
