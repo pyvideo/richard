@@ -17,20 +17,22 @@
 -#}
 {% macro display(embed, available_formats) -%}
   {# Fix floats in unisubs widget that are not cleared #}
-  <div class="videobox-inner clearfix">
-    {% if available_formats %}
-      <video id="{{ v.slug }}" controls width="100%">
-        {% for media in available_formats %}
-          <source src="{{ media['url'] }}" type="{{ media['mime_type'] }}">
-        {% endfor %}
-        {% if embed %}
-          {{ embed|safe }}
-        {% endif %}
-      </video>
-    {% elif embed %}
-      {{ embed|safe }}
-    {% else %}
-      <p>No video to show.</p>
-    {% endif %}
+  <div class="clearfix">
+    <div class="videobox-inner">
+      {% if available_formats %}
+        <video id="{{ v.slug }}" controls>
+          {% for media in available_formats %}
+            <source src="{{ media['url'] }}" type="{{ media['mime_type'] }}">
+          {% endfor %}
+          {% if embed %}
+            {{ embed|safe }}
+          {% endif %}
+        </video>
+      {% elif embed %}
+        {{ embed|safe }}
+      {% else %}
+        <p>No video to show.</p>
+      {% endif %}
+    </div>
   </div>
 {% endmacro %}

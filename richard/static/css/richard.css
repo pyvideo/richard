@@ -40,5 +40,8 @@ div#footer {
 }
 
 .videobox-inner {
-  padding-bottom: 22px;
+  background: #ccc;
+  text-align: center;
+  margin: 0 auto;
+  padding: 10px;
 }
