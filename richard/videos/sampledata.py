@@ -20,7 +20,7 @@ from richard.videos.models import Video
 from richard.videos.tests import category_kind, category, speaker, tag, video
 
 
-def run():
+def generate_sampledata(options):
     conference = category_kind(name=u'Conference', save=True)
 
     pycon2011 = category(name=u'PyCon', title=u'Pycon 2011', slug=u'pycon-2011',

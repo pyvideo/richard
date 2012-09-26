@@ -13,3 +13,6 @@ south
 # We're using a specific version here because we need the MultiAuthentication
 # feature, but newer commits break tests.
 -e git://github.com/toastdriven/django-tastypie.git@5e8850434ef1c8672b0a22953bd7cc0def6347f8#egg=django-tastypie
+
+# eadred is in development
+-e git://github.com/willkg/django-eadred@master#egg=django-eadred

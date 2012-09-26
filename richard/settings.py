@@ -216,11 +216,11 @@ INSTALLED_APPS = (
     'haystack',
     'south',
     'tastypie',
+    'eadred',
 
     'richard.videos',
     'richard.sitenews',
     'richard.pages',
-    'richard.sampledata',
     'richard.suggestions',
 )
 

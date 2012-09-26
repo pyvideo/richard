@@ -17,7 +17,7 @@
 from richard.sitenews.tests import sitenews
 
 
-def run():
+def generate_sampledata(options):
     sitenews(title=u'Welcome to my index!',
              summary=u'<p>I just created this site.</p>',
              content=u'Yay!',

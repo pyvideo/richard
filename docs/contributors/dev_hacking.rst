@@ -135,6 +135,6 @@ Setting up sample data (optional)
 
 If you want to set up some initial data, do::
 
-    $ ./manage.py load_sampledata
+    $ ./manage.py generatedata
 
 This is useful to see how the site works.
