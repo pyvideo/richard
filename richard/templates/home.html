@@ -55,7 +55,10 @@
           {% if latest_videos %}
             <ul>
               {% for video in latest_videos %}
-                <li><a href="{{ video.get_absolute_url() }}">{{ video.title }}</a>
+                <li>
+                  <a href="{{ video.get_absolute_url() }}">{{ video.title }}</a>
+                  ({{ video.category }})
+                </li>
               {% endfor %}
             </ul>
           {% endif %}
