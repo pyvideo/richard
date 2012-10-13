@@ -43,9 +43,9 @@
       </div>
 
       <div class="span3">
-      {% if cat.start_date %}
-        Date: {{ cat.start_date }}<br>
-      {% endif %}
+        {% if cat.start_date %}
+          Date: {{ cat.start_date }}<br>
+        {% endif %}
         Videos: {{ cat.video_set.live().count() }}
       </div>
     </div>
