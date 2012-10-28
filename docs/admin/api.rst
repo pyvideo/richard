@@ -108,6 +108,17 @@ Videos
 
     Returns information for that specific video id.
 
+``GET /api/v1/video/?speaker=FOO``
+
+    Returns videos with speaker FOO. It only handles one speaker, but
+    it uses icontains which will do case-insensitive substring
+    matches.
+
+``GET /api/v1/video/?tag=FOO``
+
+    Returns videos with tag FOO. It only takes one tag and does an
+    exact match.
+
 ``POST /api/v1/video/``
 
     Creates a new video.

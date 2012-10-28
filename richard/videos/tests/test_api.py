@@ -24,7 +24,7 @@ from nose.plugins.skip import SkipTest
 from nose.tools import eq_
 from tastypie.models import ApiKey
 
-from richard.videos.tests import video, category
+from richard.videos.tests import video, category, tag, speaker
 from richard.videos.models import Video
 from richard.videos.urls import build_api_urls
 
@@ -104,6 +104,46 @@ class TestAPI(TestAPIBase):
         video(state=Video.STATE_DRAFT, title=u'Bar', save=True)
 
         resp = self.auth_get('/api/v1/video/',
+                             content_type='application/json')
+
+        data = json.loads(resp.content)
+        eq_(len(data['objects']), 2)
+
+    def test_videos_by_tag(self):
+        tag1 = tag(tag='boat', save=True)
+        v1 = video(state=Video.STATE_LIVE, title=u'Foo1', save=True)
+        v1.tags = [tag1]
+        v1.save()
+        v2 = video(state=Video.STATE_LIVE, title=u'Foo2', save=True)
+        v2.tags = [tag1]
+        v2.save()
+        video(state=Video.STATE_LIVE, title=u'Foo3', save=True)
+
+        resp = self.auth_get('/api/v1/video/?tag=boat',
+                             content_type='application/json')
+
+        data = json.loads(resp.content)
+        eq_(len(data['objects']), 2)
+
+    def test_videos_by_speaker(self):
+        speaker1 = speaker(name='webber', save=True)
+        v1 = video(state=Video.STATE_LIVE, title=u'Foo1', save=True)
+        v1.speakers = [speaker1]
+        v1.save()
+        v2 = video(state=Video.STATE_LIVE, title=u'Foo2', save=True)
+        v2.speakers = [speaker1]
+        v2.save()
+        video(state=Video.STATE_LIVE, title=u'Foo3', save=True)
+
+        # Filter by full name.
+        resp = self.auth_get('/api/v1/video/?speaker=webber',
+                             content_type='application/json')
+
+        data = json.loads(resp.content)
+        eq_(len(data['objects']), 2)
+
+        # Filter by partial name.
+        resp = self.auth_get('/api/v1/video/?speaker=web',
                              content_type='application/json')
 
         data = json.loads(resp.content)

@@ -24,7 +24,6 @@ from tastypie import http
 from tastypie.authentication import (ApiKeyAuthentication, Authentication,
                                      MultiAuthentication)
 from tastypie.authorization import Authorization
-from tastypie.constants import ALL
 from tastypie.exceptions import ImmediateHttpResponse
 from tastypie.resources import ModelResource
 from tastypie.serializers import Serializer
@@ -123,10 +122,25 @@ class VideoResource(EnhancedModelResource):
         authentication = get_authentication()
         authorization = AdminAuthorization()
         serializer = Serializer(formats=['json'])
-        filtering = {
-            'tags': ALL,
-            'speakers': ALL
-            }
+
+    def build_filters(self, filters=None):
+        if filters is None:
+            filters = {}
+
+        orm_filters = super(EnhancedModelResource, self).build_filters(filters)
+
+        # TODO: An "ANDing" of tags might be more useful here.
+        if 'tag' in filters:
+            orm_filters['tags__in'] = list(
+                Tag.objects.filter(tag=filters['tag'])
+                   .values_list('pk', flat=True))
+
+        if 'speaker' in filters:
+            orm_filters['speakers__in'] = list(
+                Speaker.objects.filter(name__icontains=filters['speaker'])
+                       .values_list('pk', flat=True))
+
+        return orm_filters
 
     def hydrate(self, bundle):
         """Hydrate converts the json to an object."""
