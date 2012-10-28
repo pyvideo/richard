@@ -24,6 +24,7 @@ from tastypie import http
 from tastypie.authentication import (ApiKeyAuthentication, Authentication,
                                      MultiAuthentication)
 from tastypie.authorization import Authorization
+from tastypie.constants import ALL
 from tastypie.exceptions import ImmediateHttpResponse
 from tastypie.resources import ModelResource
 from tastypie.serializers import Serializer
@@ -61,11 +62,19 @@ def get_id_from_url(url):
 
 class EnhancedModelResource(ModelResource):
     def dispatch(self, request_type, request, **kwargs):
+        """Wrap ModelResource.dispatch so that it emails errors.
+
+        We're having problems with the API, so this emails errors
+        to admins.
+
+        This should be temporary. Last thing we want to deal with
+        is errors from everyone for everything.
+
+        """
         try:
             resp = super(EnhancedModelResource, self).dispatch(
                 request_type, request, **kwargs)
         except Exception as exc:
-            
             subject = 'API error: %s' % request.path
             try:
                 request_repr = repr(request)
@@ -107,9 +116,6 @@ class EnhancedModelResource(ModelResource):
 class VideoResource(EnhancedModelResource):
     category = fields.ToOneField('richard.videos.api.CategoryResource',
                                  'category')
-    speakers = fields.ToManyField('richard.videos.api.SpeakerResource',
-                                  'speakers')
-    tags = fields.ToManyField('richard.videos.api.TagResource', 'tags')
 
     class Meta:
         queryset = Video.objects.all()
@@ -117,6 +123,10 @@ class VideoResource(EnhancedModelResource):
         authentication = get_authentication()
         authorization = AdminAuthorization()
         serializer = Serializer(formats=['json'])
+        filtering = {
+            'tags': ALL,
+            'speakers': ALL
+            }
 
     def hydrate(self, bundle):
         """Hydrate converts the json to an object."""
@@ -152,43 +162,39 @@ class VideoResource(EnhancedModelResource):
                 state = int(bundle.data['state'])
                 if state not in valid_states:
                     errors['state'] = 'state should be in %s' % valid_states
+                    return self.raise_bad_request(bundle, errors)
             except ValueError:
                 errors['state'] = 'state should be in %s' % valid_states
+                return self.raise_bad_request(bundle, errors)
         else:
             bundle.data['state'] = 1
 
         # Incoming tags can either be an API url or a tag name.
         tags = bundle.data.get('tags', [])
-        for i, tag in enumerate(tags):
-            if isinstance(tag, Tag):
-                continue
-            elif not tag:
-                errors.setdefault('tags', []).append(
-                    'tags must be list of non-empty strings.')
-            elif tag.startswith('/api/v1/'):
-                tag = get_id_from_url(tag)
-                tag = Tag.objects.get(pk=tag)
-            else:
-                tag = Tag.objects.get_or_create(tag=tag)[0]
-            tags[i] = tag
-        bundle.data['tags'] = tags
+        tag_objs = []
+        if tags:
+            for i, tag in enumerate(tags):
+                if not tag or '/' in tag:
+                    errors.setdefault('tags', []).append(
+                        'tags must be list of non-empty strings.')
+                    return self.raise_bad_request(bundle, errors)
+                else:
+                    tag = Tag.objects.get_or_create(tag=tag)[0]
+                    tag_objs.append(tag)
 
         # Incoming speakers can either be an API url or a speaker
         # name.
         speakers = bundle.data.get('speakers', [])
-        for i, speaker in enumerate(speakers):
-            if isinstance(speaker, Speaker):
-                continue
-            elif not speaker:
-                errors.setdefault('speakers', []).append(
-                    'speakers must be list of non-empty strings.')
-            elif speaker.startswith('/api/v1/'):
-                speaker = get_id_from_url(speaker)
-                speaker = Speaker.objects.get(pk=speaker)
-            else:
-                speaker = Speaker.objects.get_or_create(name=speaker)[0]
-            speakers[i] = speaker
-        bundle.data['speakers'] = speakers
+        speaker_objs = []
+        if speakers:
+            for i, speaker in enumerate(speakers):
+                if not speaker or '/' in speaker:
+                    errors.setdefault('speakers', []).append(
+                        'speakers must be list of non-empty strings.')
+                    return self.raise_bad_request(bundle, errors)
+                else:
+                    speaker = Speaker.objects.get_or_create(name=speaker)[0]
+                    speaker_objs.append(speaker)
 
         # Incoming category can be either an API url or a category
         # title (not a name!).
@@ -202,6 +208,10 @@ class VideoResource(EnhancedModelResource):
                     cat = Category.objects.get(pk=cat)
                 else:
                     cat = Category.objects.get(title=cat)
+                # Have to put it in both places because we need to
+                # save it to save the m2m fields and the object needs
+                # a category in order to save.
+                bundle.obj.category = cat
                 bundle.data['category'] = cat
             except Category.DoesNotExist:
                 errors['category'] = 'category "%s" does not exist.' % cat
@@ -236,6 +246,10 @@ class VideoResource(EnhancedModelResource):
 
         if errors:
             bundle.errors = errors
+        else:
+            bundle.obj.save()
+            bundle.obj.tags = tag_objs
+            bundle.obj.speakers = speaker_objs
 
         return bundle
 
@@ -247,6 +261,9 @@ class VideoResource(EnhancedModelResource):
             bundle.data['language'] = None
         else:
             bundle.data['language'] = lang.name
+        # Add speaker names and tags
+        bundle.data['speakers'] = [s.name for s in bundle.obj.speakers.all()]
+        bundle.data['tags'] = [t.tag for t in bundle.obj.tags.all()]
         return bundle
 
     def apply_authorization_limits(self, request, object_list):
@@ -255,29 +272,6 @@ class VideoResource(EnhancedModelResource):
             return object_list.filter(state=Video.STATE_LIVE)
 
         return object_list
-
-
-class SpeakerResource(EnhancedModelResource):
-    videos = fields.ListField()
-
-    class Meta:
-        queryset = Speaker.objects.all()
-        resource_name = 'speaker'
-        authentication = get_authentication()
-        authorization = AdminAuthorization()
-        serializer = Serializer(formats=['json'])
-
-    def dehydrate_videos(self, bundle):
-        video_set = bundle.obj.video_set
-        if hasattr(bundle.request, 'user') and bundle.request.user.is_staff:
-            video_set = video_set.all()
-        else:
-            video_set = video_set.live()
-
-        # TODO: fix url so it's not hard-coded
-        return [
-            '/api/v1/video/%d/' % vid
-            for vid in video_set.values_list('id', flat=True)]
 
 
 class CategoryResource(EnhancedModelResource):
@@ -315,29 +309,6 @@ class CategoryResource(EnhancedModelResource):
             bundle.errors = errors
 
         return bundle
-
-    def dehydrate_videos(self, bundle):
-        video_set = bundle.obj.video_set
-        if hasattr(bundle.request, 'user') and bundle.request.user.is_staff:
-            video_set = video_set.all()
-        else:
-            video_set = video_set.live()
-
-        # TODO: fix url so it's not hard-coded
-        return [
-            '/api/v1/video/%d/' % vid
-            for vid in video_set.values_list('id', flat=True)]
-
-
-class TagResource(EnhancedModelResource):
-    videos = fields.ListField()
-
-    class Meta:
-        queryset = Tag.objects.all()
-        resource_name = 'tag'
-        authentication = get_authentication()
-        authorization = AdminAuthorization()
-        serializer = Serializer(formats=['json'])
 
     def dehydrate_videos(self, bundle):
         video_set = bundle.obj.video_set

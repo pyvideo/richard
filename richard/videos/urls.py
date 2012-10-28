@@ -20,8 +20,7 @@ from haystack.views import SearchView, search_view_factory
 from haystack.forms import ModelSearchForm
 from tastypie.api import Api
 
-from richard.videos.api import (VideoResource, SpeakerResource,
-                                CategoryResource, TagResource)
+from richard.videos.api import VideoResource, CategoryResource
 from richard.videos.feeds import (CategoryVideosFeed, SpeakerVideosFeed,
                                   NewPostedVideoFeed)
 
@@ -71,9 +70,7 @@ urlpatterns = patterns(
 def build_api_urls():
     v1_api = Api(api_name='v1')
     v1_api.register(VideoResource())
-    v1_api.register(SpeakerResource())
     v1_api.register(CategoryResource())
-    v1_api.register(TagResource())
 
     return patterns(
         'richard.videos.views',
