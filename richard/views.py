@@ -25,8 +25,8 @@ from richard.suggestions.models import Suggestion
 
 
 def home(request):
-    latest_categories = Category.objects.order_by('-start_date')[:5]
-    latest_videos = Video.objects.live().order_by('-added')[:5]
+    latest_categories = Category.objects.order_by('-start_date')[:10]
+    latest_videos = Video.objects.live().order_by('-added')[:10]
 
     news_list = SiteNews.objects.all()[:5]
     video_count = Video.objects.live().count()
