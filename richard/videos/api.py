@@ -278,6 +278,8 @@ class VideoResource(EnhancedModelResource):
         # Add speaker names and tags
         bundle.data['speakers'] = [s.name for s in bundle.obj.speakers.all()]
         bundle.data['tags'] = [t.tag for t in bundle.obj.tags.all()]
+        # Use the category title instead of api url
+        bundle.data['category'] = bundle.obj.category.title
         return bundle
 
     def apply_authorization_limits(self, request, object_list):

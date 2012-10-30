@@ -77,6 +77,26 @@ class TestAPI(TestAPIBase):
         eq_(resp.status_code, 200)
         eq_(json.loads(resp.content)['title'], vid.title)
 
+    def test_get_video_data(self):
+        cat = category(title=u'Foo Title', save=True)
+        vid = video(category=cat, state=Video.STATE_LIVE, save=True)
+        t = tag(tag=u'tag', save=True)
+        vid.tags = [t]
+        s = speaker(name=u'Jim', save=True)
+        vid.speakers = [s]
+
+        resp = self.client.get('/api/v1/video/%d/' % vid.pk,
+                               {'format': 'json'})
+        eq_(resp.status_code, 200)
+        content = json.loads(resp.content)
+        eq_(content['title'], vid.title)
+        # This should be the category title--not api url
+        eq_(content['category'], cat.title)
+        # This should be the tag--not api url
+        eq_(content['tags'], [t.tag])
+        # This should be the speaker name--not api url
+        eq_(content['speakers'], [s.name])
+
     def test_get_category(self):
         """Test that a category can be retrieved."""
         cat = category(save=True)
