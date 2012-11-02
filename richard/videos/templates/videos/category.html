@@ -37,8 +37,14 @@
   </h1>
 </div>
 
+<ul class="nav nav-pills">
+  <li class="{{ 'active' if view == 'videos' else '' }}"><a href="{{ url('videos-category', category_id=category.pk, slug=category.slug) }}">Videos</a></li>
+  <li class="{{ 'active' if view == 'files' else '' }}"><a href="{{ url('videos-category-files', category_id=category.pk, slug=category.slug) }}">files</a></li>
+  <li><a href="{{ url('videos-category-feed', category_id=category.pk, slug=category.slug) }}">rss feed</a></li>
+</ul>
+
 <div class="row-fluid">
-  <div class="span9">
+  <div class="span12">
     {% if category.url %}
     <p>
       <a href="{{ category.url }}">{{ category.url }}</a>
@@ -48,9 +54,6 @@
       {{ category.description|safe }}
     </p>
   </div>
-  <div class="span3">
-    <a class="feed" href="{{ url('videos-category-feed', category_id=category.pk, slug=category.slug) }}"> feed</a>
-  </div>
 </div>
 
 <div class="row-fluid">
@@ -59,7 +62,37 @@
   </div>
 </div>
 
-{% for v in videos %}
-  {{ macros.video_summary(v) }}
-{% endfor %}
+{% if view == 'videos' %}
+  {% for v in videos %}
+    {{ macros.video_summary(v) }}
+  {% endfor %}
+{% elif view == 'files' %}
+  <table class="table">
+    <tr><th>Title</th><th>Files</th></tr>
+    {% for v in videos %}
+      <tr>
+        <td>
+          {{ v.title }}
+          {% if v.speakers.all() %}
+            &mdash;
+            {% set pipe = joiner(", ") %}
+            {% for s in v.speakers.all() -%}
+              {{ pipe() }} {{ s.name }}
+            {%- endfor %}
+          {% endif %}
+        </td>
+        <td>
+          {% set formats = v.get_available_formats(html5tag=True) %}
+          {% if formats %}
+            {% for format in formats %}
+              <a href="{{ format.url }}">{{ format.mime_type }}</a>
+            {% endfor %}
+          {% else %}
+            No downloadable files.
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endif %}
 {% endblock %}

@@ -45,7 +45,21 @@ def category(request, category_id, slug):
 
     ret = render(
         request, 'videos/category.html',
-        {'category': obj,
+        {'view': 'videos',
+         'category': obj,
+         'videos': videos})
+    return ret
+
+
+def category_files(request, category_id, slug):
+    obj = get_object_or_404(models.Category, pk=category_id)
+
+    videos = obj.video_set.live().prefetch_related('speakers')
+
+    ret = render(
+        request, 'videos/category.html',
+        {'view': 'files',
+         'category': obj,
          'videos': videos})
     return ret
 

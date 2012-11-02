@@ -35,6 +35,8 @@ urlpatterns = patterns(
         'category', name='videos-category'),
     url(r'^category/(?P<category_id>[0-9]+)(?:/(?P<slug>[\w-]*))?/rss/?$',
         CategoryVideosFeed(), name='videos-category-feed'),
+    url(r'^category/(?P<category_id>[0-9]+)(?:/(?P<slug>[\w-]*))?/files/?$',
+        'category_files', name='videos-category-files'),
 
     # speakers
     url(r'^speaker/$',
