@@ -91,7 +91,7 @@ class TestAPI(TestAPIBase):
         eq_(resp.status_code, 200)
         content = json.loads(resp.content)
         eq_(content['title'], vid.title)
-        eq_(content['slug'], vid.slug)
+        eq_(content['slug'], 'foo-bar')
         # This should be the category title--not api url
         eq_(content['category'], cat.title)
         # This should be the tag--not api url
@@ -194,6 +194,7 @@ class TestVideoPostAPI(TestAPIBase):
 
         vid = Video.objects.get(title=data['title'])
         eq_(vid.title, data['title'])
+        eq_(vid.slug, u'creating-delicious-apis-for-django-apps-since-201')
         eq_(list(vid.speakers.values_list('name', flat=True)), ['Guido'])
         eq_(sorted(vid.tags.values_list('tag', flat=True)),
             [u'api', u'django'])
