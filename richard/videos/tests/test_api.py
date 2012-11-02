@@ -79,7 +79,8 @@ class TestAPI(TestAPIBase):
 
     def test_get_video_data(self):
         cat = category(title=u'Foo Title', save=True)
-        vid = video(category=cat, state=Video.STATE_LIVE, save=True)
+        vid = video(title=u'Foo Bar', category=cat, state=Video.STATE_LIVE,
+                    save=True)
         t = tag(tag=u'tag', save=True)
         vid.tags = [t]
         s = speaker(name=u'Jim', save=True)
@@ -90,6 +91,7 @@ class TestAPI(TestAPIBase):
         eq_(resp.status_code, 200)
         content = json.loads(resp.content)
         eq_(content['title'], vid.title)
+        eq_(content['slug'], vid.slug)
         # This should be the category title--not api url
         eq_(content['category'], cat.title)
         # This should be the tag--not api url

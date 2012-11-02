@@ -14,22 +14,16 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.template.defaultfilters import slugify
+from django.test import TestCase
+from nose.tools import eq_
+
+from richard.videos.tests import video
 
 
-def generate_unique_slug(obj, slug_from, slug_field='slug'):
-    text = getattr(obj, slug_from)[:49]
-    root_text = text
-    for i in range(100):
-        slug = slugify(text)
-        try:
-            d = {slug_field: slug}
-            obj.__class__.objects.get(**d)
-        except obj.__class__.DoesNotExist:
-            return slug
+class TestVideoModel(TestCase):
+    def test_slug_creation(self):
+        v = video(title=u'Foo Bar Baz', save=True)
+        eq_(v.slug, 'foo-bar-baz')
 
-        ending = u'-%s' % i
-        text = root_text + ending
-
-    raise ValueError('No valid slugs available.')
-
+        v = video(title=u'Foo Bar Baz', slug='baz', save=True)
+        eq_(v.slug, 'baz')
