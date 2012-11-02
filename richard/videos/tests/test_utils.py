@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # richard -- video index system
 # Copyright (C) 2012 richard contributors.  See AUTHORS.
 #
@@ -41,3 +42,8 @@ class TestGenerateUniqueSlug(TestCase):
         v2 = video(title=u'Foo')
         eq_(generate_unique_slug(v2, u'title', u'slug'),
             u'foo-4')
+
+    def test_unicode_title(self):
+        v = video(title=u'Nebenläufige Programme mit Python')
+        eq_(generate_unique_slug(v, u'title', u'slug'),
+            u'nebenlaufige-programme-mit-python')
