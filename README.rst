@@ -30,7 +30,7 @@ Features richard currently has:
 * HTML5 video and embedded video support
 * site search backed by django-haystack
 * API: HTTP GET access for everyone and HTTP PUT/DELETE for admin
-* decent documentation at http://richard.readthedocs.org/
+* decent documentation at http://richard.rtfd.org/
 
 We're actively working on fixing bugs, adding new features,
 refactoring bad design decisions, making it more flexible, and
@@ -70,10 +70,20 @@ Documentation:
     Documentation is in the ``docs/`` directory including docs for
     installing, upgrading, deploying, contributing, ...
 
-    Most recent docs are at: http://richard.readthedocs.org/
+    Most recent docs are at: http://richard.rtfd.org/
 
 IRC channel:
     ``#richard`` on ``irc.freenode.net``
+
+
+Who's using richard?
+====================
+
+Known sites using richard:
+
+* http://pyvideo.org/
+
+If you're using richard and want to be added to this site, let us know!
 
 
 Want to help?
@@ -84,7 +94,7 @@ you in the future? Does it sound like something you want to be
 involved in?
 
 I'd love to have help! We have a special `Contributor's Guide
-<http://richard.readthedocs.org/en/latest/contributors/dev_contribute.html>`_
+<http://richard.rtfd.org/en/latest/contributors/dev_contribute.html>`_
 in the richard manual that covers how to get richard set up for
 hacking on it, the kinds of things we need help on, and all the sorts
 of things you'd want to know about the project.
@@ -93,4 +103,4 @@ of things you'd want to know about the project.
 Install, Upgrade, Configuration
 ===============================
 
-See the `richard documentation <http://richard.readthedocs.org/>`_.
+See the `richard documentation <http://richard.rtfd.org/>`_.
