@@ -144,7 +144,21 @@ class VideoResource(EnhancedModelResource):
 
     def hydrate(self, bundle):
         """Hydrate converts the json to an object."""
+
+        # TODO: This is a little goofy since we're technically doing a
+        # lot of data checking here in hydrate rather than where
+        # tastypie wants us to do data checking. I can't remember
+        # offhand why I did it this way, but I think it was either
+        # easier or the data checking required data lookups anyhow, so
+        # I figured I'd do it here rather than fetch data twice.
+
         errors = {}
+
+        # # Check title
+        title = bundle.data.get('title')
+        if not title:
+            errors['title'] = 'You must pass in a title.'
+            return self.raise_bad_request(bundle, errors)
 
         # Check slug
         slug = bundle.data.get('slug')
@@ -167,6 +181,9 @@ class VideoResource(EnhancedModelResource):
                     except Video.DoesNotExist:
                         errors['slug'] = ('Video with id %d does not have '
                                           'slug %s.' % (id_, slug))
+
+            if errors:
+                return self.raise_bad_request(bundle, errors)
 
         # Check state
         state = bundle.data.get('state')
