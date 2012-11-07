@@ -236,7 +236,7 @@ class Video(models.Model):
                                     self.category)
 
     def save(self, *args, **kwargs):
-        if not self.slug:
+        if self.title and not self.slug:
             self.slug = generate_unique_slug(self, u'title', u'slug')
         super(Video, self).save(*args, **kwargs)
 
