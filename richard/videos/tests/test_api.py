@@ -106,7 +106,7 @@ class TestAPI(TestAPIBase):
         resp = self.client.get('/api/v1/category/%d/' % cat.pk,
                                {'format': 'json'})
         eq_(resp.status_code, 200)
-        eq_(json.loads(resp.content)['name'], cat.name)
+        eq_(json.loads(resp.content)['title'], cat.title)
 
     def test_only_live_videos_for_anonymous_users(self):
         """Test that not authenticated users can't see draft videos."""

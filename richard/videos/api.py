@@ -29,8 +29,7 @@ from tastypie.resources import ModelResource
 from tastypie.serializers import Serializer
 from tastypie.utils.mime import build_content_type
 
-from richard.videos.models import (Video, Speaker, Category, Tag, Language,
-                                   CategoryKind)
+from richard.videos.models import Video, Speaker, Category, Tag, Language
 
 
 class AdminAuthorization(Authorization):
@@ -321,16 +320,6 @@ class CategoryResource(EnhancedModelResource):
 
     def hydrate(self, bundle):
         errors = {}
-
-        if 'kind' not in bundle.data:
-            errors['kind'] = 'kind is a required field.'
-        else:
-            try:
-                bundle.obj.kind = CategoryKind.objects.get(
-                    pk=bundle.data['kind'])
-            except CategoryKind.DoesNotExist:
-                    errors['kind'] = ('"%s" is not a valid category kind.' %
-                                      bundle.data['kind'])
 
         if 'slug' in bundle.data:
             slug = bundle.data['slug']

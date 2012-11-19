@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 from django.utils.translation import ugettext_lazy as _
 
-from richard.videos.models import (Video, Category, Speaker, CategoryKind, Tag,
+from richard.videos.models import (Video, Category, Speaker, Tag,
                                    Language, RelatedUrl)
 
 
@@ -38,13 +38,6 @@ class WhiteboardFilter(SimpleListFilter):
             return queryset.filter(whiteboard__exact='')
         if self.value() == '1':
             return queryset.exclude(whiteboard__exact='')
-
-
-class CategoryKindAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-
-
-admin.site.register(CategoryKind, CategoryKindAdmin)
 
 
 def make_live(modeladmin, request, queryset):

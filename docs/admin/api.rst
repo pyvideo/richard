@@ -144,10 +144,6 @@ existing ones:
 
       "category": "PyCon 2012"
 
-  .. Note::
-
-     This is the category *title* not the category *name*.
-
 * **state**
 
   Required.

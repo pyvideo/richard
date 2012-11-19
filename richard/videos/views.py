@@ -29,11 +29,11 @@ from richard.videos import models
 
 
 def category_list(request):
-    category_kinds = models.CategoryKind.objects.all()
+    category = models.Category.objects.order_by('title')
 
     ret = render(
         request, 'videos/category_list.html',
-        {'kinds': category_kinds})
+        {'categories': category})
     return ret
 
 

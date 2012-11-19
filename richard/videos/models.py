@@ -33,26 +33,7 @@ MIMETYPES_MAP = {
 USE_HTML_HELP_TEXT = _(u'Use HTML. p, ul, ol, li, ...')
 
 
-class CategoryKind(models.Model):
-    name = models.CharField(max_length=40)
-
-    class Meta(object):
-        verbose_name = _(u'category kind')
-        verbose_name_plural = _(u'category kinds')
-
-    def __unicode__(self):
-        return self.name
-
-    def __repr__(self):
-        return '<CategoryKind %s>' % self.name.encode('ascii', 'ignore')
-
-
 class Category(models.Model):
-    kind = models.ForeignKey(CategoryKind)
-
-    name = models.CharField(
-        max_length=255,
-        help_text=_(u'The name of the category. e.g. PyCon'))
     title = models.CharField(
         max_length=255,
         help_text=_(u'The complete title for the category. e.g. '
@@ -88,7 +69,7 @@ class Category(models.Model):
         super(Category, self).save(*args, **kwargs)
 
     class Meta(object):
-        ordering = ["name", "title"]
+        ordering = ["title"]
         verbose_name = _(u'category')
         verbose_name_plural = _(u'categories')
 

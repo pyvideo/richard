@@ -18,19 +18,9 @@ import uuid
 
 from django.template.defaultfilters import slugify
 
-from richard.videos.models import (CategoryKind, Category, Speaker, Tag,
-                                   Video, RelatedUrl, Language)
+from richard.videos.models import (Category, Speaker, Tag, Video, RelatedUrl,
+                                   Language)
 from richard.tests.utils import with_save
-
-
-@with_save
-def category_kind(**kwargs):
-    defaults = {
-        'name': 'foo'
-        }
-    defaults.update(kwargs)
-
-    return CategoryKind(**defaults)
 
 
 @with_save
@@ -38,16 +28,10 @@ def category(**kwargs):
     defaults = {}
     defaults.update(kwargs)
 
-    if 'name' not in defaults:
-        defaults['name'] = str(uuid.uuid4())
     if 'title' not in defaults:
-        defaults['title'] = defaults['name'] + u' 2012'
+        defaults['title'] = str(uuid.uuid4()) + u' 2012'
     if 'slug' not in defaults:
-        defaults['slug'] = slugify(defaults['name'])
-    if 'kind' not in defaults:
-        ck = category_kind()
-        ck.save()
-        defaults['kind'] = ck
+        defaults['slug'] = slugify(defaults['title'])
 
     return Category(**defaults)
 

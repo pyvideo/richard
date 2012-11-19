@@ -23,32 +23,24 @@
   <h1>Categories</h1>
 </div>
 
-{% for kind in kinds %}
+{% for cat in categories %}
   <div class="row-fluid">
-    <div class="span12">
-      <h2>{{ kind.name }}</h2>
+    <div class="span9 section">
+      <h3>
+        <a href="{{ cat.get_absolute_url() }}">{{ cat.title }}</a>
+        <small><a class="feed" href="{{ url('videos-category-feed', category_id=cat.pk, slug=cat.slug) }}"> feed</a></small>
+      </h3>
+      <div>
+        {{ cat.description|safe }}
+      </div>
+    </div>
+
+    <div class="span3">
+      {% if cat.start_date %}
+        Date: {{ cat.start_date }}<br>
+      {% endif %}
+      Videos: {{ cat.video_set.live().count() }}
     </div>
   </div>
-
-  {% for cat in kind.category_set.all() %}
-    <div class="row-fluid">
-      <div class="span9 section">
-        <h3>
-          <a href="{{ cat.get_absolute_url() }}">{{ cat.title }}</a>
-          <small><a class="feed" href="{{ url('videos-category-feed', category_id=cat.pk, slug=cat.slug) }}"> feed</a></small>
-        </h3>
-        <div>
-          {{ cat.description|safe }}
-        </div>
-      </div>
-
-      <div class="span3">
-        {% if cat.start_date %}
-          Date: {{ cat.start_date }}<br>
-        {% endif %}
-        Videos: {{ cat.video_set.live().count() }}
-      </div>
-    </div>
-  {% endfor %}
 {% endfor %}
 {% endblock %}
