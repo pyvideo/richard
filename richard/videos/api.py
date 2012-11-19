@@ -200,7 +200,7 @@ class VideoResource(EnhancedModelResource):
         else:
             bundle.data['state'] = 1
 
-        # Incoming tags can either be an API url or a tag name.
+        # Incoming tags must be a list of Tag.tag strings.
         tags = bundle.data.get('tags', [])
         tag_objs = []
         if tags:
@@ -212,9 +212,9 @@ class VideoResource(EnhancedModelResource):
                 else:
                     tag = Tag.objects.get_or_create(tag=tag)[0]
                     tag_objs.append(tag)
+        bundle.data['tag_objs'] = tag_objs
 
-        # Incoming speakers can either be an API url or a speaker
-        # name.
+        # Incoming speakers must be a list of Speaker.name strings.
         speakers = bundle.data.get('speakers', [])
         speaker_objs = []
         if speakers:
@@ -226,11 +226,12 @@ class VideoResource(EnhancedModelResource):
                 else:
                     speaker = Speaker.objects.get_or_create(name=speaker)[0]
                     speaker_objs.append(speaker)
+        bundle.data['speaker_objs'] = speaker_objs
 
         # Incoming category can be either an API url or a category
         # title (not a name!).
         cat = bundle.data.get('category', None)
-        if cat is not None:
+        if cat:
             try:
                 if isinstance(cat, Category):
                     pass
@@ -277,12 +278,13 @@ class VideoResource(EnhancedModelResource):
 
         if errors:
             bundle.errors = errors
-        else:
-            bundle.obj.save()
-            bundle.obj.tags = tag_objs
-            bundle.obj.speakers = speaker_objs
 
         return bundle
+
+    def save_m2m(self, bundle):
+        super(VideoResource, self).save_m2m(bundle)
+        bundle.obj.tags = bundle.data['tag_objs']
+        bundle.obj.speakers = bundle.data['speaker_objs']
 
     def dehydrate(self, bundle):
         """Dehydrate converts the object to json."""
