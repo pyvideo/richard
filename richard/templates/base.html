@@ -19,11 +19,9 @@
 <html>
 <head>
   <link rel="stylesheet" href="{{ settings.STATIC_URL }}bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="{{ settings.STATIC_URL }}bootstrap/css/bootstrap-responsive.min.css">
   <link rel="stylesheet" href="{{ settings.STATIC_URL }}css/richard.css">
   <link rel="search" type="application/opensearchdescription+xml" title="{{ settings.SITE_TITLE }} search" href="{{ url('videos-opensearch') }}">
   <title>{% block title %}{{ page_title() }}{% endblock %}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 {% if meta %}
   {% for meta_name, meta_content in meta %}
     <meta name="{{ meta_name }}" content="{{ meta_content }}">
@@ -65,7 +63,7 @@
 
   <div id="content" class="container">
   {% if notifications -%}
-    <div class="row-fluid">
+    <div class="row">
       <div class="span12">
     {% for n in notifications -%}
       <div class="alert alert-info">

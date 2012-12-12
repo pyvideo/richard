@@ -29,7 +29,7 @@
   <h1>Search</h1>
 </div>
 
-<div class="row-fluid">
+<div class="row">
   <div class="span12">
     <form class="well form-search" method="get" action="/search/">
       <input type="hidden" name="models" value="videos.video">
@@ -40,7 +40,7 @@
 </div>
 
 {% if query %}
-<div class="row-fluid">
+<div class="row">
   <div class="span12">
     <h2>Results</h2>
   </div>
@@ -48,7 +48,7 @@
   {% for result in page.object_list %}
     {{ macros.video_summary(result.object) }}
   {% else %}
-    <div class="row-fluid">
+    <div class="row">
       <div class="span12">
         <div class="section">
           No results
@@ -58,7 +58,7 @@
   {% endfor %}
 
   {% if page.has_previous() or page.has_next() %}
-<div class="row-fluid">
+<div class="row">
 	<div class="span12 centered">
 		<div class="pager">
 			<ul>

@@ -18,7 +18,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="row-fluid">
+<div class="row">
   <div class="span12">
     <div class="hero-unit">
       <h1>{{ settings.SITE_TITLE }}</h1>
@@ -29,8 +29,9 @@
       <p>
         <a class="btn btn-primary btn-large" href="{{ url('pages-page', page='about') }}">Learn more</a>
       </p>
+    </div>
 
-      <div class="row-fluid section">
+    <div class="row section">
         <div class="span6">
           <h2>Latest categories</h2>
 
@@ -67,14 +68,13 @@
           {% endif %}
         </div>
 
-      <div>
     </div>
   </div>
 </div>
 
 
 {% if news %}
-  <div class="row-fluid section">
+  <div class="row section">
     <div class="span12">
       <h2>Site news
         <small><a class="feed" href="{{ url('sitenews-feed') }}"> feed</a></small>

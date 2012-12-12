@@ -174,7 +174,7 @@ you so desire. To add a page:
          <h1>Contact information</h1>
        </div>
 
-       <div class="row-fluid">
+       <div class="row">
          <div class="span12">
            <p>
              If you have problems with this site, send email to
