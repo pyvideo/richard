@@ -26,70 +26,92 @@
   <h1>{{ video_count }} video{{ 's' if video_count != 0 }} indexed</h2>
 </div>
 
-<div class="row">
-  <div class="span4">
-    <div class="well">
-      <p class="stats-number">
-        <strong>{{ category_count }}</strong>
-        <em>categor{{ 'y' if category_count == 1 else 'ies' }}</em>
-      </p>
+<div class="section">
+  <div class="row">
+    <div class="span3">
+      <div class="well">
+        <p class="stats-number">
+          <strong>{{ category_count }}</strong>
+          <em>categor{{ 'y' if category_count == 1 else 'ies' }}</em>
+        </p>
+      </div>
+    </div>
+    <div class="span9">
       <ul>
-      {% for cat in category_top5 %}
+        {% for cat in category_top5 %}
         <li>
           <a href="{{ cat.get_absolute_url() }}">{{ cat }}</a>
           (<strong>{{ cat.count }}&nbsp;videos</strong>)
         </li>
-      {% endfor %}
-      </ul>
-      <a href="{{ url('videos-category-list') }}">All categories</a>
-    </div>
-  </div>
-
-  <div class="span4">
-    <div class="well">
-      <p class="stats-number">
-        <strong>{{ speaker_count }}</strong>
-        <em>speaker{{ 's' if speaker_count != 1 }}</em>
-      </p>
-      <ul>
-      {% for s in speaker_top5 %}
-        <li>
-          <a href="{{ s.get_absolute_url() }}">{{ s }}</a>
-          (<strong>{{ s.count }}&nbsp;videos</strong>)
-        </li>
-      {% endfor %}
-      </ul>
-      <a href="{{ url('videos-speaker-list') }}">All speakers</a>
-    </div>
-  </div>
-
-  <div class="span4">
-    <div class="well">
-      <p class="stats-number">
-        <strong>{{ tag_count }}</strong>
-        <em>tag{{ 's' if tag_count != 1 }}</em>
-      </p>
-      <ul>
-      {% for tag in tag_top5 %}
-        <li>
-          {{ tag }}
-          (<strong>{{ tag.count }}&nbsp;videos</strong>)
-        </li>
-      {% endfor %}
+        {% endfor %}
+        <li><a href="{{ url('videos-category-list') }}">See all
+        categories...</a></li>
       </ul>
     </div>
   </div>
 </div>
 
-<div class="row">
-  <div class="span4">
-    <div class="well">
-      <p class="stats-number">
-        <strong>{{ suggestions|length }}</strong>
-        <em>open suggestion{{ 's' if suggestions|length != 1 }}</em>
-      </p>
+<div class="section">
+  <div class="row">
+    <div class="span3">
+      <div class="well">
+        <p class="stats-number">
+          <strong>{{ speaker_count }}</strong>
+          <em>speaker{{ 's' if speaker_count != 1 }}</em>
+        </p>
+      </div>
+    </div>
+    <div class="span9">
       <ul>
-      {% for s in suggestions %}
+        {% for s in speaker_top5 %}
+        <li>
+          <a href="{{ s.get_absolute_url() }}">{{ s }}</a>
+          (<strong>{{ s.count }}&nbsp;videos</strong>)
+        </li>
+        {% endfor %}
+        <li><a href="{{ url('videos-speaker-list') }}">See all
+        speakers...</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="row">
+    <div class="span3">
+      <div class="well">
+        <p class="stats-number">
+          <strong>{{ tag_count }}</strong>
+          <em>tag{{ 's' if tag_count != 1 }}</em>
+        </p>
+      </div>
+    </div>
+    <div class="span9">
+      <ul>
+        {% for tag in tag_top5 %}
+        <li>
+          {{ tag }}
+          (<strong>{{ tag.count }}&nbsp;videos</strong>)
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="row">
+    <div class="span3">
+      <div class="well">
+        <p class="stats-number">
+          <strong>{{ suggestions|length }}</strong>
+          <em>open suggestion{{ 's' if suggestions|length != 1 }}</em>
+        </p>
+      </div>
+    </div>
+    <div class="span9">
+      <ul>
+        {% for s in suggestions %}
         <li>
           {{ s }}
           {% if s.state == 0 %}
@@ -98,9 +120,10 @@
             (<strong>In progress</strong>)
           {% endif %}
         </li>
-      {% endfor %}
+        {% endfor %}
+        <li><a href="{{ url('suggestions-list') }}">See all
+        suggestions...</a></li>
       </ul>
-      <a href="{{ url('suggestions-list') }}">All suggestions</a>
     </div>
   </div>
 </div>
