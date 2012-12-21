@@ -154,8 +154,7 @@ class Video(models.Model):
     speakers = models.ManyToManyField(Speaker, blank=True)
 
     # notes for quality issues (audio or video) in the video
-    quality_notes = models.TextField(blank=True, default=u'',
-                                     help_text=USE_HTML_HELP_TEXT)
+    quality_notes = models.TextField(blank=True, default=u'')
 
     # the primary language the video is in
     language = models.ForeignKey(Language, null=True)
