@@ -171,6 +171,14 @@ Here are additional configuration settings:
     Set this to a list of spam words in order to automatically check
     newly submitted suggestion for spam and mark the items as such.
 
+    .. Note::
+
+       You only have to specify the word once in lowercase. You don't
+       need differently cased versions.
+
+       e.g. "viagra" is fine. You don't need "viagra", "Viagra",
+       "VIAGRA", etc.
+
 
 ``VIDEO_THUMBNAIL_SIZE``
 
