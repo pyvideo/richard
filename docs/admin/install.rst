@@ -166,6 +166,11 @@ Here are additional configuration settings:
     don't know whether it was the software or the service. So it's
     either called Amara or Universal Subtitles.
 
+``SPAM_WORDS``
+
+    Set this to a list of spam words in order to automatically check
+    newly submitted suggestion for spam and mark the items as such.
+
 
 ``VIDEO_THUMBNAIL_SIZE``
 

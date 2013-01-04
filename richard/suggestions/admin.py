@@ -19,13 +19,19 @@ from django.contrib import admin
 from richard.suggestions.models import Suggestion
 
 
+def mark_as_spam(modeladmin, request, queryset):
+    queryset.update(state=Suggestion.STATE_SPAM,
+                    is_reviewed=True)
+
+
 class SuggestionAdmin(admin.ModelAdmin):
     date_hierarchy = 'submitted'
-    list_display = ('state', 'name', 'url', 'submitted', 'resolved',)
-    list_filter = ('state',)
+    list_display = ('state', 'is_reviewed', 'name', 'url', 'submitted', 'resolved',)
+    list_filter = ('state', 'is_reviewed',)
     search_fields = ('name', 'url',)
     radio_fields = {'state': admin.HORIZONTAL}
     exclude = ('resolved',)
+    actions = [mark_as_spam]
 
 
 admin.site.register(Suggestion, SuggestionAdmin)
