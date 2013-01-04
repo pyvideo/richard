@@ -18,6 +18,7 @@ from django.shortcuts import render, redirect
 
 from richard.suggestions.forms import SuggestionForm
 from richard.suggestions.models import Suggestion
+from richard.suggestions.utils import mark_if_spam
 
 
 def suggestions(request):
@@ -25,15 +26,18 @@ def suggestions(request):
     if request.method == 'POST':
         form = SuggestionForm(request.POST)
         if form.is_valid():
-            form.save()
+            obj = form.save()
+            mark_if_spam(obj)
             return redirect('suggestions-list')
     else:
         form = SuggestionForm()
 
     open_objs = Suggestion.objects.filter(
-        state__in=Suggestion.OPEN_STATES)
+        state__in=Suggestion.OPEN_STATES,
+        is_reviewed=True)
     resolved_objs = Suggestion.objects.filter(
-        state__in=Suggestion.RESOLVED_STATES)
+        state__in=Suggestion.RESOLVED_STATES,
+        is_reviewed=True)
 
     ret = render(
         request, 'suggestions/suggestions_list.html',

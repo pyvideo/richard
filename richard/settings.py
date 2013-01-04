@@ -262,12 +262,15 @@ LOGGING = {
     }
 }
 
+# Modify this list to prevent spam messages in public suggestions
+SPAM_WORDS = []
+
 try:
-    from richard.settings_local import *    
+    from richard.settings_local import *
 except ImportError:
     pass
 
-import sys
+
 if 'test' in sys.argv:
     try:
         from richard.settings_test import *

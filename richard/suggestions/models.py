@@ -61,6 +61,7 @@ class Suggestion(models.Model):
 
     submitted = models.DateTimeField(auto_now_add=True)
     resolved = models.DateTimeField(blank=True, null=True)
+    is_reviewed = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.name

@@ -26,10 +26,22 @@ from richard.suggestions.tests import suggestion
 class TestSuggestions(TestCase):
     """Tests for the ``suggestions`` app."""
 
-    def test_list(self):
+    def test_not_reviewed_list(self):
         """Test the view of the listing of all suggestions."""
         url = reverse('suggestions-list')
         s = suggestion(save=True)
+
+        resp = self.client.get(url)
+        eq_(resp.status_code, 200)
+        self.assertTemplateUsed(resp, 'suggestions/suggestions_list.html')
+        assert s.name not in resp.content
+
+    def test_reviewed_list(self):
+        """Test the view of the listing of all suggestions."""
+        url = reverse('suggestions-list')
+        s = suggestion(save=True)
+        s.is_reviewed = True
+        s.save()
 
         resp = self.client.get(url)
         eq_(resp.status_code, 200)
