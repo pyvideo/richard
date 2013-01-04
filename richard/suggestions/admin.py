@@ -24,6 +24,10 @@ def mark_as_spam(modeladmin, request, queryset):
                     is_reviewed=True)
 
 
+def mark_as_reviewed(modeladmin, request, queryset):
+    queryset.update(is_reviewed=True)
+
+
 class SuggestionAdmin(admin.ModelAdmin):
     date_hierarchy = 'submitted'
     list_display = ('state', 'is_reviewed', 'name', 'url', 'submitted', 'resolved',)
@@ -31,7 +35,7 @@ class SuggestionAdmin(admin.ModelAdmin):
     search_fields = ('name', 'url',)
     radio_fields = {'state': admin.HORIZONTAL}
     exclude = ('resolved',)
-    actions = [mark_as_spam]
+    actions = [mark_as_spam, mark_as_reviewed]
 
 
 admin.site.register(Suggestion, SuggestionAdmin)
