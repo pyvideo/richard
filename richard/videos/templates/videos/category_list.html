@@ -24,23 +24,37 @@
 </div>
 
 {% for cat in categories %}
+<div class="section">
   <div class="row">
-    <div class="span9 section">
+    <div class="span10">
       <h3>
         <a href="{{ cat.get_absolute_url() }}">{{ cat.title }}</a>
         <small><a class="feed" href="{{ url('videos-category-feed', category_id=cat.pk, slug=cat.slug) }}"> feed</a></small>
       </h3>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="span9">
       <div>
-        {{ cat.description|safe }}
+        <strong>Description:</strong>
+        {% if cat.description %}
+          {{ cat.description|safe }}
+        {% else %}
+          No description.
+        {% endif %}
       </div>
     </div>
 
     <div class="span3">
-      {% if cat.start_date %}
-        Date: {{ cat.start_date }}<br>
-      {% endif %}
-      Videos: {{ cat.video_set.live().count() }}
+      <div class="well">
+        {% if cat.start_date %}
+          <strong>Date:</strong> {{ cat.start_date|datetime }}<br>
+        {% endif %}
+        <strong>Videos:</strong> {{ cat.video_set.live().count() }}
+      </div>
     </div>
   </div>
+</div>
 {% endfor %}
 {% endblock %}
