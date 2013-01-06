@@ -34,14 +34,25 @@
     </div>
   </div>
 </div>
+
 <div class="row">
-  <div class="span12">
-    <ul>
-      {% for s in speakers %}
-        <li><a href="{{ s.get_absolute_url() }}">{{ s.name }}</a>
-          ({{ s.video_count }})</li>
+  <div class="span12 section">
+    <table class="table">
+      {% for row in speakers|batch(4, '&nbsp;') %}
+        <tr>
+          {% for s in row %}
+            <td>
+              {% if s != '&nbsp;' %}
+                <a href="{{ s.get_absolute_url() }}">{{ s.name }}</a>
+                ({{ s.video_count }})
+              {% else %}
+                {{ s|safe }}
+              {% endif %}
+            </td>
+          {% endfor %}
+        </tr>
       {% endfor %}
-    </ul>
+    </table>
   </div>
 </div>
 {% endblock %}
