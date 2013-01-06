@@ -47,11 +47,16 @@
   <div class="span12">
     {% if category.url %}
     <p>
-      <a href="{{ category.url }}">{{ category.url }}</a>
+      <strong>URL:</strong> <a href="{{ category.url }}">{{ category.url }}</a>
     </p>
     {% endif %}
     <p>
-      {{ category.description|safe }}
+      <strong>Description:</strong>
+      {% if category.description %}
+        {{ category.description|safe }}
+      {% else %}
+        No description.
+      {% endif %}
     </p>
   </div>
 </div>
