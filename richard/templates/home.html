@@ -32,68 +32,61 @@
     </div>
 
     <div class="row section">
-        <div class="span6">
-          <h2>Latest categories</h2>
+      <div class="span6">
+        <h3>Latest categories</h3>
 
-          {% if latest_categories %}
-            <ul>
-              {% for cat in latest_categories %}
-                <li>
-                  <a href="{{ cat.get_absolute_url() }}">{{ cat.title }}</a>
-                  ({{ cat.video_set.live().count() }})
-                </li>
-              {% endfor %}
-            </ul>
-          {% endif %}
+        {% if latest_categories %}
+          <ul>
+            {% for cat in latest_categories %}
+              <li>
+                <a href="{{ cat.get_absolute_url() }}">{{ cat.title }}</a>
+                ({{ cat.video_set.live().count() }})
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
 
-          <p>
-            <a href="{{ url('videos-category-list') }}">See all categories...</a>
-          </p>
-        </div>
+        <p>
+          <a href="{{ url('videos-category-list') }}">See all categories...</a>
+        </p>
+      </div>
 
-        <div class="span6">
-          <h2>Latest videos
-            <small><a class="feed" href="{{ url('videos-new-feed') }}"> feed</a></small>
-          </h2>
+      <div class="span6">
+        <h3>Latest videos
+          <small><a class="feed" href="{{ url('videos-new-feed') }}"> feed</a></small>
+        </h3>
 
-          {% if latest_videos %}
-            <ul>
-              {% for video in latest_videos %}
-                <li>
-                  ({{ video.category }})
-                  <a href="{{ video.get_absolute_url() }}">{{ video.title }}</a>
-                </li>
-              {% endfor %}
-            </ul>
-          {% endif %}
-        </div>
+        {% if latest_videos %}
+          <ul>
+            {% for video in latest_videos %}
+              <li>
+                ({{ video.category }})
+                <a href="{{ video.get_absolute_url() }}">{{ video.title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
 
     </div>
   </div>
 </div>
 
-
 {% if news %}
   <div class="row section">
     <div class="span12">
-      <h2>Site news
+      <h3>Site news
         <small><a class="feed" href="{{ url('sitenews-feed') }}"> feed</a></small>
-      </h2>
+      </h3>
 
-      {% for item in news %}
-        <div class="news-item">
-          <div>
-            <h3><a href="{{ item.get_absolute_url() }}">{{ item.title|safe }}</a></h3>
-          </div>
-          <div>
-            {{ item.summary|safe }}
-          </div>
-          <div>
-            Updated: {{ item.updated|datetime }} |
-            <a href="{{ item.get_absolute_url() }}">Permalink</a>
-          </div>
-        </div>
-      {% endfor %}
+      <ul>
+        {% for item in news %}
+          <li>
+            <a href="{{ item.get_absolute_url() }}">{{ item.title|safe }}</a>
+            - {{ item.updated|datetime }}
+          </li>
+        {% endfor %}
+      </ul>
 
       <p>
         <a href="{{ url('sitenews-list') }}">See all site news...</a>
