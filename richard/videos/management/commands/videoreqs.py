@@ -27,15 +27,15 @@ class Command(BaseCommand):
     help = 'Generates a JSON file with requirements for video'
 
     def handle(self, *args, **options):
-        verbose = int(options.get('verbosity'))
-
         # Generate the basic stuff
-        fields = {}
+        fields = []
         for field in Video._meta.fields:
-            if field.name == 'id':
+            # Skip some things that shouldn't be in an API push
+            if field.name in ['id', 'updated']:
                 continue
 
-            fields[field.name] = {
+            data = {
+                'name': field.name,
                 'type': field.get_internal_type(),
                 'null': field.null,
                 'empty_strings': field.empty_strings_allowed,
@@ -43,40 +43,43 @@ class Command(BaseCommand):
                 'html': 'html' in field.help_text.lower()
                 }
 
-        # Remove the icky things
-        for key in ['id', 'updated']:
-            if key in fields:
-                del fields[key]
+            if field.name == 'category':
+                data.update({
+                        'type': 'TextField',
+                        'empty_strings': False,
+                        'null': False,
+                        'choices': [],
+                        'html': False
+                        })
+            elif field.name == 'language':
+                data.update({
+                        'type': 'TextField',
+                        'empty_strings': False,
+                        'null': False,
+                        'choices': [],
+                        'html': False
+                        })
 
-        # Fix the things that are slightly different in the API
-        fields['category'] = {
-            'type': 'TextField',
-            'empty_strings': False,
-            'null': False,
-            'choices': [],
-            'html': False
-            }
-        fields['language'] = {
-            'type': 'TextField',
-            'empty_strings': False,
-            'null': False,
-            'choices': [],
-            'html': False
-            }
-        fields['tags'] = {
-            'type': 'TextArrayField',
-            'empty_strings': False,
-            'null': False,
-            'choices': [],
-            'html': False
-            }
-        fields['speakers'] = {
-            'type': 'TextArrayField',
-            'empty_strings': False,
-            'null': False,
-            'choices': [],
-            'html': False
-            }
+            fields.append(data)
+
+        # Add tags and speakers which are M2M, but we do them funkily
+        # in the API.
+        fields.append({
+                'name': 'tags',
+                'type': 'TextArrayField',
+                'empty_strings': False,
+                'null': False,
+                'choices': [],
+                'html': False
+                })
+        fields.append({
+                'name': 'speakers',
+                'type': 'TextArrayField',
+                'empty_strings': False,
+                'null': False,
+                'choices': [],
+                'html': False
+                })
 
         f = open('video_reqs.json', 'w')
         f.write(json.dumps(fields, indent=2))
