@@ -47,7 +47,7 @@
     {% if v.summary %}
       <div class="section">
         <h4>Summary</h4>
-        {{ v.summary|safe }}
+        {{ v.summary|md }}
       </div>
     {% endif %}
 
@@ -67,7 +67,7 @@
     {% if v.description %}
       <div class="section">
         <h4>Description</h4>
-        {{ v.description|safe }}
+        {{ v.description|md }}
       </div>
     {% endif %}
   </div>

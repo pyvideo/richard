@@ -20,7 +20,6 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-
 from richard.videos.utils import generate_unique_slug
 
 
@@ -30,7 +29,7 @@ MIMETYPES_MAP = {
     'webm': 'video/webm',
     'flv': 'video/x-flv'
 }
-USE_HTML_HELP_TEXT = _(u'Use HTML. p, ul, ol, li, ...')
+USE_MARKDOWN_HELP_TEXT = _(u'Use Markdown')
 
 
 class Category(models.Model):
@@ -40,7 +39,7 @@ class Category(models.Model):
         'PyCon 2010'))
     description = models.TextField(
         blank=True, default=u'',
-        help_text=USE_HTML_HELP_TEXT)
+        help_text=USE_MARKDOWN_HELP_TEXT)
     url = models.URLField(
         blank=True, default=u'',
         help_text=_(u'URL for the category. e.g. If this category was a '
@@ -146,9 +145,9 @@ class Video(models.Model):
 
     title = models.CharField(max_length=255)
     summary = models.TextField(blank=True, default=u'',
-                               help_text=USE_HTML_HELP_TEXT)
+                               help_text=USE_MARKDOWN_HELP_TEXT)
     description = models.TextField(blank=True, default=u'',
-                                   help_text=USE_HTML_HELP_TEXT)
+                                   help_text=USE_MARKDOWN_HELP_TEXT)
     tags = models.ManyToManyField(Tag, blank=True)
     category = models.ForeignKey(Category)
     speakers = models.ManyToManyField(Speaker, blank=True)

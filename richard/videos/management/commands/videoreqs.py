@@ -39,8 +39,7 @@ class Command(BaseCommand):
                 'has_default': field.default is not fields.NOT_PROVIDED,
                 'null': field.null,
                 'empty_strings': field.empty_strings_allowed,
-                'choices': [mem[0] for mem in field.choices],
-                'html': 'html' in field.help_text.lower()
+                'choices': [mem[0] for mem in field.choices]
                 }
 
             if field.name == 'category':
@@ -49,8 +48,7 @@ class Command(BaseCommand):
                         'empty_strings': False,
                         'null': False,
                         'has_default': False,
-                        'choices': [],
-                        'html': False
+                        'choices': []
                         })
             elif field.name == 'language':
                 data.update({
@@ -58,8 +56,7 @@ class Command(BaseCommand):
                         'empty_strings': False,
                         'null': False,
                         'has_default': False,
-                        'choices': [],
-                        'html': False
+                        'choices': []
                         })
 
             reqs.append(data)
@@ -72,8 +69,7 @@ class Command(BaseCommand):
                 'empty_strings': False,
                 'null': True,
                 'has_default': False,
-                'choices': [],
-                'html': False
+                'choices': []
                 })
         reqs.append({
                 'name': 'speakers',
@@ -81,8 +77,7 @@ class Command(BaseCommand):
                 'empty_strings': False,
                 'has_default': False,
                 'null': True,
-                'choices': [],
-                'html': False
+                'choices': []
                 })
 
         f = open('video_reqs.json', 'w')

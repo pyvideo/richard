@@ -68,7 +68,7 @@
     {% for n in notifications -%}
       <div class="alert alert-info">
         <i class="icon-info-sign"></i> <strong>{{ n.interjection }}</strong>
-        {{ n.text|safe }}
+        {{ n.text|md }}
       </div>
     {%- endfor %}
       </div>

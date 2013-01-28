@@ -48,7 +48,7 @@
           <div class="news-item">
             <h2><a href="{{ item.get_absolute_url() }}">{{ item.title }}</a></h2>
             <div class="summary">
-              {{ item.summary|safe }}
+              {{ item.summary|md }}
             </div>
             <div class="meta">
               Author: {{ item.author }} |

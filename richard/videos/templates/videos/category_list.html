@@ -39,7 +39,7 @@
       <div>
         <strong>Description:</strong>
         {% if cat.description %}
-          {{ cat.description|safe }}
+          {{ cat.description|md }}
         {% else %}
           No description.
         {% endif %}

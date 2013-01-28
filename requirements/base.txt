@@ -3,6 +3,7 @@ Jinja2
 whoosh
 bleach
 requests
+markdown
 south
 -e git://github.com/jbalogh/jingo.git#egg=jingo
 

@@ -163,22 +163,17 @@ existing ones:
 
       "title": "My dog has fleas"
 
-  .. Note::
-
-     Unlike summary and description, this is just a string and not in
-     HTML.
-
 * **summary** and **description**
 
-  The summary and description should be in valid HTML.
+  The summary and description should be in valid Markdown.
 
   Example::
 
-      "summary": "<p>This is a summary</p>"
+      "summary": "This is a summary"
 
   and::
 
-      "description": "<p>This is a description.</p>\n<p>La la la!</p>"
+      "description": "This is a description.\n\nLa la la!"
 
 * **tags**
 

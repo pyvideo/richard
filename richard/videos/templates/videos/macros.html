@@ -26,7 +26,7 @@
         <a href="{{ v.get_absolute_url() }}">{{ v.title }}</a>
       </div>
       <div>
-        {{ v.summary|safe }}
+        {{ v.summary|md }}
       </div>
     </div>
     <div class="span3">

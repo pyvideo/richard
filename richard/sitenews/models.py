@@ -27,8 +27,8 @@ class SiteNews(models.Model):
     in the same style.
     """
     title = models.CharField(max_length=50)
-    summary = models.TextField(help_text=_(u'Two sentences. Use HTML.'))
-    content = models.TextField(help_text=_(u'Use HTML.'))
+    summary = models.TextField(help_text=_(u'Two sentences. Use Markdown.'))
+    content = models.TextField(help_text=_(u'Use Markdown.'))
     # TODO: make this a django user instead?
     author = models.CharField(max_length=50)
 
@@ -67,7 +67,7 @@ class Notification(models.Model):
 
     text = models.CharField(
         max_length=200,
-        help_text=_(u'Use HTML. Keep the text short. Add a link to '
+        help_text=_(u'Use Markdown. Keep the text short. Add a link to '
         'sitenews for more information.'))
 
     start_date = models.DateTimeField()

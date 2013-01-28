@@ -34,10 +34,10 @@
         <div class="news-item">
           <h2>{{ item.title }}</h2>
           <div class="summary">
-            {{ item.summary|safe }}
+            {{ item.summary|md }}
           </div>
           <div class="content">
-            {{ item.content|safe }}
+            {{ item.content|md }}
           </div>
           <div class="meta">
             Author: {{ item.author }} |
