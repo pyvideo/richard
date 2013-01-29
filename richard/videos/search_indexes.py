@@ -42,5 +42,5 @@ class VideoIndex(indexes.SearchIndex, indexes.Indexable):
     def get_model(self):
         return Video
 
-    def index_queryset(self):
+    def index_queryset(self, **kwargs):
         return self.get_model().objects.all()
