@@ -39,7 +39,8 @@ urlpatterns = patterns(
 
     url(r'^$', 'richard.views.home', name='home'),
     url(r'^stats/$', 'richard.views.stats', name='stats'),
-    (r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
+    (r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap',
+     {'sitemaps': sitemaps}),
 
     url(r'^admin/', include(admin.site.urls)),
 
