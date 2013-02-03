@@ -268,6 +268,8 @@ LOGGING = {
     }
 }
 
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
 # Modify this list to prevent spam messages in public suggestions
 SPAM_WORDS = []
 

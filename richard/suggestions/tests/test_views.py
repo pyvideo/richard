@@ -28,32 +28,29 @@ class TestSuggestions(TestCase):
 
     def test_not_reviewed_list(self):
         """Test the view of the listing of all suggestions."""
-        url = reverse('suggestions-list')
         s = suggestion(save=True)
 
-        resp = self.client.get(url)
+        resp = self.client.get(reverse('suggestions-list'))
         eq_(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'suggestions/suggestions_list.html')
         assert s.name not in resp.content
 
     def test_reviewed_list(self):
         """Test the view of the listing of all suggestions."""
-        url = reverse('suggestions-list')
         s = suggestion(save=True)
         s.is_reviewed = True
         s.save()
 
-        resp = self.client.get(url)
+        resp = self.client.get(reverse('suggestions-list'))
         eq_(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'suggestions/suggestions_list.html')
         assert s.name in resp.content
 
     def test_list_without_spam(self):
         """Test that entries marked as spam do not show up."""
-        url = reverse('suggestions-list')
         s = suggestion(state=Suggestion.STATE_SPAM, save=True)
 
-        resp = self.client.get(url)
+        resp = self.client.get(reverse('suggestions-list'))
         eq_(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'suggestions/suggestions_list.html')
         assert s.name not in resp.content
@@ -62,8 +59,10 @@ class TestSuggestions(TestCase):
         """Test that submitting a suggestion works."""
         url = reverse('suggestions-list')
 
-        resp = self.client.post(url, {'name': u'Add boston user group',
-                                      'url': u'http://meetup.bostonpython.com/'},
-                                follow=True)
+        resp = self.client.post(
+            reverse('suggestions-list'),
+            {'name': u'Add boston user group',
+             'url': u'http://meetup.bostonpython.com/'},
+            follow=True)
         eq_(resp.status_code, 200)
         assert Suggestion.objects.filter(name=u'Add boston user group').exists()

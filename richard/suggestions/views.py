@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from django.contrib import messages
 from django.shortcuts import render, redirect
 
 from richard.suggestions.forms import SuggestionForm
@@ -28,6 +29,8 @@ def suggestions(request):
         if form.is_valid():
             obj = form.save()
             mark_if_spam(obj)
+            messages.add_message(request, messages.INFO,
+                                 'Suggestion submitted.')
             return redirect('suggestions-list')
     else:
         form = SuggestionForm()

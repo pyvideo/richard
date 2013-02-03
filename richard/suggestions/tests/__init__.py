@@ -18,14 +18,24 @@ from richard.tests.utils import with_save
 from richard.suggestions.models import Suggestion
 
 
+def _counter():
+    count = 0
+    while 1:
+        yield count
+        count += 1
+
+
+_count = _counter()
+
+
 @with_save
 def suggestion(**kwargs):
     defaults = {}
     defaults.update(kwargs)
 
     if 'name' not in defaults:
-        defaults['name'] = u'Add pycon conference 2042'
+        defaults['name'] = u'Add pycon conference ' + str(_count.next())
     if 'url' not in defaults:
-        defaults['url'] = u'https://us.pycon.org/2012/'
+        defaults['url'] = u'https://us.pycon.org/2012/' + str(_count.next())
 
     return Suggestion(**defaults)

@@ -44,10 +44,12 @@ class Suggestion(models.Model):
 
     name = models.CharField(
         max_length=128,
-        help_text=_(u'Name of video/collection of videos'))
+        help_text=_(u'Name of video/collection of videos'),
+        unique=True)
     url = models.URLField(
         max_length=255,
-        help_text=_(u'Link to video/collection of videos'))
+        help_text=_(u'Link to video/collection of videos'),
+        unique=True)
     comment = models.TextField(
         blank=True,
         help_text=_(u'Additional information, urls, etc (optional)'))

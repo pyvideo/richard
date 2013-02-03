@@ -32,6 +32,16 @@
 {% block title %}{{ page_title('Suggestions') }}{% endblock %}
 {% block content %}
 
+{% if messages %}
+<div class="alert alert-info">
+  <ul class="messages">
+    {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
 <div class="page-header">
   <h1>
     Suggestions
