@@ -39,6 +39,7 @@ class Command(BaseCommand):
                 'has_default': field.default is not fields.NOT_PROVIDED,
                 'null': field.null,
                 'empty_strings': field.empty_strings_allowed,
+                'md': 'markdown' in field.help_text.lower(),
                 'choices': [mem[0] for mem in field.choices]
                 }
 
@@ -48,6 +49,7 @@ class Command(BaseCommand):
                         'empty_strings': False,
                         'null': False,
                         'has_default': False,
+                        'md': False,
                         'choices': []
                         })
             elif field.name == 'language':
@@ -56,6 +58,7 @@ class Command(BaseCommand):
                         'empty_strings': False,
                         'null': False,
                         'has_default': False,
+                        'md': False,
                         'choices': []
                         })
 
@@ -69,6 +72,7 @@ class Command(BaseCommand):
                 'empty_strings': False,
                 'null': True,
                 'has_default': False,
+                'md': False,
                 'choices': []
                 })
         reqs.append({
@@ -77,6 +81,7 @@ class Command(BaseCommand):
                 'empty_strings': False,
                 'has_default': False,
                 'null': True,
+                'md': False,
                 'choices': []
                 })
 
@@ -85,4 +90,3 @@ class Command(BaseCommand):
         f.close()
 
         self.stdout.write('Done!\n')
-
