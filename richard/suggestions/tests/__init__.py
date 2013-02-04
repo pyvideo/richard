@@ -14,18 +14,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import itertools
+
 from richard.tests.utils import with_save
 from richard.suggestions.models import Suggestion
 
 
-def _counter():
-    count = 0
-    while 1:
-        yield count
-        count += 1
-
-
-_count = _counter()
+_count = itertools.count()
 
 
 @with_save
