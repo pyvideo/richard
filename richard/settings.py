@@ -12,6 +12,16 @@ import sys
 # site_root is the parent directory
 SITE_ROOT = os.path.dirname(os.path.dirname(__file__))
 
+# site_url is the url for this site. it's important it's
+# correct otherwise browserid authentication won't work.
+SITE_URL = 'http://127.0.0.1:8000'
+LOGIN_URL = '/'
+LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL_FAILURE = '/login-failure'
+
+# For now, we don't create new users.
+BROWSERID_CREATE_USER = False
+
 # root is this directory
 ROOT = os.path.dirname(__file__)
 
@@ -153,7 +163,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'SEKRETKEY'
+SECRET_KEY = ''
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -191,6 +201,7 @@ TEMPLATE_DIRS = (
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.contrib.messages.context_processors.messages',
+    'django_browserid.context_processors.browserid',
 
     'richard.context_processors.base',
 )
@@ -203,6 +214,7 @@ JINGO_EXCLUDE_APPS = (
     # This is the template name passed to jingo that is used to derive the app
     # name and check if it should be excluded.
     'sitemap.xml',
+    'browserid',
 )
 
 JINJA_CONFIG = {
@@ -211,6 +223,7 @@ JINJA_CONFIG = {
 
 INSTALLED_APPS = (
     'django.contrib.auth',
+    'django_browserid',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
@@ -228,6 +241,10 @@ INSTALLED_APPS = (
     'richard.sitenews',
     'richard.pages',
     'richard.suggestions',
+)
+
+AUTHENTICATION_BACKENDS = (
+    'django_browserid.auth.BrowserIDBackend',
 )
 
 try:

@@ -41,6 +41,10 @@ def home(request):
     return ret
 
 
+def login_failure(request):
+    return render(request, 'login_failure.html')
+
+
 def stats(request):
     """List statistics about the collection.
 

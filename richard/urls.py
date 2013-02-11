@@ -17,10 +17,12 @@
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
+from django.contrib.auth.decorators import login_required
 
 # enable the admin
 from django.contrib import admin
 admin.autodiscover()
+admin.site.login = login_required(admin.site.login)
 
 from richard.pages.sitemaps import PageSitemap
 from richard.videos.sitemaps import (CategorySitemap, SpeakerSitemap,
@@ -38,6 +40,8 @@ urlpatterns = patterns(
     '',
 
     url(r'^$', 'richard.views.home', name='home'),
+    url(r'^login-failure$', 'richard.views.login_failure',
+        name='login_failure'),
     url(r'^stats/$', 'richard.views.stats', name='stats'),
     (r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap',
      {'sitemaps': sitemaps}),
@@ -48,4 +52,6 @@ urlpatterns = patterns(
     url(r'^pages/', include('richard.pages.urls')),
     url(r'^suggestions/', include('richard.suggestions.urls')),
     url(r'', include('richard.videos.urls')),
+
+    url(r'^browserid/', include('django_browserid.urls')),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

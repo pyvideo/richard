@@ -103,20 +103,18 @@ handle things for you.
 Configuration
 =============
 
-Default configuration for the project goes in ``richard/settings.py``.
-
 You will need to override some of those settings for your
 instance. To do that:
 
-1. create a file ``richard/settings_local.py``
-2. add configuration for your instance in that file
+1. ``cp richard/settings_local.py-dist richard/settings_local.py``
+2. Edit ``richard/settings_local.py``
 
-Make sure to set a ``SECRET_KEY``::
 
-    # Make this unique, and don't share it with anybody.
-    SECRET_KEY = 'long secret key'
+Make sure to do at least the following:
 
-.. todo:: list configuration settings that should be in settings_local.py
+1. Set a ``SECRET_KEY``. Make it unique! Don't share it with anyone!
+
+TODO: Finish this up
 
 
 Setting up database schema and creating admin user
@@ -138,3 +136,22 @@ If you want to set up some initial data, do::
     $ ./manage.py generatedata
 
 This is useful to see how the site works.
+
+
+Troubleshooting
+===============
+
+I can't log in
+--------------
+
+First, make sure your administrator account has an email address associated
+with it. This is the email address you will log in with Persona.
+
+Second, if you're seeing a "Misconfigured" kind of error, make sure the
+``SITE_URL`` in your ``settings_local.py`` file matches the domain and port
+that the server is running on. If it doesn't match, then django-browserid
+won't work.
+
+See `the django-browserid troubleshooting docs
+<https://django-browserid.readthedocs.org/en/latest/details/troubleshooting.html>`_
+for more details.
