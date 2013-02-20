@@ -1,4 +1,4 @@
-django==1.4.3
+django==1.4.4
 Jinja2
 whoosh
 bleach
