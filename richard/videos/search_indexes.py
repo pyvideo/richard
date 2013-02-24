@@ -26,7 +26,7 @@ class VideoIndex(indexes.SearchIndex, indexes.Indexable):
     video_id = indexes.IntegerField(model_attr='id', indexed=False)
     slug = indexes.CharField(model_attr='slug', indexed=False)
     tags = indexes.MultiValueField()
-    speakers = indexes.MultiValueField()
+    speakers = indexes.MultiValueField(indexed=True)
 
     # Used for suggestions in opensearch
     title_auto = indexes.EdgeNgramField(model_attr='title')
@@ -34,8 +34,10 @@ class VideoIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare(self, obj):
         self.prepared_data = super(VideoIndex, self).prepare(obj)
 
-        self.prepared_data['tags'] = [t.tag for t in obj.tags.all()]
-        self.prepared_data['speakers'] = [s.name for s in obj.speakers.all()]
+        self.prepared_data['tags'] = [
+            t.tag.lower() for t in obj.tags.all()]
+        self.prepared_data['speakers'] = [
+            s.name.lower() for s in obj.speakers.all()]
 
         return self.prepared_data
 

@@ -25,15 +25,12 @@
 {% endblock %}
 {% import "videos/macros.html" as macros with context %}
 {% block content %}
-<div class="page-header">
-  <h1>Search</h1>
-</div>
 
 <div class="row">
   <div class="span12">
     <form class="well form-search" method="get" action="/search/">
       <input type="hidden" name="models" value="videos.video">
-      <input type="text" class="input-medium search-query" name="q" value="{{ query }}">
+      <input type="text" class="input-long search-query" name="q" value="{{ query }}">
       <button type="submit" class="btn">Search</button>
     </form>
   </div>

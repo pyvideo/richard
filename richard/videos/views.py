@@ -20,6 +20,7 @@ import json
 from django.db.models import Count
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.core.paginator import EmptyPage, Paginator
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from haystack.query import SearchQuerySet
@@ -139,6 +140,34 @@ def video(request, video_id, slug):
          'embed_type': embed_type,
          'available_formats': available_formats})
     return ret
+
+
+def search(request):
+    q = request.GET.get('q', '')
+    if q:
+        qs = (SearchQuerySet().filter_or(content=q)
+                              .filter_or(speakers__startswith=q.lower()))
+
+
+        page = Paginator(qs, 25)
+        p = request.GET.get('p', '1')
+        try:
+            p = max(1, int(p))
+        except ValueError:
+            p = 1
+
+        try:
+            page = page.page(p)
+        except EmptyPage:
+            page = page.page(1)
+
+    else:
+        page = None
+
+    return render(request,
+                  'videos/search.html',
+                  {'query': q,
+                   'page': page})
 
 
 def opensearch(request):

@@ -53,11 +53,7 @@ urlpatterns = patterns(
 
     # search
     url(r'^search/?$',
-        search_view_factory(
-            view_class=SearchView,
-            template='videos/search.html',
-            form_class=ModelSearchForm),
-        name='haystack-search'),
+        'search', name='videos-search'),
     url(r'^search/xml/?$',
         'opensearch', name='videos-opensearch'),
     url(r'^search/suggestions/$',

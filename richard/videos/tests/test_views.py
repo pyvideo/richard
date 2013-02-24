@@ -276,7 +276,7 @@ class TestVideoSearch(TestCase):
 
     def test_search(self):
         """Test the search view."""
-        url = reverse('haystack-search')
+        url = reverse('videos-search')
 
         resp = self.client.get(url)
         eq_(resp.status_code, 200)
