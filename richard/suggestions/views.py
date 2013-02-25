@@ -16,12 +16,14 @@
 
 from django.contrib import messages
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_protect
 
 from richard.suggestions.forms import SuggestionForm
 from richard.suggestions.models import Suggestion
 from richard.suggestions.utils import mark_if_spam
 
 
+@csrf_protect
 def suggestions(request):
     """Show a list of all accepted suggestions and their status."""
     if request.method == 'POST':
