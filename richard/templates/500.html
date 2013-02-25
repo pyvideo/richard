@@ -15,14 +15,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#}
-{% extends "base.html" %}
-{% block content %}
-
-<div class="row">
-  <div class="span12">
-    <h2>Not Found</h2>
-    <p>The page you requested is not found.</p>
-    <p>Perhaps try <a href="{{ url('home') }}">home</a>.</p>
-  </div>
-</div>
-{% endblock %}
+<html>
+<title>Server Error</title>
+<body>
+<h1>Server Error</h1>
+<p>
+  Something has happened on the server.
+</p>
+<p>
+  <a href="/">Here's a link to the home page</a>.
+</p>
+</body>
+</html>
