@@ -20,7 +20,7 @@
 
 {% block additional_head %}
   {{ super() }}
-  <link rel="alternate" type="application/rss+xml" href="{{ url('videos-category-feed', category_id=category.pk, slug=category.slug) }}" />
+  <link rel="alternate" type="application/rss+xml" href="{{ url('videos-category-videos-feed', category_id=category.pk, slug=category.slug) }}" />
 {% endblock %}
 
 {% import "videos/macros.html" as macros with context %}
@@ -40,7 +40,7 @@
 <ul class="nav nav-pills">
   <li class="{{ 'active' if view == 'videos' else '' }}"><a href="{{ url('videos-category', category_id=category.pk, slug=category.slug) }}">Videos</a></li>
   <li class="{{ 'active' if view == 'files' else '' }}"><a href="{{ url('videos-category-files', category_id=category.pk, slug=category.slug) }}">files</a></li>
-  <li><a href="{{ url('videos-category-feed', category_id=category.pk, slug=category.slug) }}">rss feed</a></li>
+  <li><a href="{{ url('videos-category-videos-feed', category_id=category.pk, slug=category.slug) }}">rss feed</a></li>
 </ul>
 
 <div class="row">

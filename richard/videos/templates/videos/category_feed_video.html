@@ -1,0 +1,9 @@
+{% if obj.description %}
+  <p>Description</p>
+  {{ obj.description|md }}
+{% endif %}
+<ul>
+  {% for vid in obj.video_set.live().order_by('title') %}
+    <li><a href="{{ vid.get_absolute_url() }}">{{ vid.title }}</a></li>
+  {% endfor %}
+</ul>

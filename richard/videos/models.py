@@ -56,6 +56,9 @@ class Category(models.Model):
 
     slug = models.SlugField(unique=True)
 
+    # when the category was added to this site
+    added = models.DateTimeField(null=True, auto_now_add=True)
+
     def __unicode__(self):
         return self.title
 

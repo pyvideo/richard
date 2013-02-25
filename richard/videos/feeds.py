@@ -23,7 +23,6 @@ from django.shortcuts import get_object_or_404
 from django.utils.feedgenerator import Rss201rev2Feed
 from django.utils.translation import ugettext as _
 
-
 from richard.videos.models import Speaker, Category, Video
 
 
@@ -51,6 +50,36 @@ class MediaRSSFeed(Rss201rev2Feed):
 
         for name, attrs in item.get('media', {}).items():
             handler.addQuickElement(u'media:%s' % name, '', attrs)
+
+
+class CategoryFeed(Feed):
+    """Feed of categories"""
+    feed_type = Rss201rev2Feed
+    ttl = 500
+    description_template = 'videos/category_feed_video.html'
+
+    def link(self):
+        return reverse('videos-category-feed')
+
+    def title(self):
+        return _(u'{site_title}: Categories').format(
+            site_title=settings.SITE_TITLE)
+
+    def items(self):
+        cats = Category.objects.order_by('-start_date')
+        return cats[:settings.MAX_FEED_LENGTH]
+
+    def item_title(self, item):
+        return item.title
+
+    def item_pubdate(self, item):
+        if item.start_date:
+            return datetime.combine(item.start_date, time())
+        else:
+            return None
+
+    def item_link(self, item):
+        return item.get_absolute_url()
 
 
 class BaseVideoFeed(Feed):
@@ -140,7 +169,7 @@ class BaseVideoFeed(Feed):
 class CategoryVideosFeed(BaseVideoFeed):
     """Videos of a single category, e.g. of a conference."""
     def link(self, category):
-        return reverse('videos-category-feed',
+        return reverse('videos-category-videos-feed',
                         kwargs={'category_id': category.pk, 'slug': category.slug})
 
     def title(self, category):

@@ -16,13 +16,12 @@
 
 from django.conf import settings
 from django.conf.urls.defaults import patterns, url, include
-from haystack.views import SearchView, search_view_factory
-from haystack.forms import ModelSearchForm
 from tastypie.api import Api
 
 from richard.videos.api import VideoResource, CategoryResource
-from richard.videos.feeds import (CategoryVideosFeed, SpeakerVideosFeed,
-                                  NewPostedVideoFeed)
+from richard.videos.feeds import (
+    CategoryFeed, CategoryVideosFeed, SpeakerVideosFeed,
+    NewPostedVideoFeed)
 
 
 urlpatterns = patterns(
@@ -33,8 +32,10 @@ urlpatterns = patterns(
         'category_list', name='videos-category-list'),
     url(r'^category/(?P<category_id>[0-9]+)(?:/(?P<slug>[\w-]*))?/?$',
         'category', name='videos-category'),
+    url(r'^category/rss/?$',
+        CategoryFeed(), name='videos-category-feed'),
     url(r'^category/(?P<category_id>[0-9]+)(?:/(?P<slug>[\w-]*))?/rss/?$',
-        CategoryVideosFeed(), name='videos-category-feed'),
+        CategoryVideosFeed(), name='videos-category-videos-feed'),
     url(r'^category/(?P<category_id>[0-9]+)(?:/(?P<slug>[\w-]*))?/files/?$',
         'category_files', name='videos-category-files'),
 

@@ -39,7 +39,7 @@
           <tr>
             <td>
               <a href="{{ cat.get_absolute_url() }}">{{ cat.title }}</a>
-              <a class="feed" href="{{ url('videos-category-feed', category_id=cat.pk, slug=cat.slug) }}"> feed</a>
+              <a class="feed" href="{{ url('videos-category-videos-feed', category_id=cat.pk, slug=cat.slug) }}"> feed</a>
             </td>
             <td>
               {% if cat.start_date %}

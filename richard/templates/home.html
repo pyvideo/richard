@@ -33,7 +33,9 @@
 
     <div class="row section">
       <div class="span6">
-        <h3>Latest categories</h3>
+        <h3>Latest categories
+          <small><a class="feed" href="{{ url('videos-category-feed') }}"> feed</a></small>
+        </h3>
 
         {% if latest_categories %}
           <ul>
