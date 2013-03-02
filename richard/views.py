@@ -32,7 +32,7 @@ def home(request):
     video_count = Video.objects.live().count()
 
     ret = render(
-        request, 'home.html',
+        request, 'home_branded.html',
         {'title': settings.SITE_TITLE,
          'news': news_list,
          'latest_categories': latest_categories,
