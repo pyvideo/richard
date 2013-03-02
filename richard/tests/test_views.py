@@ -30,7 +30,7 @@ class RichardViewsTest(TestCase):
 
         resp = self.client.get(url)
         eq_(resp.status_code, 200)
-        self.assertTemplateUsed(resp, 'home.html')
+        self.assertTemplateUsed(resp, 'home_branded.html')
 
     def test_notifications_on_home(self):
         """Test that notifications are displayed on the homepage."""
