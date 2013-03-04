@@ -13,6 +13,12 @@ class Migration(SchemaMigration):
                       self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, null=True, blank=True),
                       keep_default=False)
 
+        if not db.dry_run:
+            # Set the added field to start_date for all existing
+            # categories.
+            for cat in orm.Category.objects.all():
+                cat.added = cat.start_date
+                cat.save()
 
     def backwards(self, orm):
         # Deleting field 'Category.added'
