@@ -6,6 +6,7 @@ requests
 markdown
 south
 eadred
+django-browserid>=0.8
 
 # Jingo never really does releases.
 -e git://github.com/jbalogh/jingo.git#egg=jingo
@@ -17,6 +18,3 @@ eadred
 # We're using a specific version here because we need the MultiAuthentication
 # feature, but newer commits break tests.
 -e git://github.com/toastdriven/django-tastypie.git@5e8850434ef1c8672b0a22953bd7cc0def6347f8#egg=django-tastypie
-
-# Using django-browserid master tip to pick up improvements
--e git://github.com/mozilla/django-browserid.git@0ed6fef4#egg=django-browserid

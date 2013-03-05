@@ -30,7 +30,7 @@
   {% block additional_head %}{% endblock %}
 </head>
 <body>
-  {{ browserid_info|safe }}
+  {{ browserid_info()|safe }}
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
       <div class="container">
@@ -66,11 +66,11 @@
                 {% if user.is_superuser %}
                   <li><a href="{{ url('admin:index') }}">Admin</a></li>
                 {% endif %}
-                <li>{{ browserid_button(sign_in='Sign in', sign_out='Sign out')|safe }}</li>
+                <li>{{ browserid_logout(text='Sign out')|safe }}</li>
               </ul>
             </li>
           {% else %}
-            <li>{{ browserid_button(sign_in='Sign in', sign_out='Sign out')|safe }}</li>
+            <li>{{ browserid_login(text='Sign in')|safe }}</li>
 
           {% endif %}
         </ul>
@@ -110,7 +110,7 @@
   {% block site_js %}
   <script type="text/javascript" src="{{ settings.STATIC_URL }}js/jquery-1.7.2.min.js"></script>
   <script type="text/javascript" src="{{ settings.STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="{{ settings.STATIC_URL }}js/browserid.js"></script>
+  <script type="text/javascript" src="{{ settings.STATIC_URL }}browserid/browserid.js"></script>
   <script type="text/javascript" src="https://login.persona.org/include.js"></script>
   {% endblock %}
 </body>
