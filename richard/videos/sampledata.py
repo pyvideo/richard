@@ -17,20 +17,20 @@
 from datetime import datetime, date
 
 from richard.videos.models import Video
-from richard.videos.tests import category_kind, category, speaker, tag, video
+from richard.videos.tests import category, speaker, tag, video
 
 
 def generate_sampledata(options):
-    conference = category_kind(name=u'Conference', save=True)
-
-    pycon2011 = category(name=u'PyCon', title=u'Pycon 2011', slug=u'pycon-2011',
+    pycon2011 = category(title=u'Pycon 2011',
+                         slug=u'pycon-2011',
                          description=u'PyCon 2011 in Atlanta, GA',
-                         kind=conference, url=u'http://us.pycon.org/2011/home/',
+                         url=u'http://us.pycon.org/2011/home/',
                          save=True)
 
-    pycon2012 = category(name=u'PyCon', title=u'Pycon 2012', slug=u'pycon-2012',
+    pycon2012 = category(title=u'Pycon 2012',
+                         slug=u'pycon-2012',
                          description=u'PyCon 2011 in Santa Clara, CA',
-                         kind=conference, url=u'http://us.pycon.org/2012/',
+                         url=u'http://us.pycon.org/2012/',
                          save=True)
 
     jm = speaker(name=u'Jessica McKellar', save=True)
