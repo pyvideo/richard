@@ -2,7 +2,7 @@
 
 -r ./base.txt
 nose
--e git://github.com/jbalogh/django-nose.git#egg=django-nose
+django-nose
 Pygments
-sphinx
--e git://github.com/jbalogh/test-utils.git#egg=test-utils
+Sphinx
+# -e git://github.com/jbalogh/test-utils.git#egg=test-utils

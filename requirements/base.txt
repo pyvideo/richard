@@ -5,6 +5,7 @@ bleach
 requests
 markdown
 south
+eadred
 
 # Jingo never really does releases.
 -e git://github.com/jbalogh/jingo.git#egg=jingo
@@ -16,9 +17,6 @@ south
 # We're using a specific version here because we need the MultiAuthentication
 # feature, but newer commits break tests.
 -e git://github.com/toastdriven/django-tastypie.git@5e8850434ef1c8672b0a22953bd7cc0def6347f8#egg=django-tastypie
-
-# eadred is in development
--e git://github.com/willkg/django-eadred@master#egg=django-eadred
 
 # Using django-browserid master tip to pick up improvements
 -e git://github.com/mozilla/django-browserid.git@0ed6fef4#egg=django-browserid
