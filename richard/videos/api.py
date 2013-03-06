@@ -272,7 +272,7 @@ class VideoResource(EnhancedModelResource):
         # the end which makes Django cross.
         if not settings.USE_TZ:
             for mem in ('added', 'recorded'):
-                if mem in bundle.data and bundle.data[mem].endswith('Z'):
+                if bundle.data.get(mem) and bundle.data[mem].endswith('Z'):
                     bundle.data[mem] = bundle.data[mem][:-1]
 
         if errors:
