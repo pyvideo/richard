@@ -26,46 +26,47 @@
 {% import "videos/macros.html" as macros with context %}
 {% block content %}
 
-<div class="page-header">
-  <h1>{{ category.title }}
-    <small>
-      ({{ videos|length }} Video{{ 's' if videos|length != 1 else '' }})
-      {% if user.is_staff %}
-        <a href="{{ url('admin:videos_category_change', category.id) }}"><i class="icon-edit"></i> edit</a>
-      {% endif %}
-    </small>
-  </h1>
-</div>
-
-<ul class="nav nav-pills">
+<ul class="nav nav-pills pull-right">
   <li class="{{ 'active' if view == 'videos' else '' }}"><a href="{{ url('videos-category', category_id=category.pk, slug=category.slug) }}">Videos</a></li>
-  <li class="{{ 'active' if view == 'files' else '' }}"><a href="{{ url('videos-category-files', category_id=category.pk, slug=category.slug) }}">files</a></li>
-  <li><a href="{{ url('videos-category-videos-feed', category_id=category.pk, slug=category.slug) }}">rss feed</a></li>
+  <li class="{{ 'active' if view == 'files' else '' }}"><a href="{{ url('videos-category-files', category_id=category.pk, slug=category.slug) }}">Files</a></li>
+  <li><a href="{{ url('videos-category-videos-feed', category_id=category.pk, slug=category.slug) }}">RSS Feed</a></li>
 </ul>
 
-<div class="row">
-  <div class="span12">
-    {% if category.url %}
-    <p>
-      <strong>URL:</strong> <a href="{{ category.url }}">{{ category.url }}</a>
-    </p>
+<div>
+  <h1>{{ category.title }}
+    {% if user.is_staff %}
+      <small>
+        <a href="{{ url('admin:videos_category_change', category.id) }}"><i class="icon-edit"></i> edit</a>
+      </small>
     {% endif %}
-    <p>
-      <strong>Description:</strong>
-      {% if category.description %}
-        {{ category.description|md }}
-      {% else %}
-        No description.
+  </h1>
+
+  <div class="well">
+    <dl class="dl-horizontal">
+      {% if category.url %}
+        <dt>URL:</dt>
+        <dd> <a href="{{ category.url }}">{{ category.url }}</a></dd>
       {% endif %}
-    </p>
+      <dt>Description:</dt>
+      <dd>
+        {% if category.description %}
+          {{ category.description|md }}
+        {% else %}
+          No description.
+        {% endif %}
+      </dd>
+      <dt>Date:</dt>
+      <dd>
+        {{ category.start_date|datetime }}
+      </dd>
+      <dt>Number of videos:</dt>
+      <dd>
+        {{ videos|length }}
+      </dd>
+    </dl>
   </div>
 </div>
 
-<div class="row">
-  <div class="span12">
-    <hr noshade>
-  </div>
-</div>
 
 {% if view == 'videos' %}
   {% for v in videos %}

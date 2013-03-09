@@ -26,23 +26,27 @@
 {% import "videos/macros.html" as macros with context %}
 {% block content %}
 
-<div class="page-header">
-  <h1>{{ speaker.name }}
-    <small>
-      ({{ videos|length }} Video{{ 's' if videos|length != 1 else '' }})
-      {% if user.is_staff %}
-        <a href="{{ url('admin:videos_speaker_change', speaker.id) }}"><i class="icon-edit"></i> edit</a>
-      {% endif %}
-    </small>
-  </h1>
-</div>
+<ul class="nav nav-pills pull-right">
+  <li class="active"><a href="{{ url('videos-speaker', speaker_id=speaker.pk, slug=speaker.slug) }}">Videos</a></li>
+  <li><a href="{{ url('videos-speaker-feed', speaker_id=speaker.pk, slug=speaker.slug) }}">RSS Feed</a></li>
+</ul>
 
-<div class="row">
-  <div class="span9">
-    <h2>Videos</h2>
-  </div>
-  <div class="span3">
-    <a class="feed" href="{{ url('videos-speaker-feed', speaker_id=speaker.pk, slug=speaker.slug) }}"> feed</a>
+<div>
+  <h1>{{ speaker.name }}
+    {% if user.is_staff %}
+      <small>
+        <a href="{{ url('admin:videos_speaker_change', speaker.id) }}"><i class="icon-edit"></i> edit</a>
+      </small>
+    {% endif %}
+  </h1>
+
+  <div class="well">
+    <dl class="dl-horizontal">
+      <dt>Number of videos:</dt>
+      <dd>
+        {{ videos|length }}
+      </dd>
+    </dl>
   </div>
 </div>
 
