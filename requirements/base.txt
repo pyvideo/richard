@@ -6,7 +6,9 @@ requests
 markdown
 south
 eadred
-django-browserid>=0.8
+
+# Need master tip of django-browserid
+-e git://github.com/mozilla/django-browserid.git@9eb0bd3054ddfab4543fae25171f9cee18b5f928#egg=django-browserid
 
 # Jingo never really does releases.
 -e git://github.com/jbalogh/jingo.git#egg=jingo
