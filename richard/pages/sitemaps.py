@@ -26,4 +26,3 @@ class PageSitemap(Sitemap):
 
     def location(self, obj):
         return reverse('pages-page', kwargs={'page': obj})
-

@@ -46,7 +46,7 @@ class TestSitenews(TestCase):
 
     def test_news_raise_404_when_does_not_exist(self):
         """
-        Test that trying to view a non-existent news raises returns 
+        Test that trying to view a non-existent news raises returns
         an HTTP 404 error.
         """
         url = reverse('sitenews-news', args=(1234, 'random-slug'))
@@ -57,7 +57,7 @@ class TestSitenews(TestCase):
     def test_news_archive_year(self):
         """Test the view of current year's archive."""
         sitenews(save=True)
-        url = reverse('sitenews-archive-year', 
+        url = reverse('sitenews-archive-year',
                       kwargs={'year': datetime.now().year})
 
         resp = self.client.get(url)

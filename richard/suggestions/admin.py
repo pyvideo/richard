@@ -30,7 +30,8 @@ def mark_as_reviewed(modeladmin, request, queryset):
 
 class SuggestionAdmin(admin.ModelAdmin):
     date_hierarchy = 'submitted'
-    list_display = ('state', 'is_reviewed', 'name', 'url', 'submitted', 'resolved',)
+    list_display = ('state', 'is_reviewed', 'name', 'url', 'submitted',
+                    'resolved')
     list_filter = ('state', 'is_reviewed',)
     search_fields = ('name', 'url',)
     radio_fields = {'state': admin.HORIZONTAL}

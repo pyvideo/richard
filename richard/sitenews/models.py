@@ -63,12 +63,12 @@ class Notification(models.Model):
     interjection = models.CharField(
         max_length=20,
         help_text=_(u'Short interjection like "Alert!", "Information!", '
-        '"Warning!", "Heads up!", "Whoops!"'))
+                    u'"Warning!", "Heads up!", "Whoops!"'))
 
     text = models.CharField(
         max_length=200,
         help_text=_(u'Use Markdown. Keep the text short. Add a link to '
-        'sitenews for more information.'))
+                    u'sitenews for more information.'))
 
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()

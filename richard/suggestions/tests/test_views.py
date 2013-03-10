@@ -57,12 +57,10 @@ class TestSuggestions(TestCase):
 
     def test_submit(self):
         """Test that submitting a suggestion works."""
-        url = reverse('suggestions-list')
-
         resp = self.client.post(
             reverse('suggestions-list'),
-            {'name': u'Add boston user group',
+            {'name': u'Add boston group',
              'url': u'http://meetup.bostonpython.com/'},
             follow=True)
         eq_(resp.status_code, 200)
-        assert Suggestion.objects.filter(name=u'Add boston user group').exists()
+        assert Suggestion.objects.filter(name=u'Add boston group').exists()

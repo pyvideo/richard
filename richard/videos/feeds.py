@@ -170,7 +170,8 @@ class CategoryVideosFeed(BaseVideoFeed):
     """Videos of a single category, e.g. of a conference."""
     def link(self, category):
         return reverse('videos-category-videos-feed',
-                        kwargs={'category_id': category.pk, 'slug': category.slug})
+                       kwargs={'category_id': category.pk,
+                               'slug': category.slug})
 
     def title(self, category):
         return _(u'{site_title}: Videos of {category}').format(
@@ -187,7 +188,7 @@ class SpeakerVideosFeed(BaseVideoFeed):
     """Videos of a single speaker."""
     def link(self, speaker):
         return reverse('videos-speaker-feed',
-                        kwargs={'speaker_id': speaker.pk, 'slug': speaker.slug})
+                       kwargs={'speaker_id': speaker.pk, 'slug': speaker.slug})
 
     def title(self, speaker):
         return _(u'{site_title}: Videos of {speaker}').format(

@@ -14,9 +14,4 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.core.urlresolvers import reverse
-from django.test import TestCase
-
-from richard.videos.tests import category, speaker, video
-
 # TODO: Write these

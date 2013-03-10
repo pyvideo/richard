@@ -36,19 +36,19 @@ class Category(models.Model):
     title = models.CharField(
         max_length=255,
         help_text=_(u'The complete title for the category. e.g. '
-        'PyCon 2010'))
+                    u'PyCon 2010'))
     description = models.TextField(
         blank=True, default=u'',
         help_text=USE_MARKDOWN_HELP_TEXT)
     url = models.URLField(
         blank=True, default=u'',
         help_text=_(u'URL for the category. e.g. If this category was a '
-        'conference, this would be the url for the conference '
-        'web-site.'))
+                    u'conference, this would be the url for the conference '
+                    u'web-site.'))
     start_date = models.DateField(
         blank=True, null=True,
         help_text=_(u'If the category was an event, then this is the start '
-        'date for the event.'))
+                    u'date for the event.'))
 
     whiteboard = models.CharField(
         blank=True, max_length=255, default=u'',
@@ -88,7 +88,8 @@ class Speaker(models.Model):
         return self.name
 
     def __repr__(self):
-        return '<Speaker %s: %s>' % (self.id, self.name.encode('ascii', 'ignore'))
+        return '<Speaker %s: %s>' % (
+            self.id, self.name.encode('ascii', 'ignore'))
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -291,7 +292,7 @@ class Video(models.Model):
 
             if url:
                 result.append({'url': url, 'length': length,
-                                'mime_type': mime_type})
+                               'mime_type': mime_type})
 
         if not html5tag:
             # Now we do this goofy thing where if this is a YouTube

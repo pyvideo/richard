@@ -137,7 +137,7 @@ class VideoResource(EnhancedModelResource):
         if 'speaker' in filters:
             orm_filters['speakers__in'] = list(
                 Speaker.objects.filter(name__icontains=filters['speaker'])
-                       .values_list('pk', flat=True))
+                    .values_list('pk', flat=True))
 
         return orm_filters
 
@@ -289,7 +289,7 @@ class VideoResource(EnhancedModelResource):
         """Dehydrate converts the object to json."""
         # Add language name or None
         lang = bundle.obj.language
-        if lang == None:
+        if lang is None:
             bundle.data['language'] = None
         else:
             bundle.data['language'] = lang.name

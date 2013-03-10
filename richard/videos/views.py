@@ -109,7 +109,7 @@ def video(request, video_id, slug):
         ('keywords', ",".join([t.tag for t in obj.tags.all()]))
         ]
     if obj.summary:
-        meta.append(('description', 
+        meta.append(('description',
                      bleach.clean(obj.summary, tags=[], strip=True)))
 
     # Figure out how we're going to embed the video.
@@ -148,7 +148,6 @@ def search(request):
         qs = (SearchQuerySet().filter_or(content=q)
                               .filter_or(speakers__startswith=q.lower()))
 
-
         page = Paginator(qs, 25)
         p = request.GET.get('p', '1')
         try:
@@ -181,7 +180,7 @@ def opensearch(request):
 
 def opensearch_suggestions(request):
     """Return suggestions for a search query.
-    
+
     Implements the OpenSearch suggestions extension.
     """
     if not settings.OPENSEARCH_ENABLE_SUGGESTIONS:
@@ -198,9 +197,9 @@ def opensearch_suggestions(request):
 # TODO: Move this elsewhere
 
 class JSONResponse(HttpResponse):
-     def __init__(self, content):
-         super(JSONResponse, self).__init__(
-             content, mimetype='application/json')
+    def __init__(self, content):
+        super(JSONResponse, self).__init__(
+            content, mimetype='application/json')
 
 
 def apiurlforsource(request):
@@ -209,4 +208,5 @@ def apiurlforsource(request):
         raise Http404
 
     obj = get_object_or_404(models.Video, source_url=host_url)
-    return JSONResponse('{"source_url": "http://pyvideo.org%s"}' % obj.get_absolute_url())
+    return JSONResponse('{"source_url": "http://pyvideo.org%s"}' %
+                        obj.get_absolute_url())

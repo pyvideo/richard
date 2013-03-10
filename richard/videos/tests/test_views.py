@@ -33,7 +33,7 @@ from richard.videos.models import Video
 class TestVideos(TestCase):
     """Tests for the ``videos`` app."""
 
-    # category 
+    # category
 
     def test_category_list_empty(self):
         """Test the view of the listing of all categories."""
@@ -54,7 +54,7 @@ class TestVideos(TestCase):
         resp = self.client.get(url)
         eq_(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'videos/category_list.html')
-        
+
     def test_category_urls(self):
         """Test the view of an category."""
         cat = category(save=True)
@@ -74,7 +74,7 @@ class TestVideos(TestCase):
 
     def test_category_raise_404_when_does_not_exist(self):
         """
-        Test that trying to view a non-existent category returns 
+        Test that trying to view a non-existent category returns
         a HTTP 404 error.
         """
         url = reverse('videos-category',
@@ -96,15 +96,15 @@ class TestVideos(TestCase):
     def test_speaker_list_empty_character(self):
         """
         Test the view of the listing of all speakers given a empty
-        `character` GET parameter. It should fallback to showing the 
+        `character` GET parameter. It should fallback to showing the
         speakers starting from the lowest possible character.
         """
         s1 = speaker(name=u'Random Speaker', save=True)
-        s2= speaker(name=u'Another Speaker', save=True)
+        s2 = speaker(name=u'Another Speaker', save=True)
 
         url = reverse('videos-speaker-list')
         data = {'character': ''}
-        
+
         resp = self.client.get(url, data)
         eq_(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'videos/speaker_list.html')
@@ -120,7 +120,7 @@ class TestVideos(TestCase):
         s2 = speaker(name=u'Random Speaker', save=True)
 
         url = reverse('videos-speaker-list')
-        data = {'character': 'r'} 
+        data = {'character': 'r'}
 
         resp = self.client.get(url, data)
         eq_(resp.status_code, 200)
@@ -131,7 +131,7 @@ class TestVideos(TestCase):
     def test_speaker_list_character_with_string(self):
         """
         Test the view of the listing of all speakers giving a invalid
-        character argument. The view should fallback to showing the 
+        character argument. The view should fallback to showing the
         speakers starting from the lowest possible character.
         """
         s1 = speaker(name=u'Random Speaker', save=True)
@@ -149,7 +149,7 @@ class TestVideos(TestCase):
     def test_speaker_list_not_string_character(self):
         """
         Test the view of the listing of all speakers giving a invalid
-        character argument. The view should fallback to showing the 
+        character argument. The view should fallback to showing the
         speakers starting from the lowest possible character.
         """
         s1 = speaker(name=u'Random Speaker', save=True)

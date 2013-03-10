@@ -32,4 +32,3 @@ def generate_unique_slug(obj, slug_from, slug_field='slug'):
         text = root_text + ending
 
     raise ValueError('No valid slugs available.')
-

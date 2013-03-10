@@ -34,5 +34,5 @@ def with_save(func):
             model.save()
 
         return model
-    
+
     return wrapper

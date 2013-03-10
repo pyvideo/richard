@@ -53,7 +53,7 @@ class Suggestion(models.Model):
     comment = models.TextField(
         blank=True,
         help_text=_(u'Additional information, urls, etc (optional)'))
- 
+
     whiteboard = models.CharField(
         max_length=255, blank=True, default=u'',
         help_text=_(u'Editor notes for this suggestion.'))

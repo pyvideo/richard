@@ -52,10 +52,10 @@ def generate_sampledata(options):
         recorded=date(2011, 3, 11),
         updated=datetime(2011, 3, 14, 3, 47, 59),
         source_url=u'http://blip.tv/file/4881071',
-        video_mp4_url=u'http://blip.tv/file/get/Pycon-PyCon2011WritingGreatDocumentation191.mp4',
-        video_ogv_length=158578172, 
-        video_ogv_url=u'http://blip.tv/file/get/Pycon-PyCon2011WritingGreatDocumentation312.ogv',
-        thumbnail_url=u'http://a.images.blip.tv/Pycon-PyCon2011WritingGreatDocumentation902.png',
+        video_mp4_url=u'http://blip.tv/file/get/Pycon-PyCon2011WritingGreatDocumentation191.mp4',  # noqa
+        video_ogv_length=158578172,
+        video_ogv_url=u'http://blip.tv/file/get/Pycon-PyCon2011WritingGreatDocumentation312.ogv',  # noqa
+        thumbnail_url=u'http://a.images.blip.tv/Pycon-PyCon2011WritingGreatDocumentation902.png',  # noqa
         save=True)
 
     v.speakers.add(jkm)
@@ -63,8 +63,8 @@ def generate_sampledata(options):
 
     v = video(
         state=Video.STATE_LIVE, category=pycon2012,
-        title=u'Diversity in practice: How the Boston Python User Group grew to '
-              u'1700 people and over 15% women',
+        title=u'Diversity in practice: How the Boston Python User Group grew '
+              u'to 1700 people and over 15% women',
         summary=u"""
             <p>How do you bring more women into programming communities with
             long-term, measurable results? In this talk we'll analyze our
@@ -75,12 +75,12 @@ def generate_sampledata(options):
         updated=datetime(2012, 3, 13, 16, 15, 17),
         source_url=u'https://www.youtube.com/watch?v=QrITN6GZDu4',
         embed=u'''
-            <object width="425" height="344">
-            <param name="movie" value="http://www.youtube.com/v/QrITN6GZDu4&amp;hl=en&amp;fs=1">
-            <param name="allowFullScreen" value="true">
-            <param name="allowscriptaccess" value="always">
-            <embed src="http://www.youtube.com/v/QrITN6GZDu4&amp;hl=en&amp;fs=1" allowscriptaccess="always" height="344" width="425" allowfullscreen="true" type="application/x-shockwave-flash"></embed>
-            </object>''',
+<object width="425" height="344">
+<param name="movie" value="http://www.youtube.com/v/QrITN6GZDu4&amp;hl=en&amp;fs=1">
+<param name="allowFullScreen" value="true">
+<param name="allowscriptaccess" value="always">
+<embed src="http://www.youtube.com/v/QrITN6GZDu4&amp;hl=en&amp;fs=1" allowscriptaccess="always" height="344" width="425" allowfullscreen="true" type="application/x-shockwave-flash"></embed>
+</object>''',  # noqa
         thumbnail_url=u'http://img.youtube.com/vi/QrITN6GZDu4/hqdefault.jpg',
         save=True)
 

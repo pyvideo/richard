@@ -41,7 +41,8 @@ class TestNoAPI(TestCase):
         vid = video(state=Video.STATE_LIVE, save=True)
 
         # anonymous user
-        resp = self.client.get('/api/v1/video/%d/' % vid.pk, {'format': 'json'})
+        resp = self.client.get('/api/v1/video/%d/' % vid.pk,
+                               {'format': 'json'})
         eq_(resp.status_code, 404)
 
 
@@ -220,7 +221,7 @@ class TestVideoPostAPI(TestAPIBase):
                 'state': 0}
 
         resp = self.auth_post('/api/v1/video/', json.dumps(data),
-                                content_type='application/json')
+                              content_type='application/json')
         eq_(resp.status_code, 400)
 
     def test_post_with_used_slug(self):
@@ -234,7 +235,7 @@ class TestVideoPostAPI(TestAPIBase):
                 'slug': 'test1'}
 
         resp = self.auth_post('/api/v1/video/', json.dumps(data),
-                                content_type='application/json')
+                              content_type='application/json')
         eq_(resp.status_code, 400)
 
     def test_put_with_id_and_no_slug(self):
@@ -323,7 +324,7 @@ class TestVideoPostAPI(TestAPIBase):
                 })
 
         resp = self.auth_post('/api/v1/video/', json.dumps(data),
-                                content_type='application/json')
+                              content_type='application/json')
         eq_(resp.status_code, 201)
 
         # Get the created video
@@ -343,13 +344,13 @@ class TestVideoPostAPI(TestAPIBase):
         data.update({'tags': ['']})
 
         resp = self.auth_post('/api/v1/video/', json.dumps(data),
-                                content_type='application/json')
+                              content_type='application/json')
         eq_(resp.status_code, 400)
 
         data.update({'tags': ['/api/v1/tag/1']})
 
         resp = self.auth_post('/api/v1/video/', json.dumps(data),
-                                content_type='application/json')
+                              content_type='application/json')
         eq_(resp.status_code, 400)
 
     def test_post_with_speaker_name(self):
@@ -366,7 +367,7 @@ class TestVideoPostAPI(TestAPIBase):
                 })
 
         resp = self.auth_post('/api/v1/video/', json.dumps(data),
-                                content_type='application/json')
+                              content_type='application/json')
         print resp.content
         eq_(resp.status_code, 201)
 
@@ -387,13 +388,13 @@ class TestVideoPostAPI(TestAPIBase):
         data.update({'speakers': ['']})
 
         resp = self.auth_post('/api/v1/video/', json.dumps(data),
-                                content_type='application/json')
+                              content_type='application/json')
         eq_(resp.status_code, 400)
 
         data.update({'speakers': ['/api/v1/speaker/1']})
 
         resp = self.auth_post('/api/v1/video/', json.dumps(data),
-                                content_type='application/json')
+                              content_type='application/json')
         eq_(resp.status_code, 400)
 
     def test_post_with_category_title(self):
@@ -405,7 +406,7 @@ class TestVideoPostAPI(TestAPIBase):
                 'state': Video.STATE_DRAFT}
 
         resp = self.auth_post('/api/v1/video/', json.dumps(data),
-                                content_type='application/json')
+                              content_type='application/json')
         eq_(resp.status_code, 201)
 
     def test_post_with_no_category(self):
@@ -413,7 +414,7 @@ class TestVideoPostAPI(TestAPIBase):
         data = {'title': 'test1',
                 'state': Video.STATE_DRAFT}
         resp = self.auth_post('/api/v1/video/', json.dumps(data),
-                                content_type='application/json')
+                              content_type='application/json')
         eq_(resp.status_code, 400)
 
     def test_post_with_bad_language(self):
@@ -426,7 +427,7 @@ class TestVideoPostAPI(TestAPIBase):
                 'language': 'lolcats'}
 
         resp = self.auth_post('/api/v1/video/', json.dumps(data),
-                                content_type='application/json')
+                              content_type='application/json')
         eq_(resp.status_code, 400)
 
     def test_post_video_no_data(self):
@@ -447,4 +448,3 @@ class TestVideoPostAPI(TestAPIBase):
         resp = self.client.post('/api/v1/video/', json.dumps(data),
                                 content_type='application/json')
         eq_(resp.status_code, 401)
-
