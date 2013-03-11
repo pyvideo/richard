@@ -38,8 +38,8 @@ class SiteNews(models.Model):
     slug = models.SlugField(unique=True)
 
     class Meta(object):
-        get_latest_by = "updated"
-        ordering = ["-updated"]
+        get_latest_by = 'created'
+        ordering = ['-created']
         # TODO make both translation independent from each other
         verbose_name = _(u'site news')
         verbose_name_plural = _(u'site news')
