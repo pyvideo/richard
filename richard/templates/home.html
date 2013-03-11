@@ -87,7 +87,7 @@
         {% for item in news %}
           <li>
             <a href="{{ item.get_absolute_url() }}">{{ item.title }}</a>
-            - {{ item.updated|datetime }}
+            - {{ item.created|datetime }}
           </li>
         {% endfor %}
       </ul>
