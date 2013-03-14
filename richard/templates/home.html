@@ -42,10 +42,12 @@
         {% if latest_categories %}
           <ul>
             {% for cat in latest_categories %}
-              <li>
-                <a href="{{ cat.get_absolute_url() }}">{{ cat.title }}</a>
-                ({{ cat.video_set.live().count() }})
-              </li>
+              {% if user.is_staff or cat.video_set.live().count() > 0 %}
+                <li>
+                  <a href="{{ cat.get_absolute_url() }}">{{ cat.title }}</a>
+                  ({{ cat.video_set.live().count() }})
+                </li>
+              {% endif %}
             {% endfor %}
           </ul>
         {% endif %}
