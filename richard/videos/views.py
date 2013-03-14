@@ -29,12 +29,39 @@ from haystack.query import SearchQuerySet
 from richard.videos import models
 
 
+def split_year(title):
+    """Returns (title base, year)
+
+    Some categories have a year at the end. This detects that
+    and returns a split.
+
+    Example:
+    >>> split_year('Foo')
+    ('Foo', None)
+    >>> split_year('PyCon 2013')
+    ('PyCon', 2013)
+
+    """
+    try:
+        title = title.strip()
+        return title[:-4].strip(), int(title[-4:])
+    except (IndexError, ValueError):
+        return title, None
+
+
 def category_list(request):
-    category = models.Category.objects.order_by('title')
+    categories = models.Category.objects.order_by('title')
+
+    # category title -> list of categories
+    cats = {}
+    for cat in categories:
+        title, year = split_year(cat.title)
+        cat._year = year
+        cats.setdefault(title, []).append(cat)
 
     ret = render(
         request, 'videos/category_list.html',
-        {'categories': category})
+        {'cats_by_group': cats})
     return ret
 
 
