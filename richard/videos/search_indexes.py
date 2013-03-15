@@ -21,6 +21,7 @@ from richard.videos.models import Video
 
 class VideoIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
+    category = indexes.CharField(indexed=True)
     summary = indexes.CharField(model_attr='summary', indexed=False)
     recorded = indexes.DateTimeField(model_attr='recorded', null=True)
     video_id = indexes.IntegerField(model_attr='id', indexed=False)
@@ -34,6 +35,7 @@ class VideoIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare(self, obj):
         self.prepared_data = super(VideoIndex, self).prepare(obj)
 
+        self.prepared_data['category'] = obj.category.title
         self.prepared_data['tags'] = [
             t.tag.lower() for t in obj.tags.all()]
         self.prepared_data['speakers'] = [

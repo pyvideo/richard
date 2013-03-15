@@ -15,42 +15,44 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#}
-{% macro video_summary(v) -%}
+{% macro video_summary(v, wide, show_category) -%}
+{% set span = 'span10' if wide else 'span7' %}
   <div class="row section">
     <div class="span2">
       <a href="{{ v.get_absolute_url() }}" class="thumbnail"><img width="{{ v.thumbnail_width }}" height="{{ v.thumbnail_height }}" src="{{ v.get_thumbnail_url() }}"></a>
     </div>
 
-    <div class="span7">
+    <div class="{{ span }}">
       <div>
-        <a href="{{ v.get_absolute_url() }}">{{ v.title }}</a>
+        <strong><a href="{{ v.get_absolute_url() }}">{{ v.title }}</a></strong>
+        {% if show_category %}
+          &mdash;
+          <a href="{{ v.category.get_absolute_url() }}">{{ v.category.title }}</a>
+        {% endif %}
+        {% if v.language %}
+          ({{ v.language.name }})
+        {% endif %}
       </div>
       <div>
-        {{ v.summary|md }}
+        {% if v.speakers.all() %}
+          {% set pipe = joiner(", ") %}
+          {% for s in v.speakers.all() -%}
+            {{ pipe() }}<a href="{{ s.get_absolute_url() }}">{{ s.name }}</a>
+          {%- endfor %}
+        {% endif %}
       </div>
-    </div>
-    <div class="span3">
-      Event: <a href="{{ v.category.get_absolute_url() }}">{{ v.category.title }}</a><br>
-      {% if v.speakers.all() %}
-        Speakers: 
-        {% set pipe = joiner(", ") %}
-        {% for s in v.speakers.all() -%}
-          {{ pipe() }}<a href="{{ s.get_absolute_url() }}">{{ s.name }}</a>
-        {%- endfor %}
-        <br>
-      {% endif %}
-      {% if v.recorded %}
-        Recorded: {{ v.recorded | datetime }}<br>
-      {% endif %}
-      {% if v.duration %}
-        Duration: {{v.duration | duration }}<br>
-      {% endif %}
-      {% if v.language %}
-        Language: {{ v.language.name }}<br>
-      {% endif %}
-      {% if v.updated %}
-        Last updated: {{ v.updated | datetime }}<br>
-      {% endif %}
+      <div>
+        {% if v.recorded %}
+          <small>Recorded: {{ v.recorded | datetime }}</small>
+        {% else %}
+          <small>Added: {{ v.added | datetime }}</small>
+        {% endif %}
+      </div>
+      <div>
+        {% if v.summary %}
+          {{ v.summary|md }}
+        {% endif %}
+      </div>
     </div>
   </div>
 {%- endmacro %}

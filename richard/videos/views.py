@@ -23,8 +23,8 @@ from django.contrib.sites.models import Site
 from django.core.paginator import EmptyPage, Paginator
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, render
-from haystack.query import SearchQuerySet
 
+from haystack.query import SearchQuerySet
 
 from richard.videos import models
 
@@ -171,9 +171,30 @@ def video(request, video_id, slug):
 
 def search(request):
     q = request.GET.get('q', '')
+    facet_counts = {}
     if q:
-        qs = (SearchQuerySet().filter_or(content=q)
-                              .filter_or(speakers__startswith=q.lower()))
+        cat_filter = request.GET.get('category')
+
+        qs = SearchQuerySet()
+        qs = qs.filter(content=q)
+        qs = qs.filter_or(speakers__startswith=q.lower())
+
+        if cat_filter:
+            # TODO: This doesn't work quite right. It should filter
+            # out anything that's not *exactly* cat_filter but it's
+            # not. Could be a problem here or with the indexing. The
+            # haystack docs are mysterious.
+            qs = qs.filter_and(category__exact=cat_filter)
+
+        # TODO: Whoosh doesn't handle faceting, so we have to do it
+        # manually. Fix this so it detects whether the haystack backend
+        # supports facets and if so, uses the backend and not the db.
+        cat_counts = {}
+        for mem in qs:
+            cat_counts[mem.category] = cat_counts.get(mem.category, 0) + 1
+
+        facet_counts['category'] = sorted(
+            cat_counts.items(), key=lambda pair: pair[1], reverse=True)
 
         page = Paginator(qs, 25)
         p = request.GET.get('p', '1')
@@ -193,6 +214,7 @@ def search(request):
     return render(request,
                   'videos/search.html',
                   {'query': q,
+                   'facet_counts': facet_counts,
                    'page': page})
 
 
