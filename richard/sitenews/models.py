@@ -70,8 +70,8 @@ class Notification(models.Model):
         help_text=_(u'Use Markdown. Keep the text short. Add a link to '
                     u'sitenews for more information.'))
 
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
+    start_date = models.DateField()
+    end_date = models.DateField()
 
     class Meta(object):
         verbose_name = _(u'notification')
@@ -79,7 +79,6 @@ class Notification(models.Model):
 
     @classmethod
     def get_live_notifications(cls):
-        # TODO: Get this from cache.
-        now = datetime.datetime.now()
+        now = datetime.date.today()
         return Notification.objects.filter(
-            start_date__lte=now, end_date__gte=now)
+            start_date__lte=now, end_date__gt=now)

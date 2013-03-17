@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 
 from richard.sitenews import models
 from richard.tests.utils import with_save
@@ -39,7 +39,7 @@ def sitenews(**kw):
 @with_save
 def notification(**kw):
     """Builds a Notification object with appropriate defaults"""
-    start = datetime.now()
+    start = date.today()
     end = start + timedelta(days=2)
 
     defaults = dict(start_date=start, end_date=end)
