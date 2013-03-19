@@ -68,8 +68,8 @@ def stats(request):
     tag_top5 = most_videos(Tag)[:5]
 
     open_states = (Suggestion.STATE_NEW, Suggestion.STATE_IN_PROGRESS)
-    suggestions = (Suggestion.objects.filter(state__in=open_states)
-                                     .order_by('-state'))
+    suggestions = (Suggestion.objects.filter(
+        state__in=open_states, is_reviewed=True).order_by('-state'))
 
     ret = render(
         request, 'stats.html',
