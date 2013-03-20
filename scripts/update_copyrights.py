@@ -1,12 +1,15 @@
 #!/usr/bin/env python
+"""
+Updates copyright statements in all html and python files.
+"""
 
 import os
 import re
 import sys
 
 
-COPYRIGHT_RE = re.compile('# Copyright \\(C\\).*?\\n')
-COPYRIGHT = '# Copyright (C) 2012, 2013 richard contributors.  See AUTHORS.
+COPYRIGHT_RE = re.compile('# Copyright \\(C\\).*?richard.*?\\n')
+COPYRIGHT = '# Copyright (C) 2012, 2013 richard contributors.  See AUTHORS.'
 
 
 def copyright_py(filename):
@@ -38,7 +41,7 @@ def main(argv):
             if name == __file__:
                 continue
 
-            if name.endswith('.py'):
+            if name.endswith(('.py', '.html')):
                 filename = os.path.join(root, name)
                 print 'Fixing {0}'.format(filename)
                 copyright_py(filename)
