@@ -42,6 +42,9 @@
       {% if v.recorded %}
         Recorded: {{ v.recorded | datetime }}<br>
       {% endif %}
+      {% if v.duration %}
+        Duration: {{v.duration | duration }}<br>
+      {% endif %}
       {% if v.language %}
         Language: {{ v.language.name }}<br>
       {% endif %}
