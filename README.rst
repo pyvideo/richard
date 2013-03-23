@@ -1,5 +1,5 @@
 ========
- README
+ Readme
 ========
 
 richard is software for running a video index site.

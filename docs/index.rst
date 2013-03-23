@@ -42,6 +42,7 @@ about the project to help out.
    contributors/dev_layout
    contributors/dev_conventions
    contributors/dev_resources
+   contributors/dev_authors
 
 
 Indices and tables
