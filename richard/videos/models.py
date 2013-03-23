@@ -259,13 +259,14 @@ class Video(models.Model):
     def is_live(self):
         return self.state == self.STATE_LIVE
 
-    def get_available_formats(self, html5tag=False):
+    def get_available_formats(self, download=False, html5tag=False):
         """Return formats ordered by MEDIA_PREFERENCE setting.
 
         Looks through all video_url/video_length fields on the model and
         selects those that are available, i.e. that have a value. The
         elements in the returned list are ordered by their format.
 
+        :arg download: True if this is being used for download links
         :arg html5tag: True if this is being used in an html5 video
             tag
 
@@ -294,7 +295,7 @@ class Video(models.Model):
                 result.append({'url': url, 'length': length,
                                'mime_type': mime_type})
 
-        if not html5tag:
+        if not html5tag and not download:
             # Now we do this goofy thing where if this is a YouTube
             # video we add it to the list of available formats. That's
             # because this gets used to build the enclosures for a

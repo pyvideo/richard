@@ -88,7 +88,7 @@
           {% endif %}
         </td>
         <td>
-          {% set formats = v.get_available_formats(html5tag=True) %}
+          {% set formats = v.get_available_formats(download=True) %}
           {% if formats %}
             {% for format in formats %}
               <a href="{{ format.url }}">{{ format.mime_type }}</a>
