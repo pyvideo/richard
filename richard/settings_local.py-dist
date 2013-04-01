@@ -31,3 +31,14 @@ DATABASES = {
         'PORT': '',
     }
 }
+
+# If you're doing development work and you're not in production and you have no
+# Internet connection, uncomment the following and set BROWSERID_AUTOLOGIN to
+# the email address of the account you want to log in as."
+
+#AUTHENTICATION_BACKENDS = (
+#    'richard.auth.AutoLoginBackend',
+#    'django_browserid.auth.BrowserIDBackend',
+#)
+#
+#BROWSERID_AUTOLOGIN = ''

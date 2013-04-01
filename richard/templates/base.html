@@ -110,8 +110,13 @@
   {% block site_js %}
   <script type="text/javascript" src="{{ settings.STATIC_URL }}js/jquery-1.7.2.min.js"></script>
   <script type="text/javascript" src="{{ settings.STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="{{ settings.STATIC_URL }}browserid/browserid.js"></script>
-  <script type="text/javascript" src="https://login.persona.org/include.js"></script>
+    {% if not settings.BROWSERID_AUTOLOGIN %}
+      <script type="text/javascript" src="{{ settings.STATIC_URL }}browserid/browserid.js"></script>
+      <script type="text/javascript" src="https://login.persona.org/include.js"></script>
+    {% else %}
+      <script type="text/javascript" src="{{ settings.STATIC_URL }}js/browserid-mock.js"></script>
+    {% endif %}
+
   {% endblock %}
 </body>
 </html>
