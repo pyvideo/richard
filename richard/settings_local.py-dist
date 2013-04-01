@@ -5,6 +5,12 @@
 #
 # See settings.py and documentation for other things you can configure.
 
+import os
+
+
+# site_root is the parent directory
+SITE_ROOT = os.path.dirname(os.path.dirname(__file__))
+
 DEBUG = TEMPLATE_DEBUG = True
 
 SECRET_KEY = 'secret key'
