@@ -20,3 +20,6 @@ class DurationFilterTest(unittest.TestCase):
         self.assertEquals("02:02:00", duration('7320'))
         self.assertEquals("02:02:01", duration('7321'))
         self.assertEquals("02:02:02", duration('7322'))
+
+    def test_bad(self):
+        self.assertEquals('', duration(None))

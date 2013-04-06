@@ -55,8 +55,10 @@ def md(text):
 
 @register.filter
 def duration(duration):
-    """Filter that converts a duration in seconds to
-    something like 01:54:01"""
+    """Filter that converts a duration in seconds to something like 01:54:01
+    """
+    if duration is None:
+        return ''
 
     duration = int(duration)
     seconds = duration % 60
