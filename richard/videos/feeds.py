@@ -66,9 +66,8 @@ class CategoryFeed(Feed):
             site_title=settings.SITE_TITLE)
 
     def items(self):
-        cats = Category.objects.order_by('-added')
-        # TODO: Figure out how to do this in the queryset
-        cats = [cat for cat in cats if cat.video_set.live().count() > 0]
+        cats = (Category.objects.filter(video__state=Video.STATE_LIVE)
+                                .order_by('-added'))
         return cats[:settings.MAX_FEED_LENGTH]
 
     def item_title(self, item):
