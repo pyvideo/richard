@@ -341,7 +341,5 @@ class CategoryResource(EnhancedModelResource):
         else:
             video_set = video_set.live()
 
-        # TODO: fix url so it's not hard-coded
-        return [
-            '/api/v1/video/%d/' % vid
-            for vid in video_set.values_list('id', flat=True)]
+        vid_resource = VideoResource()
+        return [vid_resource.get_resource_uri(vid) for vid in video_set]
