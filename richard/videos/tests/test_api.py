@@ -318,10 +318,11 @@ class TestVideoPostAPI(TestAPIBase):
                 'state': Video.STATE_DRAFT}
 
         footag = u'footag'
-        data.update({
+        data.update(
+            {
                 'title': 'test2',
                 'tags': [footag],
-                })
+            })
 
         resp = self.auth_post('/api/v1/video/', json.dumps(data),
                               content_type='application/json')
@@ -361,10 +362,11 @@ class TestVideoPostAPI(TestAPIBase):
                 'category': '/api/v1/category/%d/' % cat.pk,
                 'state': Video.STATE_DRAFT}
 
-        data.update({
+        data.update(
+            {
                 'title': 'test2',
                 'speakers': [fooperson],
-                })
+            })
 
         resp = self.auth_post('/api/v1/video/', json.dumps(data),
                               content_type='application/json')
