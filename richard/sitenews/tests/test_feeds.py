@@ -14,4 +14,21 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# TODO: do these
+from django.core.urlresolvers import reverse
+from django.test import TestCase
+
+from nose.tools import eq_
+
+from richard.sitenews.feeds import NewsFeed
+from richard.sitenews.tests import sitenews
+
+
+class FeedTest(TestCase):
+    def test_sitenews_feed(self):
+        feed = NewsFeed()
+        sitenews(save=True)
+
+        eq_(len(feed.items()), 1)
+
+        resp = self.client.get(reverse('sitenews-feed'))
+        eq_(resp.status_code, 200)
