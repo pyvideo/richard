@@ -17,17 +17,23 @@
 # TODO: Write more
 
 from django.test import TestCase
+from django.core.urlresolvers import reverse
+from django.template.loader import get_template
+from django.template.base import TemplateDoesNotExist
+
 from nose.tools import eq_
 
 from richard.videos.feeds import CategoryFeed
 from richard.videos.models import Video
-from richard.videos.tests import category, video
+from richard.videos.tests import category, video, speaker
 
 
 class FeedTest(TestCase):
 
     def test_category_feed(self):
-        """Test that only categories with live videos are included."""
+        """Tests for Category rss feed"""
+
+        # Test that only categories with live videos are included."""
         feed = CategoryFeed()
 
         cat = category(save=True)
@@ -41,3 +47,54 @@ class FeedTest(TestCase):
         v2.state = Video.STATE_LIVE
         v2.save()
         eq_([x.pk for x in feed.items()], [cat.pk])
+
+        # Category feed description_template exists.
+        found_tpl = True
+        try:
+            tpl = get_template(feed.description_template)
+        except TemplateDoesNotExist:
+            found_tpl = False
+        eq_(found_tpl, True)
+
+        # Category list feeds is accessible.
+        resp = self.client.get(reverse('videos-category-feed'))
+        eq_(resp.status_code, 200)
+
+        # Category videos feed is accessible.
+        resp = self.client.get(reverse(
+                        'videos-category-videos-feed', 
+                        kwargs={'category_id': cat.id, 'slug': cat.slug,}))
+        eq_(resp.status_code, 200)
+
+        # Category videos feed returns 404, invalid category_id.
+        resp = self.client.get(reverse(
+                        'videos-category-videos-feed', 
+                        kwargs={'category_id': 50, 'slug': 'fake-slug',}))
+        eq_(resp.status_code, 404)
+
+    def test_speaker_feed(self):
+        """Tests for Speaker rss feed"""
+
+        spk = speaker(save=True)
+
+        # Speaker feed is accessible
+        resp = self.client.get(reverse(
+                        'videos-speaker-feed',
+                        kwargs={'speaker_id': spk.id, 'slug': spk.slug,}))
+        eq_(resp.status_code, 200)
+
+        # Speaker feed returns 404, invalid speaker_id.
+        resp = self.client.get(reverse(
+                        'videos-speaker-feed',
+                        kwargs={'speaker_id': 50, 'slug': 'fake-slug',}))
+        eq_(resp.status_code, 404)
+
+    def test_video_feed(self):
+        """Tests for Video rss feed"""
+
+        #Video feed is accessible
+        resp = self.client.get(reverse('videos-new-feed'))
+        eq_(resp.status_code, 200)
+
+
+
