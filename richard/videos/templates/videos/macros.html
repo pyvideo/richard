@@ -48,6 +48,9 @@
       {% if v.language %}
         Language: {{ v.language.name }}<br>
       {% endif %}
+      {% if v.updated %}
+        Last updated: {{ v.updated | datetime }}<br>
+      {% endif %}
     </div>
   </div>
 {%- endmacro %}

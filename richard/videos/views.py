@@ -68,14 +68,23 @@ def category_list(request):
 def category(request, category_id, slug):
     obj = get_object_or_404(models.Category, pk=category_id)
 
+    sort_options = {'title': 'title',
+                    'added': '-added',
+                    'updated': '-updated'}
+    sort_key = request.GET.get('sort_by', 'title')
+    if sort_key not in sort_options:
+        sort_key = 'title'
+
     videos = (obj.video_set.live().select_related('category')
-                                  .prefetch_related('speakers'))
+                                  .prefetch_related('speakers')
+                                  .order_by(sort_options[sort_key]))
 
     ret = render(
         request, 'videos/category.html',
         {'view': 'videos',
          'category': obj,
-         'videos': videos})
+         'videos': videos,
+         'sort_by': sort_key})
     return ret
 
 
