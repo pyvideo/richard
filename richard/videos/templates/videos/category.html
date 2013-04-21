@@ -69,15 +69,6 @@
 
 
 {% if view == 'videos' %}
-  <div class="clearfix">
-    <div class="btn-group sort-options pull-right">
-      <small>Sort</small>
-      <a class="btn btn-small {% if sort_by == 'title' %}active{% endif %}" href="?sort_by=title">Title</a>
-      <a class="btn btn-small {% if sort_by == 'added' %}active{% endif %}" href="?sort_by=added">Newest</a>
-      <a class="btn btn-small {% if sort_by == 'updated' %}active{% endif %}" href="?sort_by=updated">Recently updated</a>
-    </div>
-  </div>
-
   {% for v in videos %}
     {{ macros.video_summary(v) }}
   {% endfor %}

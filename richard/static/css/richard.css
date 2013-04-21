@@ -49,14 +49,3 @@ div#footer {
 .indent {
   padding-left: 2em;
 }
-
-.sort-options {
-  margin-bottom: 20px;
-}
-
-.sort-options small {
-  font-size: 12px;
-  vertical-align: middle;
-  line-height: 20px;
-  margin-right: 5px;
-}
