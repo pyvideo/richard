@@ -97,3 +97,48 @@ class FeedTest(TestCase):
         # Video feed is accessible
         resp = self.client.get(reverse('videos-new-feed'))
         eq_(resp.status_code, 200)
+
+    def test_video_feed_enclosures(self):
+        """Test for encolures of video feeds"""
+
+        # Since video feeds that has enclosure enabled are inherited from the
+        # same base feed class ``BaseVideoFeed``, we only need to create a
+        # general enclosure test for it.
+
+        # Note: Feed content tests will be applied against `newly posted video`
+        # feeds, for the sake of simplicity.
+        feeds_url = reverse('videos-new-feed')
+
+        example_url = 'http://example.com/123456'
+        youtube_source_url = 'http://www.youtube.com/watch?v=123456'
+
+        vid = video(state=Video.STATE_LIVE, save=True)
+
+        # No video & source urls specified, no enclosures available in feeds.
+        resp = self.client.get(feeds_url)
+        eq_('enclosure' not in resp.content, True)
+
+        # `source_url` specified, but not a youtube url.
+        vid.source_url = example_url
+        vid.save()
+        resp = self.client.get(feeds_url)
+        eq_('enclosure' not in resp.content, True)
+
+        # `source_url` specified, this time a youtube url. Enclosure available.
+        vid.source_url = youtube_source_url
+        vid.save()
+        resp = self.client.get(feeds_url)
+        eq_('enclosure' in resp.content, True)
+        eq_(youtube_source_url in resp.content, True)
+
+        # video urls available, correct urls displayed in feeds.
+        vid.video_ogv_url = example_url + '.ogv'
+        vid.video_webm_url = example_url + '.webm'
+        vid.video_mp4_url = example_url + '.mp4'
+        vid.video_flv_url = example_url + '.flv'
+        vid.save()
+        resp = self.client.get(feeds_url)
+        eq_(vid.video_ogv_url in resp.content, True)
+        eq_(vid.video_webm_url in resp.content, True)
+        eq_(vid.video_mp4_url in resp.content, True)
+        eq_(vid.video_flv_url in resp.content, True)
