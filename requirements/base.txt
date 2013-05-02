@@ -8,7 +8,7 @@ south
 eadred
 
 # We need master tip of django-browserid
-https://github.com/mozilla/django-browserid/zipball/9eb0bd3054ddfab4543fae25171f9cee18b5f928#egg=django-browserid
+https://github.com/mozilla/django-browserid/zipball/afdf3408c1#egg=django-browserid
 
 # Jingo never really does releases.
 https://github.com/jbalogh/jingo/zipball/master#egg=jingo
