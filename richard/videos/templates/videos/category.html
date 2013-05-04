@@ -55,10 +55,12 @@
           No description.
         {% endif %}
       </dd>
-      <dt>Date:</dt>
-      <dd>
-        {{ category.start_date|datetime }}
-      </dd>
+      {% if category.start_date %}
+        <dt>Date:</dt>
+        <dd>
+          {{ category.start_date|datetime }}
+        </dd>
+      {% endif %}
       <dt>Number of videos:</dt>
       <dd>
         {{ videos|length }}
