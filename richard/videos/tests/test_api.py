@@ -380,6 +380,32 @@ class TestVideoPostAPI(TestAPIBase):
         vid = Video.objects.get(title=data['title'])
         eq_(vid.speakers.values_list('name', flat=True)[0], fooperson)
 
+    def test_post_with_speaker_with_extra_spaces(self):
+        """Test that you can post videos with speaker names"""
+        cat = category(save=True)
+        fooperson = u' Carl '
+        data = {'title': 'test1',
+                'category': '/api/v1/category/%d/' % cat.pk,
+                'state': Video.STATE_DRAFT}
+
+        data.update(
+            {
+                'title': 'test2',
+                'speakers': [fooperson],
+            })
+
+        resp = self.auth_post('/api/v1/video/', json.dumps(data),
+                              content_type='application/json')
+        print resp.content
+        eq_(resp.status_code, 201)
+
+        # Get the created video
+        resp = self.auth_get(resp['Location'], {'format': 'json'})
+
+        # Verify the speaker
+        vid = Video.objects.get(title=data['title'])
+        eq_(vid.speakers.values_list('name', flat=True)[0], fooperson.strip())
+
     def test_post_with_bad_speaker_string(self):
         cat = category(save=True)
 

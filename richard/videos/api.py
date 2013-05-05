@@ -223,7 +223,8 @@ class VideoResource(EnhancedModelResource):
                         'speakers must be list of non-empty strings.')
                     return self.raise_bad_request(bundle, errors)
                 else:
-                    speaker = Speaker.objects.get_or_create(name=speaker)[0]
+                    speaker = Speaker.objects.get_or_create(
+                        name=speaker.strip())[0]
                     speaker_objs.append(speaker)
         bundle.data['speaker_objs'] = speaker_objs
 
