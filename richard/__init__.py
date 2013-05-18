@@ -13,3 +13,12 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# See http://www.python.org/dev/peps/pep-0386/
+# Examples:
+# * 1.0.dev
+# * 1.0a2
+# * 1.0b2
+# * 1.0
+__version__ = '0.1.dev'
+__releasedate__ = '' 
