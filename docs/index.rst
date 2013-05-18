@@ -16,6 +16,7 @@ to know to run a richard-based video index site.
 .. toctree::
    :maxdepth: 1
 
+   admin/whatsnew
    admin/install
    admin/upgrade
    admin/performance

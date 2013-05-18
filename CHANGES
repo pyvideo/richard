@@ -1,0 +1,61 @@
+=====================
+What's new in richard
+=====================
+
+.. contents::
+   :local:
+
+
+Version 0.1: May 18th, 2013
+===========================
+
+**Features**
+
+* categories, speakers, videos
+* lots of metadata
+* RSS feeds for videos, categories, site news
+* site news
+* basic search
+* admin section
+* JSON API for querying the data and adding data
+
+
+**API-breaking changes:**
+
+* None since this is the initial release.
+
+
+**Other changes:**
+
+* Everything since this is the intitial release.
+
+
+**Thank you!:**
+
+Thank you to all the following folks who contributed code or reported bugs
+or otherwise helped with this release!
+
+* Adam Zapletal
+* Alejandro Gómez
+* Andrew Szeto
+* Carl Karsten
+* Chris Lawlor
+* David Winterbottom
+* Eduard-Cristian Stefan
+* Eka Putra
+* Fernando Gutierrez
+* Frank Ploss
+* Gledi Caushaj
+* lukegotszling
+* Miki Tebeka
+* Nathan Villaescusa
+* Nes.quik
+* Pavel Savchenko
+* Reiner Gerecke
+* Ricky Rosario
+* Riley Labrecque
+* Roy Hyunjin Han
+* Senthil Kumaran
+* Sheila Miguez
+* Spencer Herzberg
+* Will Kahn-Greene
