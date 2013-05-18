@@ -4,17 +4,15 @@
 
 .. Note::
 
-   richard is pretty new and is under heavy development. As such, the
-   documentation for it sucks and the installation guide may have as
-   much of a chance of helping you install richard as it does helping
-   you make a quiche.
+   richard is not heavily used. As such the documentation is probably
+   lacking and the installation guide may have as much of a chance of
+   helping you install richard as it does helping you make a quiche.
+   I'm really sorry about that.
 
-   I'm really sorry about that, but I'm still bootstrapping the
-   project.
-
-   If you have thoughts on better instructions, let us know on the irc
-   channel or write up an issue in the tracker.  See the
-   :doc:`Contributor's Guide <../index>` for more details.
+   If you have any problems or want to contribute fixes, open up an
+   `issue on GitHub <https://github.com/willkg/richard/issues>`_ or talk
+   to us on irc. See the :doc:`Contributor's Guide <../index>` for more
+   details.
 
 
 .. contents::
@@ -47,6 +45,20 @@ On Debian, this translates to::
           python-virtualenv
 
 
+Getting richard
+===============
+
+You can download a zip file:
+
+* v0.1: https://github.com/willkg/richard/archive/v0.1.zip
+* bleeding edge in development: https://github.com/willkg/richard/archive/master.zip
+
+If you're planning to contribute, then maybe it's better to clone the
+repository with git::
+
+    $ git clone git://github.com/willkg/richard.git
+
+
 Setting up a directory structure
 ================================
 
@@ -61,7 +73,7 @@ I suggest a directory hierarchy along the lines of the following::
     |- media/        <-- images, js, css served by your web server
     |- venv/         <-- virtual environment holding
     |
-    |- richard/      <-- tarball / git repository
+    |- richard/      <-- unzipped zip file / untarred tarball / git repository
        |- richard/   <-- richard django project
     ...
 
@@ -71,15 +83,7 @@ To generate that::
     $ cd your_site
     $ mkdir bin templates media venv
 
-If you have a tarball::
-
-    $ cd your_site
-    $ tar -xzvf richard.tar.gz
-
-If you're cloning from git::
-
-    $ cd your_site
-    $ git clone git://github.com/willkg/richard.git
+Then put the ``richard/`` directory under ``your_site``.
 
 
 .. Note::
@@ -94,17 +98,11 @@ Python packages to install
 Now you need to install some other things all of which are specified
 in the requirements files provided.
 
-Create a virtual environment::
+Create a virtual environment, activate it and install requirements::
 
     $ cd your_site
     $ virtualenv ./venv/
-
-Activate the virtual environment::
-
     $ . ./venv/bin/activate
-
-Use pip to install the requirements::
-
     $ pip install -r richard/requirements/base.txt
 
 
@@ -232,7 +230,7 @@ Setting up the database (sqlite)
 
 
 Setting up sqlite is easy because the configuration for it is already
-in the settings.py file. If you like the defaults, you're done!
+in the ``settings.py`` file. If you like the defaults, you're done!
 
 
 .. _install-chapter-mysql-db:
