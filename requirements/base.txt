@@ -1,4 +1,5 @@
 django==1.4.5
+django-haystack==2.0.0
 Jinja2
 whoosh
 bleach
@@ -10,13 +11,9 @@ eadred
 # We need master tip of django-browserid
 https://github.com/mozilla/django-browserid/zipball/afdf3408c1#egg=django-browserid
 
-# Jingo never really does releases.
+# Jingo never really does releases
 https://github.com/jbalogh/jingo/zipball/master#egg=jingo
 
-# We're using 2.0 alpha or 2.0 beta or something, so until 2.0 is released, we're
-# pulling from master.
-https://github.com/toastdriven/django-haystack/zipball/master#egg=django-haystack
-
 # We're using a specific version here because we need the MultiAuthentication
-# feature, but newer commits break tests.
+# feature, but newer commits break tests
 https://github.com/toastdriven/django-tastypie/zipball/5e8850434ef1c8672b0a22953bd7cc0def6347f8#egg=django-tastypie
