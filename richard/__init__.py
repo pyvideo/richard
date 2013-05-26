@@ -23,4 +23,4 @@
 __version__ = '0.2.dev'
 
 # YYYYMMDD
-__releasedate__ = '' 
+__releasedate__ = ''

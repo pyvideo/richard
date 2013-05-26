@@ -1,7 +1,8 @@
 from collections import namedtuple
 
 
-Browser = namedtuple('Browser', [
+Browser = namedtuple(
+    'Browser', [
         'name', 'version', 'platform_version', 'mobile', 'tablet'])
 
 

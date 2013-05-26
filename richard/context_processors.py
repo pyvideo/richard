@@ -46,7 +46,8 @@ def page_title(s=None):
 @register.filter
 def md(text):
     """Filter that converts Markdown text -> HTML."""
-    return Markup(markdown.markdown(
+    return Markup(
+        markdown.markdown(
             text,
             output_format='html5',
             safe_mode='replace',
