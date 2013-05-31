@@ -6,6 +6,20 @@ What's new in richard
    :local:
 
 
+Version 0.2: In development
+===========================
+
+**Other changes:**
+
+* Moved a bunch of files from ``richard/`` to the new base app in
+  ``richard/base/``. This cleans up the richard project directory a
+  bit.
+
+* Updated to django-haystack 2.0.
+
+* Cleaned up the search page a bit. Added a category facet.
+
+
 Version 0.1: May 18th, 2013
 ===========================
 
