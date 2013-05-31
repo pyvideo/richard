@@ -15,3 +15,5 @@ HAYSTACK_CONNECTIONS = {
 # This allows the "test_api_disabled" test to kick off. The other api
 # tests tweak things so they can run.
 API = False
+
+SECRET_KEY = 'richard-test'
