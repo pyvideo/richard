@@ -20,12 +20,12 @@ from jinja2 import Markup
 from jingo import register
 import markdown
 
-from sitenews import models
+from richard.sitenews.models import Notification
 
 
 def base(request):
     """Adds basic things to the context"""
-    notifications = models.Notification.get_live_notifications()
+    notifications = Notification.get_live_notifications()
 
     return {
         'request': request,

@@ -18,9 +18,9 @@ import uuid
 
 from django.template.defaultfilters import slugify
 
-from richard.videos.models import (Category, Speaker, Tag, Video, RelatedUrl,
-                                   Language)
-from richard.tests.utils import with_save
+from richard.videos.models import (
+    Category, Speaker, Tag, Video, RelatedUrl, Language)
+from richard.base.tests import with_save
 
 
 @with_save

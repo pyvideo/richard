@@ -14,23 +14,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import itertools
-
-from richard.base.tests import with_save
-from richard.suggestions.models import Suggestion
+from django.core.management import call_command
 
 
-_count = itertools.count()
-
-
-@with_save
-def suggestion(**kwargs):
-    defaults = {}
-    defaults.update(kwargs)
-
-    if 'name' not in defaults:
-        defaults['name'] = u'Add pycon conference ' + str(_count.next())
-    if 'url' not in defaults:
-        defaults['url'] = u'https://us.pycon.org/2012/' + str(_count.next())
-
-    return Suggestion(**defaults)
+def test_generate_data():
+    """Make sure ./manage.py generatedata runs."""
+    call_command('generatedata')

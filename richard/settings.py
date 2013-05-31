@@ -125,7 +125,7 @@ USE_TZ = False
 # Fixture directory for easy bulk-loading
 FIXTURE_DIRS = (
     os.path.join(ROOT, 'fixtures'),
-    )
+)
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
@@ -181,7 +181,7 @@ MIDDLEWARE_CLASSES = (
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'richard.middleware.BrowserDetectMiddleware',
+    'richard.base.middleware.BrowserDetectMiddleware',
 
     # This should probably be last. It catches 404 errors, then checks
     # to see if we should be redirecting the url.
@@ -202,7 +202,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.messages.context_processors.messages',
     'django_browserid.context_processors.browserid',
 
-    'richard.context_processors.base',
+    'richard.base.context_processors.base',
 )
 
 JINGO_EXCLUDE_APPS = (
@@ -236,6 +236,7 @@ INSTALLED_APPS = (
     'tastypie',
     'eadred',
 
+    'richard.base',
     'richard.videos',
     'richard.sitenews',
     'richard.pages',

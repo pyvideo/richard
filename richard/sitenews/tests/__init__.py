@@ -16,8 +16,8 @@
 
 from datetime import date, datetime, timedelta
 
+from richard.base.tests import with_save
 from richard.sitenews import models
-from richard.tests.utils import with_save
 
 
 @with_save

@@ -25,8 +25,8 @@ admin.autodiscover()
 admin.site.login = login_required(admin.site.login)
 
 from richard.pages.sitemaps import PageSitemap
-from richard.videos.sitemaps import (CategorySitemap, SpeakerSitemap,
-                                     VideoSitemap)
+from richard.videos.sitemaps import (
+    CategorySitemap, SpeakerSitemap, VideoSitemap)
 
 
 sitemaps = {
@@ -39,10 +39,8 @@ sitemaps = {
 urlpatterns = patterns(
     '',
 
-    url(r'^$', 'richard.views.home', name='home'),
-    url(r'^login-failure$', 'richard.views.login_failure',
-        name='login_failure'),
-    url(r'^stats/$', 'richard.views.stats', name='stats'),
+    url(r'', include('richard.base.urls')),
+
     (r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap',
      {'sitemaps': sitemaps}),
 

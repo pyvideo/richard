@@ -14,23 +14,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import itertools
 
-from richard.base.tests import with_save
-from richard.suggestions.models import Suggestion
+from django.conf.urls import patterns, url
 
 
-_count = itertools.count()
+urlpatterns = patterns(
+    '',
 
-
-@with_save
-def suggestion(**kwargs):
-    defaults = {}
-    defaults.update(kwargs)
-
-    if 'name' not in defaults:
-        defaults['name'] = u'Add pycon conference ' + str(_count.next())
-    if 'url' not in defaults:
-        defaults['url'] = u'https://us.pycon.org/2012/' + str(_count.next())
-
-    return Suggestion(**defaults)
+    url(r'^$', 'richard.base.views.home', name='home'),
+    url(r'^login-failure$', 'richard.base.views.login_failure',
+        name='login_failure'),
+    url(r'^stats/$', 'richard.base.views.stats', name='stats'),
+)
