@@ -9,6 +9,7 @@ directory tree like this::
    |- docs/          -- documentation
    |- requirements/  -- requirements files for pip
    \- richard/       -- richard django project
+      |- base/       -- base code shared by the other apps
       |- pages/      -- code for "about", "contac", etc pages
       |- sampledata/ -- code for loading sampledata from apps
       |- sitenews/   -- code for sitenews
@@ -31,6 +32,12 @@ Here's what's there:
 
     This is the "Django project" part of the project and where the
     "Django apps" go. There are a few:
+
+    **base**
+
+        This is where shared code for all the apps go as well as code
+        central to the Django project. Middleware, context processors,
+        base templates, static assets, etc.
 
     **pages**
 

@@ -36,8 +36,6 @@ Locations
 
 Tests for apps go in ``richard/richard/APPNAME/tests/``.
 
-Tests for richard project go in ``richard/richard/tests/``.
-
 
 Conventions
 -----------

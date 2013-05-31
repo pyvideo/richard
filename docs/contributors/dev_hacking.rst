@@ -64,9 +64,11 @@ Create a virtual environment::
     $ cd richard
     $ virtualenv ./venv/
 
+
 Use pip to install the development requirements::
 
     $ ./venv/bin/pip install -r requirements/development.txt
+
 
 .. Note::
 
@@ -81,6 +83,7 @@ Use pip to install the development requirements::
    To activate the virtual environment, do::
 
        $ . ./venv/bin/activate
+
 
 .. Note::
 
@@ -144,13 +147,14 @@ Troubleshooting
 I can't log in
 --------------
 
-First, make sure your administrator account has an email address associated
-with it. This is the email address you will log in with Persona.
+First, make sure your administrator account has an email address
+associated with it. This is the email address you will log in with
+Persona.
 
-Second, if you're seeing a "Misconfigured" kind of error, make sure the
-``SITE_URL`` in your ``settings_local.py`` file matches the domain and port
-that the server is running on. If it doesn't match, then django-browserid
-won't work.
+Second, if you're seeing a "Misconfigured" kind of error, make sure
+the ``SITE_URL`` in your ``settings_local.py`` file matches the domain
+and port that the server is running on. If it doesn't match, then
+django-browserid won't work.
 
 See `the django-browserid troubleshooting docs
 <https://django-browserid.readthedocs.org/en/latest/details/troubleshooting.html>`_

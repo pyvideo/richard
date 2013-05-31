@@ -120,7 +120,7 @@ Django / nose / jinja2 / haystack / whoosh / tastypie
 
   I additionally use `nose-progressive
   <http://pypi.python.org/pypi/nose-progressive/>`_ because then the test
-  output is easier to read.
+  output is easier to read. I highly recommend it.
 
 * `jingo <https://github.com/jbalogh/jingo>`_ and
   `jinja2 <http://jinja.pocoo.org/>`_
@@ -133,11 +133,13 @@ Django / nose / jinja2 / haystack / whoosh / tastypie
 * `django-haystack <http://haystacksearch.org/>`_ and
   `whoosh <https://bitbucket.org/mchaput/whoosh/wiki/Home>`_
 
-  This runs the search system. I picked whoosh because it's a pure Python
-  package and thus really easy to install and use.
+  This runs the search system. I picked whoosh because it's a pure
+  Python package and thus really easy to install and use. That makes
+  richard easy for contributors to get up and running.
 
-  You can pick something different and change ``settings_local.py`` with
-  the appropriate configuration.
+  You can pick a different backend by setting the appropriate
+  configuration in ``settings_local.py``. See the django-haystack
+  documentation for details.
 
 * `south <http://south.aerocode.org/>`_
 

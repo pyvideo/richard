@@ -96,4 +96,3 @@ Why not the other things? Here's the reasons:
   summary.
 * Ditto for verb tense.
 * I'm all for ditching convention baggage for things that don't matter.
-
