@@ -25,6 +25,8 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, render
 
 from haystack.query import SearchQuerySet
+from rest_framework import generics
+from rest_framework import permissions
 
 from richard.videos import models
 
@@ -241,6 +243,73 @@ def opensearch_suggestions(request):
     result = [query, list(sqs)]
 
     return JSONResponse(json.dumps(result))
+
+
+class IsAdminOrReadOnly(permissions.BasePermission):
+    """Only admins get write access to resources"""
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        return request.user.is_staff
+
+
+class CategoryListAPI(generics.ListAPIView):
+    queryset = models.Category.objects.all()
+    serializer_class = models.CategorySerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    lookup_field = 'slug'
+    paginate_by = 50
+
+
+class CategoryRetrieveAPI(generics.RetrieveAPIView):
+    queryset = models.Category.objects.all()
+    serializer_class = models.CategorySerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    lookup_field = 'slug'
+
+
+class VideoListCreateAPI(generics.ListCreateAPIView):
+    serializer_class = models.VideoSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            queryset = models.Video.objects.all()
+        else:
+            queryset = models.Video.objects.live().all()
+
+        speaker = self.request.QUERY_PARAMS.get('speaker', None)
+        if speaker is not None:
+            queryset = queryset.filter(
+                speakers__in=(
+                    models.Speaker.objects
+                    .filter(name__icontains=speaker)
+                    .values_list('pk', flat=True)))
+
+        tag = self.request.QUERY_PARAMS.get('tag', None)
+        if tag is not None:
+            queryset = queryset.filter(
+                tags__in=(
+                    models.Tag.objects
+                    .filter(tag__icontains=tag)
+                    .values_list('pk', flat=True)))
+
+        return queryset
+
+
+class VideoRetrieveUpdateAPI(generics.RetrieveUpdateAPIView):
+    queryset = models.Video.objects.all()
+    serializer_class = models.VideoSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            queryset = models.Video.objects.all()
+        else:
+            queryset = models.Video.objects.live().all()
+
+        return queryset
 
 
 # TODO: Move this elsewhere

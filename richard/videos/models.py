@@ -17,8 +17,11 @@
 import os
 
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
+from rest_framework import serializers
 
 from richard.videos.utils import generate_unique_slug
 
@@ -165,10 +168,10 @@ class Video(models.Model):
     # text for copyright/license--for now it's loose form.
     # if null, use source video link.
     # TODO: rename this to license
-    copyright_text = models.TextField(null=True, blank=True)
+    copyright_text = models.TextField(blank=True)
 
     # embed for flash player things
-    embed = models.TextField(null=True, blank=True)
+    embed = models.TextField(blank=True)
 
     # url for the thumbnail
     thumbnail_url = models.URLField(max_length=255, null=True, blank=True)
@@ -330,3 +333,45 @@ class RelatedUrl(models.Model):
 
         """
         return self.url[:50]
+
+
+class CategorySerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Category
+        lookup_field = 'slug'
+
+
+class ShrodingersSlugRelatedField(serializers.SlugRelatedField):
+    """Less fussy SlugRelatedField
+
+    It's just like SlugRelatedField, but allows for the object not to
+    exist. If it doesn't exist, then it'll get created.
+
+    """
+    def from_native(self, data):
+        data = data.strip()
+        if self.queryset is None:
+            raise Exception('Need "queryset" argument')
+        try:
+            return self.queryset.get(**{self.slug_field: data})
+        except ObjectDoesNotExist:
+            obj = self.queryset.model(**{self.slug_field: data})
+            obj.save()
+            return obj
+        except (TypeError, ValueError):
+            msg = self.error_messages['invalid']
+            raise ValidationError(msg)
+
+
+class VideoSerializer(serializers.ModelSerializer):
+    category = serializers.SlugRelatedField(many=False, slug_field='title')
+    language = serializers.SlugRelatedField(
+        many=False, required=False, slug_field='name')
+    slug = serializers.SlugField(read_only=True)
+
+    # These are a little funky since we denormalize them for the API.
+    speakers = ShrodingersSlugRelatedField(many=True, slug_field='name')
+    tags = ShrodingersSlugRelatedField(many=True, slug_field='tag')
+
+    class Meta:
+        model = Video

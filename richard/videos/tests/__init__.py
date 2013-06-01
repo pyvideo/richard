@@ -43,7 +43,7 @@ def language(**kwargs):
         'name': 'English'
         }
     defaults.update(kwargs)
-    return Language(**kwargs)
+    return Language(**defaults)
 
 
 @with_save

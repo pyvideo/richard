@@ -209,10 +209,12 @@ JINGO_EXCLUDE_APPS = (
     'django.contrib.admin',
     'admin',
     'registration',
-    # This is the template name passed to jingo that is used to derive the app
-    # name and check if it should be excluded.
+
+    # This is the template name passed to jingo that is used to derive
+    # the app name and check if it should be excluded.
     'sitemap.xml',
     'browserid',
+    'rest_framework',
 )
 
 JINJA_CONFIG = {
@@ -232,7 +234,8 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
     'haystack',
     'south',
-    'tastypie',
+    'rest_framework',
+    'rest_framework.authtoken',
     'eadred',
 
     'richard.base',
@@ -254,6 +257,17 @@ except ImportError:
     pass
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+# Django REST Framework configuration
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSON_CLASSES': (
+        'rest_framework.permissions.IsAdminUser',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'PAGINATE_BY': 20
+}
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

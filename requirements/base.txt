@@ -1,4 +1,4 @@
-django==1.4.5
+django==1.5.1
 django-haystack==2.0.0
 Jinja2
 whoosh==2.4.1
@@ -7,13 +7,11 @@ requests
 markdown
 south
 eadred
+djangorestframework
+django-filter
 
 # We need master tip of django-browserid
 https://github.com/mozilla/django-browserid/zipball/afdf3408c1#egg=django-browserid
 
 # Jingo never really does releases
 https://github.com/jbalogh/jingo/zipball/master#egg=jingo
-
-# We're using a specific version here because we need the MultiAuthentication
-# feature, but newer commits break tests
-https://github.com/toastdriven/django-tastypie/zipball/5e8850434ef1c8672b0a22953bd7cc0def6347f8#egg=django-tastypie

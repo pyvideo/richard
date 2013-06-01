@@ -15,13 +15,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.conf import settings
-from django.conf.urls.defaults import patterns, url, include
-from tastypie.api import Api
+from django.conf.urls import patterns, url
 
-from richard.videos.api import VideoResource, CategoryResource
 from richard.videos.feeds import (
     CategoryFeed, CategoryVideosFeed, SpeakerVideosFeed,
     NewPostedVideoFeed)
+from richard.videos.views import (
+    CategoryListAPI, CategoryRetrieveAPI, VideoListCreateAPI,
+    VideoRetrieveUpdateAPI)
 
 
 urlpatterns = patterns(
@@ -67,15 +68,21 @@ urlpatterns = patterns(
 
 
 def build_api_urls():
-    v1_api = Api(api_name='v1')
-    v1_api.register(VideoResource())
-    v1_api.register(CategoryResource())
-
+    """Builds the API-related urls"""
     return patterns(
-        'richard.videos.views',
+        '',
 
-        (r'^api/', include(v1_api.urls)),
-        )
+        # v1 was done with tastypie. It's been dumped for v1 which was
+        # redone with Django-REST-Framework.
+        url(r'^api/v2/category/?$', CategoryListAPI.as_view()),
+        url(r'^api/v2/category/(?P<slug>[\w-]*)/?$',
+            CategoryRetrieveAPI.as_view()),
+
+        url(r'^api/v2/video/?$', VideoListCreateAPI.as_view()),
+        url(r'^api/v2/video/(?P<pk>[0-9]+)/?$',
+            VideoRetrieveUpdateAPI.as_view()),
+
+    )
 
 
 # API is disabled by default. To enable it, add ``API = True`` to your

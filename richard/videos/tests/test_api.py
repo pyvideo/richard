@@ -22,9 +22,9 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from nose.plugins.skip import SkipTest
 from nose.tools import eq_
-from tastypie.models import ApiKey
+from rest_framework.authtoken.models import Token
 
-from richard.videos.tests import video, category, tag, speaker
+from richard.videos.tests import category, language, speaker, tag, video
 from richard.videos.models import Video
 from richard.videos.urls import build_api_urls
 
@@ -41,7 +41,7 @@ class TestNoAPI(TestCase):
         vid = video(state=Video.STATE_LIVE, save=True)
 
         # anonymous user
-        resp = self.client.get('/api/v1/video/%d/' % vid.pk,
+        resp = self.client.get('/api/v2/video/%d/' % vid.pk,
                                {'format': 'json'})
         eq_(resp.status_code, 404)
 
@@ -54,12 +54,40 @@ class TestAPIBase(TestCase):
         user = User.objects.create_superuser(
             username='api_user', email='api@example.com', password='password')
         user.save()
-        ApiKey.objects.create(user=user)
+        token = Token.objects.create(user=user)
+        token.save()
 
-        header = 'ApiKey %s:%s' % (user.username, user.api_key.key)
-        self.auth_post = partial(self.client.post, HTTP_AUTHORIZATION=header)
-        self.auth_put = partial(self.client.put, HTTP_AUTHORIZATION=header)
-        self.auth_get = partial(self.client.get, HTTP_AUTHORIZATION=header)
+        headers = {
+            'HTTP_AUTHORIZATION': 'Token {0}'.format(token.key)
+        }
+
+        self.auth_post = partial(self.client.post, **headers)
+        self.auth_put = partial(self.client.put, **headers)
+        self.auth_get = partial(self.client.get, **headers)
+
+
+class TestCategoryAPI(TestAPIBase):
+    def test_get_category_list(self):
+        """Test that a category can be retrieved."""
+        category(save=True)
+        category(save=True)
+        category(save=True)
+
+        resp = self.client.get('/api/v2/category/',
+                               {'format': 'json'})
+        eq_(resp.status_code, 200)
+        content = json.loads(resp.content)
+        eq_(len(content['results']), 3)
+
+    def test_get_category(self):
+        """Test that a category can be retrieved."""
+        cat = category(save=True)
+
+        resp = self.client.get('/api/v2/category/%s/' % cat.slug,
+                               {'format': 'json'})
+        eq_(resp.status_code, 200)
+        content = json.loads(resp.content)
+        eq_(json.loads(resp.content)['title'], cat.title)
 
 
 class TestAPI(TestAPIBase):
@@ -68,13 +96,14 @@ class TestAPI(TestAPIBase):
         vid = video(state=Video.STATE_LIVE, save=True)
 
         # anonymous user
-        resp = self.client.get('/api/v1/video/%d/' % vid.pk,
+        resp = self.client.get('/api/v2/video/%d/' % vid.pk,
                                {'format': 'json'})
         eq_(resp.status_code, 200)
         eq_(json.loads(resp.content)['title'], vid.title)
 
         # authenticated user
-        resp = self.auth_get('/api/v1/video/%d/' % vid.pk, {'format': 'json'})
+        resp = self.auth_get('/api/v2/video/%d/' % vid.pk,
+                             {'format': 'json'})
         eq_(resp.status_code, 200)
         eq_(json.loads(resp.content)['title'], vid.title)
 
@@ -87,7 +116,7 @@ class TestAPI(TestAPIBase):
         s = speaker(name=u'Jim', save=True)
         vid.speakers = [s]
 
-        resp = self.client.get('/api/v1/video/%d/' % vid.pk,
+        resp = self.client.get('/api/v2/video/%d/' % vid.pk,
                                {'format': 'json'})
         eq_(resp.status_code, 200)
         content = json.loads(resp.content)
@@ -100,37 +129,28 @@ class TestAPI(TestAPIBase):
         # This should be the speaker name--not api url
         eq_(content['speakers'], [s.name])
 
-    def test_get_category(self):
-        """Test that a category can be retrieved."""
-        cat = category(save=True)
-
-        resp = self.client.get('/api/v1/category/%d/' % cat.pk,
-                               {'format': 'json'})
-        eq_(resp.status_code, 200)
-        eq_(json.loads(resp.content)['title'], cat.title)
-
     def test_only_live_videos_for_anonymous_users(self):
         """Test that not authenticated users can't see draft videos."""
         vid_live = video(state=Video.STATE_LIVE, title=u'Foo', save=True)
         video(state=Video.STATE_DRAFT, title=u'Bar', save=True)
 
-        resp = self.client.get('/api/v1/video/',
+        resp = self.client.get('/api/v2/video/',
                                content_type='application/json')
 
         data = json.loads(resp.content)
-        eq_(len(data['objects']), 1)
-        eq_(data['objects'][0]['title'], vid_live.title)
+        eq_(len(data['results']), 1)
+        eq_(data['results'][0]['title'], vid_live.title)
 
     def test_all_videos_for_admins(self):
         """Test that admins can see all videos."""
         video(state=Video.STATE_LIVE, title=u'Foo', save=True)
         video(state=Video.STATE_DRAFT, title=u'Bar', save=True)
 
-        resp = self.auth_get('/api/v1/video/',
+        resp = self.auth_get('/api/v2/video/',
                              content_type='application/json')
 
         data = json.loads(resp.content)
-        eq_(len(data['objects']), 2)
+        eq_(len(data['results']), 2)
 
     def test_videos_by_tag(self):
         tag1 = tag(tag='boat', save=True)
@@ -142,11 +162,11 @@ class TestAPI(TestAPIBase):
         v2.save()
         video(state=Video.STATE_LIVE, title=u'Foo3', save=True)
 
-        resp = self.auth_get('/api/v1/video/?tag=boat',
+        resp = self.auth_get('/api/v2/video/?tag=boat',
                              content_type='application/json')
 
         data = json.loads(resp.content)
-        eq_(len(data['objects']), 2)
+        eq_(len(data['results']), 2)
 
     def test_videos_by_speaker(self):
         speaker1 = speaker(name='webber', save=True)
@@ -159,38 +179,36 @@ class TestAPI(TestAPIBase):
         video(state=Video.STATE_LIVE, title=u'Foo3', save=True)
 
         # Filter by full name.
-        resp = self.auth_get('/api/v1/video/?speaker=webber',
+        resp = self.auth_get('/api/v2/video/?speaker=webber',
                              content_type='application/json')
 
         data = json.loads(resp.content)
-        eq_(len(data['objects']), 2)
+        eq_(len(data['results']), 2)
 
         # Filter by partial name.
-        resp = self.auth_get('/api/v1/video/?speaker=web',
+        resp = self.auth_get('/api/v2/video/?speaker=web',
                              content_type='application/json')
 
         data = json.loads(resp.content)
-        eq_(len(data['objects']), 2)
+        eq_(len(data['results']), 2)
 
 
 class TestVideoPostAPI(TestAPIBase):
     def test_post_video(self):
         """Test that authenticated user can create videos."""
         cat = category(save=True)
+        lang = language(name='English', save=True)
 
         data = {'title': 'Creating delicious APIs for Django apps since 2010.',
-                'category': '/api/v1/category/%d/' % cat.pk,
+                'language': lang.name,
+                'category': cat.title,
                 'speakers': ['Guido'],
                 'tags': ['django', 'api'],
                 'state': Video.STATE_LIVE}
 
-        resp = self.auth_post('/api/v1/video/', json.dumps(data),
+        resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
         eq_(resp.status_code, 201)
-
-        # Get the created video
-        resp = self.auth_get(resp['Location'], {'format': 'json'})
-        eq_(resp.status_code, 200)
         eq_(json.loads(resp.content)['title'], data['title'])
 
         vid = Video.objects.get(title=data['title'])
@@ -205,10 +223,10 @@ class TestVideoPostAPI(TestAPIBase):
         cat = category(save=True)
 
         data = {'title': '',
-                'category': '/api/v1/category/%d/' % cat.pk,
+                'category': cat.title,
                 'state': Video.STATE_LIVE}
 
-        resp = self.auth_post('/api/v1/video/', json.dumps(data),
+        resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
         eq_(resp.status_code, 400)
 
@@ -217,119 +235,72 @@ class TestVideoPostAPI(TestAPIBase):
         cat = category(save=True)
 
         data = {'title': 'test1',
-                'category': '/api/v1/category/%d/' % cat.pk,
+                'category': cat.title,
                 'state': 0}
 
-        resp = self.auth_post('/api/v1/video/', json.dumps(data),
+        resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
         eq_(resp.status_code, 400)
 
     def test_post_with_used_slug(self):
-        """Test that an already used slug kicks up a 400."""
+        """Test that already used slug creates second video with new slug."""
         cat = category(save=True)
+        lang = language(save=True)
         video(title='test1', slug='test1', save=True)
 
         data = {'title': 'test1',
-                'category': '/api/v1/category/%d/' % cat.pk,
+                'category': cat.title,
+                'language': lang.name,
                 'state': Video.STATE_DRAFT,
                 'slug': 'test1'}
 
-        resp = self.auth_post('/api/v1/video/', json.dumps(data),
+        resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
-        eq_(resp.status_code, 400)
+        eq_(resp.status_code, 201)
 
-    def test_put_with_id_and_no_slug(self):
+    def test_put(self):
         """Test that passing in an id, but no slug with a PUT works."""
         cat = category(save=True)
-        v = video(title='test1', save=True)
+        lang = language(save=True)
+        vid = video(title='test1', save=True)
 
-        data = {'id': v.pk,
-                'title': 'test1',
-                'category': '/api/v1/category/%d/' % cat.pk,
+        data = {'id': vid.pk,
+                'title': vid.title,
+                'category': cat.title,
+                'language': lang.name,
                 'speakers': ['Guido'],
                 'tags': ['foo'],
                 'state': Video.STATE_DRAFT}
 
-        resp = self.auth_put('/api/v1/video/%d/' % v.pk,
+        resp = self.auth_put('/api/v2/video/%d/' % vid.pk,
                              json.dumps(data),
                              content_type='application/json')
-        eq_(resp.status_code, 204)
+        eq_(resp.status_code, 200)
 
         # Get the video from the db and compare data.
-        v = Video.objects.get(pk=v.pk)
-        eq_(v.title, u'test1')
-        eq_(v.slug, u'test1')
-        eq_(list(v.speakers.values_list('name', flat=True)), ['Guido'])
-        eq_(list(v.tags.values_list('tag', flat=True)), ['foo'])
-
-    def test_put_with_slug_and_id(self):
-        """Test that passing in a slug and id with a PUT works."""
-        cat = category(save=True)
-        v = video(title='test1', slug='test1', save=True)
-
-        data = {'id': v.pk,
-                'slug': v.slug,
-                'title': 'test1',
-                'category': '/api/v1/category/%d/' % cat.pk,
-                'state': Video.STATE_DRAFT}
-
-        resp = self.auth_put('/api/v1/video/%d/' % v.pk,
-                             json.dumps(data),
-                             content_type='application/json')
-        eq_(resp.status_code, 204)
-
-    def test_put_with_mismatched_slug_and_id(self):
-        """Test that a mismatched slug and id with a PUT fails."""
-        cat = category(save=True)
-        v = video(title='test1', slug='test1', save=True)
-
-        data = {'id': v.pk,
-                'slug': 'ou812',
-                'title': 'test1',
-                'category': '/api/v1/category/%d/' % cat.pk,
-                'state': Video.STATE_DRAFT}
-
-        resp = self.auth_put('/api/v1/video/%d/' % v.pk,
-                             json.dumps(data),
-                             content_type='application/json')
-        eq_(resp.status_code, 400)
-
-    def test_put_with_slug_and_no_id(self):
-        """Test that a slug but no id with a PUT fails."""
-        cat = category(save=True)
-        v = video(title='test1', slug='test1', save=True)
-
-        data = {'slug': v.slug,
-                'title': 'test1',
-                'category': '/api/v1/category/%d/' % cat.pk,
-                'state': Video.STATE_DRAFT}
-
-        resp = self.auth_put('/api/v1/video/%d/' % v.pk,
-                             json.dumps(data),
-                             content_type='application/json')
-        eq_(resp.status_code, 400)
+        vid = Video.objects.get(pk=vid.pk)
+        eq_(vid.title, u'test1')
+        eq_(vid.slug, u'test1')
+        eq_(list(vid.speakers.values_list('name', flat=True)), ['Guido'])
+        eq_(list(vid.tags.values_list('tag', flat=True)), ['foo'])
 
     def test_post_with_tag_name(self):
         """Test that you can post video with url tags or real tags"""
         cat = category(save=True)
-
-        data = {'title': 'test1',
-                'category': '/api/v1/category/%d/' % cat.pk,
-                'state': Video.STATE_DRAFT}
+        lang = language(save=True)
 
         footag = u'footag'
-        data.update(
-            {
-                'title': 'test2',
-                'tags': [footag],
-            })
+        data = {
+            'title': 'test1',
+            'category': cat.title,
+            'language': lang.name,
+            'state': Video.STATE_DRAFT,
+            'tags': [footag],
+        }
 
-        resp = self.auth_post('/api/v1/video/', json.dumps(data),
+        resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
         eq_(resp.status_code, 201)
-
-        # Get the created video
-        resp = self.auth_get(resp['Location'], {'format': 'json'})
 
         # Verify the tag
         vid = Video.objects.get(title=data['title'])
@@ -339,42 +310,38 @@ class TestVideoPostAPI(TestAPIBase):
         cat = category(save=True)
 
         data = {'title': 'test1',
-                'category': '/api/v1/category/%d/' % cat.pk,
+                'category': cat.title,
                 'state': Video.STATE_DRAFT}
 
         data.update({'tags': ['']})
 
-        resp = self.auth_post('/api/v1/video/', json.dumps(data),
+        resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
         eq_(resp.status_code, 400)
 
-        data.update({'tags': ['/api/v1/tag/1']})
+        data.update({'tags': ['/api/v2/tag/1']})
 
-        resp = self.auth_post('/api/v1/video/', json.dumps(data),
+        resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
         eq_(resp.status_code, 400)
 
     def test_post_with_speaker_name(self):
         """Test that you can post videos with speaker names"""
         cat = category(save=True)
+        lang = language(save=True)
+
         fooperson = u'Carl'
-        data = {'title': 'test1',
-                'category': '/api/v1/category/%d/' % cat.pk,
-                'state': Video.STATE_DRAFT}
+        data = {
+            'title': 'test1',
+            'category': cat.title,
+            'language': lang.name,
+            'state': Video.STATE_DRAFT,
+            'speakers': [fooperson],
+        }
 
-        data.update(
-            {
-                'title': 'test2',
-                'speakers': [fooperson],
-            })
-
-        resp = self.auth_post('/api/v1/video/', json.dumps(data),
+        resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
-        print resp.content
         eq_(resp.status_code, 201)
-
-        # Get the created video
-        resp = self.auth_get(resp['Location'], {'format': 'json'})
 
         # Verify the speaker
         vid = Video.objects.get(title=data['title'])
@@ -383,24 +350,20 @@ class TestVideoPostAPI(TestAPIBase):
     def test_post_with_speaker_with_extra_spaces(self):
         """Test that you can post videos with speaker names"""
         cat = category(save=True)
+        lang = language(save=True)
+
         fooperson = u' Carl '
-        data = {'title': 'test1',
-                'category': '/api/v1/category/%d/' % cat.pk,
-                'state': Video.STATE_DRAFT}
+        data = {
+            'title': 'test1',
+            'category': cat.title,
+            'language': lang.name,
+            'state': Video.STATE_DRAFT,
+            'speakers': [fooperson],
+        }
 
-        data.update(
-            {
-                'title': 'test2',
-                'speakers': [fooperson],
-            })
-
-        resp = self.auth_post('/api/v1/video/', json.dumps(data),
+        resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
-        print resp.content
         eq_(resp.status_code, 201)
-
-        # Get the created video
-        resp = self.auth_get(resp['Location'], {'format': 'json'})
 
         # Verify the speaker
         vid = Video.objects.get(title=data['title'])
@@ -410,30 +373,33 @@ class TestVideoPostAPI(TestAPIBase):
         cat = category(save=True)
 
         data = {'title': 'test1',
-                'category': '/api/v1/category/%d/' % cat.pk,
+                'category': cat.title,
                 'state': Video.STATE_DRAFT}
 
         data.update({'speakers': ['']})
 
-        resp = self.auth_post('/api/v1/video/', json.dumps(data),
+        resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
         eq_(resp.status_code, 400)
 
-        data.update({'speakers': ['/api/v1/speaker/1']})
+        data.update({'speakers': ['/api/v2/speaker/1']})
 
-        resp = self.auth_post('/api/v1/video/', json.dumps(data),
+        resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
         eq_(resp.status_code, 400)
 
     def test_post_with_category_title(self):
         """Test that a category title works"""
         cat = category(title='testcat', save=True)
+        lang = language(name='English', save=True)
 
         data = {'title': 'test1',
+                'language': lang.name,
                 'category': cat.title,
-                'state': Video.STATE_DRAFT}
+                'state': Video.STATE_DRAFT,
+                'slug': 'foo'}
 
-        resp = self.auth_post('/api/v1/video/', json.dumps(data),
+        resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
         eq_(resp.status_code, 201)
 
@@ -441,7 +407,7 @@ class TestVideoPostAPI(TestAPIBase):
         """Test that lack of category is rejected"""
         data = {'title': 'test1',
                 'state': Video.STATE_DRAFT}
-        resp = self.auth_post('/api/v1/video/', json.dumps(data),
+        resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
         eq_(resp.status_code, 400)
 
@@ -450,11 +416,11 @@ class TestVideoPostAPI(TestAPIBase):
         cat = category(title='testcat', save=True)
 
         data = {'title': 'test1',
-                'category': '/api/v1/category/%d/' % cat.pk,
+                'category': cat.title,
                 'state': Video.STATE_DRAFT,
                 'language': 'lolcats'}
 
-        resp = self.auth_post('/api/v1/video/', json.dumps(data),
+        resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
         eq_(resp.status_code, 400)
 
@@ -462,17 +428,17 @@ class TestVideoPostAPI(TestAPIBase):
         """Test that an attempt to create a video without data is rejected."""
         data = {}
 
-        resp = self.auth_post('/api/v1/video/', json.dumps(data),
+        resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
         eq_(resp.status_code, 400)
 
     def test_post_video_not_authenticated(self):
         """Test that not authenticated users can't write."""
         cat = category(save=True)
-        data = {'title': 'Creating delicious APIs for Django apps since 2010.',
-                'category': '/api/v1/category/%d/' % cat.pk,
+        data = {'title': 'Creating delicious APIs since 2010.',
+                'category': cat.title,
                 'state': Video.STATE_LIVE}
 
-        resp = self.client.post('/api/v1/video/', json.dumps(data),
+        resp = self.client.post('/api/v2/video/', json.dumps(data),
                                 content_type='application/json')
         eq_(resp.status_code, 401)
