@@ -12,6 +12,13 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
+DATABASES = {
+    'default': {
+        'NAME': ':memory:',
+        'ENGINE': 'django.db.backends.sqlite3'
+    }
+}
+
 # This allows the "test_api_disabled" test to kick off. The other api
 # tests tweak things so they can run.
 API = False
