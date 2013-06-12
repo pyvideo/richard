@@ -54,26 +54,21 @@ And join us on the IRC channel!
 Project details
 ===============
 
-Code:
-    https://github.com/willkg/richard
+:Code:          https://github.com/willkg/richard
+:Issue tracker: https://github.com/willkg/richard/issues
+:Documentation: http://richard.rtfd.org/
+:IRC channel:   ``#richard`` on ``irc.freenode.net``
+:License:       AGPLv3
 
-    Our unit tests are run by Travis CI every time we commit to the
-    master branch.
 
-    .. image:: https://secure.travis-ci.org/willkg/richard.png?branch=master
-       :target: http://travis-ci.org/willkg/richard
+Documentation is also in the ``docs/`` directory. This includes docs for
+installing, upgrading, deploying, contributing, ...
 
-Issue tracker:
-    https://github.com/willkg/richard/issues
+Our unit tests are run by Travis CI every time we commit to the
+master branch.
 
-Documentation:
-    Documentation is in the ``docs/`` directory including docs for
-    installing, upgrading, deploying, contributing, ...
-
-    Most recent docs are at: http://richard.rtfd.org/
-
-IRC channel:
-    ``#richard`` on ``irc.freenode.net``
+.. image:: https://secure.travis-ci.org/willkg/richard.png?branch=master
+   :target: http://travis-ci.org/willkg/richard
 
 
 Who's using richard?
