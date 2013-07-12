@@ -89,7 +89,7 @@ you in the future? Does it sound like something you want to be
 involved in?
 
 I'd love to have help! We have a special `Contributor's Guide
-<http://richard.rtfd.org/en/latest/contributors/dev_contribute.html>`_
+<http://richard.readthedocs.org/en/latest/contributors/dev_contribute.html>`_
 in the richard manual that covers how to get richard set up for
 hacking on it, the kinds of things we need help on, and all the sorts
 of things you'd want to know about the project.
