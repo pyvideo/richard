@@ -9,6 +9,18 @@ What's new in richard
 Version 0.2: In development
 ===========================
 
+**Features:**
+
+* New API v2! Built on django-rest-framework, it should be simpler,
+  easier, and less buggy. See documentation for API details.
+
+**Backwards-incompatible changes:**
+
+* Ditched API v1. It used tastypie and I jettisoned that.
+
+* To use API v2, you'll need to create new API tokens in the admin in
+  the Token section.
+
 **Other changes:**
 
 * Moved a bunch of files from ``richard/`` to the new base app in
@@ -19,11 +31,15 @@ Version 0.2: In development
 
 * Cleaned up the search page a bit. Added a category facet.
 
+* Nixed tastypie for django-rest-framework.
+
+* Fixed requirements.
+
 
 Version 0.1: May 18th, 2013
 ===========================
 
-**Features**
+**Features:**
 
 * categories, speakers, videos
 * lots of metadata
@@ -34,7 +50,7 @@ Version 0.1: May 18th, 2013
 * JSON API for querying the data and adding data
 
 
-**API-breaking changes:**
+**Backwards-incompatible changes:**
 
 * None since this is the initial release.
 
