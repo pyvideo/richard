@@ -1,17 +1,14 @@
-django==1.5.1
+django==1.4.6
 django-haystack==2.0.0
-Jinja2
+Jinja2==2.7.1
+jingo==0.6.1
 whoosh==2.4.1
-bleach
-requests
-markdown
-south
-eadred
-djangorestframework
-django-filter
+bleach==1.2.2
+requests==1.2.3
+Markdown==2.3.1
+South==0.8.2
+eadred==0.2
+djangorestframework==2.3.7
 
 # We need master tip of django-browserid
 https://github.com/mozilla/django-browserid/zipball/afdf3408c1#egg=django-browserid
-
-# Jingo never really does releases
-https://github.com/jbalogh/jingo/zipball/master#egg=jingo

@@ -5,4 +5,3 @@ nose
 django-nose
 Pygments
 Sphinx
-# https://github.com/jbalogh/test-utils/zipball/master#egg=test-utils
