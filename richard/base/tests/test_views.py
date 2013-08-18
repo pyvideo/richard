@@ -56,3 +56,8 @@ class RichardViewsTest(TestCase):
 
         resp = self.client.get('/sitemap.xml')
         eq_(resp.status_code, 200)
+
+    def test_404(self):
+        """Test for 404 page"""
+        resp = self.client.get('/carlspants')
+        eq_(resp.status_code, 404)

@@ -14,8 +14,9 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
--#}
+#}
 {% extends "base.html" %}
+{% load url from future %}
 {% block content %}
 
 <div class="row">
@@ -24,11 +25,12 @@
       <div class="hero-unit">
         <h1>{{ settings.SITE_TITLE }}</h1>
         <p>
-          This site indexes videos that exist in various places and makes them easier to find.
-          {{ video_count }} video{{ 's' if video_count != 1 else '' }} so far.
+          This site indexes videos that exist in various places and
+          makes them easier to find. {{ video_count }} video{{ 's' if
+          video_count != 1 else '' }} so far.
         </p>
         <p>
-          <a class="btn btn-primary btn-large" href="{{ url('pages-page', page='about') }}">Learn more</a>
+          <a class="btn btn-primary btn-large" href="{% url 'pages-page' page='about' %}">Learn more</a>
         </p>
       </div>
     {% endblock %}
@@ -36,16 +38,16 @@
     <div class="row section">
       <div class="span6">
         <h3>Latest categories
-          <small><a class="feed" href="{{ url('videos-category-feed') }}"> feed</a></small>
+          <small><a class="feed" href="{% url 'videos-category-feed' %}"> feed</a></small>
         </h3>
 
         {% if latest_categories %}
           <ul>
             {% for cat in latest_categories %}
-              {% if user.is_staff or cat.video_set.live().count() > 0 %}
+              {% if user.is_staff or cat.video_set.live.count > 0 %}
                 <li>
-                  <a href="{{ cat.get_absolute_url() }}">{{ cat.title }}</a>
-                  ({{ cat.video_set.live().count() }})
+                  <a href="{{ cat.get_absolute_url }}">{{ cat.title }}</a>
+                  ({{ cat.video_set.live.count }})
                 </li>
               {% endif %}
             {% endfor %}
@@ -53,13 +55,13 @@
         {% endif %}
 
         <p>
-          <a href="{{ url('videos-category-list') }}">See all categories...</a>
+          <a href="{% url 'videos-category-list' %}">See all categories...</a>
         </p>
       </div>
 
       <div class="span6">
         <h3>Latest videos
-          <small><a class="feed" href="{{ url('videos-new-feed') }}"> feed</a></small>
+          <small><a class="feed" href="{% url 'videos-new-feed' %}"> feed</a></small>
         </h3>
 
         {% if latest_videos %}
@@ -67,13 +69,13 @@
             {% for video in latest_videos %}
               <li>
                 ({{ video.category }})
-                <a href="{{ video.get_absolute_url() }}">{{ video.title }}</a>
+                <a href="{{ video.get_absolute_url }}">{{ video.title }}</a>
               </li>
             {% endfor %}
           </ul>
         {% endif %}
         <p>
-          <a href="{{ url('videos-search') }}">Search all videos...</a>
+          <a href="{% url 'videos-search' %}">Search all videos...</a>
         </p>
       </div>
 
@@ -85,20 +87,20 @@
   <div class="row section">
     <div class="span12">
       <h3>Site news
-        <small><a class="feed" href="{{ url('sitenews-feed') }}"> feed</a></small>
+        <small><a class="feed" href="{% url 'sitenews-feed' %}"> feed</a></small>
       </h3>
 
       <ul>
         {% for item in news %}
           <li>
-            <a href="{{ item.get_absolute_url() }}">{{ item.title }}</a>
-            - {{ item.created|datetime }}
+            <a href="{{ item.get_absolute_url }}">{{ item.title }}</a>
+            - {{ item.created|date:"DATE_FORMAT" }}
           </li>
         {% endfor %}
       </ul>
 
       <p>
-        <a href="{{ url('sitenews-list') }}">See all site news...</a>
+        <a href="{% url 'sitenews-list' %}">See all site news...</a>
       </p>
     </div>
   </div>

@@ -1,4 +1,3 @@
-{#
 # richard -- video index system
 # Copyright (C) 2012, 2013 richard contributors.  See AUTHORS.
 #
@@ -14,25 +13,19 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
--#}
-{% macro display(embed, available_formats) -%}
-  {# Fix floats in unisubs widget that are not cleared #}
-  <div class="clearfix">
-    <div class="videobox-inner">
-      {% if available_formats %}
-        <video id="{{ v.slug }}" controls>
-          {% for media in available_formats %}
-            <source src="{{ media['url'] }}" type="{{ media['mime_type'] }}">
-          {% endfor %}
-          {% if embed %}
-            {{ embed|safe }}
-          {% endif %}
-        </video>
-      {% elif embed %}
-        {{ embed|safe }}
-      {% else %}
-        <p>No video to show.</p>
-      {% endif %}
-    </div>
-  </div>
-{% endmacro %}
+from django import template
+
+import markdown
+
+
+register = template.Library()
+
+
+@register.filter
+def md(text):
+    """Filter that converts Markdown text -> HTML."""
+    return markdown.markdown(
+        text,
+        output_format='html5',
+        safe_mode='replace',
+        html_replacement_text='[HTML REMOVED]')

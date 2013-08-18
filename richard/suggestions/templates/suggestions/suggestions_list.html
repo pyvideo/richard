@@ -14,24 +14,12 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
--#}
+#}
 {% extends "base.html" %}
-
-{% macro state_display(s) -%}
-  {% if s == 0 %}
-    <span class="label">New</span>
-  {% elif s == 1 %}
-    <span class="label label-info">In progress</span>
-  {% elif s == 2 %}
-    <span class="label label-success">Completed</span>
-  {% elif s == 3 %}
-    <span class="label label-important">Rejected</span>
-  {% endif %}
-{% endmacro %}
-
-{% block title %}{{ page_title('Suggestions') }}{% endblock %}
+{% load page_title %}
+{% load url from future %}
+{% block title %}{% page_title 'Suggestions' %}{% endblock %}
 {% block content %}
-
 {% if messages %}
 <div class="alert alert-info">
   <ul class="messages">
@@ -70,10 +58,20 @@
         <tbody>
           {% for s in open_suggestions %}
             <tr>
-              <td>{{ state_display(s.state) }}</td>
+              <td>
+                {% if s == 0 %}
+                  <span class="label">New</span>
+                {% elif s == 1 %}
+                  <span class="label label-info">In progress</span>
+                {% elif s == 2 %}
+                  <span class="label label-success">Completed</span>
+                {% elif s == 3 %}
+                  <span class="label label-important">Rejected</span>
+                {% endif %}
+              <td/>
               <td>{{ s.name }}</td>
               <td>{{ s.whiteboard }}</td>
-              <td>{{ s.submitted|datetime }}</td>
+              <td>{{ s.submitted|date:"DATE_FORMAT" }}</td>
             </tr>
           {% endfor %}
         </tbody>
@@ -100,11 +98,21 @@
         <tbody>
           {% for s in resolved_suggestions %}
             <tr>
-              <td>{{ state_display(s.state) }}</td>
+              <td>
+                {% if s == 0 %}
+                  <span class="label">New</span>
+                {% elif s == 1 %}
+                  <span class="label label-info">In progress</span>
+                {% elif s == 2 %}
+                  <span class="label label-success">Completed</span>
+                {% elif s == 3 %}
+                  <span class="label label-important">Rejected</span>
+                {% endif %}
+              <td/>
               <td>{{ s.name }}</td>
               <td>{{ s.resolution }}</td>
-              <td>{{ s.submitted|datetime }}</td>
-              <td>{{ s.resolved|datetime }}</td>
+              <td>{{ s.submitted|date:"DATE_FORMAT" }}</td>
+              <td>{{ s.resolved|date:"DATE_FORMAT" }}</td>
             </tr>
           {% endfor %}
         </tbody>
@@ -115,18 +123,16 @@
   </div>
 </div>
 
-
 <div class="row section">
   <div class="span12">
     <a name="suggest"></a>
     <h2>Suggest a video or list of videos to be added</h2>
-
     <p>
-      Fill in the form below and your suggestion will go into the queue
-      to be looked at by the site curator.
+      Fill in the form below and your suggestion will go into the
+      queue to be looked at by the site curator.
     </p>
 
-    <form class="form-horizontal" action="{{ url('suggestions-list') }}" method="POST">
+    <form class="form-horizontal" action="{% url 'suggestions-list' %}" method="POST">
       <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
       {% for field in form %}
         <div class="control-group {% if field.errors %}error{% endif %}">
@@ -134,8 +140,11 @@
           <div class="controls">
             {{ field|safe }}
             {% if field.errors %}
-              <span class="help-inline">{% for error in field.errors -%}
-                {{ error }}{% endfor %}</span>
+              <span class="help-inline">
+                {% for error in field.errors %}
+                  {{ error }}
+                {% endfor %}
+              </span>
             {% endif %}
           </div>
         </div>
@@ -143,8 +152,8 @@
       <div class="control-group">
         <div class="controls">
           <p>
-            We will review your suggestions before it is made public, you can check this page
-            for updates.
+            We will review your suggestions before it is made public,
+            you can check this page for updates.
           </p>
           <button type="submit" class="btn btn-primary">Submit</button>
         </div>

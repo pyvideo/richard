@@ -1,4 +1,3 @@
-{#
 # richard -- video index system
 # Copyright (C) 2012, 2013 richard contributors.  See AUTHORS.
 #
@@ -14,14 +13,17 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#}
-{% load md %}
-{% if obj.description %}
-  <p>Description</p>
-  {{ obj.description|md }}
-{% endif %}
-<ul>
-  {% for vid in obj.video_set.live_order_by_title %}
-    <li><a href="{{ vid.get_absolute_url }}">{{ vid.title }}</a></li>
-  {% endfor %}
-</ul>
+from django import template
+
+
+register = template.Library()
+
+
+@register.inclusion_tag('videos/includes/video_summary.html')
+def video_summary(video, wide=True, show_category=True):
+    """Function that generates a video summary."""
+    return {
+        'video': video,
+        'wide': wide,
+        'show_category': show_category
+    }

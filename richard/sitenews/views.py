@@ -48,6 +48,7 @@ class NewsDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(NewsDetail, self).get_context_data(**kwargs)
         context['archives'] = get_years()
+        context['title'] = 'News'
         return context
 
 
@@ -64,7 +65,10 @@ class NewsYear(YearArchiveView):
     def get_context_data(self, **kwargs):
         context = super(YearArchiveView, self).get_context_data(**kwargs)
         context['archives'] = get_years()
-        context['activeyear'] = int(self.get_year())
+
+        activeyear = int(self.get_year())
+        context['activeyear'] = activeyear
+        context['pagetitle'] = 'News: {year}'.format(year=activeyear)
         return context
 
 

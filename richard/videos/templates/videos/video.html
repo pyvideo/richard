@@ -14,13 +14,16 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
--#}
+#}
 {% extends "base.html" %}
-{% block title %}{{ page_title(v.title) }}{% endblock %}
-{% import "videos/video_display.html" as videodisplay with context %}
-{% block content %}
+{% load duration %}
+{% load md %}
+{% load page_title %}
+{% load url from future %}
+{% block title %}{% page_title v.title %}{% endblock %}
 
-{% if not v.is_live() %}
+{% block content %}
+{% if not v.is_live %}
 <div class="alert alert-error">
   <i class="icon-warning-sign"></i> <strong>Note:</strong>
   This video is in <strong>draft</strong> mode--it is not live.
@@ -29,7 +32,25 @@
 
 <div class="row">
   <div id="videobox" class="span12">
-    {{ videodisplay.display(embed, available_formats) }}
+    {# Fix floats in unisubs widget that are not cleared #}
+    <div class="clearfix">
+      <div class="videobox-inner">
+        {% if html5_formats %}
+          <video id="{{ v.slug }}" controls>
+            {% for media in html5_formats %}
+              <source src="{{ media.url }}" type="{{ media.mime_type }}">
+            {% endfor %}
+            {% if embed %}
+              {{ embed|safe }}
+            {% endif %}
+          </video>
+        {% elif embed %}
+          {{ embed|safe }}
+        {% else %}
+          <p>No video to show.</p>
+        {% endif %}
+      </div>
+    </div>
     <div class="section">
       <h3>{{ v.title }}</h3>
     </div>
@@ -51,18 +72,16 @@
       </div>
     {% endif %}
 
-    {% with urls = v.related_urls.all() %}
-      {% if urls %}
-        <div class="section">
-          <h4>Related URLs</h4>
-          <ul>
-          {% for u in urls %}
-            <li><a href="{{ u.url }}">{% if u.description %}{{ u.description }} ({{ u.display() }}){% else %}{{ u.display() }}{% endif %}</a></li>
+    {% if v.related_urls.all %}
+      <div class="section">
+        <h4>Related URLs</h4>
+        <ul>
+          {% for u in v.related_urls.all %}
+            <li><a href="{{ u.url }}">{% if u.description %}{{ u.description }} ({{ u.display }}){% else %}{{ u.display }}{% endif %}</a></li>
           {% endfor %}
-          </ul>
-        </div>
-      {% endif %}
-    {% endwith %}
+        </ul>
+      </div>
+    {% endif %}
 
     {% if v.description %}
       <div class="section">
@@ -75,25 +94,22 @@
   <div class="span4">
     <div id="sidebar" class="well">
       {% if user.is_staff %}
-        <a href="{{ url('admin:videos_video_change', v.id) }}"><i class="icon-edit"></i> edit</a>
+        <a href="{% url 'admin:videos_video_change' v.id %}"><i class="icon-edit"></i> edit</a>
       {% endif %}
 
       <dl>
         <dt>Category</dt>
         <dd>
-          <a href="{{ v.category.get_absolute_url() }}">{{ v.category.title }}</a>
+          <a href="{{ v.category.get_absolute_url }}">{{ v.category.title }}</a>
         </dd>
 
         <dt>Speakers</dt>
         <dd>
-          {% set speakers = v.speakers.all() %}
-          {% if speakers %}
-            {% for s in speakers %}
-              <div><a href="{{ s.get_absolute_url() }}">{{ s.name }}</a></div>
-            {% endfor %}
-          {% else %}
+          {% for s in v.speakers.all %}
+            <div><a href="{{ s.get_absolute_url }}">{{ s.name }}</a></div>
+          {% empty %}
             Unknown
-          {% endif %}
+          {% endfor %}
         </dd>
 
         {% if v.language %}
@@ -103,7 +119,7 @@
 
         {% if v.recorded %}
           <dt>Recorded</dt>
-          <dd>{{ v.recorded | datetime }}</dd>
+          <dd>{{ v.recorded|date:"DATE_FORMAT" }}</dd>
         {% endif %}
 
         {% if v.duration %}
@@ -113,14 +129,11 @@
 
         <dt>Tags</dt>
         <dd>
-          {% set tags = v.tags.all() %}
-          {% if tags %}
-            {% for t in tags %}
-              {{ t.tag }}
-            {% endfor %}
-          {% else %}
+          {% for t in v.tags.all %}
+            {{ t.tag }}
+          {% empty %}
             No tags
-          {% endif %}
+          {% endfor %}
         </dd>
 
         <dt>Copyright/License Information</dt>
@@ -162,7 +175,7 @@
 
         {% if v.updated %}
           <dt>Last updated</dt>
-          <dd>{{ v.updated | datetime }}</dd>
+          <dd>{{ v.updated|date:"DATE_FORMAT" }}</dd>
         {% endif %}
       </dl>
     </div>
@@ -171,9 +184,9 @@
 {% endblock %}
 
 {% block site_js %}
-  {{ super() }}
+  {{ block.super }}
 
-  {% if settings['AMARA_SUPPORT'] %}
+  {% if settings.AMARA_SUPPORT %}
     <script type="text/javascript" src="http://s3.www.universalsubtitles.org/js/unisubs-widgetizer.js"></script>
     <script type="text/javascript" src="http://s3.www.universalsubtitles.org/js/widgetizer/widgetizerprimer.js"></script>
   {% endif %}

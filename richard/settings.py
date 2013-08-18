@@ -165,7 +165,6 @@ SECRET_KEY = ''
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'jingo.Loader',
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
 )
@@ -199,27 +198,13 @@ TEMPLATE_DIRS = (
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.contrib.messages.context_processors.messages',
+    'django.core.context_processors.csrf',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.static',
     'django_browserid.context_processors.browserid',
 
     'richard.base.context_processors.base',
 )
-
-JINGO_EXCLUDE_APPS = (
-    'debug_toolbar',
-    'django.contrib.admin',
-    'admin',
-    'registration',
-
-    # This is the template name passed to jingo that is used to derive
-    # the app name and check if it should be excluded.
-    'sitemap.xml',
-    'browserid',
-    'rest_framework',
-)
-
-JINJA_CONFIG = {
-    'extensions': ['jinja2.ext.with_']
-}
 
 INSTALLED_APPS = (
     'django.contrib.auth',

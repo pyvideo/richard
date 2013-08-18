@@ -14,22 +14,18 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
--#}
+#}
 {% extends "base.html" %}
-{% block title %}
-  {% if activeyear %}
-    {{ page_title('News: %d'|format(activeyear)) }}
-  {% else %}
-    {{ page_title('News') }}
-  {% endif %}
-{% endblock %}
+{% load page_title %}
+{% load md %}
+{% load url from future %}
+{% block title %}{% page_title title %}{% endblock %}
 
 {% block additional_head %}
-  {{ super() }}
-  <link rel="alternate" type="application/rss+xml" href="{{ url('sitenews-feed') }}" />
+  {{ block.super }}
+  <link rel="alternate" type="application/rss+xml" href="{% url 'sitenews-feed' %}" />
 {% endblock %}
 
-{% import "sitenews/macros.html" as macros %}
 {% block content %}
 
 <div class="page-header">
@@ -38,7 +34,14 @@
 
 <div class="row">
   <div class="span2">
-    {{ macros.archivebar(archives, activeyear) }}
+    <div class="well">
+      <ul class="nav nav-list">
+        <li class="nav-header">Archives</li>
+        {% for year in archives %}
+          <li class="{% if year == activeyear %}active{% endif %}"><a href="{% url 'sitenews-archive-year' year=year %}">{{ year }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
   </div>
 
   <div class="span10">
@@ -46,30 +49,30 @@
       <div class="span9">
         {% for item in items %}
           <div class="news-item">
-            <h2><a href="{{ item.get_absolute_url() }}">{{ item.title }}</a></h2>
+            <h2><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h2>
             <div class="summary">
               {{ item.summary|md }}
             </div>
             <div class="meta">
               Author: {{ item.author }} |
-              Created: {{ item.created|datetime }} |
-              Updated: {{ item.updated|datetime }} |
-              <a href="{{ item.get_absolute_url() }}">Permalink</a>
+              Created: {{ item.created|date:"DATE_FORMAT" }} |
+              Updated: {{ item.updated|date:"DATE_FORMAT" }} |
+              <a href="{{ item.get_absolute_url }}">Permalink</a>
             </div>
           </div>
         {% endfor %}
 
         {% if is_paginated %}
           <ul class="pager">
-            {% if page_obj.has_previous() %}
+            {% if page_obj.has_previous %}
               <li class="previous">
-                <a href="?page={{ page_obj.previous_page_number() }}">&larr; Newer</a>
+                <a href="?page={{ page_obj.previous_page_number }}">&larr; Newer</a>
               </li>
             {% endif %}
             <li>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</li>
-            {% if page_obj.has_next() %}
+            {% if page_obj.has_next %}
               <li class="next">
-                <a href="?page={{ page_obj.next_page_number() }}">Older &rarr;</a>
+                <a href="?page={{ page_obj.next_page_number }}">Older &rarr;</a>
               </li>
             {% endif %}
           </ul>
@@ -77,7 +80,7 @@
       </div>
       <div class="span3">
         <p>
-          <a class="feed" href="{{ url('sitenews-feed') }}"> feed</a>
+          <a class="feed" href="{% url 'sitenews-feed' %}"> feed</a>
         </p>
       </div>
     </div>

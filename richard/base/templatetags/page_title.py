@@ -1,4 +1,3 @@
-{#
 # richard -- video index system
 # Copyright (C) 2012, 2013 richard contributors.  See AUTHORS.
 #
@@ -14,14 +13,18 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#}
-{% load md %}
-{% if obj.description %}
-  <p>Description</p>
-  {{ obj.description|md }}
-{% endif %}
-<ul>
-  {% for vid in obj.video_set.live_order_by_title %}
-    <li><a href="{{ vid.get_absolute_url }}">{{ vid.title }}</a></li>
-  {% endfor %}
-</ul>
+from django import template
+from django.conf import settings
+
+
+register = template.Library()
+
+
+@register.simple_tag
+def page_title(s=None):
+    """Function that generates the page title."""
+    if s is None:
+        return settings.SITE_TITLE
+    if len(s) > 80:
+        s = s[:80] + u'...'
+    return u'%s - %s' % (settings.SITE_TITLE, s)

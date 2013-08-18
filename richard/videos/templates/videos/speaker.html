@@ -14,28 +14,29 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
--#}
+#}
 {% extends "base.html" %}
-{% block title %}{{ page_title(speaker.name) }}{% endblock %}
+{% load page_title %}
+{% load url from future %}
+{% load video_summary %}
+{% block title %}{% page_title speaker.name %}{% endblock %}
 
 {% block additional_head %}
-  {{ super() }}
-  <link rel="alternate" type="application/rss+xml" href="{{ url('videos-speaker-feed', speaker_id=speaker.pk, slug=speaker.slug) }}" />
+  {{ block.super }}
+  <link rel="alternate" type="application/rss+xml" href="{% url 'videos-speaker-feed' speaker_id=speaker.pk slug=speaker.slug %}" />
 {% endblock %}
 
-{% import "videos/macros.html" as macros with context %}
 {% block content %}
-
 <ul class="nav nav-pills pull-right">
-  <li class="active"><a href="{{ url('videos-speaker', speaker_id=speaker.pk, slug=speaker.slug) }}">Videos</a></li>
-  <li><a href="{{ url('videos-speaker-feed', speaker_id=speaker.pk, slug=speaker.slug) }}">RSS Feed</a></li>
+  <li class="active"><a href="{% url 'videos-speaker' speaker_id=speaker.pk slug=speaker.slug %}">Videos</a></li>
+  <li><a href="{% url 'videos-speaker-feed' speaker_id=speaker.pk slug=speaker.slug %}">RSS Feed</a></li>
 </ul>
 
 <div>
   <h1>{{ speaker.name }}
     {% if user.is_staff %}
       <small>
-        <a href="{{ url('admin:videos_speaker_change', speaker.id) }}"><i class="icon-edit"></i> edit</a>
+        <a href="{% url 'admin:videos_speaker_change' speaker.id %}"><i class="icon-edit"></i> edit</a>
       </small>
     {% endif %}
   </h1>
@@ -51,6 +52,6 @@
 </div>
 
 {% for v in videos %}
-  {{ macros.video_summary(v) }}
+  {% video_summary v %}
 {% endfor %}
 {% endblock %}

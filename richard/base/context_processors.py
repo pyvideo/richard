@@ -13,13 +13,6 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-from django.conf import settings
-
-from jinja2 import Markup
-from jingo import register
-import markdown
-
 from richard.sitenews.models import Notification
 
 
@@ -28,52 +21,5 @@ def base(request):
     notifications = Notification.get_live_notifications()
 
     return {
-        'request': request,
-        'settings': settings,
-        'notifications': notifications
+        'notifications': notifications,
         }
-
-
-@register.function
-def page_title(s=None):
-    """Function that generates the page title."""
-    if s is None:
-        return settings.SITE_TITLE
-    if len(s) > 80:
-        s = s[:80] + u'...'
-    return u'%s - %s' % (settings.SITE_TITLE, s)
-
-
-@register.filter
-def md(text):
-    """Filter that converts Markdown text -> HTML."""
-    return Markup(
-        markdown.markdown(
-            text,
-            output_format='html5',
-            safe_mode='replace',
-            html_replacement_text='[HTML REMOVED]'))
-
-
-@register.filter
-def duration(duration):
-    """Filter that converts a duration in seconds to something like 01:54:01
-    """
-    if duration is None:
-        return ''
-
-    duration = int(duration)
-    seconds = duration % 60
-    minutes = (duration // 60) % 60
-    hours = (duration // 60) // 60
-
-    s = '%02d' % (seconds)
-    m = '%02d' % (minutes)
-    h = '%02d' % (hours)
-
-    output = []
-    if hours > 0:
-        output.append(h)
-    output.append(m)
-    output.append(s)
-    return ':'.join(output)

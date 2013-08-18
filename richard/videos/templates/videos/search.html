@@ -14,16 +14,12 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
--#}
+#}
 {% extends "base.html" %}
-{% block title %}
-  {% if query %}
-    {{ page_title('Search: ' + query) }}
-  {% else %}
-    {{ page_title('Search') }}
-  {% endif %}
-{% endblock %}
-{% import "videos/macros.html" as macros with context %}
+{% load page_title %}
+{% load url from future %}
+{% load video_summary %}
+{% block title %}{% page_title title %}{% endblock %}
 {% block content %}
 
 <div class="row">
@@ -45,8 +41,8 @@
           {% if facet_counts %}
             <ul class="nav nav-list">
               <li class="nav-header">By category</li>
-              {% for title, count in facet_counts['category'] %}
-                <li><a href="{{ request.build_absolute_uri() }}&amp;category={{ title }}">{{ title }} ({{ count }})</a></li>
+              {% for title, count in facet_counts.category %}
+                <li><a href="{{ request.build_absolute_uri }}&amp;category={{ title }}">{{ title }} ({{ count }})</a></li>
               {% endfor %}
             </ul>
           {% endif %}
@@ -55,7 +51,7 @@
       <div class="span9">
         <div class="row"><div class="span12">
         {% for result in page.object_list %}
-          {{ macros.video_summary(result.object, false, true) }}
+          {% video_summary result.object False True %}
         {% endfor %}
         </div></div>
       </div>
@@ -68,19 +64,19 @@
     </div>
   {% endif %}
 
-  {% if page.has_previous() or page.has_next() %}
+  {% if page.has_previous or page.has_next %}
     <div class="row">
       <div class="span12 centered">
         <div class="pager">
           <ul>
-            {% if page.has_previous() %}
-              <li><a href="?q={{ query }}&amp;page={{ page.previous_page_number() }}">&laquo; Previous</a></li>
+            {% if page.has_previous %}
+              <li><a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">&laquo; Previous</a></li>
             {% else %}
               <li class="disabled"><a>&laquo;Previous</a></li>
             {% endif %}
-			
-            {% if page.has_next() %}
-              <li><a href="?q={{ query }}&amp;page={{ page.next_page_number() }}"> Next &raquo;</a></li>
+
+            {% if page.has_next %}
+              <li><a href="?q={{ query }}&amp;page={{ page.next_page_number }}"> Next &raquo;</a></li>
             {% else %}
               <li class="disabled"><a>Next&raquo;</a></li>
             {% endif %}
@@ -91,5 +87,5 @@
   {% endif %}
 {% else %}
   {# Show some example queries to run, maybe query syntax, something else? #}
-{% endif %}    
+{% endif %}
 {% endblock %}

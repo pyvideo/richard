@@ -14,16 +14,14 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
--#}
-
+#}
 {% extends "base.html" %}
-
-{% block title %}{{ page_title("Statistics") }}{% endblock %}
-
+{% load page_title %}
+{% load url from future %}
+{% block title %}{% page_title 'Statistics' %}{% endblock %}
 {% block content %}
-
 <div class="page-header">
-  <h1>{{ video_count }} video{{ 's' if video_count != 0 }} indexed</h2>
+  <h1>{{ video_count }} video(s) indexed</h2>
 </div>
 
 <div class="section">
@@ -32,7 +30,7 @@
       <div class="well">
         <p class="stats-number">
           <strong>{{ category_count }}</strong>
-          <em>categor{{ 'y' if category_count == 1 else 'ies' }}</em>
+          <em>categories</em>
         </p>
       </div>
     </div>
@@ -40,11 +38,11 @@
       <ul>
         {% for cat in category_top5 %}
         <li>
-          <a href="{{ cat.get_absolute_url() }}">{{ cat }}</a>
+          <a href="{{ cat.get_absolute_url }}">{{ cat }}</a>
           (<strong>{{ cat.count }}&nbsp;videos</strong>)
         </li>
         {% endfor %}
-        <li><a href="{{ url('videos-category-list') }}">See all
+        <li><a href="{% url 'videos-category-list' %}">See all
         categories...</a></li>
       </ul>
     </div>
@@ -57,7 +55,7 @@
       <div class="well">
         <p class="stats-number">
           <strong>{{ speaker_count }}</strong>
-          <em>speaker{{ 's' if speaker_count != 1 }}</em>
+          <em>speaker(s)</em>
         </p>
       </div>
     </div>
@@ -65,11 +63,11 @@
       <ul>
         {% for s in speaker_top5 %}
         <li>
-          <a href="{{ s.get_absolute_url() }}">{{ s }}</a>
+          <a href="{{ s.get_absolute_url }}">{{ s }}</a>
           (<strong>{{ s.count }}&nbsp;videos</strong>)
         </li>
         {% endfor %}
-        <li><a href="{{ url('videos-speaker-list') }}">See all
+        <li><a href="{% url 'videos-speaker-list' %}">See all
         speakers...</a></li>
       </ul>
     </div>
@@ -82,7 +80,7 @@
       <div class="well">
         <p class="stats-number">
           <strong>{{ tag_count }}</strong>
-          <em>tag{{ 's' if tag_count != 1 }}</em>
+          <em>tag(s)</em>
         </p>
       </div>
     </div>
@@ -105,7 +103,7 @@
       <div class="well">
         <p class="stats-number">
           <strong>{{ suggestions|length }}</strong>
-          <em>open suggestion{{ 's' if suggestions|length != 1 }}</em>
+          <em>open suggestion(s)</em>
         </p>
       </div>
     </div>
@@ -121,7 +119,7 @@
           {% endif %}
         </li>
         {% endfor %}
-        <li><a href="{{ url('suggestions-list') }}">See all
+        <li><a href="{% url 'suggestions-list' %}">See all
         suggestions...</a></li>
       </ul>
     </div>

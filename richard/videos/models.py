@@ -136,6 +136,9 @@ class VideoManager(models.Manager):
     def live(self):
         return self.get_query_set().filter(state=Video.STATE_LIVE)
 
+    def live_order_by_title(self):
+        return self.live().order_by('title')
+
 
 class Video(models.Model):
     STATE_LIVE = 1
@@ -264,16 +267,12 @@ class Video(models.Model):
     def is_live(self):
         return self.state == self.STATE_LIVE
 
-    def get_available_formats(self, download=False, html5tag=False):
+    def get_all_formats(self):
         """Return formats ordered by MEDIA_PREFERENCE setting.
 
         Looks through all video_url/video_length fields on the model and
         selects those that are available, i.e. that have a value. The
         elements in the returned list are ordered by their format.
-
-        :arg download: True if this is being used for download links
-        :arg html5tag: True if this is being used in an html5 video
-            tag
 
         """
         result = []
@@ -283,12 +282,9 @@ class Video(models.Model):
                 continue
 
             url = getattr(self, 'video_%s_url' % fmt)
-            length = getattr(self, 'video_%s_length' % fmt)
-            download_only = getattr(self, 'video_%s_download_only' % fmt)
 
-            # If this is for html5 output and this url is for download
-            # only then we skip it.
-            if html5tag and download_only:
+            # skip empty urls
+            if not url:
                 continue
 
             try:
@@ -296,23 +292,40 @@ class Video(models.Model):
             except KeyError:
                 raise LookupError('No mimetype registered for "%s"' % fmt)
 
-            if url:
-                result.append({'url': url, 'length': length,
-                               'mime_type': mime_type})
-
-        if not html5tag and not download:
-            # Now we do this goofy thing where if this is a YouTube
-            # video we add it to the list of available formats. That's
-            # because this gets used to build the enclosures for a
-            # feed and we want to make sure this works with Miro.
-            #
-            # We put it last in the list because most options are
-            # better than this one.
-            if self.source_url and 'youtube' in self.source_url.lower():
-                result.append({'url': self.source_url,
-                               'mime_type': 'video/flv'})
+            result.append({
+                'url': url,
+                'length': getattr(self, 'video_%s_length' % fmt),
+                'mime_type': mime_type,
+                'download_only': getattr(self, 'video_%s_download_only' % fmt),
+            })
 
         return result
+
+    def get_html5_formats(self):
+        """Gets all formats appropriate for html5 video tag"""
+        return [fmt for fmt in self.get_all_formats()
+                if not fmt['download_only']]
+
+    def get_feed_formats(self):
+        """Gets all formats appropriate for feed
+
+        Note: We if this video is on YouTube, we add the YouTube url
+        to the available formats because we want to make sure this
+        works with Miro. We put it last in the list because most
+        options are # better than this one.
+
+        """
+        fmts = self.get_all_formats()
+        if self.source_url and 'youtube' in self.source_url.lower():
+            fmts.append({
+                'url': self.source_url,
+                'mime_type': 'video/flv',
+            })
+        return fmts
+
+    def get_download_formats(self):
+        """Gets all formats appropriate for file download list"""
+        return self.get_all_formats()
 
 
 class RelatedUrl(models.Model):

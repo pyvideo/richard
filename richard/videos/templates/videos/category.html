@@ -14,29 +14,32 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
--#}
+#}
 {% extends "base.html" %}
-{% block title %}{{ page_title(category.title) }}{% endblock %}
+{% load md %}
+{% load page_title %}
+{% load url from future %}
+{% load video_summary %}
+{% block title %}{% page_title category.title %}{% endblock %}
 
 {% block additional_head %}
-  {{ super() }}
-  <link rel="alternate" type="application/rss+xml" href="{{ url('videos-category-videos-feed', category_id=category.pk, slug=category.slug) }}" />
+  {{ block.super }}
+  <link rel="alternate" type="application/rss+xml" href="{% url 'videos-category-videos-feed' category_id=category.pk slug=category.slug %}" />
 {% endblock %}
 
-{% import "videos/macros.html" as macros with context %}
 {% block content %}
 
 <ul class="nav nav-pills pull-right">
-  <li class="{{ 'active' if view == 'videos' else '' }}"><a href="{{ url('videos-category', category_id=category.pk, slug=category.slug) }}">Videos</a></li>
-  <li class="{{ 'active' if view == 'files' else '' }}"><a href="{{ url('videos-category-files', category_id=category.pk, slug=category.slug) }}">Files</a></li>
-  <li><a href="{{ url('videos-category-videos-feed', category_id=category.pk, slug=category.slug) }}">RSS Feed</a></li>
+  <li class="{% if view == 'videos' %}active{% endif %}"><a href="{% url 'videos-category' category_id=category.pk slug=category.slug %}">Videos</a></li>
+  <li class="{% if view == 'files' %}active{% endif %}"><a href="{% url 'videos-category-files' category_id=category.pk slug=category.slug %}">Files</a></li>
+  <li><a href="{% url 'videos-category-videos-feed' category_id=category.pk slug=category.slug %}">RSS Feed</a></li>
 </ul>
 
 <div>
   <h1>{{ category.title }}
     {% if user.is_staff %}
       <small>
-        <a href="{{ url('admin:videos_category_change', category.id) }}"><i class="icon-edit"></i> edit</a>
+        <a href="{% url 'admin:videos_category_change' category.id %}"><i class="icon-edit"></i> edit</a>
       </small>
     {% endif %}
   </h1>
@@ -58,7 +61,7 @@
       {% if category.start_date %}
         <dt>Date:</dt>
         <dd>
-          {{ category.start_date|datetime }}
+          {{ category.start_date|date:"DATE_FORMAT" }}
         </dd>
       {% endif %}
       <dt>Number of videos:</dt>
@@ -72,7 +75,7 @@
 
 {% if view == 'videos' %}
   {% for v in videos %}
-    {{ macros.video_summary(v) }}
+    {% video_summary v %}
   {% endfor %}
 {% elif view == 'files' %}
   <table class="table">
@@ -81,18 +84,17 @@
       <tr>
         <td>
           {{ v.title }}
-          {% if v.speakers.all() %}
+          {% if v.speakers.all %}
             &mdash;
-            {% set pipe = joiner(", ") %}
-            {% for s in v.speakers.all() -%}
-              {{ pipe() }} {{ s.name }}
-            {%- endfor %}
+            {% for s in v.speakers.all %}
+              {{ s.name }}
+              {% if not forloop.last %}, {% endif %}
+            {% endfor %}
           {% endif %}
         </td>
         <td>
-          {% set formats = v.get_available_formats(download=True) %}
-          {% if formats %}
-            {% for format in formats %}
+          {% if v.get_download_formats %}
+            {% for format in v.get_download_formats %}
               <a href="{{ format.url }}">{{ format.mime_type }}</a>
             {% endfor %}
           {% else %}

@@ -102,8 +102,8 @@ Tools
   <https://github.com/jbalogh/check>`_.
 
 
-Django / nose / jinja2 / haystack / whoosh / django-rest-framework
-==================================================================
+Django / nose / haystack / whoosh / django-rest-framework
+=========================================================
 
 * `Django <https://www.djangoproject.com/>`_
 
@@ -121,14 +121,6 @@ Django / nose / jinja2 / haystack / whoosh / django-rest-framework
   I additionally use `nose-progressive
   <http://pypi.python.org/pypi/nose-progressive/>`_ because then the test
   output is easier to read. I highly recommend it.
-
-* `jingo <https://github.com/jbalogh/jingo>`_ and
-  `jinja2 <http://jinja.pocoo.org/>`_
-
-  The Django templates are nice, but I prefer Jinja2 templates. The
-  Jinja2 docs cover `differences between Django and Jinja2 templating
-  engines <http://jinja.pocoo.org/docs/switching/#django>`_, though
-  Django 1.4 adds ``elif``, so that's no longer a difference.
 
 * `django-haystack <http://haystacksearch.org/>`_ and
   `whoosh <https://bitbucket.org/mchaput/whoosh/wiki/Home>`_

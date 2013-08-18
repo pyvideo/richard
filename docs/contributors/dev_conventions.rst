@@ -27,7 +27,7 @@ Minor caveats:
   later commit.
 
 
-HTML/Jinja2 templates
+HTML/Django templates
 =====================
 
 http://mozweb.readthedocs.org/en/latest/coding.html#html

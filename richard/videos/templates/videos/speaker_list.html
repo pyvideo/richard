@@ -14,9 +14,12 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
--#}
+#}
 {% extends "base.html" %}
-{% block title %}{{ page_title('Speakers') }}{% endblock %}
+{% load batch %}
+{% load page_title %}
+{% load url from future %}
+{% block title %}{% page_title 'Speakers' %}{% endblock %}
 {% block content %}
 
 <div class="page-header">
@@ -28,7 +31,7 @@
     <div class="btn-toolbar">
       <div class="btn-group">
         {% for c in chars %}
-        <a class="btn{{ ' btn-primary' if c == active_char }}" href="{{ url('videos-speaker-list') }}?character={{ c }}">{{ c.upper() }}</a>
+        <a class="btn{% if c == active_char %} btn-primary{% endif %}" href="{% url 'videos-speaker-list' %}?character={{ c }}">{{ c.upper }}</a>
         {% endfor %}
       </div>
     </div>
@@ -38,12 +41,12 @@
 <div class="row">
   <div class="span12 section">
     <table class="table">
-      {% for row in speakers|batch(4, '&nbsp;') %}
+      {% for row in speakers|batch:"4,&nbsp;" %}
         <tr>
           {% for s in row %}
             <td>
               {% if s != '&nbsp;' %}
-                <a href="{{ s.get_absolute_url() }}">{{ s.name }}</a>
+                <a href="{{ s.get_absolute_url }}">{{ s.name }}</a>
                 ({{ s.video_count }})
               {% else %}
                 &nbsp;

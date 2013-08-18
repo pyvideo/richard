@@ -58,12 +58,14 @@ def category_list(request):
     cats = {}
     for cat in categories:
         title, year = split_year(cat.title)
-        cat._year = year
+        cat.title_year = year
         cats.setdefault(title, []).append(cat)
 
-    ret = render(
-        request, 'videos/category_list.html',
-        {'cats_by_group': cats})
+    # convert to dicts
+    cats = [{'title': key, 'cats': val} for key, val in cats.items()]
+    ret = render(request, 'videos/category_list.html', {
+        'cats_by_group': cats
+    })
     return ret
 
 
@@ -153,21 +155,22 @@ def video(request, video_id, slug):
         embed_type = 'html5'
 
     embed = obj.embed
-    available_formats = obj.get_available_formats(html5tag=True)
+    html5_formats = obj.get_html5_formats()
+    download_formats = obj.get_download_formats()
 
     # For Firefox, we nix any non-free formats.
     if request.BROWSER.name == 'Firefox':
-        available_formats = [
-            af for af in available_formats
+        html5_formats = [
+            af for af in html5_formats
             if af['mime_type'].endswith(('ogg', 'ogv', 'webm'))]
 
-    ret = render(
-        request, 'videos/video.html',
-        {'meta': meta,
-         'v': obj,
-         'embed': embed,
-         'embed_type': embed_type,
-         'available_formats': available_formats})
+    ret = render(request, 'videos/video.html', {
+        'meta': meta,
+        'v': obj,
+        'embed': embed,
+        'embed_type': embed_type,
+        'html5_formats': html5_formats
+    })
     return ret
 
 
@@ -213,11 +216,19 @@ def search(request):
     else:
         page = None
 
-    return render(request,
-                  'videos/search.html',
-                  {'query': q,
-                   'facet_counts': facet_counts,
-                   'page': page})
+    if q:
+        title = 'Search: {query}'.format(q)
+    else:
+        title = 'Search'
+
+    return render(
+        request,
+        'videos/search.html', {
+            'query': q,
+            'title': title,
+            'facet_counts': facet_counts,
+            'page': page
+        })
 
 
 def opensearch(request):

@@ -160,14 +160,14 @@ Adding static pages
 The "About" page is a static page. Our system lets you add pages as
 you so desire. To add a page:
 
-1. Create the page as a Jinja2 template file in
+1. Create the page as a Django template file in
    ``templates/pages/<page-name>``.
 
    For example, if I wanted to create a page for contact information,
    I'd create ``templates/pages/contact.html`` which would have in it::
 
        {% extends "base.html" %}
-       {% block title %}{{ page_title('About') }}{% endblock %}
+       {% block title %}{% page_title 'About' %}{% endblock %}
        {% block content %}
        
        <div class="page-header">
