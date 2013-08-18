@@ -4,8 +4,8 @@
  API
 =====
 
-richard comes with an REST API built with `tastypie
-<http://django-tastypie.readthedocs.org/>`_.
+richard comes with an REST API built with `django-rest-framework
+<http://django-rest-framework.org/>`_.
 
 
 .. contents::
@@ -21,8 +21,15 @@ The API is disabled by default. To enable the API, add this to your
     API = True
 
 
-API keys
-========
+API tokens
+==========
+
+.. Note::
+
+   The API keys used in richard v 0.1 are different than the API
+   tokens used in richard v 0.2 and later. If you were using richard v
+   0.1, you'll need to create new API tokens when you upgrade to v
+   0.2.
 
 Anonymous users have read-only access to all the data except videos
 that are in DRAFT status.
@@ -34,38 +41,18 @@ Site admin can do that as well as with an API key:
 * create items
 * update items
 
-richard uses Tastypie to implement the API.
+richard uses django-rest-framework to implement the API.
 
-To get an API key, you need to:
+To get an API token, you need to:
 
 1. log into the richard admin
-2. click on `Api keys` in the `Tastypie` section
-3. click on `Add api key` in the upper right
+2. click on `Tokens` in the `Authtoken` section
+3. click on `Add token` in the upper right
 4. select the user you want to add a key for in the drop down
-5. (completely not obvious step) click on `Save and continue editing`
-   button
+5. click on `Save` in bottom right hand corner
 
-After doing that, your API key will be generated and will be in the
-box marked `Key`.
-
-
-Using the API
-=============
-
-Tastypie is super helpful in that the data it returns tells you about
-the API and how to navigate it.
-
-For example::
-
-    $ curl -XGET 'http://example.com/api/v1/'
-
-lists the endpoints for what can be retrieved through the API.
-
-The API only returns JSON because I think it makes it easier to use.
-
-GET requests that return long lists of things return a page of that
-list. There's a `meta` section in the response that tells you which
-page you requested and how to get the next page.
+After doing that, your API token will be generated and will be in the
+`Key` field.
 
 
 Authenticating
@@ -74,199 +61,163 @@ Authenticating
 There are two groups of users: site admin and everyone else. Only site
 admin need to authenticate.
 
-Tastypie lets you authenticate via querystring parameters as well as
-HTTP header.  We'll cover authenticating by querystring parameters
-here. You need to provide two key/value pairs:
-
-* ``username`` - your richard site admin username
-* ``api_key`` - the api key for your account
+You must authenticate with the `Authorization` HTTP header. You'll
+provide your API token.
 
 For example, using curl::
 
-    $ curl --dump-header - -H "Content-Type: application/json" \
-        -X POST --data '{"tag": "foo"}' \
-        'http://example.com/api/v1/tag/?username=USERNAME&api_key=KEY'
+    $ curl --dump-header - \
+        -H "Content-Type: application/json" \
+        -H "Authentication: Token abd984049d938e8909ff" \
+        -X POST 'http://example.com/api/v2/video/' \
+        -d '
+    {
+        "tag": "foo"
+        ...
+    }'
 
-.. seealso::
 
-   http://django-tastypie.readthedocs.org/en/latest/authentication_authorization.html#apikeyauthentication
-     API Key authentication docs
+Obviously, that data doesn't work, but the header structure is correct.
 
 
 API
 ===
+
+Category
+--------
+
+``GET /api/v1/category/``
+    Lists categories.
+
+``GET /api/v1/category/<CATEGORY_ID>/``
+    Lists information about that category.
 
 
 Videos
 ------
 
 ``GET /api/v1/video/``
-
-    Lists all the videos on the site.
+    Lists all the videos on the site. This is paginated.
 
 ``GET /api/v1/video/<VIDEO_ID>/``
-
     Returns information for that specific video id.
 
 ``GET /api/v1/video/?speaker=FOO``
-
     Returns videos with speaker FOO. It only handles one speaker, but
     it uses icontains which will do case-insensitive substring
     matches.
 
 ``GET /api/v1/video/?tag=FOO``
-
     Returns videos with tag FOO. It only takes one tag and does an
     exact match.
 
 ``POST /api/v1/video/``
-
     Creates a new video.
 
-``POST /api/v1/video/<VIDEO_ID>/``
-
+``PUT /api/v1/video/<VIDEO_ID>/``
     Updates an existing video.
 
 
-Intersting things to keep in mind when creating new videos or updating
-existing ones:
+Fields for creating/updating videos:
 
-* **category**
+    **category** --- Required.
+        The title of the category.
 
-  Required.
+        The category must exist on the site. If it doesn't exist, the
+        API will waggle its finger at you. (Oops!)
 
-  The title of the category.
+        Example: ``"category": "PyCon 2012"``
 
-  The category must already exist. If it doesn't exist, the API will
-  waggle its finger at you. (Oops!)
+    **title** --- Required.
+        The title of the video.
 
-  Example::
+        Example: ``"title": "My dog has fleas"``
 
-      "category": "PyCon 2012"
+    **language** --- Required.
+        Name of the language that the video is primarily in. For example,
+        if the speaker is speaking English, then the video is in English.
 
-* **state**
+        The language must exist on the site. If it doesn't exist, the API
+        will waggle its finger at you.
 
-  Required.
+        Example: ``"language": "English"``
 
-  * 1 - live
-  * 2 - draft
+    **state** --- Required.
+        Possible values:
 
-  Example::
+        * 1 - live
+        * 2 - draft
 
-      "state": 1
+        Example: ``"state": 1``
 
-* **title**
+    **summary** --- Required.
+        Short summary of the video formatted in Markdown. Should be no
+        more than a single paragraph of a few sentences.
 
-  The title of the video.
+    **description**
+        Longer description of the video in Markdown. Outlines, linked
+        timecodes, etc would go here.
 
-  Example::
+    **tags**
+        List of tags.
 
-      "title": "My dog has fleas"
+        If you pass in tags and they don't exist, the API will create
+        them for you. If they do exist, the API will associate the
+        video with the existing tag objects. (Yay!)
 
-* **summary** and **description**
+        Example: ``"tags": ["web", "django", "beard"]``
 
-  The summary and description should be in valid Markdown.
+        .. Note::
 
-  Example::
+            If you're updating a video, you have to pass in the
+            complete set of tags every time. If you pass no tags,
+            it'll remove them assuming that you meant to remove all
+            the tags.
 
-      "summary": "This is a summary"
+    **speakers**
+        List of speaker names
 
-  and::
+        If you pass in speaker names and they don't exist, the API
+        will create them for you. If they do exist, the API will
+        associate the video with the existing speaker objects. (Yay!)
 
-      "description": "This is a description.\n\nLa la la!"
+        Example: ``"speakers": ["Carl Karsten", "Chris Webber"]``
 
-* **tags**
+        .. Note::
 
-  List of tags.
+           If you're updating a video, you have to pass in the
+           complete set of speakers every time. If you pass no
+           speakers, it'll remove them assuming that you meant to
+           remove all the speakers.
 
-  If you pass in tags and they don't exist, the API will create them
-  for you. If they do exist, the API will associate the video with the
-  existing tag objects. (Yay!)
+    **source_url**
+        The url where the video resides. For example, if this video
+        were hosted on YouTube, then you'd provide the YouTube url for
+        it.
 
-  Example::
-
-      "tags": ["web", "django", "beard"]
-
-  .. Note::
-
-     If you're updating a video, you have to pass in the complete set
-     of tags every time. If you pass no tags, it'll remove them
-     assuming that you meant to remove all the tags.
-
-* **speakers**
-
-  List of speaker names
-
-  If you pass in speaker names and they don't exist, the API will
-  create them for you. If they do exist, the API will associate the
-  video with the existing speaker objects. (Yay!)
-
-  Example::
-
-      "speakers": ["Carl Karsten", "Chris Webber"]
-
-  .. Note::
-
-     If you're updating a video, you have to pass in the complete set
-     of speakers every time. If you pass no speakers, it'll remove
-     them assuming that you meant to remove all the speakers.
-
-* **language**
-
-  The name of the language. This comes from the languages table.
-
-  If the language doesn't exist, the API will waggle its finger at
-  you. (Oops!)
-
-  Example::
-
-      "language": "English"
+    FIXME - Finish documenting fields. See code for the rest of the
+    fields.
 
 
 Here's an minimal JSON example for a video::
 
     {
       "category": "Test Category",
-      "state": 1,
-      "title": "Test video title"
+      "title": "Test video title",
+      "language": "English",
+      "state": 1
     }
+
 
 Here's a slightly longer one::
 
     {
       "category": "Test Category",
-      "state": 1,
       "title": "Test video title",
+      "language": "English",
+      "state": 1,
       "speakers": ["Jimmy Discotheque"],
       "tags": ["test", "bestever"],
-      "summary": "<p>Jimmy tests things out.</p>",
-      "description": "<p>Tests</p>\n<p>And more tests</p>",
-      "language": "English"
+      "summary": "Jimmy tests things out.",
+      "description": "Tests\nAnd more tests."
     }
-
-Everything else should be self-explanatory. See the schema::
-
-    curl http://example.com/api/v1/video/schema/
-
-replacing `example.com` with your server and port.
-
-
-Category
---------
-
-``/api/v1/category/``
-
-    Lists categories.
-
-
-``/api/v1/category/<CATEGORY_ID>/``
-
-    Lists information about that category.
-
-
-More?
-=====
-
-It's definitely worth looking at the `Tastypie documentation
-<http://django-tastypie.readthedocs.org/en/latest/interacting.html>`_
-for more examples and such.

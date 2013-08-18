@@ -102,8 +102,8 @@ Tools
   <https://github.com/jbalogh/check>`_.
 
 
-Django / nose / jinja2 / haystack / whoosh / tastypie
-=====================================================
+Django / nose / jinja2 / haystack / whoosh / django-rest-framework
+==================================================================
 
 * `Django <https://www.djangoproject.com/>`_
 
@@ -145,9 +145,9 @@ Django / nose / jinja2 / haystack / whoosh / tastypie
 
   South manages schema and data migrations independent on the database.
   
-* `tastypie <http://tastypieapi.org/>`_
+* `django-rest-framework <http://django-rest-framework.org/>`_
 
-  tastypie provides us with a RESTful API that can be used to retrieve
+  django-rest-framework provides a RESTful API that can be used to retrieve
   videos programmatically and can ease importing many videos for site
   admins.
 
