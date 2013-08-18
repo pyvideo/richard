@@ -284,6 +284,30 @@ class TestVideoPostAPI(TestAPIBase):
         eq_(list(vid.speakers.values_list('name', flat=True)), ['Guido'])
         eq_(list(vid.tags.values_list('tag', flat=True)), ['foo'])
 
+    def test_put_fails_with_live_videos(self):
+        """Test that passing in an id, but no slug with a PUT works."""
+        cat = category(save=True)
+        lang = language(save=True)
+        vid = video(
+            title='test1',
+            category=cat,
+            language=lang,
+            state=Video.STATE_LIVE,
+            save=True)
+
+        data = {'id': vid.pk,
+                'title': 'new title',
+                'category': cat.title,
+                'language': lang.name,
+                'speakers': ['Guido'],
+                'tags': ['foo'],
+                'state': Video.STATE_DRAFT}
+
+        resp = self.auth_put('/api/v2/video/%d/' % vid.pk,
+                             json.dumps(data),
+                             content_type='application/json')
+        eq_(resp.status_code, 403)
+
     def test_post_with_tag_name(self):
         """Test that you can post video with url tags or real tags"""
         cat = category(save=True)

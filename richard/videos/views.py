@@ -253,6 +253,14 @@ class IsAdminOrReadOnly(permissions.BasePermission):
 
         return request.user.is_staff
 
+    def has_object_permission(self, request, view, obj):
+        # We restrict PUT to only videos in DRAFT mode. Once it's
+        # live, you can only change metadata via the web interface.
+        if request.method == 'PUT' and obj.state == models.Video.STATE_LIVE:
+            return False
+
+        return True
+
 
 class CategoryListAPI(generics.ListAPIView):
     queryset = models.Category.objects.all()
