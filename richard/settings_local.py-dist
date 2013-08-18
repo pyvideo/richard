@@ -37,7 +37,7 @@ DATABASES = {
 # the email address of the account you want to log in as."
 
 #AUTHENTICATION_BACKENDS = (
-#    'richard.auth.AutoLoginBackend',
+#    'richard.base.auth.AutoLoginBackend',
 #    'django_browserid.auth.BrowserIDBackend',
 #)
 #
