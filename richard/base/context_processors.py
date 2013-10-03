@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from django.conf import settings
+
 from richard.sitenews.models import Notification
 
 
@@ -24,4 +25,4 @@ def base(request):
     return {
         'settings': settings,
         'notifications': notifications,
-        }
+    }

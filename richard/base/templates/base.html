@@ -15,7 +15,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 {% endcomment %}
-
 {% load browserid %}
 {% load md %}
 {% load page_title %}
@@ -92,7 +91,7 @@
     {% for n in notifications %}
       <div class="alert alert-info">
         <i class="icon-info-sign"></i> <strong>{{ n.interjection }}</strong>
-        {{ n.text|md }}
+        {{ n.text|md|safe }}
       </div>
     {% endfor %}
       </div>

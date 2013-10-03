@@ -53,7 +53,7 @@
       <dt>Description:</dt>
       <dd>
         {% if category.description %}
-          {{ category.description|md }}
+          {{ category.description|md|safe }}
         {% else %}
           No description.
         {% endif %}

@@ -19,6 +19,7 @@
 {% load duration %}
 {% load md %}
 {% load page_title %}
+{% load static %}
 {% load url from future %}
 {% block title %}{% page_title v.title %}{% endblock %}
 
@@ -68,7 +69,7 @@
     {% if v.summary %}
       <div class="section">
         <h4>Summary</h4>
-        {{ v.summary|md }}
+        {{ v.summary|md|safe }}
       </div>
     {% endif %}
 
@@ -86,7 +87,7 @@
     {% if v.description %}
       <div class="section">
         <h4>Description</h4>
-        {{ v.description|md }}
+        {{ v.description|md|safe }}
       </div>
     {% endif %}
   </div>
@@ -191,7 +192,7 @@
     <script type="text/javascript" src="http://s3.www.universalsubtitles.org/js/widgetizer/widgetizerprimer.js"></script>
   {% endif %}
 
-  <script type="text/javascript" src="{{ settings.STATIC_URL }}videos/js/videos.js"></script>
+  <script type="text/javascript" src="{% static 'videos/js/videos.js' %}"></script>
   <script type="text/javascript">
     $(document).ready(function() {
       // react to changes after page load

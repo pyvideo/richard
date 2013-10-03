@@ -217,7 +217,7 @@ def search(request):
         page = None
 
     if q:
-        title = 'Search: {query}'.format(q)
+        title = 'Search: {query}'.format(query=q)
     else:
         title = 'Search'
 

@@ -50,7 +50,7 @@
     </div>
     <div>
       {% if video.summary %}
-        {{ video.summary|md }}
+        {{ video.summary|md|safe }}
       {% endif %}
     </div>
   </div>
