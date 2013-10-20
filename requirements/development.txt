@@ -5,3 +5,4 @@ nose
 django-nose
 Pygments
 Sphinx
+steve

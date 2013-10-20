@@ -79,7 +79,7 @@ def build_api_urls():
             CategoryRetrieveAPI.as_view()),
 
         url(r'^api/v2/video/?$', VideoListCreateAPI.as_view()),
-        url(r'^api/v2/video/(?P<pk>[0-9]+)/?$',
+        url(r'^api/v2/video/(?P<pk>\d+)/?$',
             VideoRetrieveUpdateAPI.as_view()),
 
     )

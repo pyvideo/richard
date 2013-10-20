@@ -30,7 +30,7 @@ class Command(BaseCommand):
         reqs = []
         for field in Video._meta.fields:
             # Skip some things that shouldn't be in an API push
-            if field.name in ['id', 'updated']:
+            if field.name in ['id', 'updated', 'added']:
                 continue
 
             data = {

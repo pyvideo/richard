@@ -17,10 +17,9 @@
 import json
 from functools import partial
 
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import TestCase
-from nose.plugins.skip import SkipTest
+
 from nose.tools import eq_
 from rest_framework.authtoken.models import Token
 
@@ -47,6 +46,8 @@ class TestNoAPI(TestCase):
 class TestAPIBase(TestCase):
     def setUp(self):
         """Create superuser with API key."""
+        super(TestAPIBase, self).setUp()
+
         user = User.objects.create_superuser(
             username='api_user', email='api@example.com', password='password')
         user.save()
