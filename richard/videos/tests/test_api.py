@@ -26,29 +26,25 @@ from rest_framework.authtoken.models import Token
 
 from richard.videos.tests import category, language, speaker, tag, video
 from richard.videos.models import Video
-from richard.videos.urls import build_api_urls
-
-
-urlpatterns = build_api_urls()
+from richard.videos import urls as video_urls_module
 
 
 class TestNoAPI(TestCase):
     def test_api_disabled(self):
         """Test that disabled api kicks up 404"""
-        if settings.API:
-            raise SkipTest
+        with self.settings(API=False):
+            reload(video_urls_module)
+            vid = video(state=Video.STATE_LIVE, save=True)
 
-        vid = video(state=Video.STATE_LIVE, save=True)
+            # anonymous user
+            resp = self.client.get('/api/v2/video/%d/' % vid.pk,
+                                   {'format': 'json'})
+            eq_(resp.status_code, 404)
 
-        # anonymous user
-        resp = self.client.get('/api/v2/video/%d/' % vid.pk,
-                               {'format': 'json'})
-        eq_(resp.status_code, 404)
+        reload(video_urls_module)
 
 
 class TestAPIBase(TestCase):
-    urls = 'richard.videos.tests.test_api'
-
     def setUp(self):
         """Create superuser with API key."""
         user = User.objects.create_superuser(
