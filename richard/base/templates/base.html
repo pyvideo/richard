@@ -103,16 +103,18 @@
   TODO: breadcrumbs
   {% endcomment %}
 
-  {% block content %}{% endblock %}
+  {% block content %}{% endblock content %}
 
-  <div id="footer">
-    This site is powered by
-    <a href="http://github.com/willkg/richard">richard</a>.
-  </div>
+  {% block footer %}
+    <div id="footer">
+      This site is powered by
+      <a href="http://github.com/willkg/richard">richard</a>.
+    </div>
+  {% endblock footer %}
 </div>
 
 {% block additional_body %}
-{% endblock %}
+{% endblock additional_body %}
 
 {% block site_js %}
 <script type="text/javascript" src="{% static 'js/jquery-1.7.2.min.js' %}"></script>
@@ -123,6 +125,6 @@
   {% else %}
     <script type="text/javascript" src="{% static 'js/browserid-mock.js' %}"></script>
   {% endif %}
-{% endblock %}
+{% endblock site_js %}
 </body>
 </html>
