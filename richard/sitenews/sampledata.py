@@ -19,8 +19,8 @@ from richard.sitenews.tests import sitenews
 
 def generate_sampledata(options):
     sitenews(title=u'Welcome to my index!',
-             summary=u'<p>I just created this site.</p>',
-             content=u'Yay!',
+             summary=u'I just created _this_ site.',
+             content=u'Yay! *hurrah!*',
              author=u'site admin',
              slug='first-post',
              save=True)

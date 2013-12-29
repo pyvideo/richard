@@ -1,7 +1,7 @@
-{#
+{% comment %}
   this just tosses everything into the "text". should do analysis at
   some point as to whether that's a good idea.
-#}
+{% endcomment %}
 {{ object.title }}
 
 {{ object.summary }}
