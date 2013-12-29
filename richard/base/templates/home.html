@@ -1,4 +1,5 @@
-{#
+{% extends "base.html" %}
+{% comment %}
 # richard -- video index system
 # Copyright (C) 2012, 2013 richard contributors.  See AUTHORS.
 #
@@ -14,8 +15,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#}
-{% extends "base.html" %}
+{% endcomment %}
 {% load url from future %}
 {% block content %}
 
@@ -26,8 +26,7 @@
         <h1>{{ settings.SITE_TITLE }}</h1>
         <p>
           This site indexes videos that exist in various places and
-          makes them easier to find. {{ video_count }} video{{ 's' if
-          video_count != 1 else '' }} so far.
+          makes them easier to find. {{ video_count }} video{{ video_count|pluralize }} so far.
         </p>
         <p>
           <a class="btn btn-primary btn-large" href="{% url 'pages-page' page='about' %}">Learn more</a>

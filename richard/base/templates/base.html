@@ -1,4 +1,4 @@
-{#
+{% comment %}
 # richard -- video index system
 # Copyright (C) 2012, 2013 richard contributors.  See AUTHORS.
 #
@@ -14,16 +14,18 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#}
+{% endcomment %}
+
 {% load browserid %}
 {% load md %}
 {% load page_title %}
 {% load url from future %}
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" href="{{ settings.STATIC_URL }}bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="{{ settings.STATIC_URL }}css/richard.css">
+  <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/richard.css' %}">
   <link rel="search" type="application/opensearchdescription+xml" title="{{ settings.SITE_TITLE }} search" href="{% url 'videos-opensearch' %}">
   <title>{% block title %}{{ settings.SITE_TITLE }}{% endblock %}</title>
 {% if meta %}
@@ -97,8 +99,10 @@
     </div>
   {% endif %}
 
-  {# TODO: messages #}
-  {# TODO: breadcrumbs #}
+  {% comment %}
+  TODO: messages
+  TODO: breadcrumbs
+  {% endcomment %}
 
   {% block content %}{% endblock %}
 
@@ -112,13 +116,13 @@
 {% endblock %}
 
 {% block site_js %}
-<script type="text/javascript" src="{{ settings.STATIC_URL }}js/jquery-1.7.2.min.js"></script>
-<script type="text/javascript" src="{{ settings.STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="{% static 'js/jquery-1.7.2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
   {% if not settings.BROWSERID_AUTOLOGIN %}
-    <script type="text/javascript" src="{{ settings.STATIC_URL }}browserid/browserid.js"></script>
+    <script type="text/javascript" src="{% static 'browserid/browserid.js' %}"></script>
     <script type="text/javascript" src="https://login.persona.org/include.js"></script>
   {% else %}
-    <script type="text/javascript" src="{{ settings.STATIC_URL }}js/browserid-mock.js"></script>
+    <script type="text/javascript" src="{% static 'js/browserid-mock.js' %}"></script>
   {% endif %}
 {% endblock %}
 </body>
