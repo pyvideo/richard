@@ -86,36 +86,41 @@ API
 Category
 --------
 
-``GET /api/v1/category/``
+``GET /api/v2/category/``
     Lists categories.
 
-``GET /api/v1/category/<CATEGORY_ID>/``
+``GET /api/v2/category/<CATEGORY_ID>/``
     Lists information about that category.
 
 
 Videos
 ------
 
-``GET /api/v1/video/``
+``GET /api/v2/video/``
     Lists all the videos on the site. This is paginated.
 
-``GET /api/v1/video/<VIDEO_ID>/``
+``GET /api/v2/video/<VIDEO_ID>/``
     Returns information for that specific video id.
 
-``GET /api/v1/video/?speaker=FOO``
+``GET /api/v2/video/?speaker=FOO``
     Returns videos with speaker FOO. It only handles one speaker, but
     it uses icontains which will do case-insensitive substring
     matches.
 
-``GET /api/v1/video/?tag=FOO``
+``GET /api/v2/video/?tag=FOO``
     Returns videos with tag FOO. It only takes one tag and does an
     exact match.
 
-``POST /api/v1/video/``
+``POST /api/v2/video/``
     Creates a new video.
 
-``PUT /api/v1/video/<VIDEO_ID>/``
+``PUT /api/v2/video/<VIDEO_ID>/``
     Updates an existing video.
+
+    .. Note::
+
+       You can only update videos in DRAFT mode. If it's live, you
+       can no longer update it.
 
 
 Fields for creating/updating videos:
