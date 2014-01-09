@@ -1,10 +1,10 @@
 django==1.4.10
-django-haystack==2.0.0
-whoosh==2.4.1
+django-haystack==2.1.0
+whoosh==2.5.6
 bleach==1.2.2
-requests==1.2.3
+requests==2.1.0
 Markdown==2.3.1
-South==0.8.2
+South==0.8.4
 eadred==0.2
 djangorestframework==2.3.10
 
