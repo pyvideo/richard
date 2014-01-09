@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime, date
+from textwrap import dedent
 
 from richard.videos.models import Video
 from richard.videos.tests import category, speaker, tag, video
@@ -43,10 +44,10 @@ def generate_sampledata(options):
     v = video(
         state=Video.STATE_LIVE, category=pycon2011,
         title=u'Writing great documentation',
-        summary=u'<p>Writing great documentation</p>'
-                u'<p>Presented by Jacob Kaplan-Moss</p>',
-        description=u'<p>This talk looks at tips, tools, and techniques you can'
-                    u'use to produce great technical documentation.</p>',
+        summary=u'Writing great documentation\n\n'
+                u'Presented by Jacob Kaplan-Moss',
+        description=u'This talk looks at tips, tools, and techniques you can'
+                    u'use to produce great technical documentation.',
         copyright_text=u'Creative Commons Attribution-NonCommercial-ShareAlike 3.0',
 
         recorded=date(2011, 3, 11),
@@ -65,11 +66,12 @@ def generate_sampledata(options):
         state=Video.STATE_LIVE, category=pycon2012,
         title=u'Diversity in practice: How the Boston Python User Group grew '
               u'to 1700 people and over 15% women',
-        summary=u"""
-            <p>How do you bring more women into programming communities with
-            long-term, measurable results? In this talk we'll analyze our
-            successful effort, the Boston Python Workshop, which brought over
-            200 women into Boston's Python community this year.</p>""",
+        summary=dedent(u"""\
+        How do you bring more women into programming communities with
+        long-term, measurable results? In this talk we'll analyze our
+        successful effort, the Boston Python Workshop, which brought over
+        200 women into Boston's Python community this year.
+        """),
 
         recorded=date(2012, 3, 11),
         updated=datetime(2012, 3, 13, 16, 15, 17),
