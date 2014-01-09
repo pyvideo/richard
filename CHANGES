@@ -14,12 +14,17 @@ Version 0.2: In development
 * New API v2! Built on django-rest-framework, it should be simpler,
   easier, and less buggy. See documentation for API details.
 
+
 **Backwards-incompatible changes:**
 
 * Ditched API v1. It used tastypie and I jettisoned that.
 
 * To use API v2, you'll need to create new API tokens in the admin in
   the Token section.
+
+* Switched from Jinja2 templates to Django templates. If you had your
+  own theme, you'll have to redo it with Django templates.
+
 
 **Other changes:**
 
@@ -31,9 +36,7 @@ Version 0.2: In development
 
 * Cleaned up the search page a bit. Added a category facet.
 
-* Nixed tastypie for django-rest-framework.
-
-* Fixed requirements.
+* Updated requirements.
 
 
 Version 0.1: May 18th, 2013
