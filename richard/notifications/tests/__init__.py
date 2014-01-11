@@ -14,27 +14,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.conf.urls.defaults import patterns, url
+from datetime import date, timedelta
 
-from richard.sitenews.feeds import NewsFeed
+from richard.base.tests import with_save
+from richard.notifications import models
 
 
-urlpatterns = patterns(
-    'richard.sitenews.views',
+@with_save
+def notification(**kw):
+    """Builds a Notification object with appropriate defaults"""
+    start = date.today()
+    end = start + timedelta(days=2)
 
-    # news item
-    url(r'^entry/(?P<pk>\d+)/(?P<slug>[\w-]*)/?$',
-        'news', name='sitenews-news'),
+    defaults = dict(start_date=start, end_date=end)
+    defaults.update(kw)
 
-    # news archive for a year
-    url(r'^archives/(?P<year>[0-9]{4})/?$',
-        'news_archive_year', name='sitenews-archive-year'),
+    if 'interjection' not in kw:
+        defaults['interjection'] = u'Test!'
+    if 'text' not in kw:
+        defaults['text'] = u'Testing... One, Two, Three.'
 
-    # feed
-    url(r'^rss/?$',
-        NewsFeed(), name='sitenews-feed'),
-
-    # news listing
-    url(r'^/?$',
-        'news_list', name='sitenews-list'),
-)
+    return models.Notification(**defaults)

@@ -19,8 +19,8 @@ from datetime import datetime, timedelta
 from django.test import TestCase
 from nose.tools import eq_
 
-from richard.sitenews.tests import notification
-from richard.sitenews.models import Notification
+from richard.notifications.tests import notification
+from richard.notifications.models import Notification
 
 
 class TestNotification(TestCase):
@@ -37,8 +37,10 @@ class TestNotification(TestCase):
         start -= timedelta(days=1)
         n2 = notification(start_date=start, end_date=end, save=True)
 
-        eq_(set([x.pk for x in Notification.get_live_notifications()]),
-            set([n1.pk, n2.pk]))
+        n3 = notification(start_date=start, save=True)
+
+        eq_([x.pk for x in Notification.objects.get_live_notifications()],
+            [n1.pk, n2.pk, n3.pk])
 
     def test_not_shown(self):
         """
@@ -53,4 +55,4 @@ class TestNotification(TestCase):
         end = datetime.now() - timedelta(days=1)
         notification(start_date=start, end_date=end, save=True)
 
-        eq_(len(Notification.get_live_notifications()), 0)
+        eq_(len(Notification.objects.get_live_notifications()), 0)

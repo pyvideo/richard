@@ -20,39 +20,17 @@ from django.utils.translation import ugettext_lazy as _
 import datetime
 
 
-class SiteNews(models.Model):
-    """
-    This is a really basic site news model. It's not designed to be
-    WordPress. It is designed so it's easy to do site news on the site
-    in the same style.
-    """
-    title = models.CharField(max_length=50)
-    summary = models.TextField(help_text=_(u'Two sentences. Use Markdown.'))
-    content = models.TextField(help_text=_(u'Use Markdown.'))
-    # TODO: make this a django user instead?
-    author = models.CharField(max_length=50)
+class NotificationManager(models.Manager):
+    def get_live_notifications(self):
+        """Returns notifications in the "now" range
 
-    updated = models.DateTimeField(auto_now=True)
-    created = models.DateTimeField(auto_now_add=True)
+        This is anything that starts before now and either ends after now or
+        had a null end date.
 
-    slug = models.SlugField(unique=True)
-
-    class Meta(object):
-        get_latest_by = 'created'
-        ordering = ['-created']
-        # TODO make both translation independent from each other
-        verbose_name = _(u'site news')
-        verbose_name_plural = _(u'site news')
-
-    @models.permalink
-    def get_absolute_url(self):
-        return ('sitenews-news', (self.pk, self.slug))
-
-    def __unicode__(self):
-        return self.title
-
-    def __repr__(self):
-        return '<SiteNews: %s>' % self.title.encode('ascii', 'ignore')
+        """
+        now = datetime.date.today()
+        return self.filter(start_date__lte=now).filter(
+            models.Q(end_date__gt=now) | models.Q(end_date__isnull=True))
 
 
 class Notification(models.Model):
@@ -71,14 +49,10 @@ class Notification(models.Model):
                     u'sitenews for more information.'))
 
     start_date = models.DateField()
-    end_date = models.DateField()
+    end_date = models.DateField(null=True)
+
+    objects = NotificationManager()
 
     class Meta(object):
         verbose_name = _(u'notification')
         verbose_name_plural = _(u'notifications')
-
-    @classmethod
-    def get_live_notifications(cls):
-        now = datetime.date.today()
-        return Notification.objects.filter(
-            start_date__lte=now, end_date__gt=now)

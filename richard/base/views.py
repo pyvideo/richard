@@ -20,7 +20,6 @@ from django.shortcuts import render
 
 
 from richard.videos.models import Video, Category, Speaker, Tag
-from richard.sitenews.models import SiteNews
 from richard.suggestions.models import Suggestion
 
 
@@ -28,13 +27,11 @@ def home(request):
     latest_categories = Category.objects.order_by('-added')[:10]
     latest_videos = Video.objects.live().order_by('-added')[:10]
 
-    news_list = SiteNews.objects.all()[:5]
     video_count = Video.objects.live().count()
 
     ret = render(
         request, 'home_branded.html',
         {'title': settings.SITE_TITLE,
-         'news': news_list,
          'latest_categories': latest_categories,
          'latest_videos': latest_videos,
          'video_count': video_count})

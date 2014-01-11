@@ -224,10 +224,10 @@ INSTALLED_APPS = (
     'eadred',
 
     'richard.base',
-    'richard.videos',
-    'richard.sitenews',
+    'richard.notifications',
     'richard.pages',
     'richard.suggestions',
+    'richard.videos',
 )
 
 AUTHENTICATION_BACKENDS = (

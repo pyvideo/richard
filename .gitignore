@@ -7,3 +7,4 @@ venv
 whoosh_index
 
 docs/_build/
+static/

@@ -46,7 +46,6 @@ urlpatterns = patterns(
 
     url(r'^admin/', include(admin.site.urls)),
 
-    url(r'^news/', include('richard.sitenews.urls')),
     url(r'^pages/', include('richard.pages.urls')),
     url(r'^suggestions/', include('richard.suggestions.urls')),
     url(r'', include('richard.videos.urls')),

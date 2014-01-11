@@ -34,74 +34,43 @@
       </div>
     {% endblock %}
 
-    <div class="row section">
-      <div class="span6">
-        <h3>Latest categories
-          <small><a class="feed" href="{% url 'videos-category-feed' %}"> feed</a></small>
-        </h3>
+    <h3>Latest categories
+      <small><a class="feed" href="{% url 'videos-category-feed' %}"> feed</a></small>
+    </h3>
 
-        {% if latest_categories %}
-          <ul>
-            {% for cat in latest_categories %}
-              {% if user.is_staff or cat.video_set.live.count > 0 %}
-                <li>
-                  <a href="{{ cat.get_absolute_url }}">{{ cat.title }}</a>
-                  ({{ cat.video_set.live.count }})
-                </li>
-              {% endif %}
-            {% endfor %}
-          </ul>
-        {% endif %}
-
-        <p>
-          <a href="{% url 'videos-category-list' %}">See all categories...</a>
-        </p>
-      </div>
-
-      <div class="span6">
-        <h3>Latest videos
-          <small><a class="feed" href="{% url 'videos-new-feed' %}"> feed</a></small>
-        </h3>
-
-        {% if latest_videos %}
-          <ul>
-            {% for video in latest_videos %}
-              <li>
-                ({{ video.category }})
-                <a href="{{ video.get_absolute_url }}">{{ video.title }}</a>
-              </li>
-            {% endfor %}
-          </ul>
-        {% endif %}
-        <p>
-          <a href="{% url 'videos-search' %}">Search all videos...</a>
-        </p>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-{% if news %}
-  <div class="row section">
-    <div class="span12">
-      <h3>Site news
-        <small><a class="feed" href="{% url 'sitenews-feed' %}"> feed</a></small>
-      </h3>
-
+    {% if latest_categories %}
       <ul>
-        {% for item in news %}
+        {% for cat in latest_categories %}
+          {% if user.is_staff or cat.video_set.live.count > 0 %}
+            <li>
+              <a href="{{ cat.get_absolute_url }}">{{ cat.title }}</a>
+              ({{ cat.video_set.live.count }})
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    {% endif %}
+    <p>
+      <a href="{% url 'videos-category-list' %}">See all categories...</a>
+    </p>
+
+    <h3>Latest videos
+      <small><a class="feed" href="{% url 'videos-new-feed' %}"> feed</a></small>
+    </h3>
+
+    {% if latest_videos %}
+      <ul>
+        {% for video in latest_videos %}
           <li>
-            <a href="{{ item.get_absolute_url }}">{{ item.title }}</a>
-            - {{ item.created|date:"DATE_FORMAT" }}
+            ({{ video.category }})
+            <a href="{{ video.get_absolute_url }}">{{ video.title }}</a>
           </li>
         {% endfor %}
       </ul>
-
-      <p>
-        <a href="{% url 'sitenews-list' %}">See all site news...</a>
-      </p>
-    </div>
+    {% endif %}
+    <p>
+      <a href="{% url 'videos-search' %}">Search all videos...</a>
+    </p>
   </div>
-{% endif %}
+</div>
 {% endblock %}
