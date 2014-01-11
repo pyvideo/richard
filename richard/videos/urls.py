@@ -80,7 +80,7 @@ def build_api_urls():
 
         url(r'^api/v2/video/?$', VideoListCreateAPI.as_view()),
         url(r'^api/v2/video/(?P<pk>\d+)/?$',
-            VideoRetrieveUpdateAPI.as_view()),
+            VideoRetrieveUpdateAPI.as_view(), name='videos-api-view'),
 
     )
 
