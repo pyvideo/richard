@@ -51,7 +51,9 @@
   </div>
 </div>
 
-{% for v in videos %}
-  {% video_summary v %}
-{% endfor %}
+<div id="video-summary-content">
+  {% for v in videos %}
+    {% video_summary v %}
+  {% endfor %}
+</div>
 {% endblock %}

@@ -72,8 +72,12 @@ def category_list(request):
 def category(request, category_id, slug):
     obj = get_object_or_404(models.Category, pk=category_id)
 
-    videos = (obj.video_set.live().select_related('category')
-                                  .prefetch_related('speakers'))
+    if request.user.is_staff:
+        videos = obj.video_set.all()
+    else:
+        videos = obj.video_set.live()
+
+    videos = videos.select_related('category').prefetch_related('speakers')
 
     ret = render(
         request, 'videos/category.html',
@@ -123,8 +127,12 @@ def speaker_list(request):
 def speaker(request, speaker_id, slug=None):
     obj = get_object_or_404(models.Speaker, pk=speaker_id)
 
-    videos = (obj.video_set.live().select_related('category')
-                                  .prefetch_related('speakers'))
+    if request.user.is_staff:
+        videos = obj.video_set.all()
+    else:
+        videos = obj.video_set.live()
+
+    videos = videos.select_related('category').prefetch_related('speakers')
 
     ret = render(
         request, 'videos/speaker.html',

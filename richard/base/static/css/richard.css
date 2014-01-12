@@ -49,3 +49,15 @@ div#footer {
 .indent {
   padding-left: 2em;
 }
+
+div#video-summary-content .video-summary {
+  min-height: 130px;
+}
+
+div#video-summary-content .video-summary .thumbnail {
+  float: left;
+}
+
+div#video-summary-content .video-summary .video-summary-data {
+  margin-left: 200px;
+}

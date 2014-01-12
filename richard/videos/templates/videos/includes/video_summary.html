@@ -17,22 +17,24 @@
 {% endcomment %}
 {% load md %}
 {% load url from future %}
-<div class="row section">
-  <div class="span2">
+<div class="video-summary{% if not video.is_live %} alert alert-error{% endif %}">
+  <div class="thumbnail">
     <a href="{{ video.get_absolute_url }}" class="thumbnail"><img width="{{ video.thumbnail_width }}" height="{{ video.thumbnail_height }}" src="{{ video.get_thumbnail_url }}"></a>
   </div>
-
-  <div class="{% if wide %}span10{% else %}span7{% endif %}">
+  <div class="video-summary-data">
     <div>
       <strong><a href="{{ video.get_absolute_url }}">{{ video.title }}</a></strong>
-      {% if show_category %}
-        &mdash;
-        <a href="{{ video.category.get_absolute_url }}">{{ video.category.title }}</a>
-      {% endif %}
-      {% if video.language %}
-        ({{ video.language.name }})
-      {% endif %}
     </div>
+    {% if show_category %}
+      <div>
+	<a href="{{ video.category.get_absolute_url }}">{{ video.category.title }}</a>
+      </div>
+    {% endif %}
+    {% if video.language %}
+      <div>
+	Language: {{ video.language.name }}
+      </div>
+    {% endif %}
     <div>
       {% if video.speakers.all %}
         {% for s in video.speakers.all %}

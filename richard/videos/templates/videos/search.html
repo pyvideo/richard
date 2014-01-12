@@ -49,11 +49,11 @@
         </div>
       </div>
       <div class="span9">
-        <div class="row"><div class="span12">
-        {% for result in page.object_list %}
-          {% video_summary result.object False True %}
-        {% endfor %}
-        </div></div>
+	<div id="video-summary-content">
+          {% for result in page.object_list %}
+            {% video_summary result.object False True %}
+          {% endfor %}
+	</div>
       </div>
     </div>
   {% else %}
