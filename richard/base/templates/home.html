@@ -34,10 +34,6 @@
       </div>
     {% endblock %}
 
-    <h3>Latest categories
-      <small><a class="feed" href="{% url 'videos-category-feed' %}"> feed</a></small>
-    </h3>
-
     <h3>Latest videos
       <small><a class="feed" href="{% url 'videos-new-feed' %}"> feed</a></small>
     </h3>
@@ -55,6 +51,10 @@
     <p>
       <a href="{% url 'videos-search' %}">Search all videos...</a>
     </p>
+
+    <h3>Latest categories
+      <small><a class="feed" href="{% url 'videos-category-feed' %}"> feed</a></small>
+    </h3>
 
     {% if latest_categories %}
       <ul>
