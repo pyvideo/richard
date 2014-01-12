@@ -20,10 +20,9 @@ register = template.Library()
 
 
 @register.inclusion_tag('videos/includes/video_summary.html')
-def video_summary(video, wide=True, show_category=True):
+def video_summary(video, show_category=True):
     """Function that generates a video summary."""
     return {
         'video': video,
-        'wide': wide,
         'show_category': show_category
     }
