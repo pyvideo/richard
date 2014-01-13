@@ -1,4 +1,5 @@
-django==1.4.10
+django==1.5.5
+
 django-haystack==2.1.0
 whoosh==2.5.6
 bleach==1.2.2
