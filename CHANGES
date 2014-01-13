@@ -40,7 +40,7 @@ Version 0.2: In development
 
 * Category pages now show draft videos if you're an admin.
 
-* Updated to Django 1.5.
+* Updated to Django 1.6.
 
 * Updated requirements.
 
