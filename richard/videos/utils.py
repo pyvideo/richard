@@ -14,14 +14,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.template.defaultfilters import slugify
+from django.utils.text import slugify
 
 
 def generate_unique_slug(obj, slug_from, slug_field='slug'):
     text = getattr(obj, slug_from)[:49]
     root_text = text
     for i in range(100):
-        slug = slugify(text)
+        slug = slugify(unicode(text))
         try:
             d = {slug_field: slug}
             obj.__class__.objects.get(**d)
