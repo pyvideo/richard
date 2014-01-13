@@ -58,13 +58,14 @@ class TestSteveAndAPI(LiveServerTestCase):
 
     def test_create_and_update_video(self):
         cat = category(save=True)
+        lang = language(name=u'English', save=True)
 
         ret = richardapi.create_video(
             self.api_url,
             auth_token=self.token.key,
             video_data={
                 'title': 'Test video',
-                'language': 'English',
+                'language': lang.name,
                 'category': cat.title,
                 'state': 2,  # Has to be draft so update works
                 'speakers': ['Jimmy'],
