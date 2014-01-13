@@ -344,7 +344,7 @@ class VideoRetrieveUpdateAPI(generics.RetrieveUpdateAPIView):
 class JSONResponse(HttpResponse):
     def __init__(self, content):
         super(JSONResponse, self).__init__(
-            content, mimetype='application/json')
+            content, content_type='application/json')
 
 
 def apiurlforsource(request):
