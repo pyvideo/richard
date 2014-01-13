@@ -36,6 +36,12 @@ Version 0.2: In development
 
 * Cleaned up the search page a bit. Added a category facet.
 
+* Cleaned up video listing pages.
+
+* Category pages now show draft videos if you're an admin.
+
+* Updated to Django 1.5.
+
 * Updated requirements.
 
 
