@@ -42,7 +42,8 @@
       <ul>
         {% for video in latest_videos %}
           <li>
-            ({{ video.category }})
+            {{ video.added|date:"SHORT_DATE_FORMAT" }}
+            (<a href="{{ video.category.get_absolute_url }}">{{ video.category }}</a>)
             <a href="{{ video.get_absolute_url }}">{{ video.title }}</a>
           </li>
         {% endfor %}
