@@ -27,12 +27,7 @@
     </div>
     {% if show_category %}
       <div>
-	<a href="{{ video.category.get_absolute_url }}">{{ video.category.title }}</a>
-      </div>
-    {% endif %}
-    {% if video.language %}
-      <div>
-	Language: {{ video.language.name }}
+	    <a href="{{ video.category.get_absolute_url }}">{{ video.category.title }}</a>
       </div>
     {% endif %}
     <div>
@@ -48,6 +43,10 @@
         <small>Recorded: {{ video.recorded|date:"DATE_FORMAT" }}</small>
       {% else %}
         <small>Added: {{ video.added|date:"DATE_FORMAT" }}</small>
+      {% endif %}
+      {% if video.language %}
+        &mdash;
+	    <small>Language: {{ video.language.name }}</small>
       {% endif %}
     </div>
     <div>
