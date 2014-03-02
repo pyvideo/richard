@@ -118,34 +118,27 @@
           <dd>{{ v.language.name }}</dd>
         {% endif %}
 
-        {% if v.recorded %}
-          <dt>Recorded</dt>
-          <dd>{{ v.recorded|date:"DATE_FORMAT" }}</dd>
-        {% endif %}
-
         {% if v.duration %}
           <dt>Duration</dt>
           <dd>{{ v.duration|duration }}</dd>
         {% endif %}
 
-        <dt>Tags</dt>
-        <dd>
-          {% for t in v.tags.all %}
-            {{ t.tag }}
-          {% empty %}
-            No tags
-          {% endfor %}
-        </dd>
+        {% if v.recorded %}
+          <dt>Recorded</dt>
+          <dd>{{ v.recorded|date:"DATE_FORMAT" }}</dd>
+        {% endif %}
 
-        <dt>Copyright/License Information</dt>
+        {% if v.updated %}
+          <dt>Last updated</dt>
+          <dd>{{ v.updated|date:"DATE_FORMAT" }}</dd>
+        {% endif %}
+
+        <dt>Video origin</dt>
         <dd>
-          {% if v.copyright_text %}
-            {{ v.copyright_text }}
-          {% elif v.source_url %}
-            See <a href="{{ v.source_url }}">source</a> for copyright
-            information.
+          {% if v.source_url %}
+            <a href="{{ v.source_url }}">{{ v.source_url }}</a>
           {% else %}
-            Unknown.
+            Unknown
           {% endif %}
         </dd>
 
@@ -165,24 +158,31 @@
           {% endif %}
         </dd>
 
-        <dt>Video origin</dt>
+	    <dt>Metadata</dt>
+	    <dd>
+	      <a href="{% url 'videos-api-view' v.id %}">JSON</a>
+	    </dd>
+
+        <dt>Copyright/License Information</dt>
         <dd>
-          {% if v.source_url %}
-            <a href="{{ v.source_url }}">{{ v.source_url }}</a>
+          {% if v.copyright_text %}
+            {{ v.copyright_text }}
+          {% elif v.source_url %}
+            See <a href="{{ v.source_url }}">source</a> for copyright
+            information.
           {% else %}
-            Unknown
+            Unknown.
           {% endif %}
         </dd>
 
-	<dt>Metadata</dt>
-	<dd>
-	  <a href="{% url 'videos-api-view' v.id %}">JSON</a>
-	</dd>
-
-        {% if v.updated %}
-          <dt>Last updated</dt>
-          <dd>{{ v.updated|date:"DATE_FORMAT" }}</dd>
-        {% endif %}
+        <dt>Tags</dt>
+        <dd>
+          {% for t in v.tags.all %}
+            {{ t.tag }}
+          {% empty %}
+            No tags
+          {% endfor %}
+        </dd>
       </dl>
     </div>
   </div>
