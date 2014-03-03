@@ -21,29 +21,25 @@ The API is disabled by default. To enable the API, add this to your
     API = True
 
 
-API tokens
-==========
+API tokens and authenticating
+=============================
 
 .. Note::
 
    The API keys used in richard v 0.1 are different than the API
-   tokens used in richard v 0.2 and later. If you were using richard v
-   0.1, you'll need to create new API tokens when you upgrade to v
-   0.2.
+   tokens used in richard v 0.2 and later. If you were using richard
+   v0.1, you'll need to create new API tokens when you upgrade to
+   v0.2.
 
-Anonymous users have read-only access to all the data except videos
-that are in DRAFT status.
+Anonymous users have:
 
-Site admin can do that as well as with an API key:
+* read-only access to video data
 
-* see videos in DRAFT status
-* delete items
-* create items
-* update items
+Authenticated users have:
 
-richard uses django-rest-framework to implement the API.
+* read/create/update access to video data
 
-To get an API token, you need to:
+To authenticate, you need a valid API token. To get one, you need to:
 
 1. log into the richard admin
 2. click on `Tokens` in the `Authtoken` section
@@ -54,15 +50,8 @@ To get an API token, you need to:
 After doing that, your API token will be generated and will be in the
 `Key` field.
 
-
-Authenticating
-==============
-
-There are two groups of users: site admin and everyone else. Only site
-admin need to authenticate.
-
-You must authenticate with the `Authorization` HTTP header. You'll
-provide your API token.
+Use the `Authorization` HTTP header to authenticate. The value is your
+API token.
 
 For example, using curl::
 
@@ -89,27 +78,53 @@ Category
 ``GET /api/v2/category/``
     Lists categories.
 
-``GET /api/v2/category/<CATEGORY_ID>/``
+    Example::
+
+      $ curl -X GET 'http://example.com/api/v2/category/'
+
+``GET /api/v2/category/<CATEGORY_SLUG>/``
     Lists information about that category.
+
+    Example::
+
+      $ curl -X GET 'http://example.com/api/v2/category/pycon-2011/'
 
 
 Videos
 ------
 
 ``GET /api/v2/video/``
-    Lists all the videos on the site. This is paginated.
+    Lists all the videos on the site. This is paginated. The
+    pagination fields are at the top level and titled `next` and
+    `previous`.
+
+    Example::
+
+      $ curl -X GET 'http://example.com/api/v2/video/'
 
 ``GET /api/v2/video/<VIDEO_ID>/``
     Returns information for that specific video id.
 
+    Example::
+
+      $ curl -X GET 'http://example.com/api/v2/video/2/'
+
 ``GET /api/v2/video/?speaker=FOO``
     Returns videos with speaker FOO. It only handles one speaker, but
-    it uses icontains which will do case-insensitive substring
-    matches.
+    it uses `icontains` on the speaker field which will do
+    case-insensitive substring matches.
+
+    Example::
+
+      $ curl -X GET 'http://example.com/api/v2/video/?speaker=asheesh'
 
 ``GET /api/v2/video/?tag=FOO``
     Returns videos with tag FOO. It only takes one tag and does an
     exact match.
+
+    Example::
+
+      $ curl -X GET 'http://example.com/api/v2/video/?tag=django'
 
 ``POST /api/v2/video/``
     Creates a new video.
@@ -120,7 +135,7 @@ Videos
     .. Note::
 
        You can only update videos in DRAFT mode. If it's live, you
-       can no longer update it.
+       will get an error.
 
 
 Fields for creating/updating videos:
@@ -204,7 +219,7 @@ Fields for creating/updating videos:
     fields.
 
 
-Here's an minimal JSON example for a video::
+Here's minimal JSON example for a video::
 
     {
       "category": "Test Category",
