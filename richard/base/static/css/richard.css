@@ -3,13 +3,11 @@ a.feed:before {
 }
 
 .news-item {
-  padding-top: 10px;
-  padding-bottom: 15px;
+  padding: 10px 0 15px 0;
 }
 
 .section {
-  padding-top: 10px;
-  padding-bottom: 15px;
+  padding: 10px 0 15px 0;
 }
 
 div#sidebar dd {
@@ -17,9 +15,9 @@ div#sidebar dd {
 }
 
 div#footer {
-  padding-top: 15px;
-  padding-bottom: 15px;
   border-top: 1px solid #ccc;
+  clear: both;
+  padding: 15px 0 15px 0;
 }
 
 .stats-number strong {
@@ -27,8 +25,8 @@ div#footer {
 }
 
 .stats-number em {
-  font-style: normal;
   font-size: 1.1em;
+  font-style: normal;
 }
 
 .navbar-inner {
@@ -41,9 +39,9 @@ div#footer {
 
 .videobox-inner {
   background: #ccc;
-  text-align: center;
   margin: 0 auto;
   padding: 10px;
+  text-align: center;
 }
 
 .indent {
@@ -51,13 +49,15 @@ div#footer {
 }
 
 div#video-summary-content .video-summary {
-  min-height: 130px;
+  min-height: 140px;
+  padding: 5px 0 5px 0;
 }
 
 div#video-summary-content .video-summary .thumbnail {
   float: left;
+  width: 178px;
 }
 
 div#video-summary-content .video-summary .video-summary-data {
-  margin-left: 200px;
+  margin: 3px 0 0 204px;
 }
