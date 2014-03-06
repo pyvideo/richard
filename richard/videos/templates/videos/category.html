@@ -85,7 +85,7 @@
     {% for v in videos %}
       <tr>
         <td>
-          {{ v.title }}
+          <strong><a href="{{ v.get_absolute_url }}">{{ v.title }}</a></strong>
           {% if v.speakers.all %}
             &mdash;
             {% for s in v.speakers.all %}
@@ -97,7 +97,7 @@
         <td>
           {% if v.get_download_formats %}
             {% for format in v.get_download_formats %}
-              <a href="{{ format.url }}">{{ format.mime_type }}</a>
+              <a href="{{ format.url }}">{{ format.display }}</a>
             {% endfor %}
           {% else %}
             No downloadable files.

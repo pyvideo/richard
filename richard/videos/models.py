@@ -277,13 +277,9 @@ class Video(models.Model):
         """
         result = []
         for fmt in settings.MEDIA_PREFERENCE:
-            # skip unsupported formats
-            if not hasattr(self, 'video_%s_url' % fmt):
-                continue
+            url = getattr(self, 'video_%s_url' % fmt, None)
 
-            url = getattr(self, 'video_%s_url' % fmt)
-
-            # skip empty urls
+            # skip empty urls and unsupported formats
             if not url:
                 continue
 
@@ -295,6 +291,7 @@ class Video(models.Model):
             result.append({
                 'url': url,
                 'length': getattr(self, 'video_%s_length' % fmt),
+                'display': mime_type.split('/')[1],
                 'mime_type': mime_type,
                 'download_only': getattr(self, 'video_%s_download_only' % fmt),
             })

@@ -144,17 +144,12 @@
 
         <dt>Download</dt>
         <dd>
-          {% if v.video_ogv_url %}
-            <a href="{{ v.video_ogv_url }}">OGV</a>
-          {% endif %}
-          {% if v.video_mp4_url %}
-            <a href="{{ v.video_mp4_url }}">MP4</a>
-          {% endif %}
-          {% if v.video_webm_url %}
-            <a href="{{ v.video_webm_url }}">WEBM</a>
-          {% endif %}
-          {% if v.video_flv_url %}
-            <a href="{{ v.video_flv_url }}">FLV</a>
+          {% if v.get_download_formats %}
+            {% for format in v.get_download_formats %}
+              <a href="{{ format.url }}">{{ format.display }}</a>
+            {% endfor %}
+          {% else %}
+            No downloadable files.
           {% endif %}
         </dd>
 
