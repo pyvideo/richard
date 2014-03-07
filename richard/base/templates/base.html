@@ -25,6 +25,7 @@
 <head>
   <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/richard.css' %}">
+  {% browserid_css %}
   <link rel="search" type="application/opensearchdescription+xml" title="{{ settings.SITE_TITLE }} search" href="{% url 'videos-opensearch' %}">
   <title>{% block title %}{{ settings.SITE_TITLE }}{% endblock %}</title>
 {% if meta %}
@@ -75,7 +76,6 @@
             </li>
           {% else %}
             <li>{% browserid_login text='Sign in' %}</li>
-
           {% endif %}
         </ul>
 
@@ -116,11 +116,10 @@
 {% endblock additional_body %}
 
 {% block site_js %}
-<script type="text/javascript" src="{% static 'js/jquery-1.7.2.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/jquery-1.7.2.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
   {% if not settings.BROWSERID_AUTOLOGIN %}
-    <script type="text/javascript" src="{% static 'browserid/browserid.js' %}"></script>
-    <script type="text/javascript" src="https://login.persona.org/include.js"></script>
+    {% browserid_js %}
   {% else %}
     <script type="text/javascript" src="{% static 'js/browserid-mock.js' %}"></script>
   {% endif %}

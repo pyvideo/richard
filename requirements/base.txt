@@ -8,6 +8,4 @@ Markdown==2.3.1
 South==0.8.4
 eadred==0.2
 djangorestframework==2.3.10
-
-# We need master tip of django-browserid
-https://github.com/mozilla/django-browserid/zipball/8e8ef59#egg=django-browserid
+django-browserid==0.9
