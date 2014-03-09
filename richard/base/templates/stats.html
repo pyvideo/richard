@@ -26,7 +26,7 @@
 
 <div class="section">
   <div class="row">
-    <div class="span3">
+    <div class="col-md-3">
       <div class="well">
         <p class="stats-number">
           <strong>{{ category_count }}</strong>
@@ -34,7 +34,7 @@
         </p>
       </div>
     </div>
-    <div class="span9">
+    <div class="col-md-9">
       <ul>
         {% for cat in category_top5 %}
         <li>
@@ -51,7 +51,7 @@
 
 <div class="section">
   <div class="row">
-    <div class="span3">
+    <div class="col-md-3">
       <div class="well">
         <p class="stats-number">
           <strong>{{ speaker_count }}</strong>
@@ -59,7 +59,7 @@
         </p>
       </div>
     </div>
-    <div class="span9">
+    <div class="col-md-9">
       <ul>
         {% for s in speaker_top5 %}
         <li>
@@ -76,7 +76,7 @@
 
 <div class="section">
   <div class="row">
-    <div class="span3">
+    <div class="col-md-3">
       <div class="well">
         <p class="stats-number">
           <strong>{{ tag_count }}</strong>
@@ -84,7 +84,7 @@
         </p>
       </div>
     </div>
-    <div class="span9">
+    <div class="col-md-9">
       <ul>
         {% for tag in tag_top5 %}
         <li>
@@ -99,7 +99,7 @@
 
 <div class="section">
   <div class="row">
-    <div class="span3">
+    <div class="col-md-3">
       <div class="well">
         <p class="stats-number">
           <strong>{{ suggestions|length }}</strong>
@@ -107,7 +107,7 @@
         </p>
       </div>
     </div>
-    <div class="span9">
+    <div class="col-md-9">
       <ul>
         {% for s in suggestions %}
         <li>

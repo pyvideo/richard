@@ -38,14 +38,14 @@
 </div>
 
 <div class="row">
-  <div class="span12">
+  <div class="col-md-12">
     <p>Have a set of videos you think should be added to this
     site? <a href="#suggest">Suggest it here</a></p>
   </div>
 </div>
 
 <div class="row section">
-  <div class="span12">
+  <div class="col-md-12">
     <h2>Open</h2>
     {% if open_suggestions %}
       <table class="table table-striped">
@@ -84,7 +84,7 @@
 
 
 <div class="row section">
-  <div class="span12">
+  <div class="col-md-12">
     <h2>Resolved</h2>
     {% if resolved_suggestions %}
       <table class="table table-striped">
@@ -124,7 +124,7 @@
 </div>
 
 <div class="row section">
-  <div class="span12">
+  <div class="col-md-12">
     <a name="suggest"></a>
     <h2>Suggest a video or list of videos to be added</h2>
     <p>
@@ -132,12 +132,12 @@
       queue to be looked at by the site curator.
     </p>
 
-    <form class="form-horizontal" action="{% url 'suggestions-list' %}" method="POST">
+    <form class="form-horizontal" role="form" action="{% url 'suggestions-list' %}" method="POST">
       <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
       {% for field in form %}
-        <div class="control-group {% if field.errors %}error{% endif %}">
-          <label class="control-label" for="id_{{ field.html_name }}">{{ field.help_text }}</label>
-          <div class="controls">
+        <div class="form-group {% if field.errors %}error{% endif %}">
+          <label class="col-sm-2 control-labelfor="id_{{ field.html_name }}">{{ field.help_text }}</label>
+          <div class="col-sm-10">
             {{ field|safe }}
             {% if field.errors %}
               <span class="help-inline">
@@ -149,14 +149,12 @@
           </div>
         </div>
       {% endfor %}
-      <div class="control-group">
-        <div class="controls">
-          <p>
-            We will review your suggestions before it is made public,
-            you can check this page for updates.
-          </p>
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </div>
+      <div class="form-group">
+        <p>
+          We will review your suggestions before it is made public,
+          you can check this page for updates.
+        </p>
+        <button type="submit" class="btn btn-primary">Submit</button>
       </div>
     </form>
   </div>

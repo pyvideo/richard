@@ -22,8 +22,9 @@
 {% block title %}{% page_title title %}{% endblock %}
 {% block content %}
 
+  <!-- 
 <div class="row">
-  <div class="span12">
+  <div class="col-md-12">
     <form class="well form-search" method="get" action="/search/">
       <input type="hidden" name="models" value="videos.video">
       <input type="text" class="input-xxlarge search-query" name="q" value="{{ query }}">
@@ -31,42 +32,42 @@
     </form>
   </div>
 </div>
+-->
 
 {% if query %}
-  {% if page %}
-    <div class="row">
-      <div class="span3 ">
-        <div class="well">
-          <h3>Narrow search</h3>
-          {% if facet_counts %}
-            <ul class="nav nav-list">
-              <li class="nav-header">By category</li>
-              {% for title, count in facet_counts.category %}
-                <li><a href="{{ request.build_absolute_uri }}&amp;category={{ title }}">{{ title }} ({{ count }})</a></li>
-              {% endfor %}
-            </ul>
-          {% endif %}
-        </div>
+  <div class="row">
+    <div class="col-md-3 ">
+      <div class="well">
+        <h3>Narrow search</h3>
+        {% if facet_counts %}
+          <ul class="nav nav-list">
+            <li class="nav-header">By category</li>
+            {% for title, count in facet_counts.category %}
+              <li><a href="{{ request.build_absolute_uri }}&amp;category={{ title }}">{{ title }} ({{ count }})</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
       </div>
-      <div class="span9">
-	<div id="video-summary-content">
+    </div>
+    <div class="col-md-9">
+      <p>You searched for "<em>{{ query }}</em>".</p>
+      {% if page %}
+	    <div id="video-summary-content">
           {% for result in page.object_list %}
             {% video_summary result.object True %}
           {% endfor %}
-	</div>
-      </div>
+	    </div>
+      {% else %}
+        <div class="col-md-12">
+          <h2>No results</h2>
+        </div>
+      {% endif %}
     </div>
-  {% else %}
-    <div class="row">
-      <div class="span12">
-        <h2>No results</h2>
-      </div>
-    </div>
-  {% endif %}
+  </div>
 
   {% if page.has_previous or page.has_next %}
     <div class="row">
-      <div class="span12 centered">
+      <div class="col-md-12 centered">
         <div class="pager">
           <ul>
             {% if page.has_previous %}

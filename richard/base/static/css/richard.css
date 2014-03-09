@@ -49,11 +49,12 @@ div#footer {
 }
 
 div#video-summary-content .video-summary {
+  clear: left;
   min-height: 140px;
   padding: 5px 0 5px 0;
 }
 
-div#video-summary-content .video-summary .thumbnail {
+div#video-summary-content .video-summary .thumbnail-data {
   float: left;
   width: 178px;
 }
