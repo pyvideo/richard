@@ -4,14 +4,14 @@
 
 .. Note::
 
-   richard is not heavily used. As such the documentation is probably
+   richard is not heavily used. As such the documentation is
    lacking and the installation guide may have as much of a chance of
    helping you install richard as it does helping you make a quiche.
    I'm really sorry about that.
 
    If you have any problems or want to contribute fixes, open up an
    `issue on GitHub <https://github.com/willkg/richard/issues>`_ or talk
-   to us on irc. See the :doc:`Contributor's Guide <../index>` for more
+   to us on irc. See the :ref:`contribute-project-details` for more
    details.
 
 
@@ -73,15 +73,17 @@ I suggest a directory hierarchy along the lines of the following::
     |- media/        <-- images, js, css served by your web server
     |- venv/         <-- virtual environment holding
     |
-    |- richard/      <-- unzipped zip file / untarred tarball / git repository
+    |- richard/      <-- unzipped zip file / untarred tarball / git submodule
        |- richard/   <-- richard django project
     ...
+
 
 To generate that::
 
     $ mkdir your_site
     $ cd your_site
     $ mkdir bin templates media venv
+
 
 Then put the ``richard/`` directory under ``your_site``.
 
@@ -114,10 +116,9 @@ Create a virtual environment, activate it and install requirements::
 
        $ . ./venv/bin/activate
 
-.. Note::
 
-   If you want to use virtualenvwrapper or want to set things up differently,
-   feel free to do so!
+If you want to use virtualenvwrapper or want to set things up differently,
+feel free to do so!
 
 
 Configuration
@@ -134,6 +135,7 @@ Make sure to set a ``SECRET_KEY``::
 
     # Make this unique, and don't share it with anybody.
     SECRET_KEY = 'long secret key'
+
 
 Here are additional configuration settings:
 
@@ -163,6 +165,18 @@ Here are additional configuration settings:
     Wait... What's Amara? PCF changed the name of something, but I
     don't know whether it was the software or the service. So it's
     either called Amara or Universal Subtitles.
+
+
+``BROWSERID_CREATE_USER``
+
+    True or False
+
+    Default: ``BROWSERID_CREATE_USER = False``
+
+    Specifies whether or not a new account is created when someone
+    logs into the site with a Persona account that the site has never
+    seen before.
+
 
 ``SPAM_WORDS``
 
@@ -250,6 +264,7 @@ On Debian, this translates to::
 
     $ apt-get install mysql-server mysql-client libmysqlclient-dev
 
+
 You'll also need some Python packages::
 
     $ pip install -r richard/requirements/mysql_backend.txt
@@ -268,6 +283,7 @@ For example, to create a database named ``richard`` with a user named
     mysql> CREATE USER richard@localhost IDENTIFIED BY 'password';
     mysql> GRANT ALL ON richard.* TO richard@localhost IDENTIFIED BY
         'password';
+
 
 .. Note::
 
@@ -317,12 +333,14 @@ To set up the database schema and create the admin user, run::
 
     $ ./manage.py syncdb
 
+
 The admin user account you create here can be used to log into the
 richard admin section.
 
 Then run::
 
     $ ./manage.py migrate
+
 
 This sets up the rest of the database tables and also creates the save point
 for migrations making it possible to upgrade your richard instance in the
