@@ -121,7 +121,7 @@
 {% endblock additional_body %}
 
 {% block site_js %}
-  <script type="text/javascript" src="{% static 'js/jquery-1.7.2.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'jquery-1.11.0/jquery-1.11.0.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'bootstrap-3.1.1/js/bootstrap.min.js' %}"></script>
   {% if not settings.BROWSERID_AUTOLOGIN %}
     {% browserid_js %}
