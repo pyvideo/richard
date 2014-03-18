@@ -153,10 +153,12 @@
           {% endif %}
         </dd>
 
-	    <dt>Metadata</dt>
-	    <dd>
-	      <a href="{% url 'videos-api-view' v.id %}">JSON</a>
-	    </dd>
+        {% if settings.API %}
+          <dt>Metadata</dt>
+          <dd>
+            <a href="{% url 'videos-api-view' v.id %}">JSON</a>
+          </dd>
+        {% endif %}
 
         <dt>Copyright/License Information</dt>
         <dd>
