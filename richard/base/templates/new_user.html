@@ -1,5 +1,7 @@
+{% extends "base.html" %}
+{% comment %}
 # richard -- video index system
-# Copyright (C) 2012, 2013 richard contributors.  See AUTHORS.
+# Copyright (C) 2012-2014 richard contributors.  See AUTHORS.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -13,17 +15,20 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+{% endcomment %}
+{% load url from future %}
+{% block content %}
 
+<div class="row">
+  <div class="col-md-12">
+    <p>
+      You just logged into {% settings.SITE_TITLE %} using Persona.
+      Please remember which identity you used.
+    </p>
+    <p>
+      <a href="{% url 'home' %}">Back to the front page</a>
+    </p>
+  </div>
+</div>
 
-from django.conf.urls import patterns, url
-
-
-urlpatterns = patterns(
-    '',
-
-    url(r'^$', 'richard.base.views.home', name='home'),
-    url(r'^login-failure$', 'richard.base.views.login_failure',
-        name='login_failure'),
-    url(r'^new_user$', 'new_user', name='new_user'),
-    url(r'^stats/$', 'richard.base.views.stats', name='stats'),
-)
+{% endblock %}

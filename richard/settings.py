@@ -19,9 +19,6 @@ LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL_FAILURE = '/login-failure'
 
-# For now, we don't create new users.
-BROWSERID_CREATE_USER = False
-
 # root is this directory
 ROOT = os.path.dirname(__file__)
 
@@ -44,6 +41,13 @@ MANAGERS = ADMINS
 
 # See the configuration documentation for more details on these
 # settings.
+
+# This dictates whether django-browserid will create new users or not
+# when people log in that it doesn't have a record for.
+BROWSERID_CREATE_USER = False
+
+# Verification class for django-browserid.
+BROWSERID_VERIFY_CLASS = 'richard.base.browserid.RichardVerify'
 
 # The (width, height) to use when you tell richard to pull down remote
 # thumbnails, resize them, and store them locally.

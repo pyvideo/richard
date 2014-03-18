@@ -15,12 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.db.models import Count
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.utils.http import is_safe_url
 
-
-from richard.videos.models import Video, Category, Speaker, Tag
+from richard.base.models import Profile
 from richard.suggestions.models import Suggestion
+from richard.videos.models import Video, Category, Speaker, Tag
 
 
 def home(request):
@@ -40,6 +43,33 @@ def home(request):
 
 def login_failure(request):
     return render(request, 'login_failure.html')
+
+
+def new_user(request):
+    if request.user.is_anonymous():
+        # This is the AnonymousUser and they shouldn't be here
+        # so push them home.
+        return HttpResponseRedirect(reverse('home'))
+
+    try:
+        # If they have a profile, then this doesn't throw an error
+        # and we can let them see the new user view again, but it's
+        # not particularly interesting.
+        request.user.profile
+    except Profile.DoesNotExist:
+        # They aren't anonymous and don't have a profile, so create
+        # a profile for them.
+        #
+        # We could do more with this, but we're not at the moment.
+        Profile.objects.create(user=request.user)
+
+    next_url = request.GET.get('next', reverse('home'))
+    if not is_safe_url(next_url):
+        next_url = reverse('home')
+
+    return render(request, 'new_user.html', {
+        'next_url': next_url,
+    })
 
 
 def stats(request):
