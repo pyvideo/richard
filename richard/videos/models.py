@@ -303,6 +303,10 @@ class Video(models.Model):
         return [fmt for fmt in self.get_all_formats()
                 if not fmt['download_only']]
 
+    def is_youtube(self):
+        """Is this a video on YouTube?"""
+        return self.source_url and 'youtube' in self.source_url.lower()
+
     def get_feed_formats(self):
         """Gets all formats appropriate for feed
 
@@ -313,7 +317,7 @@ class Video(models.Model):
 
         """
         fmts = self.get_all_formats()
-        if self.source_url and 'youtube' in self.source_url.lower():
+        if self.is_youtube():
             fmts.append({
                 'url': self.source_url,
                 'mime_type': 'video/flv',

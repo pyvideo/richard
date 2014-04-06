@@ -164,10 +164,20 @@ def video(request, video_id, slug):
 
     embed = obj.embed
     html5_formats = obj.get_html5_formats()
+    if obj.is_youtube():
+        video_url = obj.source_url
+    elif html5_formats:
+        video_url = html5_formats[0]['url']
+    else:
+        video_url = None
+
+    use_amara = settings.AMARA_SUPPORT
 
     ret = render(request, 'videos/video.html', {
         'meta': meta,
         'v': obj,
+        'use_amara': use_amara,
+        'video_url': video_url,
         'embed': embed,
         'embed_type': embed_type,
         'html5_formats': html5_formats

@@ -38,10 +38,16 @@ div#footer {
 }
 
 .videobox-inner {
+  border-radius: 4px;
   background: #ccc;
   margin: 0 auto;
   padding: 10px;
   text-align: center;
+}
+
+div.videobox-inner span.unisubs-widget {
+    margin: 0 auto !important;
+    display: inline-block;
 }
 
 .indent {
