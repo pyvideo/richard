@@ -229,10 +229,16 @@ def search(request):
     else:
         title = 'Search'
 
+    get_params = request.GET.copy()
+    if 'category' in get_params:
+        get_params.pop('category')
+    base_url = request.path + '?' + get_params.urlencode()
+
     return render(
         request,
         'videos/search.html', {
             'query': q,
+            'base_url': base_url,
             'title': title,
             'facet_counts': facet_counts,
             'page': page

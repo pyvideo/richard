@@ -22,35 +22,24 @@
 {% block title %}{% page_title title %}{% endblock %}
 {% block content %}
 
-  <!-- 
-<div class="row">
-  <div class="col-md-12">
-    <form class="well form-search" method="get" action="/search/">
-      <input type="hidden" name="models" value="videos.video">
-      <input type="text" class="input-xxlarge search-query" name="q" value="{{ query }}">
-      <button type="submit" class="btn btn-primary">Search</button>
-    </form>
-  </div>
-</div>
--->
-
 {% if query %}
   <div class="row">
-    <div class="col-md-3 ">
-      <div class="well">
-        <h3>Narrow search</h3>
-        {% if facet_counts %}
-          <ul class="nav nav-list">
-            <li class="nav-header">By category</li>
+    <div class="col-md-3">
+      <div class="well well-small">
+        <ul class="nav nav-list">
+          <li class="nav-header">Narrow by category</li>
+          {% if facet_counts %}
+            <li><a href="{{ base_url }}">All</a></li>
             {% for title, count in facet_counts.category %}
-              <li><a href="{{ request.build_absolute_uri }}&amp;category={{ title }}">{{ title }} ({{ count }})</a></li>
+              <li><a href="{{ base_url }}&amp;category={{ title }}">{{ title }} ({{ count }})</a></li>
             {% endfor %}
-          </ul>
-        {% endif %}
+          {% else %}
+            <li>None</li>
+          {% endif %}
+        </ul>
       </div>
     </div>
     <div class="col-md-9">
-      <p>You searched for "<em>{{ query }}</em>".</p>
       {% if page %}
 	    <div id="video-summary-content">
           {% for result in page.object_list %}
