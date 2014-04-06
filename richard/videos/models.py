@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import urlparse
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
@@ -305,7 +306,10 @@ class Video(models.Model):
 
     def is_youtube(self):
         """Is this a video on YouTube?"""
-        return self.source_url and 'youtube' in self.source_url.lower()
+        if not self.source_url:
+            return False
+        parsed = urlparse.urlparse(self.source_url.lower())
+        return 'youtube' in parsed.netloc or 'youtu.be' in parsed.netloc
 
     def get_feed_formats(self):
         """Gets all formats appropriate for feed
