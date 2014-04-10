@@ -9,3 +9,4 @@ South==0.8.4
 eadred==0.2
 djangorestframework==2.3.10
 django-browserid==0.9
+django-grappelli==2.5.2
