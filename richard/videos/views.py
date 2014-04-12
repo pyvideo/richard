@@ -228,9 +228,9 @@ def search(request):
         page = None
 
     if q:
-        title = 'Search: {query}'.format(query=q)
+        title = u'Search: {query}'.format(query=q)
     else:
-        title = 'Search'
+        title = u'Search'
 
     get_params = request.GET.copy()
     if 'category' in get_params:
