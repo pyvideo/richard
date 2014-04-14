@@ -1,6 +1,6 @@
-================================
- Installing richard for hacking
-================================
+=========================================
+ Installing, running and testing richard
+=========================================
 
 This covers how to clone richard and set it up for easy hacking.
 
@@ -26,13 +26,13 @@ stuff in two groups:
 2. Python packages that should get installed in a virtual environment
 
 
-Things that you should install with your package manager
-========================================================
+Install things with your package manager
+========================================
 
 You need the following things all of which should be provided by your
 system/package manager:
 
-* Python 2.6 or 2.7
+* Python 2.7
 * pip
 * virtualenv
 
@@ -45,16 +45,16 @@ On Debian, this translates to::
           python-virtualenv
 
 
-Getting richard
-===============
+Get richard
+===========
 
 Clone the repository from github::
 
     $ git clone git://github.com/willkg/richard.git
 
 
-Python packages to install
-==========================
+Install Python requirements
+===========================
 
 Now you need to install some other things all of which are specified
 in the requirements files provided.
@@ -70,19 +70,10 @@ Use pip to install the development requirements::
     $ ./venv/bin/pip install -r requirements/development.txt
 
 
-.. Note::
+Make sure to activate the virtual environment every time you go to use
+richard things. You can do that like this::
 
-   pip installed the requirements into the virtual environment. You'll need
-   to use the virtualenv versions of ``python``, ``pip`` and friends which
-   will be in ``./venv/bin/``.
-
-   Alternatively, you can activate the virtual environment which puts the
-   virtual environment's versions of ``python``, ``pip`` and friends to the
-   front of your ``$PATH``.
-
-   To activate the virtual environment, do::
-
-       $ . ./venv/bin/activate
+    $ ./venv/bin/activate
 
 
 .. Note::
@@ -91,20 +82,8 @@ Use pip to install the development requirements::
    feel free to do so!
 
 
-Setting up the database
-=======================
-
-By default richard uses SQLite. It does not require any setup, Django will
-handle things for you.
-
-.. Note::
-
-   richard is known to work under MySQL. If you want to use postgres or
-   some other system, then please do and let me know if it works!
-
-
-Configuration
-=============
+Configure
+=========
 
 You will need to override some of those settings for your
 instance. To do that:
@@ -120,8 +99,32 @@ Make sure to do at least the following:
 TODO: Finish this up
 
 
-Setting up database schema and creating admin user
-==================================================
+Set up the database
+===================
+
+sqlite3
+-------
+
+If you're a contributor and not working on db-related bits, then using
+sqlite3 might work fine. It's certainly the easiest to set up
+
+Uncomment the sqlite3 bits in ``richard/settings_local.py`` and
+comment out the postgresql bits.
+
+
+postgresql
+----------
+
+If you're working on db-related bits or have postgres set up already,
+then do the following:
+
+1. ``pip install psycopg2``
+2. set up a postgres database and add the relevant configuration bits
+   to the ``richard/settings_local.py`` file.
+
+
+Set up database schema and create admin user
+============================================
 
 To set up the database schema and create the admin user, run::
 
@@ -131,14 +134,35 @@ The admin user account you create here can be used to log into the richard
 admin section.
 
 
-Setting up sample data (optional)
-=================================
+Set up sample data (optional)
+=============================
 
 If you want to set up some initial data, do::
 
     $ ./manage.py generatedata
 
 This is useful to see how the site works.
+
+
+Run the tests
+=============
+
+Richard uses ``django-nose`` to discover tests.
+
+Activate the virtual environment, then run the tests::
+
+    $ ./manage.py test --nologcapture --nocapture
+
+
+Run the server
+==============
+
+Run the server like this::
+
+    $ ./manage.py runserver --traceback
+
+
+Then point your browser at ``http://localhost:8000/``.
 
 
 Troubleshooting

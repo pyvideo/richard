@@ -36,7 +36,6 @@ about the project to help out.
 
    contributors/dev_contribute
    contributors/dev_hacking
-   contributors/dev_running
    contributors/dev_testing
    contributors/dev_docs
    contributors/dev_updating

@@ -8,3 +8,5 @@ whoosh_index
 
 docs/_build/
 /static/
+/venv/
+/site/

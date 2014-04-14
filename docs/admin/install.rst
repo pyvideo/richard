@@ -67,31 +67,31 @@ data that's specific to your site.
 
 I suggest a directory hierarchy along the lines of the following::
 
-    your_site/       <-- your site directory
-    |- bin/          <-- directory for your .wsgi file
-    |- templates/    <-- your site-specific templates
-    |- media/        <-- images, js, css served by your web server
-    |- venv/         <-- virtual environment holding
-    |
-    |- richard/      <-- unzipped zip file / untarred tarball / git submodule
-       |- richard/   <-- richard django project
-    ...
+    richard/            # untarred tarball, git clone, etc
+      |- docs/          # richard docs
+      |- richard/       # richard django project code
+      |- ...
+      |
+      |- bin/           # any site-specific scripts you need
+      |- site/          # anything specific to your site
+      |  |- templates/  # your site-specific templates
+      |  |- static/     # your site-specific static files (images, css, js, ...)
+      |
+      |- venv/          # your virtual environment
 
 
 To generate that::
 
-    $ mkdir your_site
-    $ cd your_site
-    $ mkdir bin templates media venv
-
-
-Then put the ``richard/`` directory under ``your_site``.
+    # untar richard tarball, git clone, or something like that
+    # which creates a richard/ directory
+    $ cd richard
+    $ mkdir -p site site/templates bin
 
 
 .. Note::
 
    The rest of these instructions assume your current working
-   directory is ``your_site``.
+   directory is the top-most richard directory.
 
 
 Python packages to install
@@ -100,9 +100,9 @@ Python packages to install
 Now you need to install some other things all of which are specified
 in the requirements files provided.
 
-Create a virtual environment, activate it and install requirements::
+In the top-most richard directory, create a virtual environment,
+activate it and install requirements::
 
-    $ cd your_site
     $ virtualenv ./venv/
     $ . ./venv/bin/activate
     $ pip install -r richard/requirements/base.txt
@@ -118,18 +118,23 @@ Create a virtual environment, activate it and install requirements::
 
 
 If you want to use virtualenvwrapper or want to set things up differently,
-feel free to do so!
+go for it!
 
 
 Configuration
 =============
 
-Default configuration for the project is in
-``richard/richard/settings.py``.
+Default configuration for the project is in ``richard/settings.py``.
 
-You can either copy that into ``your_site`` and edit it there or
-create a ``settings_site.py`` file, import the defaults and override
-the ones you want to override.
+Copy ``richard/settings_local.py-dist`` to
+``richard/settings_local.py``.
+
+``richard/settings_local.py`` will hold any configuration that is
+specific to your site. In addition to the things that are in the file,
+you can override any settings in ``richard/settings.py`` by specifying
+them in ``richard/settings_local.py``.
+
+Edit that file and follow the instructions in the configuration.
 
 Make sure to set a ``SECRET_KEY``::
 
@@ -218,112 +223,19 @@ Here are additional configuration settings:
 .. todo:: list configuration settings that should be in settings file
 
 
-Setting up database
-===================
+Setting up database (postgresql)
+================================
 
 Now you need to set up a database where richard will store its data.
 
-* :ref:`install-chapter-mysql-db`
-* :ref:`install-chapter-sqlite-db`
-* :ref:`install-chapter-postgres-db`
+First install psycopg2::
 
-We're really sorry if the database you want to use with richard isn't
-in that list. If you need help, we'll do what we can. See
-:ref:`contribute-project-details` for how to contact us for help.
+    $ pip install psycopg2
 
+Next, create the database and user role you're going to use. Update
+the ``richard/settings_local.py`` with the values you pick.
 
-.. _install-chapter-sqlite-db:
-
-Setting up the database (sqlite)
---------------------------------
-
-.. Warning::
-
-   We don't encourage you to use sqlite for production, but if you
-   must, you must.
-
-
-Setting up sqlite is easy because the configuration for it is already
-in the ``settings.py`` file. If you like the defaults, you're done!
-
-
-.. _install-chapter-mysql-db:
-
-Setting up the database (mysql)
--------------------------------
-
-Requirements
-^^^^^^^^^^^^
-
-You need the following things from your system's package manager:
-
-* MySQL Server
-* MySQL client headers
-
-On Debian, this translates to::
-
-    $ apt-get install mysql-server mysql-client libmysqlclient-dev
-
-
-You'll also need some Python packages::
-
-    $ pip install -r richard/requirements/mysql_backend.txt
-
-
-Creating database
-^^^^^^^^^^^^^^^^^
-
-You need to create a database and a user for that database.
-
-For example, to create a database named ``richard`` with a user named
-``richard`` with password ``password``, you'd do::
-
-    $ mysql -u root -p
-    mysql> CREATE DATABASE richard;
-    mysql> CREATE USER richard@localhost IDENTIFIED BY 'password';
-    mysql> GRANT ALL ON richard.* TO richard@localhost IDENTIFIED BY
-        'password';
-
-
-.. Note::
-
-   (Optional) If you're a developer and plan to run the test suite,
-   you'll also need to add permissions to the test database. The test
-   database has the same name as the database prepended with ``test_``.
-   For example::
-
-       $ mysql -u root -p
-       mysql> GRANT ALL ON test_richard.* TO richard@localhost IDENTIFIED
-           BY 'password';
-
-
-Configuration
-^^^^^^^^^^^^^
-
-In its default configuration, richard uses SQLite. To use your MySQL
-database, edit your ``settings.py`` file and change the ``DATABASES``
-configuration to something like this::
-
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'richard',
-            'USER': 'richard',
-            'PASSWORD': 'richard',
-            'HOST': '',
-            'PORT': '',
-            'OPTIONS': {'init_command': 'SET storage_engine=InnoDB'},
-        }
-    }
-
-
-.. _install-chapter-postgres-db:
-
-Setting up the database (postgresql)
-------------------------------------
-
-.. todo:: Write setup for postgres.
-
+.. todo:: instructions for running with Heroku and other PaaS systems
 
 
 Setting up database schema and creating admin user
@@ -355,8 +267,6 @@ Apache and mod_wsgi
 
 http://code.google.com/p/modwsgi/wiki/IntegrationWithDjango
 
-A sample ``.wsgi`` file is in ``richard/`` in the repository.
-
 
 Nginx and gunicorn
 ------------------
@@ -385,13 +295,13 @@ Your richard instance has a `sitemap.xml
 <http://www.sitemaps.org/>`_. This helps search engines find all the
 things on your richard instance.
 
-The url for the `sitemap.xml` file for your richard instance is
+The url for the ``sitemap.xml`` file for your richard instance is
 ``/sitemap.xml``.
 
-There are a few ways you can "advertise" your `sitemap.xml` file to
+There are a few ways you can "advertise" your ``sitemap.xml`` file to
 search engines. Details are in `the sitemaps.org guide
 <http://www.sitemaps.org/protocol.html#informing>`_.
 
-We suggest you at least add this line to your `robots.txt`::
+We suggest you at least add this line to your ``robots.txt``::
 
     Sitemap: http://YOUR-DOMAIN/sitemap.xml

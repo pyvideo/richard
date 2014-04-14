@@ -10,16 +10,18 @@
 Testing requirements
 ====================
 
-richard uses ``django-nose`` to tie the Django test system to ``nose``.
+richard uses ``django-nose`` to tie the Django test system to
+``nose``.
 
-I like to additionally use ``nose-progressive`` because it makes the test
-output more useful.
+I like to additionally use ``nose-progressive`` because it makes the
+test output more useful.
 
 
 Running tests
 =============
 
-To run the tests, make sure your virtual environment is activated and then::
+To run the tests, make sure your virtual environment is activated and
+then::
 
     ./manage.py test
 

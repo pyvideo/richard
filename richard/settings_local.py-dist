@@ -17,18 +17,24 @@ SECRET_KEY = 'secret key'
 
 DATABASES = {
     'default': {
-        # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'ENGINE': 'django.db.backends.sqlite3',
-        # Or path to database file if using sqlite3.
-        'NAME': os.path.join(SITE_ROOT, 'database.db'),
+        # postgresql configuration
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'your_site',    # db name
+        'USER': 'richard',
+        'PASSWORD': 'richard',
+        'HOST': 'localhost',
+        'PORT': ''
 
-        # The following settings are not used with sqlite3.
-        'USER': '',
-        'PASSWORD': '',
-        # Set to empty string for localhost.
-        'HOST': '',
-        # Set to empty string for default.
-        'PORT': '',
+        # This is a sqlite3 configuration. If you are a contributor
+        # and don't have postgresql on your machine, then feel free
+        # to comment out the previous lines and uncomment out the next
+        # 6 lines:
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': os.path.join(SITE_ROOT, 'database.db'),
+        # 'USER': '',
+        # 'PASSWORD': '',
+        # 'HOST': '',
+        # 'PORT': '',
     }
 }
 
