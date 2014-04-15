@@ -1,8 +1,0 @@
-# This holds development requirements.
-
--r ./base.txt
-nose
-django-nose
-Pygments
-Sphinx
-steve
