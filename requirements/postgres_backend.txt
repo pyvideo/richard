@@ -1,5 +1,0 @@
-# This holds postgres requirements.
-
--r ./base.txt
-
-psycopg2
