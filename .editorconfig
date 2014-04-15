@@ -1,0 +1,31 @@
+# http://editorconfig.org
+
+root = true
+
+[*]
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+end_of_line = lf
+charset = utf-8
+
+[Makefile]
+indent_style = tab
+
+[*.{css,html,js,json}]
+indent_size = 2
+
+[*.{rst,txt}]
+indent_style = 3
+
+# South migration files don't use final newlines
+[**/migrations/*.py]
+insert_final_newline = sometimes...
+
+# Bootstrap files should not be restyled
+[**/bootstrap-3.1.1/**]
+indent_style = ignore
+indent_size = ignore
+trim_trailing_whitespace = ignore
+insert_final_newline = ignore
