@@ -11,5 +11,6 @@ docs/_build/
 /static/
 /venv/
 /site/
+/.tox/
 *.egg-info/
 

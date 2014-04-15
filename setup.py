@@ -20,6 +20,7 @@ development_requirements = [
     'Pygments',
     'Sphinx',
     'steve',
+    'tox==1.7.1',
 ]
 
 postgre_requirements = [
