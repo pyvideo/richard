@@ -27,7 +27,7 @@
     </div>
     {% if show_category %}
       <div>
-	    <a href="{{ video.category.get_absolute_url }}">{{ video.category.title }}</a>
+        <a href="{{ video.category.get_absolute_url }}">{{ video.category.title }}</a>
       </div>
     {% endif %}
     <div>
@@ -46,7 +46,7 @@
       {% endif %}
       {% if video.language %}
         &mdash;
-	    <small>Language: {{ video.language.name }}</small>
+        <small>Language: {{ video.language.name }}</small>
       {% endif %}
     </div>
     <div>
