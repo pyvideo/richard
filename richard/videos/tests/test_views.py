@@ -260,9 +260,9 @@ class TestVideos(TestCase):
 
         resp = self.client.get(v.get_absolute_url())
         # This shows up in video tag and in downloads area
-        eq_(resp.content.count('OGV_VIDEO'), 2)
+        eq_(resp.content.count(b'OGV_VIDEO'), 2)
         # This only shows up in downloads area
-        eq_(resp.content.count('MP4_VIDEO'), 1)
+        eq_(resp.content.count(b'MP4_VIDEO'), 1)
 
 
 class TestVideoSearch(TestCase):
