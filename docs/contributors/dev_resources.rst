@@ -82,7 +82,7 @@ Documentation
 Tools
 =====
 
-* `git <http://git-scm.com/>`_, 
+* `git <http://git-scm.com/>`_,
   `github <http://help.github.com/>`_ and
   `ProGit <http://progit.org/>`_
 
@@ -136,7 +136,7 @@ Django / nose / haystack / whoosh / django-rest-framework
 * `south <http://south.aerocode.org/>`_
 
   South manages schema and data migrations independent on the database.
-  
+
 * `django-rest-framework <http://django-rest-framework.org/>`_
 
   django-rest-framework provides a RESTful API that can be used to retrieve
