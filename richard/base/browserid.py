@@ -1,5 +1,8 @@
 from __future__ import print_function
-import urlparse
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urlparse import urlparse
 
 from django.http import HttpResponseRedirect
 
@@ -28,7 +31,7 @@ class RichardVerify(Verify):
 
             # Do not accept redirect URLs pointing to a different host.
             if redirect_to:
-                netloc = urlparse.urlparse(redirect_to).netloc
+                netloc = urlparse(redirect_to).netloc
                 if netloc and netloc != self.request.get_host():
                     redirect_to = None
 
