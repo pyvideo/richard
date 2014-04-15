@@ -31,10 +31,12 @@
 </div>
 {% endif %}
 
-<div class="row">
+<div class="row" vocab="http://schema.org" typeof="VideoObject">
   <div id="videobox" class="col-md-12">
     <div class="section">
-      <h3 class="centered">{{ v.title }}</h3>
+      <h3 class="centered" property="name">{{ v.title }}</h3>
+      <link property="thumbnailUrl" href="{{ v.get_thumbnail_url }}"/>
+      <link property="sameAs" href="{{ v.get_absolute_url }}"/>
     </div>
 
     {# Fix floats in unisubs widget that are not cleared #}
@@ -78,7 +80,8 @@
     {% if v.summary %}
       <div class="section">
         <h4>Summary</h4>
-        {{ v.summary|md|safe }}
+        <span property="description">{{ v.summary|md|safe }}</span>
+        <meta property="caption" content="{{ v.summary|md|safe }}"/>
       </div>
     {% endif %}
 
@@ -117,6 +120,7 @@
         <dd>
           {% for s in v.speakers.all %}
             <div><a href="{{ s.get_absolute_url }}">{{ s.name }}</a></div>
+            <meta property="author" content="{{ s.name }}"/>
           {% empty %}
             Unknown
           {% endfor %}
@@ -124,28 +128,37 @@
 
         {% if v.language %}
           <dt>Language</dt>
-          <dd>{{ v.language.name }}</dd>
+          <dd>{{ v.language.name }}
+            <meta property="inLanguage" content="{{ v.language.iso639_1 }}"/>
+          </dd>
         {% endif %}
 
         {% if v.duration %}
           <dt>Duration</dt>
-          <dd>{{ v.duration|duration }}</dd>
+          <dd>{{ v.duration|duration }}
+            <meta property="duration" content="{{ v.duration|duration_iso8601 }}"/>
+          </dd>
         {% endif %}
 
         {% if v.recorded %}
           <dt>Recorded</dt>
-          <dd>{{ v.recorded|date:"DATE_FORMAT" }}</dd>
+          <dd>{{ v.recorded|date:"DATE_FORMAT" }}
+            <meta property="dateCreated" content="{{ v.recorded|date:"c" }}"/>
+          </dd>
         {% endif %}
 
         {% if v.updated %}
           <dt>Last updated</dt>
-          <dd>{{ v.updated|date:"DATE_FORMAT" }}</dd>
+          <dd>{{ v.updated|date:"DATE_FORMAT" }}
+            <meta property="dateModified" content="{{ v.updated|date:"c" }}"/>
+            <meta property="datePublished" content="{{ v.updated|date:"c" }}"/>
+          </dd>
         {% endif %}
 
         <dt>Video origin</dt>
         <dd>
           {% if v.source_url %}
-            <a href="{{ v.source_url }}">{{ v.source_url }}</a>
+            <a href="{{ v.source_url }}" property="embedUrl">{{ v.source_url }}</a>
           {% else %}
             Unknown
           {% endif %}
@@ -155,7 +168,8 @@
         <dd>
           {% if v.get_download_formats %}
             {% for format in v.get_download_formats %}
-              <a href="{{ format.url }}">{{ format.display }}</a>
+              <a href="{{ format.url }}" property="contentUrl">{{ format.display }}</a>
+              <meta property="contentType" content="{{ format.display }}"/>
             {% endfor %}
           {% else %}
             No downloadable files.
@@ -184,10 +198,11 @@
         <dt>Tags</dt>
         <dd>
           {% for t in v.tags.all %}
-            {{ t.tag }}
+            <span property="keywords">{{ t.tag }}</span>
           {% empty %}
             No tags
           {% endfor %}
+          <meta property="keywords" content="{{ v.category.title }}"/>
         </dd>
       </dl>
     </div>
