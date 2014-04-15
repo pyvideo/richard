@@ -16,6 +16,7 @@ requirements = [
 ]
 
 development_requirements = [
+    'httmock==1.2.2',
     'nose',
     'django-nose',
     'Pygments',

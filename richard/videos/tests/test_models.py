@@ -15,9 +15,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.test import TestCase
+from httmock import urlmatch, HTTMock
 from nose.tools import eq_
 
 from richard.videos.tests import video
+from richard.videos import models
 
 
 class TestVideoModel(TestCase):
@@ -27,3 +29,52 @@ class TestVideoModel(TestCase):
 
         v = video(title=u'Foo Bar Baz', slug='baz', save=True)
         eq_(v.slug, 'baz')
+
+
+class TestVideoUrlStatusModel(TestCase):
+    @staticmethod
+    @urlmatch(netloc='500.com')
+    def bad_500(url, request):
+        return {'status_code': 500,
+                'reason': 'Server error'}
+
+    @staticmethod
+    @urlmatch(netloc='400.com')
+    def bad_404(url, request):
+        return {'status_code': 404,
+                'reason': 'Not Found'}
+
+    @staticmethod
+    @urlmatch(netloc='200.com')
+    def ok_200(url, request):
+        return {'status_code': 200,
+                'content': 'some shiney content'}
+
+    def test_good_video(self):
+        with HTTMock(self.ok_200), HTTMock(self.bad_404), HTTMock(self.bad_500):
+            vid = video(title=u'Foo', source_url='http://200.com')
+            vid.save()
+            result = models.VideoUrlStatus.objects.create_for_video(vid)
+        eq_(result, {})
+
+    def test_bad_video(self):
+        with HTTMock(self.ok_200), HTTMock(self.bad_404), HTTMock(self.bad_500):
+            vid = video(title=u'Foo', source_url='http://400.com')
+            vid.save()
+            result = models.VideoUrlStatus.objects.create_for_video(vid)
+        eq_(result, {404: 1})
+
+    def test_bad_video_multiple_links(self):
+        with HTTMock(self.ok_200), HTTMock(self.bad_404), HTTMock(self.bad_500):
+            vid = video(title=u'Foo',
+                        source_url='http://400.com',
+                        thumbnail_url='http://500.com',
+                        video_ogv_url='http://200.com',
+                        video_mp4_url='http://400.com',
+                        video_flv_url='http://400.com',
+                        )
+            vid.save()
+            result = models.VideoUrlStatus.objects.create_for_video(vid)
+        eq_(result, {404: 3,
+                     500: 1})
+

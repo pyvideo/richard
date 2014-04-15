@@ -14,11 +14,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import collections
+import datetime
 import os
 try:
     from urllib.parse import urlparse
 except ImportError:
     from urlparse import urlparse
+import requests
+import requests.exceptions
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
@@ -341,6 +345,22 @@ class Video(models.Model):
         """Gets all formats appropriate for file download list"""
         return self.get_all_formats()
 
+    @property
+    def all_urls(self):
+        """Returns a list of all the populated URLs of this Video
+        """
+        return [url for url in
+                [
+                    self.thumbnail_url,
+                    self.video_ogv_url,
+                    self.video_mp4_url,
+                    self.video_webm_url,
+                    self.video_flv_url,
+                    self.source_url,
+                ]
+                if url is not None and url != ''
+        ]
+
 
 @python_2_unicode_compatible
 class RelatedUrl(models.Model):
@@ -361,6 +381,45 @@ class RelatedUrl(models.Model):
 
         """
         return self.url[:50]
+
+
+class VideoUrlStatusManager(models.Manager):
+    def create_for_video(self, video):
+        """Create VideoUrlStatus objects for each failed url in a video
+
+        :return: The number of VidoeUrlStatuses created
+        """
+        def check_urls(urls):
+            for url in urls:
+                try:
+                    r = requests.head(url)
+                    if not r.ok:
+                        yield url, r.status_code, r.reason
+                except requests.exceptions.RequestException as e:
+                    yield url, 9999, unicode(e)
+
+        video_url_status = [
+            VideoUrlStatus(
+                video=video,
+                url=url,
+                check_date=datetime.datetime.now(),
+                status_code=status_code,
+                status_message=status_message)
+            for url, status_code, status_message in check_urls(video.all_urls)
+        ]
+        if video_url_status:
+            self.bulk_create(video_url_status)
+        return collections.Counter(video.status_code for video in video_url_status)
+
+
+class VideoUrlStatus(models.Model):
+    objects = VideoUrlStatusManager()
+
+    check_date = models.DateTimeField(null=False, blank=False)
+    status_code = models.IntegerField(null=False, blank=False)
+    status_message = models.CharField(max_length=255, null=False, blank=True)
+    url = models.URLField(max_length=255, null=False, blank=False)
+    video = models.ForeignKey(Video)
 
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
@@ -403,3 +462,5 @@ class VideoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Video
+
+
