@@ -2,7 +2,7 @@ import platform
 from setuptools import setup, find_packages
 
 requirements = [
-    'bleach==1.2.2',
+    'bleach==1.4',
     'django==1.6.2',
     'djangorestframework==2.3.10',
     'django-browserid==0.9',
