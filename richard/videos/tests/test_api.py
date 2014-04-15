@@ -16,6 +16,7 @@
 
 import json
 from functools import partial
+from imp import reload
 
 from django.contrib.auth.models import User
 from django.test import TestCase
