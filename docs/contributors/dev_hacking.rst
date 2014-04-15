@@ -40,7 +40,9 @@ system/package manager:
 On Debian, this translates to::
 
     $ apt-get install \
-          python \
+          libxml2 \
+          libxml2-dev \
+          libxslt-dev \
           python-pip \
           python-virtualenv
 
@@ -64,17 +66,23 @@ Create a virtual environment::
     $ cd richard
     $ virtualenv ./venv/
 
-
-Use pip to install the development requirements::
-
-    $ ./venv/bin/pip install -r requirements/development.txt
-
-
 Make sure to activate the virtual environment every time you go to use
 richard things. You can do that like this::
 
     $ ./venv/bin/activate
 
+Use pip to install the development requirements::
+
+    $ ./venv/bin/pip install -e .\[dev\]
+
+If you want to also install with postgres support::
+
+    $ apt-get install \
+        postgresql \
+        build-essential \
+        libpq-dev \
+        python-dev
+    $ ./venv/bin/pip install -e .\[dev,postgresql\]
 
 .. Note::
 

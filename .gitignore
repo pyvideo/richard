@@ -10,3 +10,5 @@ docs/_build/
 /static/
 /venv/
 /site/
+*.egg-info/
+
