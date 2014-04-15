@@ -3,6 +3,7 @@
 Updates copyright statements in all html and python files.
 """
 
+from __future__ import print_function
 import os
 import re
 import sys
@@ -26,14 +27,14 @@ def copyright_py(filename):
 
 def main(argv):
     if '--doit' not in argv:
-        print 'Usage: {0} --doit'.format(__file__)
-        print 'Updates the copyright on all Python files.'
+        print('Usage: {0} --doit'.format(__file__))
+        print('Updates the copyright on all Python files.')
         return 1
 
     top_level = os.path.abspath(
         os.path.join(os.path.dirname(__file__), os.pardir))
 
-    print 'Starting at {0}'.format(top_level)
+    print('Starting at {0}'.format(top_level))
 
     for root, dirs, files in os.walk(top_level):
         for name in files:
@@ -43,7 +44,7 @@ def main(argv):
 
             if name.endswith(('.py', '.html')):
                 filename = os.path.join(root, name)
-                print 'Fixing {0}'.format(filename)
+                print('Fixing {0}'.format(filename))
                 copyright_py(filename)
 
     return 0
