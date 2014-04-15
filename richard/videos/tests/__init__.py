@@ -16,6 +16,7 @@
 
 import uuid
 
+from django.utils.six import text_type
 from django.utils.text import slugify
 
 from richard.videos.models import (
@@ -29,9 +30,9 @@ def category(**kwargs):
     defaults.update(kwargs)
 
     if 'title' not in defaults:
-        defaults['title'] = unicode(uuid.uuid4()) + u' 2012'
+        defaults['title'] = text_type(uuid.uuid4()) + u' 2012'
     if 'slug' not in defaults:
-        defaults['slug'] = slugify(unicode(defaults['title']))
+        defaults['slug'] = slugify(text_type(defaults['title']))
 
     return Category(**defaults)
 
@@ -54,7 +55,7 @@ def speaker(**kwargs):
     defaults.update(kwargs)
 
     if 'slug' not in defaults:
-        defaults['slug'] = slugify(unicode(defaults['name']))
+        defaults['slug'] = slugify(text_type(defaults['name']))
 
     return Speaker(**defaults)
 
