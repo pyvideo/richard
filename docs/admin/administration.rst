@@ -169,7 +169,7 @@ you so desire. To add a page:
        {% extends "base.html" %}
        {% block title %}{% page_title 'About' %}{% endblock %}
        {% block content %}
-       
+
        <div class="page-header">
          <h1>Contact information</h1>
        </div>

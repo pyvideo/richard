@@ -41,11 +41,11 @@
     </div>
     <div class="col-md-9">
       {% if page %}
-	    <div id="video-summary-content">
+        <div id="video-summary-content">
           {% for result in page.object_list %}
             {% video_summary result.object True %}
           {% endfor %}
-	    </div>
+        </div>
       {% else %}
         <div class="col-md-12">
           <h2>No results</h2>
