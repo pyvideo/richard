@@ -76,27 +76,26 @@ class Command(BaseCommand):
         If something fails, print it out.
         """
         urls = self.all_urls(v)
+
         for url in urls:
             try:
                 r = requests.head(url)
                 if not r.ok:
                     self.log('FAIL: status %s video %s URL %s' % (r.status_code, v.id, url))
-                self.log('SUCCESSS: video %s URL %s' % (v.id, url))
             except requests.exceptions.RequestException:
                 self.log('FAIL: requests call failed for video %s URL %s' % (v.id, url))
+            else:
+                self.log('SUCCESSS: video %s URL %s' % (v.id, url))
 
 
     def all_urls(self, video):
         """ returns a list of all the poopulated URLs of this Video
         maybe later we want to be clever and introspect for URLFields?
         """
-        return [url for url in
-            [
-                video.thumbnail_url, video.video_ogv_url, video.video_mp4_url,
-                video.video_webm_url, video.video_flv_url,
-            ]
-            if url is not None
-        ]
+        return [url for url in [
+            video.thumbnail_url, video.video_ogv_url, video.video_mp4_url,
+            video.video_webm_url, video.video_flv_url, video.source_url,
+        ] if url is not None and url != '']
 
 
     def log(self, msg):
