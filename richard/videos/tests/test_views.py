@@ -108,8 +108,8 @@ class TestVideos(TestCase):
         resp = self.client.get(url, data)
         eq_(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'videos/speaker_list.html')
-        assert s1.name not in resp.content
-        assert s2.name in resp.content
+        self.assertNotContains(resp, s1.name)
+        self.assertContains(resp, s2.name)
 
     def test_speaker_list_character(self):
         """
@@ -125,8 +125,8 @@ class TestVideos(TestCase):
         resp = self.client.get(url, data)
         eq_(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'videos/speaker_list.html')
-        assert s1.name not in resp.content
-        assert s2.name in resp.content
+        self.assertNotContains(resp, s1.name)
+        self.assertContains(resp, s2.name)
 
     def test_speaker_list_character_with_string(self):
         """
@@ -143,8 +143,8 @@ class TestVideos(TestCase):
         resp = self.client.get(url, data)
         eq_(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'videos/speaker_list.html')
-        assert s1.name not in resp.content
-        assert s2.name in resp.content
+        self.assertNotContains(resp, s1.name)
+        self.assertContains(resp, s2.name)
 
     def test_speaker_list_not_string_character(self):
         """
@@ -161,8 +161,8 @@ class TestVideos(TestCase):
         resp = self.client.get(url, data)
         eq_(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'videos/speaker_list.html')
-        assert s1.name not in resp.content
-        assert s2.name in resp.content
+        self.assertNotContains(resp, s1.name)
+        self.assertContains(resp, s2.name)
 
     def test_speaker_urls(self):
         """Test the view of a speaker."""
@@ -209,7 +209,7 @@ class TestVideos(TestCase):
         speaker_url = s.get_absolute_url()
 
         resp = self.client.get(speaker_url)
-        assert vid.title in resp.content
+        self.assertContains(resp, vid.title)
 
     def test_active_video_category_page(self):
         """Active video should shows up on category page."""
@@ -218,7 +218,7 @@ class TestVideos(TestCase):
         category_url = vid.category.get_absolute_url()
 
         resp = self.client.get(category_url)
-        assert vid.title in resp.content
+        self.assertContains(resp, vid.title)
 
     def test_inactive_video_category_page(self):
         """Inactive video should not show up on category page."""
@@ -227,7 +227,7 @@ class TestVideos(TestCase):
         category_url = vid.category.get_absolute_url()
 
         resp = self.client.get(category_url)
-        assert vid.title not in resp.content
+        self.assertNotContains(resp, vid.title)
 
     def test_inactive_video_speaker_page(self):
         """Inactive video should not show up on it's speaker's page."""
@@ -238,7 +238,7 @@ class TestVideos(TestCase):
         speaker_url = s.get_absolute_url()
 
         resp = self.client.get(speaker_url)
-        assert vid.title not in resp.content
+        self.assertNotContains(resp, vid.title)
 
     def test_related_url(self):
         """Related urls should show up on the page."""
@@ -248,7 +248,7 @@ class TestVideos(TestCase):
                            save=True)
 
         resp = self.client.get(v.get_absolute_url())
-        assert rurl.description in resp.content
+        self.assertContains(resp, rurl.description)
 
     def test_download_only(self):
         """Video urls marked as download-only shouldn't be in video tag."""

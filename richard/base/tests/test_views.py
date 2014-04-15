@@ -38,8 +38,8 @@ class RichardViewsTest(TestCase):
         n2 = notification(text=u'Just a test.', save=True)
 
         resp = self.client.get(reverse('home'))
-        assert n1.text in resp.content
-        assert n2.text in resp.content
+        self.assertContains(resp, n1.text)
+        self.assertContains(resp, n2.text)
 
     def test_stats(self):
         """Test the statistics page."""
