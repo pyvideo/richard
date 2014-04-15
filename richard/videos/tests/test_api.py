@@ -20,6 +20,7 @@ from imp import reload
 
 from django.contrib.auth.models import User
 from django.test import TestCase
+from django.utils.encoding import smart_text
 
 from nose.tools import eq_
 from rest_framework.authtoken.models import Token
@@ -74,7 +75,7 @@ class TestCategoryAPI(TestAPIBase):
         resp = self.client.get('/api/v2/category/',
                                {'format': 'json'})
         eq_(resp.status_code, 200)
-        content = json.loads(resp.content)
+        content = json.loads(smart_text(resp.content))
         eq_(len(content['results']), 3)
 
     def test_get_category(self):
@@ -84,8 +85,8 @@ class TestCategoryAPI(TestAPIBase):
         resp = self.client.get('/api/v2/category/%s/' % cat.slug,
                                {'format': 'json'})
         eq_(resp.status_code, 200)
-        content = json.loads(resp.content)
-        eq_(json.loads(resp.content)['title'], cat.title)
+        content = json.loads(smart_text(resp.content))
+        eq_(json.loads(smart_text(resp.content))['title'], cat.title)
 
 
 class TestAPI(TestAPIBase):
@@ -97,13 +98,13 @@ class TestAPI(TestAPIBase):
         resp = self.client.get('/api/v2/video/%d/' % vid.pk,
                                {'format': 'json'})
         eq_(resp.status_code, 200)
-        eq_(json.loads(resp.content)['title'], vid.title)
+        eq_(json.loads(smart_text(resp.content))['title'], vid.title)
 
         # authenticated user
         resp = self.auth_get('/api/v2/video/%d/' % vid.pk,
                              {'format': 'json'})
         eq_(resp.status_code, 200)
-        eq_(json.loads(resp.content)['title'], vid.title)
+        eq_(json.loads(smart_text(resp.content))['title'], vid.title)
 
     def test_get_video_data(self):
         cat = category(title=u'Foo Title', save=True)
@@ -117,7 +118,7 @@ class TestAPI(TestAPIBase):
         resp = self.client.get('/api/v2/video/%d/' % vid.pk,
                                {'format': 'json'})
         eq_(resp.status_code, 200)
-        content = json.loads(resp.content)
+        content = json.loads(smart_text(resp.content))
         eq_(content['title'], vid.title)
         eq_(content['slug'], 'foo-bar')
         # This should be the category title--not api url
@@ -135,7 +136,7 @@ class TestAPI(TestAPIBase):
         resp = self.client.get('/api/v2/video/',
                                content_type='application/json')
 
-        data = json.loads(resp.content)
+        data = json.loads(smart_text(resp.content))
         eq_(len(data['results']), 1)
         eq_(data['results'][0]['title'], vid_live.title)
 
@@ -147,7 +148,7 @@ class TestAPI(TestAPIBase):
         resp = self.auth_get('/api/v2/video/',
                              content_type='application/json')
 
-        data = json.loads(resp.content)
+        data = json.loads(smart_text(resp.content))
         eq_(len(data['results']), 2)
 
     def test_videos_by_tag(self):
@@ -163,7 +164,7 @@ class TestAPI(TestAPIBase):
         resp = self.auth_get('/api/v2/video/?tag=boat',
                              content_type='application/json')
 
-        data = json.loads(resp.content)
+        data = json.loads(smart_text(resp.content))
         eq_(len(data['results']), 2)
 
     def test_videos_by_speaker(self):
@@ -180,14 +181,14 @@ class TestAPI(TestAPIBase):
         resp = self.auth_get('/api/v2/video/?speaker=webber',
                              content_type='application/json')
 
-        data = json.loads(resp.content)
+        data = json.loads(smart_text(resp.content))
         eq_(len(data['results']), 2)
 
         # Filter by partial name.
         resp = self.auth_get('/api/v2/video/?speaker=web',
                              content_type='application/json')
 
-        data = json.loads(resp.content)
+        data = json.loads(smart_text(resp.content))
         eq_(len(data['results']), 2)
 
 
@@ -207,7 +208,7 @@ class TestVideoPostAPI(TestAPIBase):
         resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
         eq_(resp.status_code, 201)
-        eq_(json.loads(resp.content)['title'], data['title'])
+        eq_(json.loads(smart_text(resp.content))['title'], data['title'])
 
         vid = Video.objects.get(title=data['title'])
         eq_(vid.title, data['title'])

@@ -23,6 +23,7 @@ from django.core import management
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.utils import override_settings
+from django.utils.encoding import smart_text
 
 from nose.tools import eq_
 
@@ -309,7 +310,7 @@ class TestVideoSearch(TestCase):
 
         response = self.client.get(url, {'q': 'test'})
         eq_(response.status_code, 200)
-        data = json.loads(response.content)
+        data = json.loads(smart_text(response.content))
         eq_(data[0], 'test')
         eq_(set(data[1]),
             set(['django testing', 'Speedily Practical Large-Scale Tests']))
