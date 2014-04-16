@@ -22,7 +22,7 @@ from richard.videos.feeds import (
     NewPostedVideoFeed)
 from richard.videos.views import (
     CategoryListAPI, CategoryRetrieveAPI, VideoListCreateAPI,
-    VideoRetrieveUpdateAPI)
+    VideoRetrieveUpdateAPI, SpeakerListAPI)
 
 
 urlpatterns = patterns(
@@ -77,6 +77,8 @@ def build_api_urls():
         url(r'^api/v2/category/?$', CategoryListAPI.as_view()),
         url(r'^api/v2/category/(?P<slug>[\w-]*)/?$',
             CategoryRetrieveAPI.as_view()),
+
+        url(r'^api/v2/speaker/?$', SpeakerListAPI.as_view()),
 
         url(r'^api/v2/video/?$', VideoListCreateAPI.as_view()),
         url(r'^api/v2/video/(?P<pk>\d+)/?$',

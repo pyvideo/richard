@@ -90,6 +90,17 @@ Category
       $ curl -X GET 'http://example.com/api/v2/category/pycon-2011/'
 
 
+Speaker
+-------
+
+``GET /api/v2/speaker/``
+    Lists speakers.
+
+    Example::
+
+      $ curl -X GET 'http://example.com/api/v2/speaker/'
+
+
 Videos
 ------
 

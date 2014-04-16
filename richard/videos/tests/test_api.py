@@ -89,6 +89,21 @@ class TestCategoryAPI(TestAPIBase):
         eq_(json.loads(smart_text(resp.content))['title'], cat.title)
 
 
+class TestSpeakerAPI(TestAPIBase):
+    def test_get_speakers_list(self):
+        """Test that a list of speakers can be retrieved."""
+        speaker(name=u'Guido van Rossum', save=True)
+        speaker(name=u'Raymond Hettinger', save=True)
+
+        resp = self.client.get('/api/v2/speaker/',
+                               {'format': 'json'})
+        eq_(resp.status_code, 200)
+        content = json.loads(resp.content)
+        eq_(len(content['results']), 2)
+        names = set([result['name'] for result in content['results']])
+        eq_(names, set([u'Guido van Rossum', u'Raymond Hettinger']))
+
+
 class TestAPI(TestAPIBase):
     def test_get_video(self):
         """Test that a video can be retrieved."""

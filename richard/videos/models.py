@@ -428,6 +428,11 @@ class CategorySerializer(serializers.HyperlinkedModelSerializer):
         lookup_field = 'slug'
 
 
+class SpeakerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Speaker
+
+
 class ShrodingersSlugRelatedField(serializers.SlugRelatedField):
     """Less fussy SlugRelatedField
 

@@ -305,6 +305,13 @@ class CategoryRetrieveAPI(generics.RetrieveAPIView):
     lookup_field = 'slug'
 
 
+class SpeakerListAPI(generics.ListAPIView):
+    queryset = models.Speaker.objects.all()
+    serializer_class = models.SpeakerSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    paginate_by = 50
+
+
 class VideoListCreateAPI(generics.ListCreateAPIView):
     serializer_class = models.VideoSerializer
     permission_classes = (IsAdminOrReadOnly,)
