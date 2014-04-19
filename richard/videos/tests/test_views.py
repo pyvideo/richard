@@ -23,6 +23,7 @@ from django.core import management
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.utils import override_settings
+from django.utils.encoding import smart_text
 
 from nose.tools import eq_
 
@@ -108,8 +109,8 @@ class TestVideos(TestCase):
         resp = self.client.get(url, data)
         eq_(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'videos/speaker_list.html')
-        assert s1.name not in resp.content
-        assert s2.name in resp.content
+        self.assertNotContains(resp, s1.name)
+        self.assertContains(resp, s2.name)
 
     def test_speaker_list_character(self):
         """
@@ -125,8 +126,8 @@ class TestVideos(TestCase):
         resp = self.client.get(url, data)
         eq_(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'videos/speaker_list.html')
-        assert s1.name not in resp.content
-        assert s2.name in resp.content
+        self.assertNotContains(resp, s1.name)
+        self.assertContains(resp, s2.name)
 
     def test_speaker_list_character_with_string(self):
         """
@@ -143,8 +144,8 @@ class TestVideos(TestCase):
         resp = self.client.get(url, data)
         eq_(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'videos/speaker_list.html')
-        assert s1.name not in resp.content
-        assert s2.name in resp.content
+        self.assertNotContains(resp, s1.name)
+        self.assertContains(resp, s2.name)
 
     def test_speaker_list_not_string_character(self):
         """
@@ -161,8 +162,8 @@ class TestVideos(TestCase):
         resp = self.client.get(url, data)
         eq_(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'videos/speaker_list.html')
-        assert s1.name not in resp.content
-        assert s2.name in resp.content
+        self.assertNotContains(resp, s1.name)
+        self.assertContains(resp, s2.name)
 
     def test_speaker_urls(self):
         """Test the view of a speaker."""
@@ -209,7 +210,7 @@ class TestVideos(TestCase):
         speaker_url = s.get_absolute_url()
 
         resp = self.client.get(speaker_url)
-        assert vid.title in resp.content
+        self.assertContains(resp, vid.title)
 
     def test_active_video_category_page(self):
         """Active video should shows up on category page."""
@@ -218,7 +219,7 @@ class TestVideos(TestCase):
         category_url = vid.category.get_absolute_url()
 
         resp = self.client.get(category_url)
-        assert vid.title in resp.content
+        self.assertContains(resp, vid.title)
 
     def test_inactive_video_category_page(self):
         """Inactive video should not show up on category page."""
@@ -227,7 +228,7 @@ class TestVideos(TestCase):
         category_url = vid.category.get_absolute_url()
 
         resp = self.client.get(category_url)
-        assert vid.title not in resp.content
+        self.assertNotContains(resp, vid.title)
 
     def test_inactive_video_speaker_page(self):
         """Inactive video should not show up on it's speaker's page."""
@@ -238,7 +239,7 @@ class TestVideos(TestCase):
         speaker_url = s.get_absolute_url()
 
         resp = self.client.get(speaker_url)
-        assert vid.title not in resp.content
+        self.assertNotContains(resp, vid.title)
 
     def test_related_url(self):
         """Related urls should show up on the page."""
@@ -248,7 +249,7 @@ class TestVideos(TestCase):
                            save=True)
 
         resp = self.client.get(v.get_absolute_url())
-        assert rurl.description in resp.content
+        self.assertContains(resp, rurl.description)
 
     def test_download_only(self):
         """Video urls marked as download-only shouldn't be in video tag."""
@@ -260,9 +261,9 @@ class TestVideos(TestCase):
 
         resp = self.client.get(v.get_absolute_url())
         # This shows up in video tag and in downloads area
-        eq_(resp.content.count('OGV_VIDEO'), 2)
+        eq_(resp.content.count(b'OGV_VIDEO'), 2)
         # This only shows up in downloads area
-        eq_(resp.content.count('MP4_VIDEO'), 1)
+        eq_(resp.content.count(b'MP4_VIDEO'), 1)
 
 
 class TestVideoSearch(TestCase):
@@ -309,7 +310,7 @@ class TestVideoSearch(TestCase):
 
         response = self.client.get(url, {'q': 'test'})
         eq_(response.status_code, 200)
-        data = json.loads(response.content)
+        data = json.loads(smart_text(response.content))
         eq_(data[0], 'test')
         eq_(set(data[1]),
             set(['django testing', 'Speedily Practical Large-Scale Tests']))

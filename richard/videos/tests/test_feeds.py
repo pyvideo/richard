@@ -116,20 +116,20 @@ class FeedTest(TestCase):
 
         # No video & source urls specified, no enclosures available in feeds.
         resp = self.client.get(feeds_url)
-        eq_('enclosure' not in resp.content, True)
+        self.assertNotContains(resp, 'enclosure')
 
         # `source_url` specified, but not a youtube url.
         vid.source_url = example_url
         vid.save()
         resp = self.client.get(feeds_url)
-        eq_('enclosure' not in resp.content, True)
+        self.assertNotContains(resp, 'enclosure')
 
         # `source_url` specified, this time a youtube url. Enclosure available.
         vid.source_url = youtube_source_url
         vid.save()
         resp = self.client.get(feeds_url)
-        eq_('enclosure' in resp.content, True)
-        eq_(youtube_source_url in resp.content, True)
+        self.assertContains(resp, 'enclosure')
+        self.assertContains(resp, youtube_source_url)
 
         # video urls available, correct urls displayed in feeds.
         vid.video_ogv_url = example_url + '.ogv'
@@ -138,7 +138,7 @@ class FeedTest(TestCase):
         vid.video_flv_url = example_url + '.flv'
         vid.save()
         resp = self.client.get(feeds_url)
-        eq_(vid.video_ogv_url in resp.content, True)
-        eq_(vid.video_webm_url in resp.content, True)
-        eq_(vid.video_mp4_url in resp.content, True)
-        eq_(vid.video_flv_url in resp.content, True)
+        self.assertContains(resp, vid.video_ogv_url)
+        self.assertContains(resp, vid.video_webm_url)
+        self.assertContains(resp, vid.video_mp4_url)
+        self.assertContains(resp, vid.video_flv_url)

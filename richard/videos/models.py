@@ -15,11 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import urlparse
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urlparse import urlparse
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import serializers
@@ -36,6 +40,7 @@ MIMETYPES_MAP = {
 USE_MARKDOWN_HELP_TEXT = _(u'Use Markdown')
 
 
+@python_2_unicode_compatible
 class Category(models.Model):
     title = models.CharField(
         max_length=255,
@@ -63,7 +68,7 @@ class Category(models.Model):
     # when the category was added to this site
     added = models.DateTimeField(null=True, auto_now_add=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     def __repr__(self):
@@ -84,11 +89,12 @@ class Category(models.Model):
         return ('videos-category', (self.pk, self.slug))
 
 
+@python_2_unicode_compatible
 class Speaker(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def __repr__(self):
@@ -110,10 +116,11 @@ class Speaker(models.Model):
         return ('videos-speaker', (self.pk, self.slug))
 
 
+@python_2_unicode_compatible
 class Tag(models.Model):
     tag = models.CharField(max_length=30)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.tag
 
     def __repr__(self):
@@ -125,11 +132,12 @@ class Tag(models.Model):
         verbose_name_plural = _(u'tags')
 
 
+@python_2_unicode_compatible
 class Language(models.Model):
     iso639_1 = models.CharField(max_length=3)
     name = models.CharField(max_length=20)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -141,6 +149,7 @@ class VideoManager(models.Manager):
         return self.live().order_by('title')
 
 
+@python_2_unicode_compatible
 class Video(models.Model):
     STATE_LIVE = 1
     STATE_DRAFT = 2
@@ -220,7 +229,7 @@ class Video(models.Model):
 
     objects = VideoManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     def __repr__(self):
@@ -308,7 +317,7 @@ class Video(models.Model):
         """Is this a video on YouTube?"""
         if not self.source_url:
             return False
-        parsed = urlparse.urlparse(self.source_url.lower())
+        parsed = urlparse(self.source_url.lower())
         return 'youtube' in parsed.netloc or 'youtu.be' in parsed.netloc
 
     def get_feed_formats(self):
@@ -333,12 +342,13 @@ class Video(models.Model):
         return self.get_all_formats()
 
 
+@python_2_unicode_compatible
 class RelatedUrl(models.Model):
     video = models.ForeignKey(Video, related_name='related_urls')
     url = models.URLField(max_length=255)
     description = models.CharField(max_length=255, blank=True, default=u'')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url
 
     def __repr__(self):

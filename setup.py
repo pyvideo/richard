@@ -2,12 +2,12 @@ import platform
 from setuptools import setup, find_packages
 
 requirements = [
-    'bleach==1.2.2',
+    'bleach==1.4',
     'django==1.6.2',
     'djangorestframework==2.3.10',
-    'django-browserid==0.9',
+    'django-browserid==0.10',
     'django-haystack==2.1.0',
-    'eadred==0.2',
+    'eadred==0.3',
     'Markdown==2.3.1',
     'requests==2.1.0',
     'South==0.8.4',

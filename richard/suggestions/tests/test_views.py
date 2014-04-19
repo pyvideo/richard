@@ -33,7 +33,7 @@ class TestSuggestions(TestCase):
         resp = self.client.get(reverse('suggestions-list'))
         eq_(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'suggestions/suggestions_list.html')
-        assert s.name not in resp.content
+        self.assertNotContains(resp, s.name)
 
     def test_reviewed_list(self):
         """Test the view of the listing of all suggestions."""
@@ -44,7 +44,7 @@ class TestSuggestions(TestCase):
         resp = self.client.get(reverse('suggestions-list'))
         eq_(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'suggestions/suggestions_list.html')
-        assert s.name in resp.content
+        self.assertContains(resp, s.name)
 
     def test_list_without_spam(self):
         """Test that entries marked as spam do not show up."""
@@ -53,7 +53,7 @@ class TestSuggestions(TestCase):
         resp = self.client.get(reverse('suggestions-list'))
         eq_(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'suggestions/suggestions_list.html')
-        assert s.name not in resp.content
+        self.assertNotContains(resp, s.name)
 
     def test_submit(self):
         """Test that submitting a suggestion works."""

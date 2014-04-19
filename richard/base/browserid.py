@@ -1,4 +1,8 @@
-import urlparse
+from __future__ import print_function
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urlparse import urlparse
 
 from django.http import HttpResponseRedirect
 
@@ -11,7 +15,7 @@ from fjord.base.models import Profile
 class RichardVerify(Verify):
     def login_success(self):
         """Send to new_user view if new user, otherwise send on their way"""
-        print 'login success'
+        print('login success')
 
         response = super(RichardVerify, self).login_success()
         # If this user has never logged in before, send them to our
@@ -27,7 +31,7 @@ class RichardVerify(Verify):
 
             # Do not accept redirect URLs pointing to a different host.
             if redirect_to:
-                netloc = urlparse.urlparse(redirect_to).netloc
+                netloc = urlparse(redirect_to).netloc
                 if netloc and netloc != self.request.get_host():
                     redirect_to = None
 

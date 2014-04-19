@@ -29,8 +29,8 @@ def suggestion(**kwargs):
     defaults.update(kwargs)
 
     if 'name' not in defaults:
-        defaults['name'] = u'Add pycon conference ' + str(_count.next())
+        defaults['name'] = u'Add pycon conference ' + str(next(_count))
     if 'url' not in defaults:
-        defaults['url'] = u'https://us.pycon.org/2012/' + str(_count.next())
+        defaults['url'] = u'https://us.pycon.org/2012/' + str(next(_count))
 
     return Suggestion(**defaults)

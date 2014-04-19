@@ -18,8 +18,10 @@ from datetime import datetime
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.utils.encoding import python_2_unicode_compatible
 
 
+@python_2_unicode_compatible
 class Suggestion(models.Model):
     """Represents a suggestion for videos to be added to the site."""
 
@@ -65,7 +67,7 @@ class Suggestion(models.Model):
     resolved = models.DateTimeField(blank=True, null=True)
     is_reviewed = models.BooleanField(default=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta(object):
