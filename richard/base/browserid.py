@@ -15,8 +15,6 @@ from fjord.base.models import Profile
 class RichardVerify(Verify):
     def login_success(self):
         """Send to new_user view if new user, otherwise send on their way"""
-        print('login success')
-
         response = super(RichardVerify, self).login_success()
         # If this user has never logged in before, send them to our
         # super secret "Welcome!" page.
