@@ -44,6 +44,7 @@ urlpatterns = patterns(
     (r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap',
      {'sitemaps': sitemaps}),
 
+    url(r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^pages/', include('richard.pages.urls')),

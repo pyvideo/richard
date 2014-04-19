@@ -6,6 +6,7 @@ requirements = [
     'django==1.6.2',
     'djangorestframework==2.3.10',
     'django-browserid==0.10',
+    'django-grappelli==2.5.2',
     'django-haystack==2.1.0',
     'eadred==0.3',
     'Markdown==2.3.1',
