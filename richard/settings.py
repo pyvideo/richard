@@ -207,7 +207,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.i18n',
     'django.core.context_processors.static',
     "django.core.context_processors.request",
-    'django_browserid.context_processors.browserid',
+
     'richard.base.context_processors.base',
 )
 
