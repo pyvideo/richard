@@ -91,7 +91,7 @@
         <h4>Related URLs</h4>
         <ul>
           {% for u in v.related_urls.all %}
-            <li><a href="{{ u.url }}">{% if u.description %}{{ u.description }} ({{ u.display }}){% else %}{{ u.display }}{% endif %}</a></li>
+            <li><a href="{{ u.url }}">{% if u.description %}{{ u.description }} ({{ u.url|truncatechars:50 }}){% else %}{{ u.url|truncatechars:50 }}{% endif %}</a></li>
           {% endfor %}
         </ul>
       </div>
