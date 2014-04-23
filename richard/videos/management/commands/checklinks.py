@@ -65,7 +65,10 @@ class Command(BaseCommand):
 
         for ind, v in enumerate(videos):
             self.log('%d/%d: Checking URLs for id %s video %s' % (ind, total, v.id, v.title), min_verbose=2)
-            status_counter += VideoUrlStatus.objects.create_for_video(v)
+            ret = VideoUrlStatus.objects.create_for_video(v)
+            if ret:
+                self.log('       %s' % unicode(ret), min_verbose=2)
+            status_counter += ret
             checked += 1
         self.log('Checked %d videos\n' % checked)
         self.log(unicode(status_counter))
