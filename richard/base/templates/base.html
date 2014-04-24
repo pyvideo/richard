@@ -58,7 +58,7 @@
         <form class="navbar-form navbar-left" role="search" action="{% url 'videos-search' %}">
           <div class="form-group">
             <input type="hidden" name="models" value="videos.video">
-            <input type="text" class="form-control" name="q" placeholder="Search" value="{{ query }}">
+            <input type="text" class="form-control" name="q" placeholder="Search" autofocus value="{{ query }}">
           </div>
         </form>
 
