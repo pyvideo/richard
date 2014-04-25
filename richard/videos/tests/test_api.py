@@ -86,7 +86,7 @@ class TestCategoryAPI(TestAPIBase):
                                {'format': 'json'})
         eq_(resp.status_code, 200)
         content = json.loads(smart_text(resp.content))
-        eq_(json.loads(smart_text(resp.content))['title'], cat.title)
+        eq_(content['title'], cat.title)
 
 
 class TestSpeakerAPI(TestAPIBase):
@@ -98,7 +98,7 @@ class TestSpeakerAPI(TestAPIBase):
         resp = self.client.get('/api/v2/speaker/',
                                {'format': 'json'})
         eq_(resp.status_code, 200)
-        content = json.loads(resp.content)
+        content = json.loads(smart_text(resp.content))
         eq_(len(content['results']), 2)
         names = set([result['name'] for result in content['results']])
         eq_(names, set([u'Guido van Rossum', u'Raymond Hettinger']))
