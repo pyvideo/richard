@@ -60,13 +60,13 @@
         <div class="pager">
           <ul>
             {% if page.has_previous %}
-              <li><a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">&laquo; Previous</a></li>
+              <li><a href="?q={{ query }}&amp;p={{ page.previous_page_number }}">&laquo; Previous</a></li>
             {% else %}
               <li class="disabled"><a>&laquo;Previous</a></li>
             {% endif %}
 
             {% if page.has_next %}
-              <li><a href="?q={{ query }}&amp;page={{ page.next_page_number }}"> Next &raquo;</a></li>
+              <li><a href="?q={{ query }}&amp;p={{ page.next_page_number }}"> Next &raquo;</a></li>
             {% else %}
               <li class="disabled"><a>Next&raquo;</a></li>
             {% endif %}
