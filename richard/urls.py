@@ -51,7 +51,7 @@ urlpatterns = patterns(
     url(r'^suggestions/', include('richard.suggestions.urls')),
     url(r'', include('richard.videos.urls')),
 
-    url(r'^browserid/', include('django_browserid.urls')),
+    url(r'', include('django_browserid.urls')),
 )
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
