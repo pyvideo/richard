@@ -57,7 +57,7 @@ For example, using curl::
 
     $ curl --dump-header - \
         -H "Content-Type: application/json" \
-        -H "Authentication: Token abd984049d938e8909ff" \
+        -H "Authorization: Token abd984049d938e8909ff" \
         -X POST 'http://example.com/api/v2/video/' \
         -d '
     {
