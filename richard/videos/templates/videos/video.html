@@ -42,11 +42,7 @@
       <div class="videobox-inner">
         {% if use_amara %}
           {% if video_url %}
-            <script type="text/javascript" src="http://s3.amazonaws.com/s3.www.universalsubtitles.org/embed.js">
-             ({
-               video_url: "{{ video_url }}"
-             })
-            </script>
+            <div class="amara-embed" data-height="480px" data-width="854px" data-url="{{ video_url }}"></div>
           {% else %}
             <p>No video to show.</p>
           {% endif %}
@@ -202,6 +198,7 @@
 {% block site_js %}
   {{ block.super }}
 
+  <script type="text/javascript" src="http://amara.org/embedder-iframe"></script>
   <script type="text/javascript" src="{% static 'videos/js/videos.js' %}"></script>
   <script type="text/javascript">
     $(document).ready(function() {
