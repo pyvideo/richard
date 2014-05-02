@@ -10,6 +10,10 @@ a.feed:before {
   padding: 10px 0 15px 0;
 }
 
+div.signin {
+  padding: 11px 0 0 0;
+}
+
 div#sidebar dd {
   padding: 6px;
 }
