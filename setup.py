@@ -5,7 +5,7 @@ requirements = [
     'bleach==1.4',
     'django==1.6.4',
     'djangorestframework==2.3.10',
-    'django-browserid==0.10',
+    'django-browserid==0.10.1',
     'django-grappelli==2.5.2',
     'django-haystack==2.1.0',
     'eadred==0.3',
