@@ -137,6 +137,14 @@ Videos
 
       $ curl -X GET 'http://example.com/api/v2/video/?tag=django'
 
+``GET /api/v2/video/?category=FOO``
+    Returns videos with category FOO. It only takes one category and does an
+    exact match on the category slug.
+
+    Example::
+
+      $ curl -X GET 'http://example.com/api/v2/video/?category=pycon-us-2014'
+
 ``POST /api/v2/video/``
     Creates a new video.
 

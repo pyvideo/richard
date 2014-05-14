@@ -338,6 +338,11 @@ class VideoListCreateAPI(generics.ListCreateAPIView):
                     .filter(tag__icontains=tag)
                     .values_list('pk', flat=True)))
 
+        category = self.request.QUERY_PARAMS.get('category', None)
+        if category is not None:
+            queryset = queryset.filter(
+                category__slug=category)
+
         return queryset
 
 
