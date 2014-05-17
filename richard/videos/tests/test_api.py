@@ -206,6 +206,22 @@ class TestAPI(TestAPIBase):
         data = json.loads(smart_text(resp.content))
         eq_(len(data['results']), 2)
 
+    def test_videos_by_category(self):
+        cat1 = category(slug="pycon-us-2014", save=True)
+        cat2 = category(slug="scipy-2013", save=True)
+        video(state=Video.STATE_LIVE, title=u'Foo1',
+              category=cat1, save=True)
+        video(state=Video.STATE_LIVE, title=u'Foo2',
+              category=cat1, save=True)
+        video(state=Video.STATE_LIVE, title=u'Foo3',
+              category=cat2, save=True)
+
+        resp = self.auth_get('/api/v2/video/?category=pycon-us-2014',
+                             content_type='application/json')
+
+        data = json.loads(smart_text(resp.content))
+        eq_(len(data['results']), 2)
+
 
 class TestVideoPostAPI(TestAPIBase):
     def test_post_video(self):
