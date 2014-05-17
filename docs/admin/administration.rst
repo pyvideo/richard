@@ -128,11 +128,22 @@ Removing videos
 Importing a batch of videos
 ===========================
 
-There is currently no way to import a batch of videos all at once.
+There is currently no way to import a batch of videos all at once using
+Richard.
 
-You could write a script that runs on your server that accesses the
-model objects directly. That's what I've been doing so far. That
-requires Python/Django chops.
+There are some non-Richard options:
+
+1. You could write a script that runs on your server that accesses the
+   model objects directly. That's what I've been doing so far. That
+   requires Python/Django chops.
+
+2. You could enable the API and write code that uses the API to add
+   and update videos in Richard.
+
+3. You could use `steve <http://steve.readthedocs.org/en/latest/>`_
+   which is the tool I've been working on which uses the API to add
+   and update videos. It's very prototype-quality. If you're interested
+   in helping out, please do.
 
 
 Updating the search index
