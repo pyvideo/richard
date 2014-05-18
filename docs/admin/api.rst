@@ -145,6 +145,15 @@ Videos
 
       $ curl -X GET 'http://example.com/api/v2/video/?category=pycon-us-2014'
 
+``GET /api/v2/video/?ordering=FOO``
+    Returns videos ordered by field FOO. The fields allowed in the
+    ordering filter are `added`, `recorded` and `title`. Reverse ordering
+    is specified by prefixing the field name with `-`
+
+    Example::
+
+      $ curl -X GET 'http://example.com/api/v2/video/?ordering=-added'
+
 ``POST /api/v2/video/``
     Creates a new video.
 

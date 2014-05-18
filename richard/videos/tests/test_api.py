@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import datetime
 import json
 from functools import partial
 from imp import reload
@@ -221,6 +222,35 @@ class TestAPI(TestAPIBase):
 
         data = json.loads(smart_text(resp.content))
         eq_(len(data['results']), 2)
+
+    def test_videos_by_order(self):
+        video(state=Video.STATE_LIVE, title=u'FooC',
+              recorded=datetime.datetime(2014, 1, 1, 10, 0),
+              save=True)
+        video(state=Video.STATE_LIVE, title=u'FooA',
+              recorded=datetime.datetime(2013, 1, 1, 10, 0),
+              save=True)
+        video(state=Video.STATE_LIVE, title=u'FooB',
+              recorded=datetime.datetime(2014, 2, 1, 10, 0),
+              save=True)
+
+        # Filter by title.
+        resp = self.auth_get('/api/v2/video/?ordering=title',
+                             content_type='application/json')
+        data = json.loads(smart_text(resp.content))
+        eq_([v['title'] for v in data['results']], [u'FooA', u'FooB', u'FooC'])
+
+        # Filter by recorded.
+        resp = self.auth_get('/api/v2/video/?ordering=recorded',
+                             content_type='application/json')
+        data = json.loads(smart_text(resp.content))
+        eq_([v['title'] for v in data['results']], [u'FooA', u'FooC', u'FooB'])
+
+        # Filter by added (reverse order).
+        resp = self.auth_get('/api/v2/video/?ordering=-added',
+                             content_type='application/json')
+        data = json.loads(smart_text(resp.content))
+        eq_([v['title'] for v in data['results']], [u'FooB', u'FooA', u'FooC'])
 
 
 class TestVideoPostAPI(TestAPIBase):
