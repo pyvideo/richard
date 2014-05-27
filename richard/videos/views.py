@@ -27,6 +27,7 @@ from django.shortcuts import get_object_or_404, render
 from haystack.query import SearchQuerySet
 from rest_framework import generics
 from rest_framework import permissions
+from rest_framework import filters
 
 from richard.videos import models
 
@@ -315,6 +316,8 @@ class SpeakerListAPI(generics.ListAPIView):
 class VideoListCreateAPI(generics.ListCreateAPIView):
     serializer_class = models.VideoSerializer
     permission_classes = (IsAdminOrReadOnly,)
+    filter_backends = (filters.OrderingFilter,)
+    ordering_fields = ('added', 'recorded', 'title')
 
     def get_queryset(self):
         if self.request.user.is_staff:
