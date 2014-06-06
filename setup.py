@@ -8,6 +8,7 @@ requirements = [
     'django-browserid==0.10.1',
     'django-grappelli==2.5.2',
     'django-haystack==2.1.0',
+    'dj-database-url==0.3.0',
     'eadred==0.3',
     'Markdown==2.3.1',
     'requests==2.1.0',
