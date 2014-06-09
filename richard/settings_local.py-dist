@@ -7,6 +7,8 @@
 
 import os
 
+import dj_database_url
+
 
 # site_root is the parent directory
 SITE_ROOT = os.path.dirname(os.path.dirname(__file__))
@@ -16,26 +18,15 @@ DEBUG = TEMPLATE_DEBUG = True
 SECRET_KEY = 'secret key'
 
 DATABASES = {
-    'default': {
-        # postgresql configuration
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'your_site',    # db name
-        'USER': 'richard',
-        'PASSWORD': 'richard',
-        'HOST': 'localhost',
-        'PORT': ''
+    # For syntax, see dj_database_url:
+    # https://github.com/kennethreitz/dj-database-url
 
-        # This is a sqlite3 configuration. If you are a contributor
-        # and don't have postgresql on your machine, then feel free
-        # to comment out the previous lines and uncomment out the next
-        # 6 lines:
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': os.path.join(SITE_ROOT, 'database.db'),
-        # 'USER': '',
-        # 'PASSWORD': '',
-        # 'HOST': '',
-        # 'PORT': '',
-    }
+    # postgres://USERNAME:PASSWORD@HOST:PORT/NAME
+    'default': dj_database_url.config(default='postgres://richard:richard@localhost:5432/YOURSITE')
+
+
+    # sqlite:////PATH
+    # 'default': 'sqlite:///' + os.path.join(SITE_ROOT, 'database.db')
 }
 
 # If you're doing development work and you're not in production and you have no
