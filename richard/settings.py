@@ -9,6 +9,8 @@ import imp
 import os
 import sys
 
+import dj_database_url
+
 # site_root is the parent directory
 SITE_ROOT = os.path.dirname(os.path.dirname(__file__))
 
@@ -78,20 +80,14 @@ API = False
 
 
 DATABASES = {
-    'default': {
-        # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'ENGINE': 'django.db.backends.sqlite3',
-        # Or path to database file if using sqlite3.
-        'NAME': os.path.join(SITE_ROOT, 'database.db'),
+    # dj_database_url pulls from the DATABASE_URL environment variable.
+    # For syntax, see dj_database_url:
+    # https://github.com/kennethreitz/dj-database-url
+    'default': dj_database_url.config(default='sqlite:///' + os.path.join(SITE_ROOT, 'database.db'))
 
-        # The following settings are not used with sqlite3.
-        'USER': '',
-        'PASSWORD': '',
-        # Set to empty string for localhost.
-        'HOST': '',
-        # Set to empty string for default.
-        'PORT': '',
-    }
+    # postgres examples
+    # DATBASE_URL=postgres://richard:richard@localhost:5432/YOURSITE
+    # DATBASE_URL=postgres://:5432/richard
 }
 
 HAYSTACK_CONNECTIONS = {

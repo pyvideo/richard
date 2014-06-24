@@ -17,18 +17,6 @@ DEBUG = TEMPLATE_DEBUG = True
 
 SECRET_KEY = 'secret key'
 
-DATABASES = {
-    # For syntax, see dj_database_url:
-    # https://github.com/kennethreitz/dj-database-url
-
-    # postgres://USERNAME:PASSWORD@HOST:PORT/NAME
-    'default': dj_database_url.config(default='postgres://richard:richard@localhost:5432/YOURSITE')
-
-
-    # sqlite:////PATH
-    # 'default': 'sqlite:///' + os.path.join(SITE_ROOT, 'database.db')
-}
-
 # If you're doing development work and you're not in production and you have no
 # Internet connection, uncomment the following and set BROWSERID_AUTOLOGIN to
 # the email address of the account you want to log in as."
