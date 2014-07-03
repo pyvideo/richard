@@ -49,7 +49,7 @@ div#footer {
   text-align: center;
 }
 
-div.videobox-inner span.unisubs-widget {
+div.videobox-inner div.amara-embed {
     margin: 0 auto !important;
     display: inline-block;
 }
