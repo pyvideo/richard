@@ -12,10 +12,11 @@ Python code
 
 * PEP-8: http://www.python.org/dev/peps/pep-0008/
 * PEP-257: http://www.python.org/dev/peps/pep-0257/
-* Use pyflakes. Srsly.
+* Use pyflakes to lint your Python code.
 
-pep8 covers Python code conventions. pep257 covers Python docstring
-conventions.
+pep8 covers Python code conventions.
+
+pep257 covers Python docstring conventions.
 
 Minor caveats:
 

@@ -1,3 +1,5 @@
+.. _hacking-chapter:
+
 =========================================
  Installing, running and testing richard
 =========================================
@@ -75,7 +77,7 @@ Use pip to install the development requirements::
 
     $ ./venv/bin/pip install -e .\[dev\]
 
-If you want to also install with postgres support::
+**(Optional)** If you want to also install with postgres support::
 
     $ apt-get install \
         postgresql \
@@ -83,6 +85,7 @@ If you want to also install with postgres support::
         libpq-dev \
         python-dev
     $ ./venv/bin/pip install -e .\[dev,postgresql\]
+
 
 .. Note::
 
@@ -93,53 +96,27 @@ If you want to also install with postgres support::
 Configure
 =========
 
-You will need to override some of those settings for your
-instance. To do that:
+You need to create a ``settings_local.py`` file. To do that, do this::
 
-1. ``cp richard/settings_local.py-dist richard/settings_local.py``
-2. Edit ``richard/settings_local.py``
+    # cp richard/settings_local.py-dist richard/settings_local.py
 
 
-Make sure to do at least the following:
+The settings should work out of the box, but you can change them as
+you see fit.
 
-1. Set a ``SECRET_KEY``. Make it unique! Don't share it with anyone!
-
-TODO: Finish this up
-
-
-Set up the database
-===================
-
-sqlite3
--------
-
-If you're a contributor and not working on db-related bits, then using
-sqlite3 might work fine. It's certainly the easiest to set up
-
-Uncomment the sqlite3 bits in ``richard/settings_local.py`` and
-comment out the postgresql bits.
+**(Optional)** If you want to use postgres, uncomment the postgres
+line in the ``DATABASES`` section.
 
 
-postgresql
-----------
+Set up database schema and create superuser
+===========================================
 
-If you're working on db-related bits or have postgres set up already,
-then do the following:
-
-1. ``pip install psycopg2``
-2. set up a postgres database and add the relevant configuration bits
-   to the ``richard/settings_local.py`` file.
-
-
-Set up database schema and create admin user
-============================================
-
-To set up the database schema and create the admin user, run::
+To set up the database schema and create the superuser, run::
 
     $ ./manage.py syncdb --migrate
 
-The admin user account you create here can be used to log into the richard
-admin section.
+The superuser account you create here can be used to log into the
+richard admin section.
 
 
 Set up sample data (optional)

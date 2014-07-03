@@ -14,16 +14,6 @@ also some design decisions and code conventions in here, too.
 Project scaffolding
 ===================
 
-* `playdoh <http://playdoh.readthedocs.org/en/latest/index.html>`_ and
-  `kitsune <http://kitsune.readthedocs.org/en/latest/>`_
-
-  Kitsune is the name of the project I work on at Mozilla. Playdoh is
-  the name of the Django web application template that most Mozilla
-  webdev projects are built on top of.
-
-  I use both for inspiration for project scaffolding.
-
-
 Settings
 --------
 
@@ -32,8 +22,7 @@ talks about settings, but doesn't cover separating settings into
 multiple settings files.
 
 richard uses ``settings_local.py`` for locally overriding settings
-defaults. We do the same thing for some of our projects at
-Mozilla. Also, James Bennett talks about using ``local_settings.py`` in
+defaults. Also, James Bennett talks about using ``local_settings.py`` in
 "Practical Django Projects" [PDP2009] which is essentially the same,
 but with a slightly different name. I like ``settings_local.py``
 better than ``local_settings.py`` since then all my settings files

@@ -17,12 +17,12 @@ Make sure you've activated your virtual environment.
 
 Then::
 
-    $ pip install -r requirements/develop.txt
+    $ ./venv/bin/pip install -e .\[dev\]
 
 
 .. Note::
 
-   If you think you horked your virtual environment, just wipe it and
+   If you think you hosed your virtual environment, just wipe it and
    build a new one.
 
 

@@ -13,8 +13,8 @@ Testing requirements
 richard uses ``django-nose`` to tie the Django test system to
 ``nose``.
 
-I like to additionally use ``nose-progressive`` because it makes the
-test output more useful.
+I like to additionally use ``nose-progressive`` and ``nosenicedots``
+because they make the test output more useful.
 
 
 Running tests
@@ -23,11 +23,13 @@ Running tests
 To run the tests, make sure your virtual environment is activated and
 then::
 
-    ./manage.py test
+    ./manage.py test --nologcapture --nocapture
 
 To run the tests with nose-progressive::
 
-    ./manage.py test --with-progressive
+    ./manage.py test --nologcapture --nocapture --with-progressive
+
+Once you get a runline you like, put it in a bash script.
 
 
 Add new tests

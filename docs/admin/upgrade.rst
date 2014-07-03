@@ -26,7 +26,7 @@ After doing that, you should:
 
 2. upgrade your virtual environment::
 
-       $ pip install -r richard/requirements/base.txt
+       $ pip install .
 
 3. update your settings files---details on what needs to be updated
    will be in the What's New notes
