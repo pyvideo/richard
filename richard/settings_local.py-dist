@@ -25,7 +25,7 @@ DATABASES = {
     # https://github.com/kennethreitz/dj-database-url
 
     # sqlite:////PATH
-    'default': 'sqlite:///' + os.path.join(SITE_ROOT, 'database.db')
+    'default': dj_database_url.config(default='sqlite:///' + os.path.join(SITE_ROOT, 'database.db'))
 
     # postgres://USERNAME:PASSWORD@HOST:PORT/NAME
     # 'default': dj_database_url.config(default='postgres://richard:richard@localhost:5432/YOURSITE')
