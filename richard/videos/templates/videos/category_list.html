@@ -54,7 +54,7 @@
                   {% endif %}
                 </td>
                 <td>
-                  {{ cat.video_set.live.count }}
+                  {{ cat.videos.live.count }}
                 </td>
                 <td>
                   <a class="feed" href="{% url 'videos-category-videos-feed' category_id=cat.pk slug=cat.slug %}"> feed</a>

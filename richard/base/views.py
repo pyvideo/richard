@@ -79,8 +79,8 @@ def stats(request):
     """
 
     # Retrieve objects of model `m`, ordered by the number of videos they have
-    most_videos = lambda m: (m.objects.filter(video__state=Video.STATE_LIVE)
-                                      .annotate(count=Count('video'))
+    most_videos = lambda m: (m.objects.filter(videos__state=Video.STATE_LIVE)
+                                      .annotate(count=Count('videos'))
                                       .order_by('-count'))
 
     video_count = Video.objects.live().count()

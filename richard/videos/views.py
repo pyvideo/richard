@@ -74,9 +74,9 @@ def category(request, category_id, slug):
     obj = get_object_or_404(models.Category, pk=category_id)
 
     if request.user.is_staff:
-        videos = obj.video_set.all()
+        videos = obj.videos.all()
     else:
-        videos = obj.video_set.live()
+        videos = obj.videos.live()
 
     videos = videos.select_related('category').prefetch_related('speakers')
 
@@ -91,7 +91,7 @@ def category(request, category_id, slug):
 def category_files(request, category_id, slug):
     obj = get_object_or_404(models.Category, pk=category_id)
 
-    videos = obj.video_set.live().prefetch_related('speakers')
+    videos = obj.videos.live().prefetch_related('speakers')
 
     ret = render(
         request, 'videos/category.html',
@@ -115,7 +115,7 @@ def speaker_list(request):
             c = chars[0]
 
     speakers = (models.Speaker.objects.filter(name__istartswith=c)
-                                      .annotate(video_count=Count('video')))
+                                      .annotate(video_count=Count('videos')))
 
     ret = render(
         request, 'videos/speaker_list.html',
@@ -129,9 +129,9 @@ def speaker(request, speaker_id, slug=None):
     obj = get_object_or_404(models.Speaker, pk=speaker_id)
 
     if request.user.is_staff:
-        videos = obj.video_set.all()
+        videos = obj.videos.all()
     else:
-        videos = obj.video_set.live()
+        videos = obj.videos.live()
 
     videos = videos.select_related('category').prefetch_related('speakers')
 

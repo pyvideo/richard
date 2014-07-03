@@ -60,10 +60,10 @@
     {% if latest_categories %}
       <ul>
         {% for cat in latest_categories %}
-          {% if user.is_staff or cat.video_set.live.count > 0 %}
+          {% if user.is_staff or cat.videos.live.count > 0 %}
             <li>
               <a href="{{ cat.get_absolute_url }}">{{ cat.title }}</a>
-              ({{ cat.video_set.live.count }})
+              ({{ cat.videos.live.count }})
             </li>
           {% endif %}
         {% endfor %}

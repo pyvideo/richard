@@ -172,9 +172,10 @@ class Video(models.Model):
                                help_text=USE_MARKDOWN_HELP_TEXT)
     description = models.TextField(blank=True, default=u'',
                                    help_text=USE_MARKDOWN_HELP_TEXT)
-    tags = models.ManyToManyField(Tag, blank=True)
-    category = models.ForeignKey(Category)
-    speakers = models.ManyToManyField(Speaker, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True, related_name='videos')
+    category = models.ForeignKey(Category, related_name='videos')
+    speakers = models.ManyToManyField(Speaker, blank=True,
+                                      related_name='videos')
 
     # notes for quality issues (audio or video) in the video
     quality_notes = models.TextField(blank=True, default=u'')
@@ -423,6 +424,11 @@ class VideoUrlStatus(models.Model):
 
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
+    videos = serializers.HyperlinkedRelatedField(
+        many=True,
+        view_name='video-api-view'
+    )
+
     class Meta:
         model = Category
         lookup_field = 'slug'

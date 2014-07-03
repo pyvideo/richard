@@ -21,7 +21,7 @@
   {{ obj.description|md|safe }}
 {% endif %}
 <ul>
-  {% for vid in obj.video_set.live_order_by_title %}
+  {% for vid in obj.videos.live_order_by_title %}
     <li><a href="{{ vid.get_absolute_url }}">{{ vid.title }}</a></li>
   {% endfor %}
 </ul>

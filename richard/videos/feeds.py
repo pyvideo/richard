@@ -66,7 +66,7 @@ class CategoryFeed(Feed):
             site_title=settings.SITE_TITLE)
 
     def items(self):
-        cats = (Category.objects.filter(video__state=Video.STATE_LIVE)
+        cats = (Category.objects.filter(videos__state=Video.STATE_LIVE)
                                 .order_by('-added'))
         return cats[:settings.MAX_FEED_LENGTH]
 
@@ -182,7 +182,7 @@ class CategoryVideosFeed(BaseVideoFeed):
         return get_object_or_404(Category, pk=category_id)
 
     def items(self, category):
-        return category.video_set.live()
+        return category.videos.live()
 
 
 class SpeakerVideosFeed(BaseVideoFeed):
@@ -199,7 +199,7 @@ class SpeakerVideosFeed(BaseVideoFeed):
         return get_object_or_404(Speaker, pk=speaker_id)
 
     def items(self, speaker):
-        return speaker.video_set.live()
+        return speaker.videos.live()
 
 
 class NewPostedVideoFeed(BaseVideoFeed):
