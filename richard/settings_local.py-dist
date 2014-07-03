@@ -4,6 +4,9 @@
 # 2. edit with your editor
 #
 # See settings.py and documentation for other things you can configure.
+#
+# Note: Settings set here are good for a development environment--not
+# a production environment.
 
 import os
 
@@ -21,12 +24,11 @@ DATABASES = {
     # For syntax, see dj_database_url:
     # https://github.com/kennethreitz/dj-database-url
 
-    # postgres://USERNAME:PASSWORD@HOST:PORT/NAME
-    'default': dj_database_url.config(default='postgres://richard:richard@localhost:5432/YOURSITE')
-
-
     # sqlite:////PATH
-    # 'default': 'sqlite:///' + os.path.join(SITE_ROOT, 'database.db')
+    'default': 'sqlite:///' + os.path.join(SITE_ROOT, 'database.db')
+
+    # postgres://USERNAME:PASSWORD@HOST:PORT/NAME
+    # 'default': dj_database_url.config(default='postgres://richard:richard@localhost:5432/YOURSITE')
 }
 
 # If you're doing development work and you're not in production and you have no

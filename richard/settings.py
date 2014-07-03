@@ -76,24 +76,6 @@ AMARA_SUPPORT = False
 # more about the API.
 API = False
 
-
-DATABASES = {
-    'default': {
-        # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'ENGINE': 'django.db.backends.sqlite3',
-        # Or path to database file if using sqlite3.
-        'NAME': os.path.join(SITE_ROOT, 'database.db'),
-
-        # The following settings are not used with sqlite3.
-        'USER': '',
-        'PASSWORD': '',
-        # Set to empty string for localhost.
-        'HOST': '',
-        # Set to empty string for default.
-        'PORT': '',
-    }
-}
-
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
