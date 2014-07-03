@@ -98,7 +98,7 @@ Configure
 
 You need to create a ``settings_local.py`` file. To do that, do this::
 
-    # cp richard/settings_local.py-dist richard/settings_local.py
+    $ cp richard/settings_local.py-dist richard/settings_local.py
 
 
 The settings should work out of the box, but you can change them as
