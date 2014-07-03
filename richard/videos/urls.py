@@ -76,13 +76,13 @@ def build_api_urls():
         # redone with Django-REST-Framework.
         url(r'^api/v2/category/?$', CategoryListAPI.as_view()),
         url(r'^api/v2/category/(?P<slug>[\w-]*)/?$',
-            CategoryRetrieveAPI.as_view()),
+            CategoryRetrieveAPI.as_view(), name='category-api-view'),
 
         url(r'^api/v2/speaker/?$', SpeakerListAPI.as_view()),
 
         url(r'^api/v2/video/?$', VideoListCreateAPI.as_view()),
         url(r'^api/v2/video/(?P<pk>\d+)/?$',
-            VideoRetrieveUpdateAPI.as_view(), name='videos-api-view'),
+            VideoRetrieveUpdateAPI.as_view(), name='video-api-view'),
 
     )
 

@@ -68,6 +68,10 @@
       <dd>
         {{ videos|length }}
       </dd>
+      <dt>Metadata</dt>
+      <dd>
+        <a href="{% url 'category-api-view' category.slug %}">JSON</a>
+      </dd>
     </dl>
   </div>
 </div>
