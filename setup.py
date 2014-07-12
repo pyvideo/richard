@@ -1,4 +1,3 @@
-import platform
 from setuptools import setup, find_packages
 
 requirements = [
@@ -42,9 +41,10 @@ setup(name='richard',
           'dev': development_requirements,
           'postgresql': postgre_requirements,
       },
-      packages=find_packages(),
+      packages=find_packages('src'),
+      package_dir={'': 'src'},
       classifiers=[
-        'Development Status :: 3 - Alpha',
+            'Development Status :: 3 - Alpha',
         'Framework :: Django',
         'License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)',
         'Programming Language :: Python :: 2.7',

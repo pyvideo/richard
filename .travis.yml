@@ -13,11 +13,11 @@ install:
 #  - 'if ( test -n "$DJANGO" ); then pip install $DJANGO; fi'
 
 script:
-  - 'python manage.py test'
+  - 'python manage.py test --settings richard.config.settings_test'
 
 notifications:
   irc:
     channels:
       - "irc.freenode.org#richard"
-    on_success: change
-    on_failure: always
+      on_success: change
+      on_failure: always

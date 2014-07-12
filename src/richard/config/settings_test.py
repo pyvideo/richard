@@ -1,6 +1,7 @@
 # Override settings for test environment here
 
 import os
+from .settings import *
 
 # site_root is the parent directory
 SITE_ROOT = os.path.dirname(os.path.dirname(__file__))
