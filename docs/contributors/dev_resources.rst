@@ -17,22 +17,18 @@ Project scaffolding
 Settings
 --------
 
-`<https://docs.djangoproject.com/en/dev/topics/settings/#django.conf.settings.configure>`_
-talks about settings, but doesn't cover separating settings into
-multiple settings files.
+richard has migrated to
+`django-configurations <http://django-configurations.readthedocs.org/>`_
+which makes settings in Django behave more like regular old class inheritance.
+The classes ``Base``, ``Testing``, ``Dev`` and ``Prod`` in the ``settings.py``
+module all handle the expected domains. You can override these by:
 
-richard uses ``settings_local.py`` for locally overriding settings
-defaults. Also, James Bennett talks about using ``local_settings.py`` in
-"Practical Django Projects" [PDP2009] which is essentially the same,
-but with a slightly different name. I like ``settings_local.py``
-better than ``local_settings.py`` since then all my settings files
-get listed next to each other when sorted alphabetically.
-
-.. [PDP2009] Practical Django Projects, by James Bennett
-
-For tests, richard uses ``settings_test.py`` which allows us to
-override settings explicitly for the test environment. We do this at
-Mozilla and it makes things a lot easier.
+* creating a ``settings_local.py`` file
+* ``from . import settings``
+* creating your class (or creating a Dev / Prod class) and extending from
+  ``settings.Base``
+* Updating your deployment scripts to run ``manage.py --settings
+  richard.config.settings_local``
 
 
 Requirements / environments / deployment
@@ -44,19 +40,10 @@ Requirements / environments / deployment
   richard uses virtualenv and pip to build the environment for richard
   to run.
 
-  Requirements are listed in ``requirements/`` in multiple files. The
-  base requirements are in ``requirements/base.txt`` and other
-  use-oriented requirements files include that and then add additional
-  requirements. This makes it easier to specify different kinds of
-  environments like development and deployment.
-
-  pip reads the requirements files, downloads requirements, and installs
-  them into the virtual environment.
-
-  It works pretty well except when PyPI is down.
-
-  We may revisit this later if this becomes an annoying problem.
-
+  Requirements are listed in the ``setup.py`` with ``extra_requires`` defined
+  for local development and postgres. Since richard is meant for deployment
+  rather than a framework, requirements are pinned hard. This makes it easy to
+  install various options without having multiple requirements files.
 
 Documentation
 -------------
