@@ -48,7 +48,7 @@ copyright = u'2012, 2013 richard authors'
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 
-sys.path.append('..')
+sys.path.append('../src')
 from richard import __version__ as version
 release = version
 
