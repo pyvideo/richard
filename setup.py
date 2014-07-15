@@ -18,8 +18,7 @@ requirements = [
 
 development_requirements = [
     'httmock==1.2.2',
-    'nose',
-    'django-nose',
+    'pytest-django==2.6.2',
     'Pygments',
     'Sphinx',
     'steve',

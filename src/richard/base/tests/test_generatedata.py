@@ -14,9 +14,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import pytest
 from django.core.management import call_command
 
 
+@pytest.mark.django_db
 def test_generate_data():
     """Make sure ./manage.py generatedata runs."""
     call_command('generatedata')

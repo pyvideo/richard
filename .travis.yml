@@ -6,6 +6,8 @@ python:
 
 env:
   - DJANGO=""
+  - DJANGO_SETTINGS_MODULE = richard.config.settings
+  - DJANGO_CONFIGURATION = Testing
 #  - DJANGO="https://github.com/django/django/archive/1.7b1.zip"
 
 install:

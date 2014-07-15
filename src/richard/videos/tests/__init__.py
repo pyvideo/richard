@@ -44,7 +44,7 @@ def language(**kwargs):
         'name': 'English'
         }
     defaults.update(kwargs)
-    return Language(**defaults)
+    return Language.objects.get_or_create(**defaults)[0]
 
 
 @with_save
