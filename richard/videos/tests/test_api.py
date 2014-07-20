@@ -273,7 +273,7 @@ class TestVideoPostAPI(TestAPIBase):
 
         vid = Video.objects.get(title=data['title'])
         eq_(vid.title, data['title'])
-        eq_(vid.slug, u'creating-delicious-apis-for-django-apps-since-201')
+        eq_(vid.slug, u'creating-delicious-apis-for-django-apps-since')
         eq_(list(vid.speakers.values_list('name', flat=True)), ['Guido'])
         eq_(sorted(vid.tags.values_list('tag', flat=True)),
             [u'api', u'django'])

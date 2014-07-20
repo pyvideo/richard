@@ -46,9 +46,11 @@ class TestGenerateUniqueSlug(TestCase):
     def test_unique_slug_length(self):
         """Generate slug less than slug max_length."""
         title = u'a' * 51
-        v = video(title=title, save=True)
-        v2 = video(title=title)
-        assert len(generate_unique_slug(v2, u'title', u'slug')) <= 50
+        for i in range(99):
+            video(title=title, save=True)
+        v = video(title=title)
+        slug = generate_unique_slug(v, u'title', u'slug')
+        assert len(slug) <= 50, 'slug [{}] is > 50'.format(slug)
 
     def test_unicode_title(self):
         v = video(title=u'Nebenläufige Programme mit Python')

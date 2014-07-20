@@ -19,7 +19,10 @@ from django.utils.text import slugify
 
 
 def generate_unique_slug(obj, slug_from, slug_field='slug'):
-    text = getattr(obj, slug_from)[:49]
+    """ generate slug with a trailing counter to prevent name collision """
+    # slug field max_length is 50
+    # take 47 characters from the title, leaving 3 characters for the ending
+    text = getattr(obj, slug_from)[:46]
     root_text = text
     for i in range(100):
         slug = slugify(text_type(text))
