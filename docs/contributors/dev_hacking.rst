@@ -119,16 +119,6 @@ The superuser account you create here can be used to log into the
 richard admin section.
 
 
-Set up sample data (optional)
-=============================
-
-If you want to set up some initial data, do::
-
-    $ ./manage.py generatedata
-
-This is useful to see how the site works.
-
-
 Run the tests
 =============
 
