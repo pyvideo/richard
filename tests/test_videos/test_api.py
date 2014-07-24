@@ -26,7 +26,7 @@ from django.utils.encoding import smart_text
 from nose.tools import eq_
 from rest_framework.authtoken.models import Token
 
-from . import category, language, speaker, tag, video
+from . import factories
 from richard.videos.models import Video
 from richard.videos import urls as video_urls_module
 
@@ -36,7 +36,7 @@ class TestNoAPI(TestCase):
         """Test that disabled api kicks up 404"""
         with self.settings(API=False):
             reload(video_urls_module)
-            vid = video(state=Video.STATE_LIVE, save=True)
+            vid = factories.VideoFactory(state=Video.STATE_LIVE)
 
             # anonymous user
             resp = self.client.get('/api/v2/video/%d/' % vid.pk,
@@ -69,9 +69,7 @@ class TestAPIBase(TestCase):
 class TestCategoryAPI(TestAPIBase):
     def test_get_category_list(self):
         """Test that a category can be retrieved."""
-        category(save=True)
-        category(save=True)
-        category(save=True)
+        factories.CategoryFactory.create_batch(size=3)
 
         resp = self.client.get('/api/v2/category/',
                                {'format': 'json'})
@@ -81,7 +79,7 @@ class TestCategoryAPI(TestAPIBase):
 
     def test_get_category(self):
         """Test that a category can be retrieved."""
-        cat = category(save=True)
+        cat = factories.CategoryFactory()
 
         resp = self.client.get('/api/v2/category/%s/' % cat.slug,
                                {'format': 'json'})
@@ -93,8 +91,8 @@ class TestCategoryAPI(TestAPIBase):
 class TestSpeakerAPI(TestAPIBase):
     def test_get_speakers_list(self):
         """Test that a list of speakers can be retrieved."""
-        speaker(name=u'Guido van Rossum', save=True)
-        speaker(name=u'Raymond Hettinger', save=True)
+        factories.SpeakerFactory(name=u'Guido van Rossum')
+        factories.SpeakerFactory(name=u'Raymond Hettinger')
 
         resp = self.client.get('/api/v2/speaker/',
                                {'format': 'json'})
@@ -108,7 +106,7 @@ class TestSpeakerAPI(TestAPIBase):
 class TestAPI(TestAPIBase):
     def test_get_video(self):
         """Test that a video can be retrieved."""
-        vid = video(state=Video.STATE_LIVE, save=True)
+        vid = factories.VideoFactory(state=Video.STATE_LIVE)
 
         # anonymous user
         resp = self.client.get('/api/v2/video/%d/' % vid.pk,
@@ -123,12 +121,13 @@ class TestAPI(TestAPIBase):
         eq_(json.loads(smart_text(resp.content))['title'], vid.title)
 
     def test_get_video_data(self):
-        cat = category(title=u'Foo Title', save=True)
-        vid = video(title=u'Foo Bar', category=cat, state=Video.STATE_LIVE,
-                    save=True)
-        t = tag(tag=u'tag', save=True)
+        cat = factories.CategoryFactory(title=u'Foo Title')
+        vid = factories.VideoFactory(title=u'Foo Bar',
+                                     category=cat,
+                                     state=Video.STATE_LIVE)
+        t = factories.TagFactory(tag=u'tag')
         vid.tags = [t]
-        s = speaker(name=u'Jim', save=True)
+        s = factories.SpeakerFactory(name=u'Jim')
         vid.speakers = [s]
 
         resp = self.client.get('/api/v2/video/%d/' % vid.pk,
@@ -146,8 +145,8 @@ class TestAPI(TestAPIBase):
 
     def test_only_live_videos_for_anonymous_users(self):
         """Test that not authenticated users can't see draft videos."""
-        vid_live = video(state=Video.STATE_LIVE, title=u'Foo', save=True)
-        video(state=Video.STATE_DRAFT, title=u'Bar', save=True)
+        vid_live = factories.VideoFactory(state=Video.STATE_LIVE, title=u'Foo')
+        factories.VideoFactory(state=Video.STATE_DRAFT, title=u'Bar')
 
         resp = self.client.get('/api/v2/video/',
                                content_type='application/json')
@@ -158,8 +157,8 @@ class TestAPI(TestAPIBase):
 
     def test_all_videos_for_admins(self):
         """Test that admins can see all videos."""
-        video(state=Video.STATE_LIVE, title=u'Foo', save=True)
-        video(state=Video.STATE_DRAFT, title=u'Bar', save=True)
+        factories.VideoFactory(state=Video.STATE_LIVE, title=u'Foo')
+        factories.VideoFactory(state=Video.STATE_DRAFT, title=u'Bar')
 
         resp = self.auth_get('/api/v2/video/',
                              content_type='application/json')
@@ -168,14 +167,14 @@ class TestAPI(TestAPIBase):
         eq_(len(data['results']), 2)
 
     def test_videos_by_tag(self):
-        tag1 = tag(tag='boat', save=True)
-        v1 = video(state=Video.STATE_LIVE, title=u'Foo1', save=True)
+        tag1 = factories.TagFactory(tag='boat')
+        v1 = factories.VideoFactory(state=Video.STATE_LIVE, title=u'Foo1')
         v1.tags = [tag1]
         v1.save()
-        v2 = video(state=Video.STATE_LIVE, title=u'Foo2', save=True)
+        v2 = factories.VideoFactory(state=Video.STATE_LIVE, title=u'Foo2')
         v2.tags = [tag1]
         v2.save()
-        video(state=Video.STATE_LIVE, title=u'Foo3', save=True)
+        factories.VideoFactory(state=Video.STATE_LIVE, title=u'Foo3')
 
         resp = self.auth_get('/api/v2/video/?tag=boat',
                              content_type='application/json')
@@ -184,14 +183,14 @@ class TestAPI(TestAPIBase):
         eq_(len(data['results']), 2)
 
     def test_videos_by_speaker(self):
-        speaker1 = speaker(name='webber', save=True)
-        v1 = video(state=Video.STATE_LIVE, title=u'Foo1', save=True)
+        speaker1 = factories.SpeakerFactory(name=u'webber')
+        v1 = factories.VideoFactory(state=Video.STATE_LIVE, title=u'Foo1')
         v1.speakers = [speaker1]
         v1.save()
-        v2 = video(state=Video.STATE_LIVE, title=u'Foo2', save=True)
+        v2 = factories.VideoFactory(state=Video.STATE_LIVE, title=u'Foo2')
         v2.speakers = [speaker1]
         v2.save()
-        video(state=Video.STATE_LIVE, title=u'Foo3', save=True)
+        factories.VideoFactory(state=Video.STATE_LIVE, title=u'Foo3')
 
         # Filter by full name.
         resp = self.auth_get('/api/v2/video/?speaker=webber',
@@ -208,14 +207,17 @@ class TestAPI(TestAPIBase):
         eq_(len(data['results']), 2)
 
     def test_videos_by_category(self):
-        cat1 = category(slug="pycon-us-2014", save=True)
-        cat2 = category(slug="scipy-2013", save=True)
-        video(state=Video.STATE_LIVE, title=u'Foo1',
-              category=cat1, save=True)
-        video(state=Video.STATE_LIVE, title=u'Foo2',
-              category=cat1, save=True)
-        video(state=Video.STATE_LIVE, title=u'Foo3',
-              category=cat2, save=True)
+        cat1 = factories.CategoryFactory(slug="pycon-us-2014")
+        cat2 = factories.CategoryFactory(slug="scipy-2013")
+        factories.VideoFactory(state=Video.STATE_LIVE,
+                               title=u'Foo1',
+                               category=cat1)
+        factories.VideoFactory(state=Video.STATE_LIVE,
+                               title=u'Foo2',
+                               category=cat1)
+        factories.VideoFactory(state=Video.STATE_LIVE,
+                               title=u'Foo3',
+                               category=cat2)
 
         resp = self.auth_get('/api/v2/video/?category=pycon-us-2014',
                              content_type='application/json')
@@ -224,15 +226,12 @@ class TestAPI(TestAPIBase):
         eq_(len(data['results']), 2)
 
     def test_videos_by_order(self):
-        video(state=Video.STATE_LIVE, title=u'FooC',
-              recorded=datetime.datetime(2014, 1, 1, 10, 0),
-              save=True)
-        video(state=Video.STATE_LIVE, title=u'FooA',
-              recorded=datetime.datetime(2013, 1, 1, 10, 0),
-              save=True)
-        video(state=Video.STATE_LIVE, title=u'FooB',
-              recorded=datetime.datetime(2014, 2, 1, 10, 0),
-              save=True)
+        factories.VideoFactory(state=Video.STATE_LIVE, title=u'FooC',
+                               recorded=datetime.datetime(2014, 1, 1, 10, 0))
+        factories.VideoFactory(state=Video.STATE_LIVE, title=u'FooA',
+                               recorded=datetime.datetime(2013, 1, 1, 10, 0))
+        factories.VideoFactory(state=Video.STATE_LIVE, title=u'FooB',
+                               recorded=datetime.datetime(2014, 2, 1, 10, 0))
 
         # Filter by title.
         resp = self.auth_get('/api/v2/video/?ordering=title',
@@ -256,8 +255,8 @@ class TestAPI(TestAPIBase):
 class TestVideoPostAPI(TestAPIBase):
     def test_post_video(self):
         """Test that authenticated user can create videos."""
-        cat = category(save=True)
-        lang = language(name='English', save=True)
+        cat = factories.CategoryFactory()
+        lang = factories.LanguageFactory(name='English')
 
         data = {'title': 'Creating delicious APIs for Django apps since 2010.',
                 'language': lang.name,
@@ -280,7 +279,7 @@ class TestVideoPostAPI(TestAPIBase):
 
     def test_post_video_no_title(self):
         """Test that no title throws an error."""
-        cat = category(save=True)
+        cat = factories.CategoryFactory()
 
         data = {'title': '',
                 'category': cat.title,
@@ -292,7 +291,7 @@ class TestVideoPostAPI(TestAPIBase):
 
     def test_post_with_bad_state(self):
         """Test that a bad state is rejected"""
-        cat = category(save=True)
+        cat = factories.CategoryFactory()
 
         data = {'title': 'test1',
                 'category': cat.title,
@@ -304,9 +303,9 @@ class TestVideoPostAPI(TestAPIBase):
 
     def test_post_with_used_slug(self):
         """Test that already used slug creates second video with new slug."""
-        cat = category(save=True)
-        lang = language(save=True)
-        video(title='test1', slug='test1', save=True)
+        cat = factories.CategoryFactory()
+        lang = factories.LanguageFactory()
+        factories.VideoFactory(title=u'test1', slug='test1')
 
         data = {'title': 'test1',
                 'category': cat.title,
@@ -320,9 +319,9 @@ class TestVideoPostAPI(TestAPIBase):
 
     def test_put(self):
         """Test that passing in an id, but no slug with a PUT works."""
-        cat = category(save=True)
-        lang = language(save=True)
-        vid = video(title='test1', save=True)
+        cat = factories.CategoryFactory()
+        lang = factories.LanguageFactory()
+        vid = factories.VideoFactory(title=u'test1')
 
         data = {'id': vid.pk,
                 'title': vid.title,
@@ -346,14 +345,10 @@ class TestVideoPostAPI(TestAPIBase):
 
     def test_put_fails_with_live_videos(self):
         """Test that passing in an id, but no slug with a PUT works."""
-        cat = category(save=True)
-        lang = language(save=True)
-        vid = video(
-            title='test1',
-            category=cat,
-            language=lang,
-            state=Video.STATE_LIVE,
-            save=True)
+        cat = factories.CategoryFactory()
+        lang = factories.LanguageFactory()
+        vid = factories.VideoFactory(title=u'test1', category=cat,
+                                     language=lang, state=Video.STATE_LIVE)
 
         data = {'id': vid.pk,
                 'title': 'new title',
@@ -370,8 +365,8 @@ class TestVideoPostAPI(TestAPIBase):
 
     def test_post_with_tag_name(self):
         """Test that you can post video with url tags or real tags"""
-        cat = category(save=True)
-        lang = language(save=True)
+        cat = factories.CategoryFactory()
+        lang = factories.LanguageFactory()
 
         footag = u'footag'
         data = {
@@ -391,7 +386,7 @@ class TestVideoPostAPI(TestAPIBase):
         eq_(vid.tags.values_list('tag', flat=True)[0], footag)
 
     def test_post_with_bad_tag_string(self):
-        cat = category(save=True)
+        cat = factories.CategoryFactory()
 
         data = {'title': 'test1',
                 'category': cat.title,
@@ -411,8 +406,8 @@ class TestVideoPostAPI(TestAPIBase):
 
     def test_post_with_speaker_name(self):
         """Test that you can post videos with speaker names"""
-        cat = category(save=True)
-        lang = language(save=True)
+        cat = factories.CategoryFactory()
+        lang = factories.LanguageFactory()
 
         fooperson = u'Carl'
         data = {
@@ -433,8 +428,8 @@ class TestVideoPostAPI(TestAPIBase):
 
     def test_post_with_speaker_with_extra_spaces(self):
         """Test that you can post videos with speaker names"""
-        cat = category(save=True)
-        lang = language(save=True)
+        cat = factories.CategoryFactory()
+        lang = factories.LanguageFactory()
 
         fooperson = u' Carl '
         data = {
@@ -454,7 +449,7 @@ class TestVideoPostAPI(TestAPIBase):
         eq_(vid.speakers.values_list('name', flat=True)[0], fooperson.strip())
 
     def test_post_with_bad_speaker_string(self):
-        cat = category(save=True)
+        cat = factories.CategoryFactory()
 
         data = {'title': 'test1',
                 'category': cat.title,
@@ -474,8 +469,8 @@ class TestVideoPostAPI(TestAPIBase):
 
     def test_post_with_category_title(self):
         """Test that a category title works"""
-        cat = category(title='testcat', save=True)
-        lang = language(name='English', save=True)
+        cat = factories.CategoryFactory(title=u'testcat')
+        lang = factories.LanguageFactory(name='English')
 
         data = {'title': 'test1',
                 'language': lang.name,
@@ -497,7 +492,7 @@ class TestVideoPostAPI(TestAPIBase):
 
     def test_post_with_bad_language(self):
         """Test that a bad state is rejected"""
-        cat = category(title='testcat', save=True)
+        cat = factories.CategoryFactory(title=u'testcat')
 
         data = {'title': 'test1',
                 'category': cat.title,
@@ -518,7 +513,7 @@ class TestVideoPostAPI(TestAPIBase):
 
     def test_post_video_not_authenticated(self):
         """Test that not authenticated users can't write."""
-        cat = category(save=True)
+        cat = factories.CategoryFactory()
         data = {'title': 'Creating delicious APIs since 2010.',
                 'category': cat.title,
                 'state': Video.STATE_LIVE}

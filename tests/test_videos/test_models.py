@@ -18,16 +18,16 @@ from django.test import TestCase
 from httmock import urlmatch, HTTMock
 from nose.tools import eq_
 
-from . import video
+from . import factories
 from richard.videos import models
 
 
 class TestVideoModel(TestCase):
     def test_slug_creation(self):
-        v = video(title=u'Foo Bar Baz', save=True)
+        v = factories.VideoFactory(title=u'Foo Bar Baz')
         eq_(v.slug, 'foo-bar-baz')
 
-        v = video(title=u'Foo Bar Baz', slug='baz', save=True)
+        v = factories.VideoFactory(title=u'Foo Bar Baz', slug='baz')
         eq_(v.slug, 'baz')
 
 
@@ -52,29 +52,24 @@ class TestVideoUrlStatusModel(TestCase):
 
     def test_good_video(self):
         with HTTMock(self.ok_200), HTTMock(self.bad_404), HTTMock(self.bad_500):
-            vid = video(title=u'Foo', source_url='http://200.com')
-            vid.save()
+            vid = factories.VideoFactory(title=u'Foo', source_url='http://200.com')
             result = models.VideoUrlStatus.objects.create_for_video(vid)
         eq_(result, {})
 
     def test_bad_video(self):
         with HTTMock(self.ok_200), HTTMock(self.bad_404), HTTMock(self.bad_500):
-            vid = video(title=u'Foo', source_url='http://400.com')
-            vid.save()
+            vid = factories.VideoFactory(title=u'Foo', source_url='http://400.com')
             result = models.VideoUrlStatus.objects.create_for_video(vid)
         eq_(result, {404: 1})
 
     def test_bad_video_multiple_links(self):
         with HTTMock(self.ok_200), HTTMock(self.bad_404), HTTMock(self.bad_500):
-            vid = video(title=u'Foo',
-                        source_url='http://400.com',
-                        thumbnail_url='http://500.com',
-                        video_ogv_url='http://200.com',
-                        video_mp4_url='http://400.com',
-                        video_flv_url='http://400.com',
-                        )
-            vid.save()
+            vid = factories.VideoFactory(title=u'Foo',
+                                         source_url='http://400.com',
+                                         thumbnail_url='http://500.com',
+                                         video_ogv_url='http://200.com',
+                                         video_mp4_url='http://400.com',
+                                         video_flv_url='http://400.com')
             result = models.VideoUrlStatus.objects.create_for_video(vid)
         eq_(result, {404: 3,
                      500: 1})
-

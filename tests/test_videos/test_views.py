@@ -27,7 +27,7 @@ from django.utils.encoding import smart_text
 
 from nose.tools import eq_
 
-from . import category, speaker, video, related_url
+from . import factories
 from richard.videos.models import Video
 
 
@@ -46,9 +46,7 @@ class TestVideos(TestCase):
 
     def test_category_list_with_categories(self):
         """Test the view of the listing of all categories."""
-        category(save=True)
-        category(save=True)
-        category(save=True)
+        factories.CategoryFactory.create_batch(size=3)
 
         url = reverse('videos-category-list')
 
@@ -58,7 +56,7 @@ class TestVideos(TestCase):
 
     def test_category_urls(self):
         """Test the view of an category."""
-        cat = category(save=True)
+        cat = factories.CategoryFactory()
 
         cases = [
             cat.get_absolute_url(),
@@ -100,8 +98,8 @@ class TestVideos(TestCase):
         `character` GET parameter. It should fallback to showing the
         speakers starting from the lowest possible character.
         """
-        s1 = speaker(name=u'Random Speaker', save=True)
-        s2 = speaker(name=u'Another Speaker', save=True)
+        s1 = factories.SpeakerFactory(name=u'Random Speaker')
+        s2 = factories.SpeakerFactory(name=u'Another Speaker')
 
         url = reverse('videos-speaker-list')
         data = {'character': ''}
@@ -117,8 +115,8 @@ class TestVideos(TestCase):
         Test the view of the listing of all speakers whose names start
         with certain character.
         """
-        s1 = speaker(name=u'Another Speaker', save=True)
-        s2 = speaker(name=u'Random Speaker', save=True)
+        s1 = factories.SpeakerFactory(name=u'Another Speaker')
+        s2 = factories.SpeakerFactory(name=u'Random Speaker')
 
         url = reverse('videos-speaker-list')
         data = {'character': 'r'}
@@ -135,8 +133,8 @@ class TestVideos(TestCase):
         character argument. The view should fallback to showing the
         speakers starting from the lowest possible character.
         """
-        s1 = speaker(name=u'Random Speaker', save=True)
-        s2 = speaker(name=u'Another Speaker', save=True)
+        s1 = factories.SpeakerFactory(name=u'Random Speaker')
+        s2 = factories.SpeakerFactory(name=u'Another Speaker')
 
         url = reverse('videos-speaker-list')
         data = {'character': 'richard'}
@@ -153,8 +151,8 @@ class TestVideos(TestCase):
         character argument. The view should fallback to showing the
         speakers starting from the lowest possible character.
         """
-        s1 = speaker(name=u'Random Speaker', save=True)
-        s2 = speaker(name=u'Another Speaker', save=True)
+        s1 = factories.SpeakerFactory(name=u'Random Speaker')
+        s2 = factories.SpeakerFactory(name=u'Another Speaker')
 
         url = reverse('videos-speaker-list')
         data = {'character': 42}
@@ -167,7 +165,7 @@ class TestVideos(TestCase):
 
     def test_speaker_urls(self):
         """Test the view of a speaker."""
-        spe = speaker(name=u'Random Speaker', save=True)
+        spe = factories.SpeakerFactory(name=u'Random Speaker')
 
         cases = [
             spe.get_absolute_url(),     # returns the URL with pk and slug
@@ -186,7 +184,7 @@ class TestVideos(TestCase):
 
     def test_video_urls(self):
         """Test the view of a video."""
-        vid = video(save=True)
+        vid = factories.VideoFactory()
 
         cases = [
             vid.get_absolute_url(),
@@ -203,8 +201,8 @@ class TestVideos(TestCase):
 
     def test_active_video_speaker_page(self):
         """Active video should show up on it's speaker's page."""
-        s = speaker(save=True)
-        vid = video(state=Video.STATE_LIVE, save=True)
+        s = factories.SpeakerFactory()
+        vid = factories.VideoFactory(state=Video.STATE_LIVE)
         vid.speakers.add(s)
 
         speaker_url = s.get_absolute_url()
@@ -214,7 +212,7 @@ class TestVideos(TestCase):
 
     def test_active_video_category_page(self):
         """Active video should shows up on category page."""
-        vid = video(state=Video.STATE_LIVE, save=True)
+        vid = factories.VideoFactory(state=Video.STATE_LIVE)
 
         category_url = vid.category.get_absolute_url()
 
@@ -223,7 +221,7 @@ class TestVideos(TestCase):
 
     def test_inactive_video_category_page(self):
         """Inactive video should not show up on category page."""
-        vid = video(save=True)
+        vid = factories.VideoFactory()
 
         category_url = vid.category.get_absolute_url()
 
@@ -232,8 +230,8 @@ class TestVideos(TestCase):
 
     def test_inactive_video_speaker_page(self):
         """Inactive video should not show up on it's speaker's page."""
-        s = speaker(save=True)
-        vid = video(save=True)
+        s = factories.SpeakerFactory()
+        vid = factories.VideoFactory()
         vid.speakers.add(s)
 
         speaker_url = s.get_absolute_url()
@@ -243,21 +241,21 @@ class TestVideos(TestCase):
 
     def test_related_url(self):
         """Related urls should show up on the page."""
-        v = video(save=True)
-        rurl = related_url(video_id=v.id, url=u'http://example.com/foo',
-                           description=u'Example related url',
-                           save=True)
+        v = factories.VideoFactory()
+        rurl = factories.RelatedUrlFactory(video=v,
+                                           url=u'http://example.com/foo',
+                                           description=u'Example related url')
 
         resp = self.client.get(v.get_absolute_url())
         self.assertContains(resp, rurl.description)
 
     def test_download_only(self):
         """Video urls marked as download-only shouldn't be in video tag."""
-        v = video(video_ogv_url='http://example.com/OGV_VIDEO',
-                  video_ogv_download_only=False,
-                  video_mp4_url='http://example.com/MP4_VIDEO',
-                  video_mp4_download_only=True,
-                  save=True)
+        v = factories.VideoFactory(
+            video_ogv_url='http://example.com/OGV_VIDEO',
+            video_ogv_download_only=False,
+            video_mp4_url='http://example.com/MP4_VIDEO',
+            video_mp4_download_only=True)
 
         resp = self.client.get(v.get_absolute_url())
         # This shows up in video tag and in downloads area
@@ -300,10 +298,10 @@ class TestVideoSearch(TestCase):
     @override_settings(OPENSEARCH_ENABLE_SUGGESTIONS=True)
     def test_opensearch_suggestions(self):
         """Test the opensearch suggestions view."""
-        video(title='introduction to pypy', save=True)
-        video(title='django testing', save=True)
-        video(title='pycon 2012 keynote', save=True)
-        video(title='Speedily Practical Large-Scale Tests', save=True)
+        factories.VideoFactory(title=u'introduction to pypy')
+        factories.VideoFactory(title=u'django testing')
+        factories.VideoFactory(title=u'pycon 2012 keynote')
+        factories.VideoFactory(title=u'Speedily Practical Large-Scale Tests')
         management.call_command('rebuild_index', interactive=False)
 
         url = reverse('videos-opensearch-suggestions')

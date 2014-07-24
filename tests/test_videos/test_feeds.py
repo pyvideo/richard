@@ -23,7 +23,7 @@ from nose.tools import eq_
 
 from richard.videos.feeds import CategoryFeed
 from richard.videos.models import Video
-from . import category, video, speaker
+from . import factories
 
 
 class FeedTest(TestCase):
@@ -34,9 +34,9 @@ class FeedTest(TestCase):
         # Test that only categories with live videos are included.
         feed = CategoryFeed()
 
-        cat = category(save=True)
-        video(category=cat, save=True)
-        v2 = video(category=cat, save=True)
+        cat = factories.CategoryFactory()
+        factories.VideoFactory(category=cat)
+        v2 = factories.VideoFactory(category=cat)
 
         # No live videos, no category in feed
         eq_(len(feed.items()), 0)
@@ -75,7 +75,7 @@ class FeedTest(TestCase):
     def test_speaker_feed(self):
         """Tests for Speaker rss feed"""
 
-        spk = speaker(save=True)
+        spk = factories.SpeakerFactory()
 
         # Speaker feed is accessible
         resp = self.client.get(
@@ -112,7 +112,7 @@ class FeedTest(TestCase):
         example_url = 'http://example.com/123456'
         youtube_source_url = 'http://www.youtube.com/watch?v=123456'
 
-        vid = video(state=Video.STATE_LIVE, save=True)
+        vid = factories.VideoFactory(state=Video.STATE_LIVE)
 
         # No video & source urls specified, no enclosures available in feeds.
         resp = self.client.get(feeds_url)

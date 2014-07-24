@@ -25,8 +25,8 @@ from rest_framework.authtoken.models import Token
 if sys.version_info < (3, 0):
     from steve import richardapi
 
-    from richard.videos.models import Category, Video
-    from . import category, language
+    from richard.videos.models import Video
+    from . import factories
 
 
     class TestSteveAndAPI(LiveServerTestCase):
@@ -48,13 +48,13 @@ if sys.version_info < (3, 0):
             self.token.save()
 
         def test_get_categories(self):
-            cat = category(save=True)
+            cat = factories.CategoryFactory()
             cats = richardapi.get_all_categories(self.api_url)
             eq_(len(cats), 1)
             cats[0]['title'] = cat.title
 
         def test_get_category(self):
-            cat = category(save=True)
+            cat = factories.CategoryFactory()
             cat_from_api = richardapi.get_category(self.api_url, cat.title)
             eq_(cat_from_api['title'], cat.title)
 
@@ -82,8 +82,8 @@ if sys.version_info < (3, 0):
             eq_(vid['title'], ret['title'])
 
         def test_create_and_update_video(self):
-            cat = category(save=True)
-            lang = language(name=u'English 2', save=True)
+            cat = factories.CategoryFactory()
+            lang = factories.LanguageFactory(name=u'English 2')
 
             ret = richardapi.create_video(
                 self.api_url,

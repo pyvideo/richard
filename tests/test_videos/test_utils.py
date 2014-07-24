@@ -18,14 +18,14 @@
 from django.test import TestCase
 from nose.tools import eq_
 
-from . import video
+from . import factories
 from richard.videos.utils import generate_unique_slug
 
 
 class TestGenerateUniqueSlug(TestCase):
     def test_slug_creation(self):
         """Slug is based on title."""
-        v = video(title=u'Foo Bar')
+        v = factories.VideoFactory.build(title=u'Foo Bar')
         eq_(generate_unique_slug(v, u'title', u'slug'),
             u'foo-bar')
 
@@ -33,17 +33,13 @@ class TestGenerateUniqueSlug(TestCase):
         """Generate unique slug using incrementing ending."""
         # These all have the same title, so they get increasingly
         # lame slugs.
-        video(title=u'Foo', save=True)
-        video(title=u'Foo', save=True)
-        video(title=u'Foo', save=True)
-        video(title=u'Foo', save=True)
-        video(title=u'Foo', save=True)
+        factories.VideoFactory.create_batch(title=u'Foo', size=5)
 
-        v2 = video(title=u'Foo')
+        v2 = factories.VideoFactory.build(title=u'Foo')
         eq_(generate_unique_slug(v2, u'title', u'slug'),
             u'foo-4')
 
     def test_unicode_title(self):
-        v = video(title=u'Nebenläufige Programme mit Python')
+        v = factories.VideoFactory.build(title=u'Nebenläufige Programme mit Python')
         eq_(generate_unique_slug(v, u'title', u'slug'),
             u'nebenlaufige-programme-mit-python')

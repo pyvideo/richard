@@ -12,6 +12,7 @@ requirements = [
     'eadred==0.3',
     'Markdown==2.3.1',
     'requests==2.1.0',
+    'pytz==2014.4',
     'South==0.8.4',
     'whoosh==2.5.6',
 ]

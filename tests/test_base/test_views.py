@@ -19,7 +19,7 @@ from django.test import TestCase
 from nose.tools import eq_
 
 from ..test_notifications import notification
-from ..test_videos import category, speaker, video
+from ..test_videos import factories as video_factories
 
 
 class RichardViewsTest(TestCase):
@@ -50,9 +50,9 @@ class RichardViewsTest(TestCase):
 
     def test_sitemap(self):
         """Test for the sitemap.xml"""
-        category(save=True)
-        speaker(save=True)
-        video(save=True)
+        video_factories.CategoryFactory()
+        video_factories.SpeakerFactory()
+        video_factories.VideoFactory()
 
         resp = self.client.get('/sitemap.xml')
         eq_(resp.status_code, 200)
