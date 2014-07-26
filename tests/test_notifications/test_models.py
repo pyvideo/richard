@@ -19,7 +19,7 @@ from datetime import datetime, timedelta
 from django.test import TestCase
 from nose.tools import eq_
 
-from . import notification
+from . import factories
 from richard.notifications.models import Notification
 
 
@@ -32,12 +32,12 @@ class TestNotification(TestCase):
         """
         start = datetime.now() - timedelta(days=2)
         end = datetime.now() + timedelta(days=2)
-        n1 = notification(start_date=start, end_date=end, save=True)
+        n1 = factories.NotificationFactory(start_date=start, end_date=end)
 
         start -= timedelta(days=1)
-        n2 = notification(start_date=start, end_date=end, save=True)
+        n2 = factories.NotificationFactory(start_date=start, end_date=end)
 
-        n3 = notification(start_date=start, save=True)
+        n3 = factories.NotificationFactory(start_date=start)
 
         eq_([x.pk for x in Notification.objects.get_live_notifications()],
             [n1.pk, n2.pk, n3.pk])
@@ -49,10 +49,10 @@ class TestNotification(TestCase):
         """
         start = datetime.now() + timedelta(days=2)
         end = datetime.now() + timedelta(days=3)
-        notification(start_date=start, end_date=end, save=True)
+        factories.NotificationFactory(start_date=start, end_date=end)
 
         start = datetime.now() - timedelta(days=2)
         end = datetime.now() - timedelta(days=1)
-        notification(start_date=start, end_date=end, save=True)
+        factories.NotificationFactory(start_date=start, end_date=end)
 
         eq_(len(Notification.objects.get_live_notifications()), 0)

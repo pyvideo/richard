@@ -18,7 +18,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from nose.tools import eq_
 
-from ..test_notifications import notification
+from ..test_notifications import factories as notification_factories
 from ..test_videos import factories as video_factories
 
 
@@ -34,8 +34,8 @@ class RichardViewsTest(TestCase):
 
     def test_notifications_on_home(self):
         """Test that notifications are displayed on the homepage."""
-        n1 = notification(text=u'1, 2, 3 - test', save=True)
-        n2 = notification(text=u'Just a test.', save=True)
+        n1 = notification_factories.NotificationFactory(text=u'1, 2, 3 - test')
+        n2 = notification_factories.NotificationFactory(text=u'Just a test.')
 
         resp = self.client.get(reverse('home'))
         self.assertContains(resp, n1.text)
