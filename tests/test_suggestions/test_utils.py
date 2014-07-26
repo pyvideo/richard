@@ -21,14 +21,14 @@ from nose.tools import eq_
 
 from richard.suggestions import utils
 from richard.suggestions.models import Suggestion
-from . import suggestion
+from . import factories
 
 
 class TestMarkIfSpam(TestCase):
     """Tests for mark_if_spam."""
 
     def test_mark_if_spam_no_spam_words(self):
-        s = suggestion(name='foo', comment='foo', save=True)
+        s = factories.SuggestionFactory(name='foo', comment='foo')
         utils.mark_if_spam(s)
 
         eq_(s.state, Suggestion.STATE_NEW)
@@ -36,25 +36,25 @@ class TestMarkIfSpam(TestCase):
     @override_settings(SPAM_WORDS=['foo'])
     def test_mark_if_spam_with_words(self):
         # handle name
-        s = suggestion(name='1 foo 2', comment='1 bar 2', save=True)
+        s = factories.SuggestionFactory(name='1 foo 2', comment='1 bar 2')
         utils.mark_if_spam(s)
 
         eq_(s.state, Suggestion.STATE_SPAM)
 
         # handle comment
-        s = suggestion(name='1 bar 2', comment='1 foo 2', save=True)
+        s = factories.SuggestionFactory(name='1 bar 2', comment='1 foo 2')
         utils.mark_if_spam(s)
 
         eq_(s.state, Suggestion.STATE_SPAM)
 
         # not case-sensitive
-        s = suggestion(name='1 FOO 2', comment='1 FOO 2', save=True)
+        s = factories.SuggestionFactory(name='1 FOO 2', comment='1 FOO 2')
         utils.mark_if_spam(s)
 
         eq_(s.state, Suggestion.STATE_SPAM)
 
         # don't flag superstrings
-        s = suggestion(name='1 food 2', comment='1 food 2', save=True)
+        s = factories.SuggestionFactory(name='1 food 2', comment='1 food 2')
         utils.mark_if_spam(s)
 
         eq_(s.state, Suggestion.STATE_NEW)

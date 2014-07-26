@@ -20,7 +20,7 @@ from django.test import TestCase
 from nose.tools import eq_
 
 from richard.suggestions.models import Suggestion
-from . import suggestion
+from . import factories
 
 
 class TestSuggestions(TestCase):
@@ -28,7 +28,7 @@ class TestSuggestions(TestCase):
 
     def test_not_reviewed_list(self):
         """Test the view of the listing of all suggestions."""
-        s = suggestion(save=True)
+        s = factories.SuggestionFactory()
 
         resp = self.client.get(reverse('suggestions-list'))
         eq_(resp.status_code, 200)
@@ -37,7 +37,7 @@ class TestSuggestions(TestCase):
 
     def test_reviewed_list(self):
         """Test the view of the listing of all suggestions."""
-        s = suggestion(save=True)
+        s = factories.SuggestionFactory()
         s.is_reviewed = True
         s.save()
 
@@ -48,7 +48,7 @@ class TestSuggestions(TestCase):
 
     def test_list_without_spam(self):
         """Test that entries marked as spam do not show up."""
-        s = suggestion(state=Suggestion.STATE_SPAM, save=True)
+        s = factories.SuggestionFactory(state=Suggestion.STATE_SPAM)
 
         resp = self.client.get(reverse('suggestions-list'))
         eq_(resp.status_code, 200)

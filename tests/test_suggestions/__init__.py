@@ -13,24 +13,3 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-import itertools
-
-from ..test_base import with_save
-from richard.suggestions.models import Suggestion
-
-
-_count = itertools.count()
-
-
-@with_save
-def suggestion(**kwargs):
-    defaults = {}
-    defaults.update(kwargs)
-
-    if 'name' not in defaults:
-        defaults['name'] = u'Add pycon conference ' + str(next(_count))
-    if 'url' not in defaults:
-        defaults['url'] = u'https://us.pycon.org/2012/' + str(next(_count))
-
-    return Suggestion(**defaults)
