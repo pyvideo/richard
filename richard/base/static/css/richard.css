@@ -72,3 +72,8 @@ div#video-summary-content .video-summary .thumbnail-data {
 div#video-summary-content .video-summary .video-summary-data {
   margin: 3px 0 0 204px;
 }
+
+.video-details-summary img,
+.video-details-description img {
+  max-width: 100%;
+}
