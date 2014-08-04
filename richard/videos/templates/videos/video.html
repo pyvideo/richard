@@ -80,7 +80,7 @@
     {% if v.summary %}
       <div class="section">
         <h4>Summary</h4>
-        <span property="description">{{ v.summary|md|safe }}</span>
+        <div class="video-details-summary" property="description">{{ v.summary|md|safe }}</div>
         <meta property="caption" content="{{ v.summary|md|safe }}"/>
       </div>
     {% endif %}
@@ -99,7 +99,7 @@
     {% if v.description %}
       <div class="section">
         <h4>Description</h4>
-        {{ v.description|md|safe }}
+        <div class="video-details-description">{{ v.description|md|safe }}</div>
       </div>
     {% endif %}
   </div>
