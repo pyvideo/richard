@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
-from functools import partial
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import LiveServerTestCase
 
@@ -25,7 +25,7 @@ from rest_framework.authtoken.models import Token
 if sys.version_info < (3, 0):
     from steve import richardapi
 
-    from richard.videos.models import Category, Video
+    from richard.videos.models import Video
     from richard.videos.tests import category, language
 
 
@@ -58,23 +58,46 @@ if sys.version_info < (3, 0):
             cat_from_api = richardapi.get_category(self.api_url, cat.title)
             eq_(cat_from_api['title'], cat.title)
 
-        def test_create_and_update_video(self):
+        def test_create_and_get_video(self):
             cat = category(save=True)
-            lang = language(name=u'English', save=True)
+            lang = language(name=u'English 1', save=True)
 
             ret = richardapi.create_video(
                 self.api_url,
                 auth_token=self.token.key,
                 video_data={
-                    'title': 'Test video',
+                    'title': 'Test video create and get',
                     'language': lang.name,
                     'category': cat.title,
-                    'state': 2,  # Has to be draft so update works
+                    'state': richardapi.STATE_DRAFT,
                     'speakers': ['Jimmy'],
                     'tags': ['foo'],
                 })
 
-            video = Video.objects.get(title='Test video')
+            vid = richardapi.get_video(
+                self.api_url,
+                auth_token=self.token.key,
+                video_id=ret['id'])
+            eq_(vid['id'], ret['id'])
+            eq_(vid['title'], ret['title'])
+
+        def test_create_and_update_video(self):
+            cat = category(save=True)
+            lang = language(name=u'English 2', save=True)
+
+            ret = richardapi.create_video(
+                self.api_url,
+                auth_token=self.token.key,
+                video_data={
+                    'title': 'Test video create and update',
+                    'language': lang.name,
+                    'category': cat.title,
+                    'state': richardapi.STATE_DRAFT,
+                    'speakers': ['Jimmy'],
+                    'tags': ['foo'],
+                })
+
+            video = Video.objects.get(title='Test video create and update')
 
             eq_(video.title, ret['title'])
             eq_(video.state, ret['state'])
