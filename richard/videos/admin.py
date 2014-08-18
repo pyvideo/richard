@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 from django.utils.translation import ugettext_lazy as _
 
-from richard.videos.models import (Video, Category, Speaker, Tag,
+from richard.videos.models import (Video, VideoUrlStatus, Category, Speaker, Tag,
                                    Language, RelatedUrl)
 
 
@@ -68,6 +68,15 @@ class VideoAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Video, VideoAdmin)
+
+
+class VideoUrlStatusAdmin(admin.ModelAdmin):
+    date_heirarchy = 'check_date'
+    list_display = ('status_code', 'status_message', 'url')
+    list_filter = ('status_code', 'check_date')
+
+
+admin.site.register(VideoUrlStatus, VideoUrlStatusAdmin)
 
 
 class CategoryAdmin(admin.ModelAdmin):
