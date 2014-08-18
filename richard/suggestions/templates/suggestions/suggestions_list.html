@@ -59,16 +59,16 @@
           {% for s in open_suggestions %}
             <tr>
               <td>
-                {% if s == 0 %}
-                  <span class="label">New</span>
-                {% elif s == 1 %}
+                {% if s.state == 0 %}
+                  <span class="label label-default">New</span>
+                {% elif s.state == 1 %}
                   <span class="label label-info">In progress</span>
-                {% elif s == 2 %}
+                {% elif s.state == 2 %}
                   <span class="label label-success">Completed</span>
-                {% elif s == 3 %}
+                {% elif s.state == 3 %}
                   <span class="label label-important">Rejected</span>
                 {% endif %}
-              <td/>
+              </td>
               <td>{{ s.name }}</td>
               <td>{{ s.whiteboard }}</td>
               <td>{{ s.submitted|date:"DATE_FORMAT" }}</td>
@@ -99,16 +99,16 @@
           {% for s in resolved_suggestions %}
             <tr>
               <td>
-                {% if s == 0 %}
-                  <span class="label">New</span>
-                {% elif s == 1 %}
+                {% if s.state == 0 %}
+                  <span class="label label-default">New</span>
+                {% elif s.state == 1 %}
                   <span class="label label-info">In progress</span>
-                {% elif s == 2 %}
+                {% elif s.state == 2 %}
                   <span class="label label-success">Completed</span>
-                {% elif s == 3 %}
+                {% elif s.state == 3 %}
                   <span class="label label-important">Rejected</span>
                 {% endif %}
-              <td/>
+              </td>
               <td>{{ s.name }}</td>
               <td>{{ s.resolution }}</td>
               <td>{{ s.submitted|date:"DATE_FORMAT" }}</td>
