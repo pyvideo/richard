@@ -39,10 +39,10 @@ def suggestions(request):
 
     open_objs = Suggestion.objects.filter(
         state__in=Suggestion.OPEN_STATES,
-        is_reviewed=True)
+        is_reviewed=True).order_by('-submitted')
     resolved_objs = Suggestion.objects.filter(
         state__in=Suggestion.RESOLVED_STATES,
-        is_reviewed=True)
+        is_reviewed=True).order_by('-resolved')
 
     ret = render(
         request, 'suggestions/suggestions_list.html',
