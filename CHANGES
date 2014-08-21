@@ -14,6 +14,9 @@ Version 0.2: In development
 * New API v2! Built on django-rest-framework, it should be simpler,
   easier, and less buggy. See documentation for API details.
 
+* Switched to django-configurations. You'll have to update your settings files,
+  but understanding where settings are coming from should now be much easier.
+
 
 **Backwards-incompatible changes:**
 

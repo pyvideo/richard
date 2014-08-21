@@ -1,4 +1,3 @@
-import platform
 from setuptools import setup, find_packages
 
 requirements = [
@@ -6,6 +5,7 @@ requirements = [
     'django==1.6.5',
     'djangorestframework==2.3.10',
     'django-browserid==0.10.1',
+    'django-configurations==0.8',
     'django-grappelli==2.5.2',
     'django-haystack==2.1.0',
     'dj-database-url==0.3.0',
@@ -42,7 +42,8 @@ setup(name='richard',
           'dev': development_requirements,
           'postgresql': postgre_requirements,
       },
-      packages=find_packages(),
+      packages=find_packages('src'),
+      package_dir={'': 'src'},
       classifiers=[
         'Development Status :: 3 - Alpha',
         'Framework :: Django',

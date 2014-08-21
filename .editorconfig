@@ -13,7 +13,7 @@ charset = utf-8
 [Makefile]
 indent_style = tab
 
-[*.{css,html,js,json}]
+[*.{css,html,js,json,yml}]
 indent_size = 2
 
 [*.{rst,txt}]
