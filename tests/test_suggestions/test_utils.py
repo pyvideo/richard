@@ -21,7 +21,7 @@ from nose.tools import eq_
 
 from richard.suggestions import utils
 from richard.suggestions.models import Suggestion
-from richard.suggestions.tests import suggestion
+from . import suggestion
 
 
 class TestMarkIfSpam(TestCase):

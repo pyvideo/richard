@@ -14,23 +14,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import itertools
+from datetime import date, timedelta
 
-from richard.base.tests import with_save
-from richard.suggestions.models import Suggestion
-
-
-_count = itertools.count()
+from ..test_base import with_save
+from richard.notifications import models
 
 
 @with_save
-def suggestion(**kwargs):
-    defaults = {}
-    defaults.update(kwargs)
+def notification(**kw):
+    """Builds a Notification object with appropriate defaults"""
+    start = date.today()
+    end = start + timedelta(days=2)
 
-    if 'name' not in defaults:
-        defaults['name'] = u'Add pycon conference ' + str(next(_count))
-    if 'url' not in defaults:
-        defaults['url'] = u'https://us.pycon.org/2012/' + str(next(_count))
+    defaults = dict(start_date=start, end_date=end)
+    defaults.update(kw)
 
-    return Suggestion(**defaults)
+    if 'interjection' not in kw:
+        defaults['interjection'] = u'Test!'
+    if 'text' not in kw:
+        defaults['text'] = u'Testing... One, Two, Three.'
+
+    return models.Notification(**defaults)

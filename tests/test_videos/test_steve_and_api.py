@@ -25,8 +25,8 @@ from rest_framework.authtoken.models import Token
 if sys.version_info < (3, 0):
     from steve import richardapi
 
-    from richard.videos.models import Video
-    from richard.videos.tests import category, language
+    from richard.videos.models import Category, Video
+    from . import category, language
 
 
     class TestSteveAndAPI(LiveServerTestCase):

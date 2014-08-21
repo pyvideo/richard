@@ -18,7 +18,7 @@ from datetime import datetime, date
 from textwrap import dedent
 
 from richard.videos.models import Video
-from richard.videos.tests import category, speaker, tag, video
+from tests.test_videos import category, speaker, tag, video  # This is horrible and will be refactored
 
 
 def generate_sampledata(options):

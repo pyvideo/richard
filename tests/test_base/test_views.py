@@ -18,8 +18,8 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from nose.tools import eq_
 
-from richard.notifications.tests import notification
-from richard.videos.tests import category, speaker, video
+from ..test_notifications import notification
+from ..test_videos import category, speaker, video
 
 
 class RichardViewsTest(TestCase):

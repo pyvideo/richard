@@ -20,7 +20,7 @@ from django.test import TestCase
 from nose.tools import eq_
 
 from richard.suggestions.models import Suggestion
-from richard.suggestions.tests import suggestion
+from . import suggestion
 
 
 class TestSuggestions(TestCase):

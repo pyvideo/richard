@@ -21,7 +21,7 @@ from django.utils.text import slugify
 
 from richard.videos.models import (
     Category, Speaker, Tag, Video, RelatedUrl, Language)
-from richard.base.tests import with_save
+from ..test_base import with_save
 
 
 @with_save

@@ -27,7 +27,7 @@ from django.utils.encoding import smart_text
 
 from nose.tools import eq_
 
-from richard.videos.tests import category, speaker, video, related_url
+from . import category, speaker, video, related_url
 from richard.videos.models import Video
 
 

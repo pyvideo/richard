@@ -18,7 +18,7 @@
 from django.test import TestCase
 from nose.tools import eq_
 
-from richard.videos.tests import video
+from . import video
 from richard.videos.utils import generate_unique_slug
 
 
