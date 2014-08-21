@@ -17,6 +17,7 @@ requirements = [
 ]
 
 development_requirements = [
+    'factory_boy==2.4.1',
     'httmock==1.2.2',
     'pytest-django==2.6.2',
     'Pygments',
