@@ -35,7 +35,7 @@ Features richard currently has:
 We're actively working on fixing bugs, adding new features,
 refactoring bad design decisions, making it more flexible, and
 improving the documentation. Check out the `issue tracker
-<http://github.com/willkg/richard/issues>`_ for some of the things
+<http://github.com/pyvideo/richard/issues>`_ for some of the things
 we're working on.
 
 
@@ -54,8 +54,8 @@ And join us on the IRC channel!
 Project details
 ===============
 
-:Code:          https://github.com/willkg/richard
-:Issue tracker: https://github.com/willkg/richard/issues
+:Code:          https://github.com/pyvideo/richard
+:Issue tracker: https://github.com/pyvideo/richard/issues
 :Documentation: http://richard.rtfd.org/
 :IRC channel:   ``#richard`` on ``irc.freenode.net``
 :License:       AGPLv3
@@ -67,8 +67,8 @@ installing, upgrading, deploying, contributing, ...
 Our unit tests are run by Travis CI every time we commit to the
 master branch.
 
-.. image:: https://secure.travis-ci.org/willkg/richard.png?branch=master
-   :target: http://travis-ci.org/willkg/richard
+.. image:: https://secure.travis-ci.org/pyvideo/richard.png?branch=master
+   :target: http://travis-ci.org/pyvideo/richard
 
 
 Who's using richard?

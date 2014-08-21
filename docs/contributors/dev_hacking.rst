@@ -54,7 +54,7 @@ Get richard
 
 Clone the repository from github::
 
-    $ git clone git://github.com/willkg/richard.git
+    $ git clone git://github.com/pyvideo/richard.git
 
 
 Install Python requirements

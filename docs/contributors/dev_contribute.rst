@@ -16,10 +16,10 @@ Project details
 ===============
 
 Code:
-    https://github.com/willkg/richard
+    https://github.com/pyvideo/richard
 
 Issue tracker:
-    https://github.com/willkg/richard/issues
+    https://github.com/pyvideo/richard/issues
 
 Documentation:
     Documentation is in the ``docs/`` directory including docs for
@@ -63,7 +63,7 @@ I'd love to have help! Here are things I need help with:
   * correct egregious errors which are probably due to
     misunderstandings of how Django and other components work
   * working on issues (bugs and new features) listed in the issue
-    tracker at https://github.com/willkg/richard/issues
+    tracker at https://github.com/pyvideo/richard/issues
   * fixing TODO items in the code
 
 * testing work
