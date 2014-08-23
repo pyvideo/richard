@@ -22,7 +22,7 @@ development_requirements = [
     'pytest-django==2.6.2',
     'Pygments',
     'Sphinx',
-    'steve',
+    'steve==0.4',
     'tox==1.7.1',
 ]
 

@@ -59,8 +59,8 @@ if sys.version_info < (3, 0):
             eq_(cat_from_api['title'], cat.title)
 
         def test_create_and_get_video(self):
-            cat = category(save=True)
-            lang = language(name=u'English 1', save=True)
+            cat = factories.CategoryFactory()
+            lang = factories.LanguageFactory(name=u'English 1')
 
             ret = richardapi.create_video(
                 self.api_url,
