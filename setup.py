@@ -9,20 +9,20 @@ requirements = [
     'django-grappelli==2.5.2',
     'django-haystack==2.1.0',
     'dj-database-url==0.3.0',
-    'eadred==0.3',
     'Markdown==2.3.1',
     'requests==2.1.0',
+    'pytz==2014.4',
     'South==0.8.4',
     'whoosh==2.5.6',
 ]
 
 development_requirements = [
+    'factory_boy==2.4.1',
     'httmock==1.2.2',
-    'nose',
-    'django-nose',
+    'pytest-django==2.6.2',
     'Pygments',
     'Sphinx',
-    'steve',
+    'steve==0.4',
     'tox==1.7.1',
 ]
 

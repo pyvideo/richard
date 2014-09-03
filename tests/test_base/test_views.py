@@ -18,8 +18,8 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from nose.tools import eq_
 
-from richard.notifications.tests import notification
-from richard.videos.tests import category, speaker, video
+from ..test_notifications import factories as notification_factories
+from ..test_videos import factories as video_factories
 
 
 class RichardViewsTest(TestCase):
@@ -34,8 +34,8 @@ class RichardViewsTest(TestCase):
 
     def test_notifications_on_home(self):
         """Test that notifications are displayed on the homepage."""
-        n1 = notification(text=u'1, 2, 3 - test', save=True)
-        n2 = notification(text=u'Just a test.', save=True)
+        n1 = notification_factories.NotificationFactory(text=u'1, 2, 3 - test')
+        n2 = notification_factories.NotificationFactory(text=u'Just a test.')
 
         resp = self.client.get(reverse('home'))
         self.assertContains(resp, n1.text)
@@ -50,9 +50,9 @@ class RichardViewsTest(TestCase):
 
     def test_sitemap(self):
         """Test for the sitemap.xml"""
-        category(save=True)
-        speaker(save=True)
-        video(save=True)
+        video_factories.CategoryFactory()
+        video_factories.SpeakerFactory()
+        video_factories.VideoFactory()
 
         resp = self.client.get('/sitemap.xml')
         eq_(resp.status_code, 200)

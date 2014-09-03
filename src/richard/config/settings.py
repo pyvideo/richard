@@ -29,7 +29,6 @@ class Base(Configuration):
     )
 
     THIRD_PARTY_APPS = (
-        'eadred',
         'grappelli',
         'haystack',
         'south',

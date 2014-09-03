@@ -5,7 +5,7 @@ python:
   - '3.3'
 
 env:
-  - DJANGO=""
+  - DJANGO="" DJANGO_SETTINGS_MODULE="richard.config.settings" DJANGO_CONFIGURATION="Testing"
 #  - DJANGO="https://github.com/django/django/archive/1.7b1.zip"
 
 install:
@@ -13,7 +13,7 @@ install:
 #  - 'if ( test -n "$DJANGO" ); then pip install $DJANGO; fi'
 
 script:
-  - 'python manage.py test --configuration Testing'
+  - 'py.test ./tests'
 
 notifications:
   irc:
