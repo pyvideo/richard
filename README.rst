@@ -23,11 +23,10 @@ We developed it with the following priorities:
 Features richard currently has:
 
 * videos, speakers, tags and categories
-* site news: let's you keep your users up to speed with site changes
 * site notifications: one-liners that show up on every page of the
   site for critical updates
-* feeds: site news feed, category feed, speaker feed
-* HTML5 video and embedded video support
+* feeds: category feed, speaker feed
+* HTML5 video and embedded video support and Amara subtitles
 * site search backed by django-haystack
 * API: HTTP GET access for everyone and HTTP PUT/DELETE for admin
 * decent documentation at http://richard.rtfd.org/

@@ -5,10 +5,12 @@
 When you do a ``git clone ...`` of richard, you end up with a
 directory tree like this::
 
-   richard
-   |- docs/          -- documentation
-   |-src/
-     \- richard/       -- richard django project
+   richard              -- repository root
+   |
+   |- docs/             -- documentation
+   |- tests/            -- all the tests
+   \- src/
+      \- richard/       -- richard django project
          |- base/       -- base code shared by the other apps
          |- config/     -- settings and configuration
          |- pages/      -- code for "about", "contac", etc pages
@@ -19,10 +21,14 @@ directory tree like this::
 
 Here's what's there:
 
-**richard/docs/**
+**docs/**
 
     Documentation for the project build wtih Sphinx and formatted in
     restructuredtext.
+
+**tests/**
+
+    This is where all the tests go.
 
 **src/richard/**
 

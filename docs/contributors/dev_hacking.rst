@@ -122,11 +122,12 @@ richard admin section.
 Run the tests
 =============
 
-Richard uses ``django-nose`` to discover tests.
+Richard uses `pytest-django <http://pytest-django.readthedocs.org/en/latest/>`_
+to discover tests.
 
 Activate the virtual environment, then run the tests::
 
-    $ ./manage.py test --nologcapture --nocapture
+    $ py.test ./tests/
 
 
 Run the server
