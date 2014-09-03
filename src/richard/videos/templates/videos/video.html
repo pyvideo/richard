@@ -81,7 +81,7 @@
       <div class="section">
         <h4>Summary</h4>
         <div class="video-details-summary" property="description">{{ v.summary|md|safe }}</div>
-        <meta property="caption" content="{{ v.summary|md|safe }}"/>
+        <meta property="caption" content="{{ v.summary|md|striptags }}"/>
       </div>
     {% endif %}
 
