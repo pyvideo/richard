@@ -199,16 +199,19 @@ class TestVideos(TestCase):
             eq_(resp.status_code, 200)
             self.assertTemplateUsed(resp, 'videos/video.html')
 
-    def test_video_sumarry(self):
+    def test_video_summary(self):
         """Test video summary for unscaped double quotes"""
         v = factories.VideoFactory(summary='Quoted "video summary."')
         resp = self.client.get(v.get_absolute_url())
         # This should not happen
-        eq_(resp.content.count(
-                '<meta property="caption" content="Quoted "'), 0)
+        self.assertNotContains(
+            resp,
+            u'content="Quoted "video')
         # This should happen
-        eq_(resp.content.count(
-                'content="Quoted &quot;video summary.&quot;"'), 2)
+        self.assertContains(
+            resp,
+            u'content="Quoted &quot;video summary.&quot;"',
+            count=2)
 
     def test_active_video_speaker_page(self):
         """Active video should show up on it's speaker's page."""
