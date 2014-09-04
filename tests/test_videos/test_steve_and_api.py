@@ -16,11 +16,9 @@
 
 import sys
 
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import LiveServerTestCase
 
-from nose.tools import eq_
 from rest_framework.authtoken.models import Token
 if sys.version_info < (3, 0):
     from steve import richardapi
@@ -50,13 +48,13 @@ if sys.version_info < (3, 0):
         def test_get_categories(self):
             cat = factories.CategoryFactory()
             cats = richardapi.get_all_categories(self.api_url)
-            eq_(len(cats), 1)
+            assert len(cats) == 1
             cats[0]['title'] = cat.title
 
         def test_get_category(self):
             cat = factories.CategoryFactory()
             cat_from_api = richardapi.get_category(self.api_url, cat.title)
-            eq_(cat_from_api['title'], cat.title)
+            assert cat_from_api['title'] == cat.title
 
         def test_create_and_get_video(self):
             cat = factories.CategoryFactory()
@@ -78,8 +76,8 @@ if sys.version_info < (3, 0):
                 self.api_url,
                 auth_token=self.token.key,
                 video_id=ret['id'])
-            eq_(vid['id'], ret['id'])
-            eq_(vid['title'], ret['title'])
+            assert vid['id'] == ret['id']
+            assert vid['title'] == ret['title']
 
         def test_create_and_update_video(self):
             cat = factories.CategoryFactory()
@@ -99,9 +97,9 @@ if sys.version_info < (3, 0):
 
             video = Video.objects.get(title='Test video create and update')
 
-            eq_(video.title, ret['title'])
-            eq_(video.state, ret['state'])
-            eq_(video.id, ret['id'])
+            assert video.title == ret['title']
+            assert video.state == ret['state']
+            assert video.id == ret['id']
 
             ret['title'] = 'Video Test'
             ret = richardapi.update_video(
@@ -112,4 +110,4 @@ if sys.version_info < (3, 0):
             )
 
             video = Video.objects.get(title='Video Test')
-            eq_(video.title, ret['title'])
+            assert video.title == ret['title']

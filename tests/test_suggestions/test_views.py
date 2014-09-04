@@ -17,8 +17,6 @@
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
-from nose.tools import eq_
-
 from richard.suggestions.models import Suggestion
 from . import factories
 
@@ -31,7 +29,7 @@ class TestSuggestions(TestCase):
         s = factories.SuggestionFactory()
 
         resp = self.client.get(reverse('suggestions-list'))
-        eq_(resp.status_code, 200)
+        assert resp.status_code == 200
         self.assertTemplateUsed(resp, 'suggestions/suggestions_list.html')
         self.assertNotContains(resp, s.name)
 
@@ -42,7 +40,7 @@ class TestSuggestions(TestCase):
         s.save()
 
         resp = self.client.get(reverse('suggestions-list'))
-        eq_(resp.status_code, 200)
+        assert resp.status_code == 200
         self.assertTemplateUsed(resp, 'suggestions/suggestions_list.html')
         self.assertContains(resp, s.name)
 
@@ -51,7 +49,7 @@ class TestSuggestions(TestCase):
         s = factories.SuggestionFactory(state=Suggestion.STATE_SPAM)
 
         resp = self.client.get(reverse('suggestions-list'))
-        eq_(resp.status_code, 200)
+        assert resp.status_code == 200
         self.assertTemplateUsed(resp, 'suggestions/suggestions_list.html')
         self.assertNotContains(resp, s.name)
 
@@ -62,5 +60,5 @@ class TestSuggestions(TestCase):
             {'name': u'Add boston group',
              'url': u'http://meetup.bostonpython.com/'},
             follow=True)
-        eq_(resp.status_code, 200)
+        assert resp.status_code == 200
         assert Suggestion.objects.filter(name=u'Add boston group').exists()

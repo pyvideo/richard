@@ -23,7 +23,6 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.utils.encoding import smart_text
 
-from nose.tools import eq_
 from rest_framework.authtoken.models import Token
 
 from . import factories
@@ -41,7 +40,7 @@ class TestNoAPI(TestCase):
             # anonymous user
             resp = self.client.get('/api/v2/video/%d/' % vid.pk,
                                    {'format': 'json'})
-            eq_(resp.status_code, 404)
+            assert resp.status_code == 404
 
         reload(video_urls_module)
 
@@ -73,9 +72,9 @@ class TestCategoryAPI(TestAPIBase):
 
         resp = self.client.get('/api/v2/category/',
                                {'format': 'json'})
-        eq_(resp.status_code, 200)
+        assert resp.status_code == 200
         content = json.loads(smart_text(resp.content))
-        eq_(len(content['results']), 3)
+        assert len(content['results']) == 3
 
     def test_get_category(self):
         """Test that a category can be retrieved."""
@@ -83,9 +82,9 @@ class TestCategoryAPI(TestAPIBase):
 
         resp = self.client.get('/api/v2/category/%s/' % cat.slug,
                                {'format': 'json'})
-        eq_(resp.status_code, 200)
+        assert resp.status_code == 200
         content = json.loads(smart_text(resp.content))
-        eq_(content['title'], cat.title)
+        assert content['title'] == cat.title
 
 
 class TestSpeakerAPI(TestAPIBase):
@@ -96,11 +95,11 @@ class TestSpeakerAPI(TestAPIBase):
 
         resp = self.client.get('/api/v2/speaker/',
                                {'format': 'json'})
-        eq_(resp.status_code, 200)
+        assert resp.status_code == 200
         content = json.loads(smart_text(resp.content))
-        eq_(len(content['results']), 2)
+        assert len(content['results']) == 2
         names = set([result['name'] for result in content['results']])
-        eq_(names, set([u'Guido van Rossum', u'Raymond Hettinger']))
+        assert names == set([u'Guido van Rossum', u'Raymond Hettinger'])
 
 
 class TestAPI(TestAPIBase):
@@ -111,14 +110,14 @@ class TestAPI(TestAPIBase):
         # anonymous user
         resp = self.client.get('/api/v2/video/%d/' % vid.pk,
                                {'format': 'json'})
-        eq_(resp.status_code, 200)
-        eq_(json.loads(smart_text(resp.content))['title'], vid.title)
+        assert resp.status_code == 200
+        assert json.loads(smart_text(resp.content))['title'] == vid.title
 
         # authenticated user
         resp = self.auth_get('/api/v2/video/%d/' % vid.pk,
                              {'format': 'json'})
-        eq_(resp.status_code, 200)
-        eq_(json.loads(smart_text(resp.content))['title'], vid.title)
+        assert resp.status_code == 200
+        assert json.loads(smart_text(resp.content))['title'] == vid.title
 
     def test_get_video_data(self):
         cat = factories.CategoryFactory(title=u'Foo Title')
@@ -132,16 +131,16 @@ class TestAPI(TestAPIBase):
 
         resp = self.client.get('/api/v2/video/%d/' % vid.pk,
                                {'format': 'json'})
-        eq_(resp.status_code, 200)
+        assert resp.status_code == 200
         content = json.loads(smart_text(resp.content))
-        eq_(content['title'], vid.title)
-        eq_(content['slug'], 'foo-bar')
+        assert content['title'] == vid.title
+        assert content['slug'] == 'foo-bar'
         # This should be the category title--not api url
-        eq_(content['category'], cat.title)
+        assert content['category'] == cat.title
         # This should be the tag--not api url
-        eq_(content['tags'], [t.tag])
+        assert content['tags'] == [t.tag]
         # This should be the speaker name--not api url
-        eq_(content['speakers'], [s.name])
+        assert content['speakers'] == [s.name]
 
     def test_only_live_videos_for_anonymous_users(self):
         """Test that not authenticated users can't see draft videos."""
@@ -152,8 +151,8 @@ class TestAPI(TestAPIBase):
                                content_type='application/json')
 
         data = json.loads(smart_text(resp.content))
-        eq_(len(data['results']), 1)
-        eq_(data['results'][0]['title'], vid_live.title)
+        assert len(data['results']) == 1
+        assert data['results'][0]['title'] == vid_live.title
 
     def test_all_videos_for_admins(self):
         """Test that admins can see all videos."""
@@ -164,7 +163,7 @@ class TestAPI(TestAPIBase):
                              content_type='application/json')
 
         data = json.loads(smart_text(resp.content))
-        eq_(len(data['results']), 2)
+        assert len(data['results']) == 2
 
     def test_videos_by_tag(self):
         tag1 = factories.TagFactory(tag='boat')
@@ -180,7 +179,7 @@ class TestAPI(TestAPIBase):
                              content_type='application/json')
 
         data = json.loads(smart_text(resp.content))
-        eq_(len(data['results']), 2)
+        assert len(data['results']) == 2
 
     def test_videos_by_speaker(self):
         speaker1 = factories.SpeakerFactory(name=u'webber')
@@ -197,14 +196,14 @@ class TestAPI(TestAPIBase):
                              content_type='application/json')
 
         data = json.loads(smart_text(resp.content))
-        eq_(len(data['results']), 2)
+        assert len(data['results']) == 2
 
         # Filter by partial name.
         resp = self.auth_get('/api/v2/video/?speaker=web',
                              content_type='application/json')
 
         data = json.loads(smart_text(resp.content))
-        eq_(len(data['results']), 2)
+        assert len(data['results']) == 2
 
     def test_videos_by_category(self):
         cat1 = factories.CategoryFactory(slug="pycon-us-2014")
@@ -223,7 +222,7 @@ class TestAPI(TestAPIBase):
                              content_type='application/json')
 
         data = json.loads(smart_text(resp.content))
-        eq_(len(data['results']), 2)
+        assert len(data['results']) == 2
 
     def test_videos_by_order(self):
         factories.VideoFactory(state=Video.STATE_LIVE, title=u'FooC',
@@ -237,19 +236,19 @@ class TestAPI(TestAPIBase):
         resp = self.auth_get('/api/v2/video/?ordering=title',
                              content_type='application/json')
         data = json.loads(smart_text(resp.content))
-        eq_([v['title'] for v in data['results']], [u'FooA', u'FooB', u'FooC'])
+        assert [v['title'] for v in data['results']] == [u'FooA', u'FooB', u'FooC']
 
         # Filter by recorded.
         resp = self.auth_get('/api/v2/video/?ordering=recorded',
                              content_type='application/json')
         data = json.loads(smart_text(resp.content))
-        eq_([v['title'] for v in data['results']], [u'FooA', u'FooC', u'FooB'])
+        assert [v['title'] for v in data['results']] == [u'FooA', u'FooC', u'FooB']
 
         # Filter by added (reverse order).
         resp = self.auth_get('/api/v2/video/?ordering=-added',
                              content_type='application/json')
         data = json.loads(smart_text(resp.content))
-        eq_([v['title'] for v in data['results']], [u'FooB', u'FooA', u'FooC'])
+        assert [v['title'] for v in data['results']] == [u'FooB', u'FooA', u'FooC']
 
 
 class TestVideoPostAPI(TestAPIBase):
@@ -267,15 +266,17 @@ class TestVideoPostAPI(TestAPIBase):
 
         resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
-        eq_(resp.status_code, 201)
-        eq_(json.loads(smart_text(resp.content))['title'], data['title'])
+        assert resp.status_code == 201
+        assert json.loads(smart_text(resp.content))['title'] == data['title']
 
         vid = Video.objects.get(title=data['title'])
-        eq_(vid.title, data['title'])
-        eq_(vid.slug, u'creating-delicious-apis-for-django-apps-since-201')
-        eq_(list(vid.speakers.values_list('name', flat=True)), ['Guido'])
-        eq_(sorted(vid.tags.values_list('tag', flat=True)),
-            [u'api', u'django'])
+        assert vid.title == data['title']
+        assert vid.slug == u'creating-delicious-apis-for-django-apps-since-201'
+        assert list(vid.speakers.values_list('name', flat=True)) == ['Guido']
+        assert (
+            sorted(vid.tags.values_list('tag', flat=True)) ==
+            [u'api', u'django']
+        )
 
     def test_post_video_no_title(self):
         """Test that no title throws an error."""
@@ -287,7 +288,7 @@ class TestVideoPostAPI(TestAPIBase):
 
         resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
-        eq_(resp.status_code, 400)
+        assert resp.status_code == 400
 
     def test_post_with_bad_state(self):
         """Test that a bad state is rejected"""
@@ -299,7 +300,7 @@ class TestVideoPostAPI(TestAPIBase):
 
         resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
-        eq_(resp.status_code, 400)
+        assert resp.status_code == 400
 
     def test_post_with_used_slug(self):
         """Test that already used slug creates second video with new slug."""
@@ -315,7 +316,7 @@ class TestVideoPostAPI(TestAPIBase):
 
         resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
-        eq_(resp.status_code, 201)
+        assert resp.status_code == 201
 
     def test_put(self):
         """Test that passing in an id, but no slug with a PUT works."""
@@ -334,14 +335,14 @@ class TestVideoPostAPI(TestAPIBase):
         resp = self.auth_put('/api/v2/video/%d/' % vid.pk,
                              json.dumps(data),
                              content_type='application/json')
-        eq_(resp.status_code, 200)
+        assert resp.status_code == 200
 
         # Get the video from the db and compare data.
         vid = Video.objects.get(pk=vid.pk)
-        eq_(vid.title, u'test1')
-        eq_(vid.slug, u'test1')
-        eq_(list(vid.speakers.values_list('name', flat=True)), ['Guido'])
-        eq_(list(vid.tags.values_list('tag', flat=True)), ['foo'])
+        assert vid.title == u'test1'
+        assert vid.slug == u'test1'
+        assert list(vid.speakers.values_list('name', flat=True)) == ['Guido']
+        assert list(vid.tags.values_list('tag', flat=True)) == ['foo']
 
     def test_put_fails_with_live_videos(self):
         """Test that passing in an id, but no slug with a PUT works."""
@@ -361,7 +362,7 @@ class TestVideoPostAPI(TestAPIBase):
         resp = self.auth_put('/api/v2/video/%d/' % vid.pk,
                              json.dumps(data),
                              content_type='application/json')
-        eq_(resp.status_code, 403)
+        assert resp.status_code == 403
 
     def test_post_with_tag_name(self):
         """Test that you can post video with url tags or real tags"""
@@ -379,11 +380,11 @@ class TestVideoPostAPI(TestAPIBase):
 
         resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
-        eq_(resp.status_code, 201)
+        assert resp.status_code == 201
 
         # Verify the tag
         vid = Video.objects.get(title=data['title'])
-        eq_(vid.tags.values_list('tag', flat=True)[0], footag)
+        assert vid.tags.values_list('tag', flat=True)[0] == footag
 
     def test_post_with_bad_tag_string(self):
         cat = factories.CategoryFactory()
@@ -396,13 +397,13 @@ class TestVideoPostAPI(TestAPIBase):
 
         resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
-        eq_(resp.status_code, 400)
+        assert resp.status_code == 400
 
         data.update({'tags': ['/api/v2/tag/1']})
 
         resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
-        eq_(resp.status_code, 400)
+        assert resp.status_code == 400
 
     def test_post_with_speaker_name(self):
         """Test that you can post videos with speaker names"""
@@ -420,11 +421,11 @@ class TestVideoPostAPI(TestAPIBase):
 
         resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
-        eq_(resp.status_code, 201)
+        assert resp.status_code == 201
 
         # Verify the speaker
         vid = Video.objects.get(title=data['title'])
-        eq_(vid.speakers.values_list('name', flat=True)[0], fooperson)
+        assert vid.speakers.values_list('name', flat=True)[0] == fooperson
 
     def test_post_with_speaker_with_extra_spaces(self):
         """Test that you can post videos with speaker names"""
@@ -442,11 +443,11 @@ class TestVideoPostAPI(TestAPIBase):
 
         resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
-        eq_(resp.status_code, 201)
+        assert resp.status_code == 201
 
         # Verify the speaker
         vid = Video.objects.get(title=data['title'])
-        eq_(vid.speakers.values_list('name', flat=True)[0], fooperson.strip())
+        assert vid.speakers.values_list('name', flat=True)[0] == fooperson.strip()
 
     def test_post_with_bad_speaker_string(self):
         cat = factories.CategoryFactory()
@@ -459,13 +460,13 @@ class TestVideoPostAPI(TestAPIBase):
 
         resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
-        eq_(resp.status_code, 400)
+        assert resp.status_code == 400
 
         data.update({'speakers': ['/api/v2/speaker/1']})
 
         resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
-        eq_(resp.status_code, 400)
+        assert resp.status_code == 400
 
     def test_post_with_category_title(self):
         """Test that a category title works"""
@@ -480,7 +481,7 @@ class TestVideoPostAPI(TestAPIBase):
 
         resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
-        eq_(resp.status_code, 201)
+        assert resp.status_code == 201
 
     def test_post_with_no_category(self):
         """Test that lack of category is rejected"""
@@ -488,7 +489,7 @@ class TestVideoPostAPI(TestAPIBase):
                 'state': Video.STATE_DRAFT}
         resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
-        eq_(resp.status_code, 400)
+        assert resp.status_code == 400
 
     def test_post_with_bad_language(self):
         """Test that a bad state is rejected"""
@@ -501,7 +502,7 @@ class TestVideoPostAPI(TestAPIBase):
 
         resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
-        eq_(resp.status_code, 400)
+        assert resp.status_code == 400
 
     def test_post_video_no_data(self):
         """Test that an attempt to create a video without data is rejected."""
@@ -509,7 +510,7 @@ class TestVideoPostAPI(TestAPIBase):
 
         resp = self.auth_post('/api/v2/video/', json.dumps(data),
                               content_type='application/json')
-        eq_(resp.status_code, 400)
+        assert resp.status_code == 400
 
     def test_post_video_not_authenticated(self):
         """Test that not authenticated users can't write."""
@@ -520,4 +521,4 @@ class TestVideoPostAPI(TestAPIBase):
 
         resp = self.client.post('/api/v2/video/', json.dumps(data),
                                 content_type='application/json')
-        eq_(resp.status_code, 401)
+        assert resp.status_code == 401

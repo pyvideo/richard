@@ -364,14 +364,6 @@ class Testing(Base):
         },
     }
 
-    try:
-        # Add django_nose for testing but only if it's installed.
-        imp.find_module('django_nose')
-        INSTALLED_APPS = tuple(list(INSTALLED_APPS) + ['django_nose'])
-        TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-    except ImportError:
-        pass
-
 
 class Dev(Base):
     API = values.BooleanValue(True, environ_prefix='RICHARD')

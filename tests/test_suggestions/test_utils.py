@@ -17,8 +17,6 @@
 from django.test import TestCase
 from django.test.utils import override_settings
 
-from nose.tools import eq_
-
 from richard.suggestions import utils
 from richard.suggestions.models import Suggestion
 from . import factories
@@ -31,7 +29,7 @@ class TestMarkIfSpam(TestCase):
         s = factories.SuggestionFactory(name='foo', comment='foo')
         utils.mark_if_spam(s)
 
-        eq_(s.state, Suggestion.STATE_NEW)
+        assert s.state == Suggestion.STATE_NEW
 
     @override_settings(SPAM_WORDS=['foo'])
     def test_mark_if_spam_with_words(self):
@@ -39,22 +37,22 @@ class TestMarkIfSpam(TestCase):
         s = factories.SuggestionFactory(name='1 foo 2', comment='1 bar 2')
         utils.mark_if_spam(s)
 
-        eq_(s.state, Suggestion.STATE_SPAM)
+        assert s.state == Suggestion.STATE_SPAM
 
         # handle comment
         s = factories.SuggestionFactory(name='1 bar 2', comment='1 foo 2')
         utils.mark_if_spam(s)
 
-        eq_(s.state, Suggestion.STATE_SPAM)
+        assert s.state == Suggestion.STATE_SPAM
 
         # not case-sensitive
         s = factories.SuggestionFactory(name='1 FOO 2', comment='1 FOO 2')
         utils.mark_if_spam(s)
 
-        eq_(s.state, Suggestion.STATE_SPAM)
+        assert s.state == Suggestion.STATE_SPAM
 
         # don't flag superstrings
         s = factories.SuggestionFactory(name='1 food 2', comment='1 food 2')
         utils.mark_if_spam(s)
 
-        eq_(s.state, Suggestion.STATE_NEW)
+        assert s.state == Suggestion.STATE_NEW

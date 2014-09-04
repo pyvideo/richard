@@ -17,7 +17,6 @@
 from datetime import datetime, timedelta
 
 from django.test import TestCase
-from nose.tools import eq_
 
 from . import factories
 from richard.notifications.models import Notification
@@ -39,8 +38,10 @@ class TestNotification(TestCase):
 
         n3 = factories.NotificationFactory(start_date=start)
 
-        eq_([x.pk for x in Notification.objects.get_live_notifications()],
-            [n1.pk, n2.pk, n3.pk])
+        assert (
+            [x.pk for x in Notification.objects.get_live_notifications()] ==
+            [n1.pk, n2.pk, n3.pk]
+        )
 
     def test_not_shown(self):
         """
@@ -55,4 +56,7 @@ class TestNotification(TestCase):
         end = datetime.now() - timedelta(days=1)
         factories.NotificationFactory(start_date=start, end_date=end)
 
-        eq_(len(Notification.objects.get_live_notifications()), 0)
+        assert (
+            len(Notification.objects.get_live_notifications()) ==
+            0
+        )

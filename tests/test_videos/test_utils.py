@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.test import TestCase
-from nose.tools import eq_
 
 from . import factories
 from richard.videos.utils import generate_unique_slug
@@ -26,8 +25,10 @@ class TestGenerateUniqueSlug(TestCase):
     def test_slug_creation(self):
         """Slug is based on title."""
         v = factories.VideoFactory.build(title=u'Foo Bar')
-        eq_(generate_unique_slug(v, u'title', u'slug'),
-            u'foo-bar')
+        assert (
+            generate_unique_slug(v, u'title', u'slug') ==
+            u'foo-bar'
+        )
 
     def test_unique_slug(self):
         """Generate unique slug using incrementing ending."""
@@ -36,10 +37,14 @@ class TestGenerateUniqueSlug(TestCase):
         factories.VideoFactory.create_batch(title=u'Foo', size=5)
 
         v2 = factories.VideoFactory.build(title=u'Foo')
-        eq_(generate_unique_slug(v2, u'title', u'slug'),
-            u'foo-4')
+        assert (
+            generate_unique_slug(v2, u'title', u'slug') ==
+            u'foo-4'
+        )
 
     def test_unicode_title(self):
         v = factories.VideoFactory.build(title=u'Nebenläufige Programme mit Python')
-        eq_(generate_unique_slug(v, u'title', u'slug'),
-            u'nebenlaufige-programme-mit-python')
+        assert (
+            generate_unique_slug(v, u'title', u'slug') ==
+            u'nebenlaufige-programme-mit-python'
+        )

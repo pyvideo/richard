@@ -52,8 +52,7 @@ Classes should be named ``Test*`` and should extend Django's
 Functions and methods should be named ``test_*``.
 
 Use the non-camel-case versions of ``assertXyz`` and friends if they
-exist, but it's probably better to use nose's ``eq_`` and Python's
-``assert``.
+exist.
 
 See existing tests for examples.
 

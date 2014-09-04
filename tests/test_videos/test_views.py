@@ -25,8 +25,6 @@ from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils.encoding import smart_text
 
-from nose.tools import eq_
-
 from . import factories
 from richard.videos.models import Video
 
@@ -41,7 +39,7 @@ class TestVideos(TestCase):
         url = reverse('videos-category-list')
 
         resp = self.client.get(url)
-        eq_(resp.status_code, 200)
+        assert resp.status_code == 200
         self.assertTemplateUsed(resp, 'videos/category_list.html')
 
     def test_category_list_with_categories(self):
@@ -51,7 +49,7 @@ class TestVideos(TestCase):
         url = reverse('videos-category-list')
 
         resp = self.client.get(url)
-        eq_(resp.status_code, 200)
+        assert resp.status_code == 200
         self.assertTemplateUsed(resp, 'videos/category_list.html')
 
     def test_category_urls(self):
@@ -68,7 +66,7 @@ class TestVideos(TestCase):
 
         for url in cases:
             resp = self.client.get(url)
-            eq_(resp.status_code, 200)
+            assert resp.status_code == 200
             self.assertTemplateUsed(resp, 'videos/category.html')
 
     def test_category_raise_404_when_does_not_exist(self):
@@ -80,7 +78,7 @@ class TestVideos(TestCase):
                       args=(1234, 'slug'))
 
         resp = self.client.get(url)
-        eq_(resp.status_code, 404)
+        assert resp.status_code == 404
 
     # speaker
 
@@ -89,7 +87,7 @@ class TestVideos(TestCase):
         url = reverse('videos-speaker-list')
 
         resp = self.client.get(url)
-        eq_(resp.status_code, 200)
+        assert resp.status_code == 200
         self.assertTemplateUsed(resp, 'videos/speaker_list.html')
 
     def test_speaker_list_empty_character(self):
@@ -105,7 +103,7 @@ class TestVideos(TestCase):
         data = {'character': ''}
 
         resp = self.client.get(url, data)
-        eq_(resp.status_code, 200)
+        assert resp.status_code == 200
         self.assertTemplateUsed(resp, 'videos/speaker_list.html')
         self.assertNotContains(resp, s1.name)
         self.assertContains(resp, s2.name)
@@ -122,7 +120,7 @@ class TestVideos(TestCase):
         data = {'character': 'r'}
 
         resp = self.client.get(url, data)
-        eq_(resp.status_code, 200)
+        assert resp.status_code == 200
         self.assertTemplateUsed(resp, 'videos/speaker_list.html')
         self.assertNotContains(resp, s1.name)
         self.assertContains(resp, s2.name)
@@ -140,7 +138,7 @@ class TestVideos(TestCase):
         data = {'character': 'richard'}
 
         resp = self.client.get(url, data)
-        eq_(resp.status_code, 200)
+        assert resp.status_code == 200
         self.assertTemplateUsed(resp, 'videos/speaker_list.html')
         self.assertNotContains(resp, s1.name)
         self.assertContains(resp, s2.name)
@@ -158,7 +156,7 @@ class TestVideos(TestCase):
         data = {'character': 42}
 
         resp = self.client.get(url, data)
-        eq_(resp.status_code, 200)
+        assert resp.status_code == 200
         self.assertTemplateUsed(resp, 'videos/speaker_list.html')
         self.assertNotContains(resp, s1.name)
         self.assertContains(resp, s2.name)
@@ -177,7 +175,7 @@ class TestVideos(TestCase):
 
         for url in cases:
             resp = self.client.get(url)
-            eq_(resp.status_code, 200)
+            assert resp.status_code == 200
             self.assertTemplateUsed(resp, 'videos/speaker.html')
 
     # videos
@@ -196,7 +194,7 @@ class TestVideos(TestCase):
 
         for url in cases:
             resp = self.client.get(url)
-            eq_(resp.status_code, 200)
+            assert resp.status_code == 200
             self.assertTemplateUsed(resp, 'videos/video.html')
 
     def test_video_summary(self):
@@ -273,9 +271,9 @@ class TestVideos(TestCase):
 
         resp = self.client.get(v.get_absolute_url())
         # This shows up in video tag and in downloads area
-        eq_(resp.content.count(b'OGV_VIDEO'), 2)
+        assert resp.content.count(b'OGV_VIDEO') == 2
         # This only shows up in downloads area
-        eq_(resp.content.count(b'MP4_VIDEO'), 1)
+        assert resp.content.count(b'MP4_VIDEO') == 1
 
 
 class TestVideoSearch(TestCase):
@@ -292,14 +290,14 @@ class TestVideoSearch(TestCase):
         url = reverse('videos-search')
 
         resp = self.client.get(url)
-        eq_(resp.status_code, 200)
+        assert resp.status_code == 200
 
     def test_opensearch_description(self):
         """Test the opensearch description view."""
         url = reverse('videos-opensearch')
 
         resp = self.client.get(url)
-        eq_(resp.status_code, 200)
+        assert resp.status_code == 200
 
     @override_settings(OPENSEARCH_ENABLE_SUGGESTIONS=True)
     def test_opensearch_description_with_suggestions(self):
@@ -307,7 +305,7 @@ class TestVideoSearch(TestCase):
         url = reverse('videos-opensearch')
 
         resp = self.client.get(url)
-        eq_(resp.status_code, 200)
+        assert resp.status_code == 200
 
     @override_settings(OPENSEARCH_ENABLE_SUGGESTIONS=True)
     def test_opensearch_suggestions(self):
@@ -321,15 +319,17 @@ class TestVideoSearch(TestCase):
         url = reverse('videos-opensearch-suggestions')
 
         response = self.client.get(url, {'q': 'test'})
-        eq_(response.status_code, 200)
+        assert response.status_code == 200
         data = json.loads(smart_text(response.content))
-        eq_(data[0], 'test')
-        eq_(set(data[1]),
-            set(['django testing', 'Speedily Practical Large-Scale Tests']))
+        assert data[0] == 'test'
+        assert (
+            set(data[1]) ==
+            set(['django testing', 'Speedily Practical Large-Scale Tests'])
+        )
 
     def test_opensearch_suggestions_disabled(self):
         """Test that when suggestions are disabled, the view does nothing."""
         url = reverse('videos-opensearch-suggestions')
 
         response = self.client.get(url, {'q': 'test'})
-        eq_(response.status_code, 404)
+        assert response.status_code == 404
