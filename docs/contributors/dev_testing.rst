@@ -10,11 +10,11 @@
 Testing requirements
 ====================
 
-richard uses ``django-nose`` to tie the Django test system to
-``nose``.
+richard uses `pytest-django <http://pytest-django.readthedocs.org/en/latest/>`_
+to tie the Django test system to `pytest <http://pytest.org/latest/>`_.
 
-I like to additionally use ``nose-progressive`` and ``nosenicedots``
-because they make the test output more useful.
+We use `FactoryBoy <http://factoryboy.readthedocs.org/en/latest/>`_ to
+generate model instances and test data.
 
 
 Running tests
@@ -23,11 +23,11 @@ Running tests
 To run the tests, make sure your virtual environment is activated and
 then::
 
-    ./manage.py test --nologcapture --nocapture
+    py.test tests/
 
-To run the tests with nose-progressive::
+You can see more options by doing::
 
-    ./manage.py test --nologcapture --nocapture --with-progressive
+    py.test --help
 
 Once you get a runline you like, put it in a bash script.
 
@@ -38,7 +38,7 @@ Add new tests
 Locations
 ---------
 
-Tests for apps go in ``richard/richard/APPNAME/tests/``.
+Tests go in directories like ``tests/test_<APPNAME>/``.
 
 
 Conventions

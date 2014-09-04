@@ -17,7 +17,7 @@ Make sure you've activated your virtual environment.
 
 Then::
 
-    $ ./venv/bin/pip install -e .\[dev\]
+    $ ./venv/bin/pip install -e ".[dev]"
 
 
 .. Note::

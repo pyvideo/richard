@@ -78,25 +78,18 @@ Tools
   <https://github.com/jbalogh/check>`_.
 
 
-Django / nose / haystack / whoosh / django-rest-framework
-=========================================================
+Django / py.test / haystack / whoosh / django-rest-framework
+============================================================
 
 * `Django <https://www.djangoproject.com/>`_
 
   This software is built using Django. I tried to use Django pieces
   where possible.
 
-* `django-nose <https://github.com/jbalogh/django-nose>`_ and
-  `nose <http://readthedocs.org/docs/nose/en/latest/>`_
+* `pytest-django <https://readthedocs.org/projects/pytest-django/>`_ and
+  `pytest <http://pytest.org/latest/>`_
 
-  Testing is done using django-nose which replaces the default Django
-  test runner with nose. This makes it a one-liner to run all the
-  tests and also provides some nice scaffolding for building tests and
-  organizing them.
-
-  I additionally use `nose-progressive
-  <http://pypi.python.org/pypi/nose-progressive/>`_ because then the test
-  output is easier to read. I highly recommend it.
+  We use pytest and the django wrapper.
 
 * `django-haystack <http://haystacksearch.org/>`_ and
   `whoosh <https://bitbucket.org/mchaput/whoosh/wiki/Home>`_
