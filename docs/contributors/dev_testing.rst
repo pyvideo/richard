@@ -38,15 +38,18 @@ Add new tests
 Locations
 ---------
 
-Tests go in directories like ``tests/test_<APPNAME>/``.
-
-
 Conventions
 -----------
 
-Modules should be named ``test_*.py``.
+Tests go in directories like ``tests/test_<APPNAME>/``.
 
-Classes should be named ``Test*`` and should extend Django's
+We use `Factory Boy <http://factoryboy.readthedocs.org/en/latest/>`_
+to generate model instances. Factory classes go in
+``tests/test_<APPNAME>/factories.py``.
+
+Test modules should be named ``test_*.py``.
+
+Test classes should be named ``Test*`` and should extend Django's
 ``UnitTest`` class.
 
 Functions and methods should be named ``test_*``.
