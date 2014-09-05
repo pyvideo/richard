@@ -16,7 +16,6 @@
 
 from django.test import TestCase
 from httmock import urlmatch, HTTMock
-from nose.tools import eq_
 
 from . import factories
 from richard.videos import models
@@ -25,10 +24,10 @@ from richard.videos import models
 class TestVideoModel(TestCase):
     def test_slug_creation(self):
         v = factories.VideoFactory(title=u'Foo Bar Baz')
-        eq_(v.slug, 'foo-bar-baz')
+        assert v.slug == 'foo-bar-baz'
 
         v = factories.VideoFactory(title=u'Foo Bar Baz', slug='baz')
-        eq_(v.slug, 'baz')
+        assert v.slug == 'baz'
 
 
 class TestVideoUrlStatusModel(TestCase):
@@ -54,13 +53,13 @@ class TestVideoUrlStatusModel(TestCase):
         with HTTMock(self.ok_200), HTTMock(self.bad_404), HTTMock(self.bad_500):
             vid = factories.VideoFactory(title=u'Foo', source_url='http://200.com')
             result = models.VideoUrlStatus.objects.create_for_video(vid)
-        eq_(result, {})
+        assert result == {}
 
     def test_bad_video(self):
         with HTTMock(self.ok_200), HTTMock(self.bad_404), HTTMock(self.bad_500):
             vid = factories.VideoFactory(title=u'Foo', source_url='http://400.com')
             result = models.VideoUrlStatus.objects.create_for_video(vid)
-        eq_(result, {404: 1})
+        assert result == {404: 1}
 
     def test_bad_video_multiple_links(self):
         with HTTMock(self.ok_200), HTTMock(self.bad_404), HTTMock(self.bad_500):
@@ -71,5 +70,7 @@ class TestVideoUrlStatusModel(TestCase):
                                          video_mp4_url='http://400.com',
                                          video_flv_url='http://400.com')
             result = models.VideoUrlStatus.objects.create_for_video(vid)
-        eq_(result, {404: 3,
-                     500: 1})
+        assert (
+            result ==
+            {404: 3, 500: 1}
+        )

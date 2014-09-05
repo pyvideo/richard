@@ -16,7 +16,6 @@
 
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-from nose.tools import eq_
 
 from ..test_notifications import factories as notification_factories
 from ..test_videos import factories as video_factories
@@ -29,7 +28,7 @@ class RichardViewsTest(TestCase):
         url = reverse('home')
 
         resp = self.client.get(url)
-        eq_(resp.status_code, 200)
+        assert resp.status_code == 200
         self.assertTemplateUsed(resp, 'home_branded.html')
 
     def test_notifications_on_home(self):
@@ -46,7 +45,7 @@ class RichardViewsTest(TestCase):
         url = reverse('stats')
 
         resp = self.client.get(url)
-        eq_(resp.status_code, 200)
+        assert resp.status_code == 200
 
     def test_sitemap(self):
         """Test for the sitemap.xml"""
@@ -55,9 +54,9 @@ class RichardViewsTest(TestCase):
         video_factories.VideoFactory()
 
         resp = self.client.get('/sitemap.xml')
-        eq_(resp.status_code, 200)
+        assert resp.status_code == 200
 
     def test_404(self):
         """Test for 404 page"""
         resp = self.client.get('/carlspants')
-        eq_(resp.status_code, 404)
+        assert resp.status_code == 404

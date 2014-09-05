@@ -24,6 +24,7 @@ development_requirements = [
     'Sphinx',
     'steve==0.4',
     'tox==1.7.1',
+    'eadred==0.3',
 ]
 
 postgre_requirements = [

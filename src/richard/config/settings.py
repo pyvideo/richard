@@ -351,7 +351,7 @@ class Base(Configuration):
 
 class Testing(Base):
     DEBUG = True
-    INSTALLED_APPS = Base.INSTALLED_APPS
+    INSTALLED_APPS = Base.INSTALLED_APPS + ('eadred',)
     SECRET_KEY = 'richard-testing'
     DATABASES = values.DatabaseURLValue('sqlite://:memory:')
 
@@ -364,20 +364,14 @@ class Testing(Base):
         },
     }
 
-    try:
-        # Add django_nose for testing but only if it's installed.
-        imp.find_module('django_nose')
-        INSTALLED_APPS = tuple(list(INSTALLED_APPS) + ['django_nose'])
-        TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-    except ImportError:
-        pass
-
 
 class Dev(Base):
     API = values.BooleanValue(True, environ_prefix='RICHARD')
     DEBUG = True
 
     SECRET_KEY = 'richard-testing'
+
+    INSTALLED_APPS = tuple(list(Base.INSTALLED_APPS) + ['eadred'])
 
     AUTHENTICATION_BACKENDS = (
         'richard.base.auth.AutoLoginBackend',  # DON'T use this in Production!

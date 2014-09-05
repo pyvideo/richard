@@ -119,6 +119,20 @@ The superuser account you create here can be used to log into the
 richard admin section.
 
 
+Set up sample data (optional)
+=============================
+
+You can add some sample data to your database which makes development
+a little easier since you can see what things look like. To do this,
+do::
+
+    $ ./manage.py generatedata
+
+This doesn't affect tests at all. You can remove the sample data at
+some later point. Running ``generatedata`` a second time will fail
+because slugs won't be unique.
+
+
 Run the tests
 =============
 
