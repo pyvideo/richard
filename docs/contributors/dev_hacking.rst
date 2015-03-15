@@ -48,6 +48,14 @@ On Debian, this translates to::
           python-pip \
           python-virtualenv
 
+On Fedora, this translates to::
+
+    $ yum install \
+          libxml2-devel \
+          libxslt-devel \
+          python-pip \
+          python-virtualenv
+
 
 Get richard
 ===========
@@ -71,7 +79,7 @@ Create a virtual environment::
 Make sure to activate the virtual environment every time you go to use
 richard things. You can do that like this::
 
-    $ ./venv/bin/activate
+    $ . ./venv/bin/activate
 
 Use pip to install the development requirements::
 
