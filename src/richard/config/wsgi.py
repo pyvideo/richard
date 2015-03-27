@@ -30,8 +30,17 @@ framework.
 
 """
 import os
+import sys
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "richard.settings")
+
+# Richard allows overriding of templates and settings and such. To
+# simplify that, we look at the SITE_PATH environment variable for
+# extending the sys.path so things get picked up correctly.
+site_path = os.getenv('SITE_PATH', '')
+if site_path:
+    site_path = site_path.split(',')
+    sys.path.extend(site_path)
 
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION

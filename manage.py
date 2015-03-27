@@ -21,6 +21,14 @@ import sys
 
 
 if __name__ == "__main__":
+    # Richard allows overriding of templates and settings and such. To
+    # simplify that, we look at the SITE_PATH environment variable for
+    # extending the sys.path so things get picked up correctly.
+    site_path = os.getenv('SITE_PATH', '')
+    if site_path:
+        site_path = site_path.split(',')
+        sys.path.extend(site_path)
+
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "richard.config.settings")
     os.environ.setdefault('DJANGO_CONFIGURATION', 'Dev')
 
