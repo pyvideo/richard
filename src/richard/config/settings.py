@@ -6,9 +6,9 @@ from configurations import Configuration, values
 # richard/settings_local.py module.
 # ===================================================
 
-import imp
 import os
 
+# richard src/ directory
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 class Base(Configuration):
