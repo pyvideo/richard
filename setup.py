@@ -1,34 +1,35 @@
 from setuptools import setup, find_packages
 
 requirements = [
-    'bleach==1.4',
-    'django==1.6.5',
-    'djangorestframework==2.3.10',
-    'django-browserid==0.10.1',
+    'bleach==1.4.1',
+    'django==1.6.11',
+    'djangorestframework==2.3.14',
+    'django-browserid==0.11.1',
     'django-configurations==0.8',
     'django-grappelli==2.5.2',
-    'django-haystack==2.1.0',
+    'django-haystack==2.3.1',
     'dj-database-url==0.3.0',
-    'Markdown==2.3.1',
-    'requests==2.1.0',
-    'pytz==2014.4',
-    'South==0.8.4',
-    'whoosh==2.5.6',
+    'fancy_tag==0.2.0',
+    'Markdown==2.6.1',
+    'requests==2.6.0',
+    'pytz==2014.10',
+    'South==0.8.4',  # 1.0.2
+    'whoosh==2.5.7',
 ]
 
 development_requirements = [
     'factory_boy==2.4.1',
-    'httmock==1.2.2',
-    'pytest-django==2.6.2',
-    'Pygments',
-    'Sphinx',
+    'httmock==1.2.3',
+    'pytest-django==2.8.0',
+    'Pygments==2.0.1',
+    'Sphinx==1.3.1',
     'steve==0.4',
-    'tox==1.7.1',
+    'tox==1.9.2',
     'eadred==0.3',
 ]
 
 postgre_requirements = [
-    'psycopg2',
+    'psycopg2==2.7',
 ]
 
 

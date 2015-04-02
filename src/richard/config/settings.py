@@ -15,7 +15,9 @@ class Base(Configuration):
     ##########
     # App configuartion
     ##########
-    DJANGO_APPS = (
+    INSTALLED_APPS = (
+        'grappelli',
+
         'django.contrib.auth',
         'django_browserid',
         'django.contrib.contenttypes',
@@ -26,17 +28,12 @@ class Base(Configuration):
         'django.contrib.admin',
         'django.contrib.redirects',
         'django.contrib.sitemaps',
-    )
 
-    THIRD_PARTY_APPS = (
-        'grappelli',
         'haystack',
         'south',
         'rest_framework',
         'rest_framework.authtoken',
-    )
 
-    LOCAL_APPS = (
         'richard.base',
         'richard.notifications',
         'richard.pages',
@@ -44,7 +41,6 @@ class Base(Configuration):
         'richard.videos',
     )
 
-    INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
     ##########
     # End App configuartion
     ##########
@@ -371,13 +367,14 @@ class Dev(Base):
 
     SECRET_KEY = 'richard-testing'
 
-    INSTALLED_APPS = tuple(list(Base.INSTALLED_APPS) + ['eadred'])
+    INSTALLED_APPS = Base.INSTALLED_APPS + ('eadred',)
 
     AUTHENTICATION_BACKENDS = (
         'richard.base.auth.AutoLoginBackend',  # DON'T use this in Production!
         'django_browserid.auth.BrowserIDBackend',
     )
 
+    BROWSERID_AUDIENCES = ['http://localhost:8000', 'http://127.0.0.1:8000']
     BROWSERID_AUTOLOGIN = ''
 
 
