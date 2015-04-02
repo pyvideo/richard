@@ -29,7 +29,7 @@ development_requirements = [
 ]
 
 postgre_requirements = [
-    'psycopg2==2.7',
+    'psycopg2==2.6',
 ]
 
 
