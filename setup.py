@@ -13,7 +13,7 @@ requirements = [
     'Markdown==2.6.1',
     'requests==2.6.0',
     'pytz==2014.10',
-    'South==0.8.4',  # 1.0.2
+    'South==1.0.2',
     'whoosh==2.5.7',
 ]
 
