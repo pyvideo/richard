@@ -229,7 +229,8 @@ def search(request):
         page = None
 
     if q:
-        title = u'Search: {query}'.format(query=q)
+        title = u'Search: {query}'.format(
+            query=bleach.clean(q, tags=[], strip=True))
     else:
         title = u'Search'
 
