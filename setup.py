@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 requirements = [
     'bleach==1.4.1',
-    'django==1.6.11',
+    'django==1.7.7',
     'djangorestframework==2.3.14',
     'django-browserid==0.11.1',
     'django-configurations==0.8',
@@ -13,7 +13,6 @@ requirements = [
     'Markdown==2.6.1',
     'requests==2.6.0',
     'pytz==2014.10',
-    'South==1.0.2',
     'whoosh==2.5.7',
 ]
 

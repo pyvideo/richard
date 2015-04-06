@@ -30,7 +30,6 @@ class Base(Configuration):
         'django.contrib.sitemaps',
 
         'haystack',
-        'south',
         'rest_framework',
         'rest_framework.authtoken',
 

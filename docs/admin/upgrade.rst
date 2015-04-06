@@ -2,6 +2,19 @@
  Upgrading
 ===========
 
+Upgrading 0.1 to 0.2
+====================
+
+1. Uninstall South in your virtual environments.
+
+2. Run ``./manage.py migrate --fake`` to mark all the migrations as
+   having run because we switched from Django 1.6 with South to Django
+   1.7 migration systems.
+
+
+Up to 0.1
+=========
+
 .. Note::
 
    When you upgrade to a new version of richard, please please please
