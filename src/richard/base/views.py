@@ -22,7 +22,6 @@ from django.shortcuts import render
 from django.utils.http import is_safe_url
 
 from richard.base.models import Profile
-from richard.suggestions.models import Suggestion
 from richard.videos.models import Video, Category, Speaker, Tag
 
 
@@ -94,10 +93,6 @@ def stats(request):
     tag_count = Tag.objects.count()
     tag_top5 = most_videos(Tag)[:5]
 
-    open_states = (Suggestion.STATE_NEW, Suggestion.STATE_IN_PROGRESS)
-    suggestions = (Suggestion.objects.filter(
-        state__in=open_states, is_reviewed=True).order_by('-state'))
-
     ret = render(
         request, 'stats.html',
         {'video_count': video_count,
@@ -106,6 +101,5 @@ def stats(request):
          'speaker_count': speaker_count,
          'speaker_top5': speaker_top5,
          'tag_count': tag_count,
-         'tag_top5': tag_top5,
-         'suggestions': suggestions})
+         'tag_top5': tag_top5})
     return ret

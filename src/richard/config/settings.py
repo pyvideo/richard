@@ -51,7 +51,6 @@ class Base(Configuration):
         'richard.base',
         'richard.notifications',
         'richard.pages',
-        'richard.suggestions',
         'richard.videos',
     )
 
@@ -332,9 +331,6 @@ class Base(Configuration):
     # Whether or not to enable the REST API. See the documentation for
     # more about the API.
     API = values.BooleanValue(False, environ_prefix='RICHARD')
-
-    # Modify this list to prevent spam messages in public suggestions
-    SPAM_WORDS = []
 
     MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 

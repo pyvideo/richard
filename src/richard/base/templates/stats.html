@@ -97,33 +97,4 @@
   </div>
 </div>
 
-<div class="section">
-  <div class="row">
-    <div class="col-md-3">
-      <div class="well">
-        <p class="stats-number">
-          <strong>{{ suggestions|length }}</strong>
-          <em>open suggestion(s)</em>
-        </p>
-      </div>
-    </div>
-    <div class="col-md-9">
-      <ul>
-        {% for s in suggestions %}
-        <li>
-          {{ s }}
-          {% if s.state == 0 %}
-            (<strong>New</strong>)
-          {% elif s.state == 1 %}
-            (<strong>In progress</strong>)
-          {% endif %}
-        </li>
-        {% endfor %}
-        <li><a href="{% url 'suggestions-list' %}">See all
-        suggestions...</a></li>
-      </ul>
-    </div>
-  </div>
-</div>
-
 {% endblock %}
