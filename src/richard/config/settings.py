@@ -51,6 +51,7 @@ class Base(Configuration):
         'richard.base',
         'richard.notifications',
         'richard.pages',
+        'richard.playlists',
         'richard.videos',
     )
 

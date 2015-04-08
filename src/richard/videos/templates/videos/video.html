@@ -111,6 +111,37 @@
       {% endif %}
 
       <dl>
+        {% if user.is_authenticated %}
+          <dt>Playlists</dt>
+          {% if not user_playlists %}
+            <dd>
+              <a href="{% url 'playlists-playlist-list' %}">Create new playlist</a>
+            </dd>
+          {% else %}
+            <dd>
+              {% if video_in_playlists %}
+                {% for playlist in video_in_playlists %}
+                  <div><a href="{% url 'playlists-playlist' playlist.id %}">{{ playlist.summary|truncatechars:40 }}</a></div>
+                {% endfor %}
+              {% else %}
+                None
+              {% endif %}
+            </dd>
+            <dt>Add to playlist</dt>
+            <dd>
+              <form class="form-inline form-playlist-add" method="post" action="{% url 'videos-video-add-playlist' %}">
+                {% csrf_token %}
+                <input type="hidden" name="videoid" value="{{ v.id }}">
+                <select class="form-control" id="playlistid" name="playlistid">
+                  {% for playlist in user_playlists %}
+                    <option value="{{ playlist.id }}">{{ playlist.summary|truncatechars:40 }}</option>
+                  {% endfor %}
+                </select>
+                <button class="btn btn-primary" type="submit">Add</button>
+              </form>
+            </dd>
+          {% endif %}
+        {% endif %}
         <dt>Category</dt>
         <dd>
           <a href="{{ v.category.get_absolute_url }}">{{ v.category.title }}</a>

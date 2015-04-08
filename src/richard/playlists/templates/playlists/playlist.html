@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% comment %}
+# richard -- video index system
+# Copyright (C) 2012, 2013 richard contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+{% endcomment %}
+{% load page_title %}
+{% load url from future %}
+{% load video_summary %}
+{% load md %}
+%}{% block title %}{% page_title playlist.summary %}{% endblock %}
+
+{% block content %}
+<div>
+  <h1>Playlist: {{ playlist.summary }}</h1>
+  {% if playlist.description %}
+    <h2>Description</h2>
+    <div class="playlist-description">{{ playlist.description|md|safe }}</div>
+  {% endif %}
+
+  <div class="well">
+    <dl class="dl-horizontal">
+      <dt>Number of videos:</dt>
+      <dd>
+        {{ playlist.video_count }}
+      </dd>
+    </dl>
+  </div>
+</div>
+
+<div id="video-summary-content">
+  {% for video in playlist.video_list %}
+    <div class="row{% if not video.is_live %} alert alert-error{% endif %}">
+      <div class="col-md-3">
+        <a href="{{ video.get_absolute_url }}" class="thumbnail"><img class="img-rounded" width="{{ video.thumbnail_width }}" height="{{ video.thumbnail_height }}" src="{{ video.get_thumbnail_url }}"></a>
+      </div>
+
+      <div class="col-md-6">
+        <div>
+          <strong><a href="{{ video.get_absolute_url }}">{{ video.title }}</a></strong>
+        </div>
+        {% if show_category %}
+          <div>
+            <a href="{{ video.category.get_absolute_url }}">{{ video.category.title }}</a>
+          </div>
+        {% endif %}
+        <div>
+          {% if video.speakers.all %}
+            {% for s in video.speakers.all %}
+              <a href="{{ s.get_absolute_url }}">{{ s.name }}</a>
+              {% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          {% endif %}
+        </div>
+        <div>
+          {% if video.recorded %}
+            <small>Recorded: {{ video.recorded|date:"DATE_FORMAT" }}</small>
+          {% else %}
+            <small>Added: {{ video.added|date:"DATE_FORMAT" }}</small>
+          {% endif %}
+          {% if video.language %}
+            &mdash;
+            <small>Language: {{ video.language.name }}</small>
+          {% endif %}
+        </div>
+        <div>
+          {% if video.summary %}
+            {{ video.summary|md|safe }}
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <form method="post" action="{% url 'playlists-playlist-remove-video' %}">
+          {% csrf_token %}
+          <input type="hidden" name="video_id" value="{{ video.id }}">
+          <input type="hidden" name="playlist_id" value="{{ playlist.id }}">
+          <button class="btn" type="submit">Remove</button>
+        </form>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

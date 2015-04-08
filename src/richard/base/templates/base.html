@@ -63,7 +63,11 @@
             <input type="text" class="form-control" name="q" placeholder="Search" autofocus value="{{ query }}">
           </div>
         </form>
-
+        {% if user.is_authenticated %}
+          <ul class="nav navbar-nav">
+            <li><a href="{% url 'playlists-playlist-list' %}">My playlists</a></li>
+          </ul>
+        {% endif %}
         <ul class="nav navbar-nav navbar-right">
           <li><a href="{% url 'stats' %}">Stats</a></li>
           <li><a href="{% url 'pages-page' page='about' %}">About</a></li>

@@ -21,14 +21,17 @@ from django.db.models import Count
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.paginator import EmptyPage, Paginator
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from django.core.urlresolvers import reverse
 
 from haystack.query import SearchQuerySet
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework import filters
 
+from richard.base.utils import smart_int
+from richard.playlists import models as playlist_models
 from richard.videos import models
 
 
@@ -142,6 +145,31 @@ def speaker(request, speaker_id, slug=None):
     return ret
 
 
+def video_add_playlist(request):
+    if not request.method == 'POST':
+        return HttpResponseRedirect(reverse('home'))
+
+    videoid = smart_int(request.POST.get('videoid', None))
+    if videoid is None:
+        return HttpResponseRedirect(reverse('home'))
+
+    playlistid = smart_int(request.POST.get('playlistid', None))
+    if not playlistid:
+        return HttpResponseRedirect(reverse('videos-video', args=(videoid,)))
+
+    try:
+        playlist = playlist_models.Playlist.objects.get(
+            id=playlistid,
+            user=request.user
+        )
+    except playlist_models.Playlist.DoesNotExist:
+        return HttpResponseRedirect(reverse('videos-video', args=(videoid,)))
+
+    playlist.append_video(videoid)
+    # FIXME: Message user that the video was added.
+    return HttpResponseRedirect(reverse('videos-video', args=(videoid,)))
+
+
 def video(request, video_id, slug):
     obj = get_object_or_404(models.Video, pk=video_id)
 
@@ -174,6 +202,19 @@ def video(request, video_id, slug):
 
     use_amara = settings.AMARA_SUPPORT
 
+    if request.user.is_authenticated():
+        user_playlists = list(
+            playlist_models.Playlist.objects.filter(
+                user=request.user
+            )
+        )
+        video_in_playlists = [
+            playlist for playlist in user_playlists if playlist.has_video(obj.id)
+        ]
+    else:
+        user_playlists = []
+        video_in_playlists = []
+
     ret = render(request, 'videos/video.html', {
         'meta': meta,
         'v': obj,
@@ -181,7 +222,9 @@ def video(request, video_id, slug):
         'video_url': video_url,
         'embed': embed,
         'embed_type': embed_type,
-        'html5_formats': html5_formats
+        'html5_formats': html5_formats,
+        'user_playlists': user_playlists,
+        'video_in_playlists': video_in_playlists
     })
     return ret
 
