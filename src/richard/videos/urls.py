@@ -52,6 +52,8 @@ urlpatterns = patterns(
     url(r'^video/(?P<video_id>[0-9]+)(?:/(?P<slug>[\w-]*))?/?$',
         'video', name='videos-video'),
     url(r'^video/rss/?$', NewPostedVideoFeed(), name='videos-new-feed'),
+    url(r'^video/playlist-add/?$',
+        'video_add_playlist', name='videos-video-add-playlist'),
 
     # search
     url(r'^search/?$',

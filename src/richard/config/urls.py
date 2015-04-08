@@ -48,6 +48,7 @@ urlpatterns = patterns(
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^pages/', include('richard.pages.urls')),
+    url(r'', include('richard.playlists.urls')),
     url(r'', include('richard.videos.urls')),
 
     url(r'', include('django_browserid.urls')),

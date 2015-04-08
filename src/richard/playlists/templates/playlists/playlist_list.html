@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% comment %}
+# richard -- video index system
+# Copyright (C) 2012, 2013 richard contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+{% endcomment %}
+{% load page_title %}
+{% load url from future %}
+{% block title %}{% page_title 'Playlists' %}{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>My playlists</h1>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+
+    <div class="section">
+      <form class="form-inline" method="post" action="{% url 'playlists-playlist-list' %}">
+        {% csrf_token %}
+        <div class="form-group">
+          <label class="control-label" for="playlistname">Create new playlist:</label>
+          <input id="playlistname" type="text" name="playlistname" placeholder="Playlist name/summary">
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+
+      <a href="#help">Help using playlists</a>
+      </form>
+    </div>
+
+    {% if playlists %}
+      <table id="playlist-table" class="table table-hover">
+        <thead>
+          <tr>
+            <th>Summary</th>
+            <th># Videos</th>
+            <th>Last updated</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for playlist in playlists %}
+            <tr>
+              <td class="main"><a href="{{ playlist.get_absolute_url }}">{{ playlist.summary }}</a></td>
+              <td>{{ playlist.video_count }}</td>
+              <td>{{ playlist.updated }}</td>
+              <td>
+                <div class="pull-right">
+                  <form method="post" action="{% url 'playlists-playlist-delete' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="playlistid" value="{{ playlist.id }}">
+                    <button type="submit" class="btn">Delete</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="section">
+        <p>
+          You have no playlists. Create a new playlist using the form
+          above.
+        </p>
+      </div>
+    {% endif %}
+    <div class="section">
+      <a name="help"></a>
+      <h3>Playlists help</h3>
+      <p>
+        You can create playlists here and add videos to those
+        playlists from video pages on this site.
+      </p>
+      <p>
+        Playlists make it easier for you to bookmark videos you're
+        interested in viewing as well as building lists of videos
+        you want to share with others.
+      </p>
+      <p>
+        On this page, you can:
+      </p>
+      <ol>
+        <li>create new playlists</li>
+        <li>delete existing playlists</li>
+        <li>pick a playlist to view videos in</li>
+      </ol>
+      <p>
+        To add videos to a playlist:
+      </p>
+      <ol>
+        <li>go to the page of the video you want to add to a playlist</li>
+        <li>on the right-side of the page, select the playlist you want to add
+          the video to</li>
+        <li>add the video to the playlist</li>
+      </ol>
+    </div>
+  </div>
+</div>
+{% endblock %}

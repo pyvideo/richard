@@ -1,3 +1,12 @@
+.form-playlist-add select.form-control {
+  width: 200px;
+}
+
+#playlist-table td.main,
+#playlist-table th.main {
+    width: 50%;
+}
+
 a.feed:before {
   content:url(/static/img/rss_feed.png);
 }
@@ -56,21 +65,6 @@ div.videobox-inner div.amara-embed {
 
 .indent {
   padding-left: 2em;
-}
-
-div#video-summary-content .video-summary {
-  clear: left;
-  min-height: 140px;
-  padding: 5px 0 5px 0;
-}
-
-div#video-summary-content .video-summary .thumbnail-data {
-  float: left;
-  width: 178px;
-}
-
-div#video-summary-content .video-summary .video-summary-data {
-  margin: 3px 0 0 204px;
 }
 
 .video-details-summary img,
