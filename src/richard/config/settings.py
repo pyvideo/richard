@@ -380,12 +380,18 @@ class Dev(Base):
     INSTALLED_APPS = Base.INSTALLED_APPS + ('eadred',)
 
     AUTHENTICATION_BACKENDS = (
-        'richard.base.auth.AutoLoginBackend',  # DON'T use this in Production!
+        'django_browserid.auth.AutoLoginBackend',  # DON'T use this in Production!
         'django_browserid.auth.BrowserIDBackend',
     )
 
     BROWSERID_AUDIENCES = ['http://localhost:8000', 'http://127.0.0.1:8000']
-    BROWSERID_AUTOLOGIN = ''
+
+    # To enable autologin, use environment variables:
+    # export BROWSERID_AUTOLOGIN_EMAIL="joe@example.com"
+    # export BROWSERID_AUTOLOGIN_ENABLED=1
+    # ./manage.py runserver
+    BROWSERID_AUTOLOGIN_EMAIL = values.Value('')
+    BROWSERID_AUTOLOGIN_ENABLED = values.BooleanValue(False)
 
 
 class Prod(Base):
