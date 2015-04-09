@@ -85,7 +85,7 @@ class Base(Configuration):
     ##########
     # Debug
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#debug
-    DEBUG = values.Value(False)
+    DEBUG = values.BooleanValue(False)
 
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-debug
     TEMPLATE_DEBUG = DEBUG
