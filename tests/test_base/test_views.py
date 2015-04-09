@@ -14,11 +14,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
-from ..test_notifications import factories as notification_factories
-from ..test_videos import factories as video_factories
+from richard.base.models import Profile
+
+from tests import RichardTestCase, UserFactory
+from tests.test_notifications import factories as notification_factories
+from tests.test_videos import factories as video_factories
 
 
 class RichardViewsTest(TestCase):
@@ -60,3 +64,31 @@ class RichardViewsTest(TestCase):
         """Test for 404 page"""
         resp = self.client.get('/carlspants')
         assert resp.status_code == 404
+
+
+class NewUserTest(RichardTestCase):
+    def test_new_user_page_redirects_to_home(self):
+        """Anonymous users get redirected to home"""
+        resp = self.client.get(reverse('new_user'), follow=True)
+        assert resp.status_code == 200
+        self.assertTemplateUsed(resp, 'base.html')
+
+    def test_new_user_page(self):
+        """New users get sent to new_user page"""
+        # Create a new user with no profile
+        jane = UserFactory(profile=None)
+        # Try to use the profile attribute. If there is no profile,
+        # then it kicks up a DoesNotExist error. We want that.
+        try:
+            jane.profile
+            assert False, 'Profile exists, but should not'
+        except Profile.DoesNotExist:
+            pass
+
+        self.client_login_user(jane)
+        resp = self.client.get(reverse('new_user'))
+        assert resp.status_code == 200
+        self.assertContains(resp, 'using Persona')
+
+        jane = User.objects.get(username=jane.username)
+        assert jane.profile is not None

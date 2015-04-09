@@ -21,6 +21,7 @@ except ImportError:
 
 from django.http import HttpResponseRedirect
 
+from django_browserid.http import JSONResponse
 from django_browserid.views import Verify
 from django.core.urlresolvers import reverse
 
@@ -55,4 +56,7 @@ class RichardVerify(Verify):
         if redirect_to:
             url = url + '?next=' + redirect_to
 
-        return HttpResponseRedirect(url)
+        return JSONResponse({
+            'email': self.user.email,
+            'redirect': url
+        })
