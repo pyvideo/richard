@@ -30,7 +30,7 @@ class NotificationManager(models.Manager):
         """
         now = datetime.date.today()
         return (
-            self.get_query_set()
+            self.get_queryset()
             .filter(start_date__lte=now)
             .filter(
                 models.Q(end_date__gt=now) | models.Q(end_date__isnull=True))

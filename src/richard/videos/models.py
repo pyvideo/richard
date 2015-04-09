@@ -147,7 +147,7 @@ class Language(models.Model):
 
 class VideoManager(models.Manager):
     def live(self):
-        return self.get_query_set().filter(state=Video.STATE_LIVE)
+        return self.get_queryset().filter(state=Video.STATE_LIVE)
 
     def live_order_by_title(self):
         return self.live().order_by('title')
