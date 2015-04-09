@@ -9,6 +9,7 @@ whoosh_index
 docs/_build/
 /dist/
 /static/
+/src/richard/static/
 /venv/
 /site/
 /.tox/
