@@ -25,4 +25,5 @@ urlpatterns = patterns(
         name='login_failure'),
     url(r'^new_user$', 'richard.base.views.new_user', name='new_user'),
     url(r'^stats/$', 'richard.base.views.stats', name='stats'),
+    url(r'^errormenow/$', 'richard.base.views.error_test', name='error_test'),
 )

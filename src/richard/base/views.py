@@ -17,7 +17,7 @@
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db.models import Count
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.utils.http import is_safe_url
 
@@ -104,3 +104,14 @@ def stats(request):
          'tag_count': tag_count,
          'tag_top5': tag_top5})
     return ret
+
+
+def error_test(request):
+    if not (request.user.is_authenticated and request.user.is_staff):
+        return HttpResponseRedirect(reverse('home'))
+
+    # This raises an error so that we can test error handling on
+    # the server.
+    1 / 0
+
+    return HttpResponse('foo')
