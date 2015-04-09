@@ -302,7 +302,7 @@ class Base(Configuration):
 
     # This dictates whether django-browserid will create new users or not
     # when people log in that it doesn't have a record for.
-    BROWSERID_CREATE_USER = False
+    BROWSERID_CREATE_USER = True
 
     # Verification class for django-browserid.
     BROWSERID_VERIFY_CLASS = 'richard.base.browserid.RichardVerify'

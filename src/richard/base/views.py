@@ -60,15 +60,16 @@ def new_user(request):
         # a profile for them.
         #
         # We could do more with this, but we're not at the moment.
-        Profile.objects.create(user=request.user)
+        profile = Profile.objects.create(user=request.user)
+        profile.save()
 
     next_url = request.GET.get('next', reverse('home'))
-    if not is_safe_url(next_url):
+    if not next_url or not is_safe_url(next_url):
         next_url = reverse('home')
 
-    return render(request, 'new_user.html', {
-        'next_url': next_url,
-    })
+    ret = render(request, 'new_user.html',
+                 {'next_url': next_url})
+    return ret
 
 
 def stats(request):

@@ -22,15 +22,17 @@ except ImportError:
 from django.http import HttpResponseRedirect
 
 from django_browserid.views import Verify
-from funfactory.urlresolvers import reverse
+from django.core.urlresolvers import reverse
 
-from fjord.base.models import Profile
+from richard.base.models import Profile
 
 
 class RichardVerify(Verify):
     def login_success(self):
         """Send to new_user view if new user, otherwise send on their way"""
+        # Note: This has the side-effect of logging the user in.
         response = super(RichardVerify, self).login_success()
+
         # If this user has never logged in before, send them to our
         # super secret "Welcome!" page.
         try:
@@ -38,17 +40,19 @@ class RichardVerify(Verify):
             return response
 
         except Profile.DoesNotExist:
-            url = reverse('new_user')
+            pass
 
-            redirect_to = self.request.REQUEST.get('next')
+        url = reverse('new_user')
 
-            # Do not accept redirect URLs pointing to a different host.
-            if redirect_to:
-                netloc = urlparse(redirect_to).netloc
-                if netloc and netloc != self.request.get_host():
-                    redirect_to = None
+        redirect_to = self.request.GET.get('next')
 
-            if redirect_to:
-                url = url + '?next=' + redirect_to
+        # Do not accept redirect URLs pointing to a different host.
+        if redirect_to:
+            netloc = urlparse(redirect_to).netloc
+            if netloc and netloc != self.request.get_host():
+                redirect_to = None
 
-            return HttpResponseRedirect(url)
+        if redirect_to:
+            url = url + '?next=' + redirect_to
+
+        return HttpResponseRedirect(url)
