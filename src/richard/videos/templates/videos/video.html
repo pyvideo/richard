@@ -31,14 +31,8 @@
 </div>
 {% endif %}
 
-<div class="row" vocab="http://schema.org" typeof="VideoObject">
+<div class="row section" vocab="http://schema.org" typeof="VideoObject">
   <div id="videobox" class="col-md-12">
-    <div class="section">
-      <h3 class="centered" property="name">{{ v.title }}</h3>
-      <link property="thumbnailUrl" href="{{ v.get_thumbnail_url }}"/>
-      <link property="sameAs" href="{{ v.get_absolute_url }}"/>
-    </div>
-
     {# Fix floats in unisubs widget that are not cleared #}
     <div class="clearfix">
       <div class="videobox-inner">
@@ -71,6 +65,12 @@
 
 <div class="row">
   <div id="videobox" class="col-md-8">
+    <div class="section">
+      <h3 class="centered" property="name">{{ v.title }}</h3>
+      <link property="thumbnailUrl" href="{{ v.get_thumbnail_url }}"/>
+      <link property="sameAs" href="{{ v.get_absolute_url }}"/>
+    </div>
+
     {% if v.quality_notes %}
       <div class="section alert alert-info">
         <span class="label label-info">Note:</span> {{ v.quality_notes }}
