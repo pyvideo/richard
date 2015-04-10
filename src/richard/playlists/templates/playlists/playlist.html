@@ -83,12 +83,14 @@
       </div>
 
       <div class="col-md-3">
-        <form method="post" action="{% url 'playlists-playlist-remove-video' %}">
-          {% csrf_token %}
-          <input type="hidden" name="video_id" value="{{ video.id }}">
-          <input type="hidden" name="playlist_id" value="{{ playlist.id }}">
-          <button class="btn" type="submit">Remove</button>
-        </form>
+        {% if playlist.user == request.user %}
+          <form method="post" action="{% url 'playlists-playlist-remove-video' %}">
+            {% csrf_token %}
+            <input type="hidden" name="video_id" value="{{ video.id }}">
+            <input type="hidden" name="playlist_id" value="{{ playlist.id }}">
+            <button class="btn" type="submit">Remove</button>
+          </form>
+        {% endif %}
       </div>
     </div>
   {% endfor %}
