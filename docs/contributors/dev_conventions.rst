@@ -12,7 +12,7 @@ Python code
 
 * PEP-8: http://www.python.org/dev/peps/pep-0008/
 * PEP-257: http://www.python.org/dev/peps/pep-0257/
-* Use pyflakes to lint your Python code.
+* We use flake8 along with a few other pre-commit hooks to lint Python code.
 
 pep8 covers Python code conventions.
 
@@ -48,6 +48,7 @@ JavaScript
 http://mozweb.readthedocs.org/en/latest/js-style.html
 
 We use the same JavaScript style conventions that Mozilla webdev does.
+We use jshint pre-commit hook to lint JavaScript code.
 
 
 Git

@@ -41,3 +41,14 @@ To migrate your database to the latest schema, do::
 .. Note::
 
    If you're already up-to-date, then this won't do anything.
+
+
+Update pre-commit hooks
+=======================
+
+richard uses `pre-commit <http://pre-commit.com/>`_ package to install
+various pre-commit hooks to lint the code. If there are any changes to the
+pre-commit configuration in .pre-commit-config.yaml, update the hooks by
+running::
+
+    $ pre-commit install

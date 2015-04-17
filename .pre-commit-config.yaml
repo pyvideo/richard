@@ -1,0 +1,21 @@
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    sha: 2d83e302cc2757a28cedc03e6bb075de913c1804
+    hooks:
+    -   id: check-added-large-files
+    -   id: check-case-conflict
+    -   id: check-docstring-first
+    -   id: check-merge-conflict
+    -   id: check-yaml
+    -   id: debug-statements
+    -   id: detect-private-key
+    -   id: double-quote-string-fixer
+    -   id: end-of-file-fixer
+    -   id: trailing-whitespace
+    -   id: flake8
+        exclude: "\
+            (.*migrations.*)|\
+            (docs/.*)"
+-   repo: https://github.com/pre-commit/mirrors-jshint
+    sha: 'v2.6.3'
+    hooks:
+    -   id: jshint
