@@ -101,6 +101,19 @@ Use pip to install the development requirements::
    feel free to do so!
 
 
+Install the pre-commit hooks
+============================
+
+richard uses `pre-commit <http://pre-commit.com/>`_ package to install
+various pre-commit hooks to lint the code. Install the hooks by running::
+
+    $ pre-commit install
+
+The configuration of the hooks is done in ```.pre-commit-config.yaml``.
+To ignore the errors and proceed with the commit, use the ```--no-verify```
+option to the ```git commit``` command.
+
+
 Configure
 =========
 

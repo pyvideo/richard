@@ -42,6 +42,7 @@ development_requirements = [
     'steve==0.4',
     'tox==1.9.2',
     'eadred==0.3',
+    'pre-commit==0.4.4',
 ]
 
 postgre_requirements = [
