@@ -1,20 +1,21 @@
 .. _hacking-chapter:
 
-=========================================
- Installing, running and testing richard
-=========================================
+=======================================
+Installing, running and testing richard
+=======================================
 
 This covers how to clone richard and set it up for easy hacking.
 
 .. Note::
 
-   richard is pretty new and is under heavy development. As such, the
-   documentation for it sucks and the installation guide may have as
-   much of a chance of helping you install richard as it does helping
-   you make a quiche.
+   richard is still under heavy development. As such, the documentation
+   for it is constantly in flux and probably outdated and the installation
+   guide may have as much of a chance of helping you install richard
+   as it does helping you make a quiche.
 
-   I'm really sorry about that, but I'm still bootstrapping the
-   project.
+   I'm really sorry about that. If you find issues, please let us know:
+
+   https://github.com/pyvideo/richard/issues
 
 
 .. contents::
@@ -24,8 +25,10 @@ This covers how to clone richard and set it up for easy hacking.
 richard requires a bunch of stuff to run. I'm going to talk about this
 stuff in two groups:
 
-1. stuff that you should install with your package manager
-2. Python packages that should get installed in a virtual environment
+1. stuff that you should install with your operating system's package
+   manager
+2. Python packages that you should install with pip in a virtual
+   environment
 
 
 Install things with your package manager
@@ -34,12 +37,16 @@ Install things with your package manager
 You need the following things all of which should be provided by your
 system/package manager:
 
-* Python 2.7
+* Python 2.7 or 3.3+
 * pip
 * virtualenv
+* git
 
 
-On Debian, this translates to::
+Python 2.7
+----------
+
+Debian::
 
     $ apt-get install \
           libxml2 \
@@ -48,7 +55,7 @@ On Debian, this translates to::
           python-pip \
           python-virtualenv
 
-On Fedora, this translates to::
+Fedora::
 
     $ yum install \
           libxml2-devel \
@@ -57,42 +64,27 @@ On Fedora, this translates to::
           python-virtualenv
 
 
-Get richard
-===========
+Python 3.3+
+-----------
 
-Clone the repository from github::
+FIXME: Please provide instructions.
+
+
+Install and configure richard
+=============================
+
+Get the code, set up virtual environment and install requirements
+-----------------------------------------------------------------
+
+First, you need the code. Clone the repository from github::
 
     $ git clone git://github.com/pyvideo/richard.git
 
-
-Install Python requirements
-===========================
-
-Now you need to install some other things all of which are specified
-in the requirements files provided.
 
 Create a virtual environment::
 
     $ cd richard
     $ virtualenv ./venv/
-
-Make sure to activate the virtual environment every time you go to use
-richard things. You can do that like this::
-
-    $ . ./venv/bin/activate
-
-Use pip to install the development requirements::
-
-    $ ./venv/bin/pip install -e .\[dev\]
-
-**(Optional)** If you want to also install with postgres support::
-
-    $ apt-get install \
-        postgresql \
-        build-essential \
-        libpq-dev \
-        python-dev
-    $ ./venv/bin/pip install -e .\[dev,postgresql\]
 
 
 .. Note::
@@ -101,57 +93,85 @@ Use pip to install the development requirements::
    feel free to do so!
 
 
-Install the pre-commit hooks
-============================
+Make sure to activate the virtual environment every time you go to use
+richard things. You can do that like this::
 
-richard uses `pre-commit <http://pre-commit.com/>`_ package to install
-various pre-commit hooks to lint the code. Install the hooks by running::
+    $ . ./venv/bin/activate
 
-    $ pre-commit install
+Use pip in the virtual environment to update pip to the latest version::
 
-The configuration of the hooks is done in ```.pre-commit-config.yaml``.
-To ignore the errors and proceed with the commit, use the ```--no-verify```
-option to the ```git commit``` command.
+    $ pip install -U pip
+
+Use pip in the virtual environment to install richard and the development
+requirements::
+
+    $ pip install -e ".[dev]"
+
+**(Optional) use postresql**
+
+    If you want to also install with postgres support, you'll need to install
+    postgresql and the bits you need to compile the postgresql driver.
+
+    On Debian::
+
+        $ apt-get install \
+            postgresql \
+            build-essential \
+            libpq-dev \
+            python-dev
+
+    Then run in your virtual environment::
+
+        $ pip install -e ".[postgresql]"
 
 
 Configure
-=========
+---------
 
-You need to create a ``settings_local.py`` file. To do that, do this::
-
-    $ cp richard/settings_local.py-dist richard/settings_local.py
-
+You should be able to use the ``Dev`` configuration specified in
+``richard.config.settings``. This is the default used by ``manage.py``.
 
 The settings should work out of the box, but you can change them as
 you see fit.
 
-**(Optional)** If you want to use postgres, uncomment the postgres
-line in the ``DATABASES`` section.
+**(Optional) use postgres**
+
+    Set the ``DATABASE_URL`` environment variable. See
+    http://django-configurations.readthedocs.org/en/latest/values/#configurations.values.DatabaseURLValue
+    for details.
 
 
-Set up database schema and create superuser
-===========================================
+Set up database schema
+----------------------
 
 To set up the database schema and create the superuser, run::
 
-    $ ./manage.py syncdb --migrate
-
-The superuser account you create here can be used to log into the
-richard admin section.
+    $ ./manage.py migrate
 
 
-Set up sample data (optional)
-=============================
+Set up superuser account
+------------------------
 
-You can add some sample data to your database which makes development
-a little easier since you can see what things look like. To do this,
-do::
+To create a superuser account, run::
 
-    $ ./manage.py generatedata
+    $ ./manage.py createsuperuser
 
-This doesn't affect tests at all. You can remove the sample data at
-some later point. Running ``generatedata`` a second time will fail
-because slugs won't be unique.
+The username and password don't matter--you'll never use
+them. However, the email address you use does since that needs to be
+the same as your Persona account.
+
+
+All set!
+--------
+
+You should have richard installed now. Any time you update the richard
+code, you'll want to install any requirements changes::
+
+    $ pip install -e ".[dev]"
+
+and run migrations::
+
+    $ ./manage.py migrate
 
 
 Run the tests
@@ -162,7 +182,7 @@ to discover tests.
 
 Activate the virtual environment, then run the tests::
 
-    $ py.test ./tests/
+    $ py.test tests
 
 
 Run the server
@@ -176,6 +196,38 @@ Run the server like this::
 Then point your browser at ``http://localhost:8000/``.
 
 
+Install the pre-commit hooks (optional)
+=======================================
+
+richard uses `pre-commit <http://pre-commit.com/>`_ package to install
+various pre-commit hooks to lint the code when you create new commits.
+Install the hooks by running::
+
+    $ pre-commit install
+
+The configuration of the hooks is done in ``.pre-commit-config.yaml`.
+To ignore the errors and proceed with the commit, use the
+``--no-verify`` option to the ``git commit`` command.
+
+
+Set up sample data (optional)
+=============================
+
+You can add some sample data to your database which makes development
+a little easier since you can see what things look like. To do this,
+do::
+
+    $ ./manage.py generatedata
+
+.. Note::
+
+   This doesn't affect running tests at all. You can always delete
+   sample data later.
+
+   FIXME: Running ``generatedata`` a second time will fail because slugs
+   won't be unique.
+
+
 Troubleshooting
 ===============
 
@@ -186,11 +238,6 @@ First, make sure your administrator account has an email address
 associated with it. This is the email address you will log in with
 Persona.
 
-Second, if you're seeing a "Misconfigured" kind of error, make sure
-the ``SITE_URL`` in your ``settings_local.py`` file matches the domain
-and port that the server is running on. If it doesn't match, then
-django-browserid won't work.
-
-See `the django-browserid troubleshooting docs
-<https://django-browserid.readthedocs.org/en/latest/details/troubleshooting.html>`_
+After that, wee `the django-browserid troubleshooting docs
+<https://django-browserid.readthedocs.org/en/latest/user/troubleshooting.html>`_
 for more details.
