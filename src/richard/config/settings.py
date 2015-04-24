@@ -14,17 +14,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # Django settings for richard project.
-from configurations import Configuration, values
-
-# ===================================================
-# NOTE: Override settings for local instances in the
-# richard/settings_local.py module.
-# ===================================================
 
 import os
 
-# richard src/ directory
+from configurations import Configuration, values
+
+
+# src/richard/ directory
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+# repository root directory
+ROOT_DIR = os.path.dirname(os.path.dirname(BASE_DIR))
+
 
 class Base(Configuration):
     ##########
@@ -134,7 +135,7 @@ class Base(Configuration):
     # http://django-configurations.readthedocs.org/en/latest/values/#configurations.values.DatabaseURLValue
     # with syntax from
     # https://github.com/kennethreitz/dj-database-url
-    DATABASES = values.DatabaseURLValue('sqlite:///' + os.path.join(BASE_DIR, 'database.db'))
+    DATABASES = values.DatabaseURLValue('sqlite:///' + os.path.join(ROOT_DIR, 'database.db'))
     ##########
     # End Database Configuration
     ##########
@@ -338,7 +339,7 @@ class Base(Configuration):
     HAYSTACK_CONNECTIONS = {
         'default': {
             'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-            'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+            'PATH': os.path.join(ROOT_DIR, 'whoosh_index'),
         },
     }
 
@@ -367,7 +368,7 @@ class Testing(Base):
     HAYSTACK_CONNECTIONS = {
         'default': {
             'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-            'PATH': os.path.join(BASE_DIR, '_test_whoosh_index'),
+            'PATH': os.path.join(ROOT_DIR, '_test_whoosh_index'),
         },
     }
 
