@@ -18,17 +18,15 @@
 {% endcomment %}
 {% load url from future %}
 {% block content %}
-
-<div class="row">
-  <div class="col-md-12">
-    <p>
-      Either your login has failed or we don't have an account
-      for that email address on this server.
-    </p>
-    <p>
-      <a href="{% url 'home' %}">Back to the front page</a>
-    </p>
+  <div class="row">
+    <div class="col-md-12">
+      <p>
+        Either your login has failed or we don't have an account
+        for that email address on this server.
+      </p>
+      <p>
+        <a href="{% url 'home' %}">Back to the front page</a>
+      </p>
+    </div>
   </div>
-</div>
-
 {% endblock %}

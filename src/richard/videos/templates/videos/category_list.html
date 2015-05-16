@@ -16,59 +16,57 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 {% endcomment %}
-{% load page_title %}
 {% load url from future %}
-{% block title %}{% page_title 'Categories' %}{% endblock %}
+{% block title %}{{ settings.SITE_TITLE }} - Categories{% endblock %}
+
 {% block content %}
-
-<div class="page-header">
-  <h1>Categories</h1>
-</div>
-
-<div class="row">
-  <div class="col-md-12">
-
-    <table class="table table-hover">
-      <tbody>
-        {% if cats_by_group %}
-          {% for grouping in cats_by_group|dictsort:'title' %}
-            {% if grouping.cats|length > 1 %}
-              <tr><td colspan=4>{{ grouping.title }}</td></tr>
-            {% endif %}
-            {% for cat in grouping.cats %}
-              <tr>
-                <td>
-                  {% if grouping.cats|length > 1 %}
-                    <span class="indent">
-                      <a href="{{ cat.get_absolute_url }}">{{ cat.title_year }}</a>
-                    </span>
-                  {% else %}
-                    <a href="{{ cat.get_absolute_url }}">{{ cat.title }}</a>
-                  {% endif %}
-                </td>
-                <td>
-                  {% if cat.start_date %}
-                    {{ cat.start_date|date:"DATE_FORMAT" }}
-                  {% else %}
-                    &nbsp;
-                  {% endif %}
-                </td>
-                <td>
-                  {{ cat.videos.live.count }}
-                </td>
-                <td>
-                  <a class="feed" href="{% url 'videos-category-videos-feed' category_id=cat.pk slug=cat.slug %}"> feed</a>
-                </td>
-              </tr>
-            {% endfor %}
-          {% endfor %}
-        {% else %}
-          <tr>
-            <td>No categories
-          </tr>
-        {% endif %}
-      </tbody>
-    </table>
+  <div class="page-header">
+    <h1>Categories</h1>
   </div>
-</div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table table-hover">
+        <tbody>
+          {% if cats_by_group %}
+            {% for grouping in cats_by_group|dictsort:'title' %}
+              {% if grouping.cats|length > 1 %}
+                <tr><td colspan=4>{{ grouping.title }}</td></tr>
+              {% endif %}
+              {% for cat in grouping.cats %}
+                <tr>
+                  <td>
+                    {% if grouping.cats|length > 1 %}
+                      <span class="indent">
+                        <a href="{{ cat.get_absolute_url }}">{{ cat.title_year }}</a>
+                      </span>
+                    {% else %}
+                      <a href="{{ cat.get_absolute_url }}">{{ cat.title }}</a>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if cat.start_date %}
+                      {{ cat.start_date|date:"DATE_FORMAT" }}
+                    {% else %}
+                      &nbsp;
+                    {% endif %}
+                  </td>
+                  <td>
+                    {{ cat.videos.live.count }}
+                  </td>
+                  <td>
+                    <a class="feed" href="{% url 'videos-category-videos-feed' category_id=cat.pk slug=cat.slug %}"> feed</a>
+                  </td>
+                </tr>
+              {% endfor %}
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td>No categories
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 {% endblock %}

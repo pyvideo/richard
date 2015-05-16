@@ -17,45 +17,44 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 {% endcomment %}
 {% load batch %}
-{% load page_title %}
 {% load url from future %}
-{% block title %}{% page_title 'Speakers' %}{% endblock %}
+{% block title %}{{ settings.SITE_TITLE }} - Speakers{% endblock %}
+
 {% block content %}
+  <div class="page-header">
+    <h1>Speakers</h1>
+  </div>
 
-<div class="page-header">
-  <h1>Speakers</h1>
-</div>
-
-<div class="row">
-  <div class="col-md-12">
-    <div class="btn-toolbar">
-      <div class="btn-group">
-        {% for c in chars %}
-        <a class="btn{% if c == active_char %} btn-primary{% endif %}" href="{% url 'videos-speaker-list' %}?character={{ c }}">{{ c.upper }}</a>
-        {% endfor %}
+  <div class="row">
+    <div class="col-md-12">
+      <div class="btn-toolbar">
+        <div class="btn-group">
+          {% for c in chars %}
+            <a class="btn{% if c == active_char %} btn-primary{% endif %}" href="{% url 'videos-speaker-list' %}?character={{ c }}">{{ c.upper }}</a>
+          {% endfor %}
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="row">
-  <div class="col-md-12 section">
-    <table class="table">
-      {% for row in speakers|batch:"4,&nbsp;" %}
-        <tr>
-          {% for s in row %}
-            <td>
-              {% if s != '&nbsp;' %}
-                <a href="{{ s.get_absolute_url }}">{{ s.name }}</a>
-                ({{ s.video_count }})
-              {% else %}
-                &nbsp;
-              {% endif %}
-            </td>
-          {% endfor %}
-        </tr>
-      {% endfor %}
-    </table>
+  <div class="row">
+    <div class="col-md-12 section">
+      <table class="table">
+        {% for row in speakers|batch:"4,&nbsp;" %}
+          <tr>
+            {% for s in row %}
+              <td>
+                {% if s != '&nbsp;' %}
+                  <a href="{{ s.get_absolute_url }}">{{ s.name }}</a>
+                  ({{ s.video_count }})
+                {% else %}
+                  &nbsp;
+                {% endif %}
+              </td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
   </div>
-</div>
 {% endblock %}

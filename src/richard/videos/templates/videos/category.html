@@ -17,10 +17,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 {% endcomment %}
 {% load md %}
-{% load page_title %}
 {% load url from future %}
 {% load video_summary %}
-{% block title %}{% page_title category.title %}{% endblock %}
+{% block title %}{{ settings.SITE_TITLE }} - {{ category.title|truncatechars:60 }}{% endblock %}
 
 {% block additional_head %}
   {{ block.super }}
@@ -28,89 +27,87 @@
 {% endblock %}
 
 {% block content %}
+  <ul class="nav nav-pills pull-right">
+    <li class="{% if view == 'videos' %}active{% endif %}"><a href="{% url 'videos-category' category_id=category.pk slug=category.slug %}">Videos</a></li>
+    <li class="{% if view == 'files' %}active{% endif %}"><a href="{% url 'videos-category-files' category_id=category.pk slug=category.slug %}">Files</a></li>
+    <li><a href="{% url 'videos-category-videos-feed' category_id=category.pk slug=category.slug %}">RSS Feed</a></li>
+  </ul>
 
-<ul class="nav nav-pills pull-right">
-  <li class="{% if view == 'videos' %}active{% endif %}"><a href="{% url 'videos-category' category_id=category.pk slug=category.slug %}">Videos</a></li>
-  <li class="{% if view == 'files' %}active{% endif %}"><a href="{% url 'videos-category-files' category_id=category.pk slug=category.slug %}">Files</a></li>
-  <li><a href="{% url 'videos-category-videos-feed' category_id=category.pk slug=category.slug %}">RSS Feed</a></li>
-</ul>
-
-<div>
-  <h1>{{ category.title }}
-    {% if user.is_staff %}
-      <small>
-        <a href="{% url 'admin:videos_category_change' category.id %}"><i class="icon-edit"></i> edit</a>
-      </small>
-    {% endif %}
-  </h1>
-
-  <div class="well">
-    <dl class="dl-horizontal">
-      {% if category.url %}
-        <dt>URL:</dt>
-        <dd> <a href="{{ category.url }}">{{ category.url }}</a></dd>
+  <div>
+    <h1>{{ category.title }}
+      {% if user.is_staff %}
+        <small>
+          <a href="{% url 'admin:videos_category_change' category.id %}"><i class="icon-edit"></i> edit</a>
+        </small>
       {% endif %}
-      <dt>Description:</dt>
-      <dd>
-        {% if category.description %}
-          {{ category.description|md|safe }}
-        {% else %}
-          No description.
+    </h1>
+
+    <div class="well">
+      <dl class="dl-horizontal">
+        {% if category.url %}
+          <dt>URL:</dt>
+          <dd> <a href="{{ category.url }}">{{ category.url }}</a></dd>
         {% endif %}
-      </dd>
-      {% if category.start_date %}
-        <dt>Date:</dt>
+        <dt>Description:</dt>
         <dd>
-          {{ category.start_date|date:"DATE_FORMAT" }}
-        </dd>
-      {% endif %}
-      <dt>Number of videos:</dt>
-      <dd>
-        {{ videos|length }}
-      </dd>
-      {% if settings.API %}
-        <dt>Metadata</dt>
-        <dd>
-          <a href="{% url 'category-api-view' category.slug %}">JSON</a>
-        </dd>
-      {% endif %}
-    </dl>
-  </div>
-</div>
-
-
-{% if view == 'videos' %}
-  <div id="video-summary-content">
-    {% for v in videos %}
-      {% video_summary v %}
-    {% endfor %}
-  </div>
-{% elif view == 'files' %}
-  <table class="table">
-    <tr><th>Title</th><th>Files</th></tr>
-    {% for v in videos %}
-      <tr>
-        <td>
-          <strong><a href="{{ v.get_absolute_url }}">{{ v.title }}</a></strong>
-          {% if v.speakers.all %}
-            &mdash;
-            {% for s in v.speakers.all %}
-              {{ s.name }}
-              {% if not forloop.last %}, {% endif %}
-            {% endfor %}
-          {% endif %}
-        </td>
-        <td>
-          {% if v.get_download_formats %}
-            {% for format in v.get_download_formats %}
-              <a href="{{ format.url }}">{{ format.display }}</a>
-            {% endfor %}
+          {% if category.description %}
+            {{ category.description|md|safe }}
           {% else %}
-            No downloadable files.
+            No description.
           {% endif %}
-        </td>
-      </tr>
-    {% endfor %}
-  </table>
-{% endif %}
+        </dd>
+        {% if category.start_date %}
+          <dt>Date:</dt>
+          <dd>
+            {{ category.start_date|date:"DATE_FORMAT" }}
+          </dd>
+        {% endif %}
+        <dt>Number of videos:</dt>
+        <dd>
+          {{ videos|length }}
+        </dd>
+        {% if settings.API %}
+          <dt>Metadata</dt>
+          <dd>
+            <a href="{% url 'category-api-view' category.slug %}">JSON</a>
+          </dd>
+        {% endif %}
+      </dl>
+    </div>
+  </div>
+
+  {% if view == 'videos' %}
+    <div id="video-summary-content">
+      {% for v in videos %}
+        {% video_summary v %}
+      {% endfor %}
+    </div>
+  {% elif view == 'files' %}
+    <table class="table">
+      <tr><th>Title</th><th>Files</th></tr>
+      {% for v in videos %}
+        <tr>
+          <td>
+            <strong><a href="{{ v.get_absolute_url }}">{{ v.title }}</a></strong>
+            {% if v.speakers.all %}
+              &mdash;
+              {% for s in v.speakers.all %}
+                {{ s.name }}
+                {% if not forloop.last %}, {% endif %}
+              {% endfor %}
+            {% endif %}
+          </td>
+          <td>
+            {% if v.get_download_formats %}
+              {% for format in v.get_download_formats %}
+                <a href="{{ format.url }}">{{ format.display }}</a>
+              {% endfor %}
+            {% else %}
+              No downloadable files.
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% endif %}
 {% endblock %}

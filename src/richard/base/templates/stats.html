@@ -16,85 +16,83 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 {% endcomment %}
-{% load page_title %}
 {% load url from future %}
-{% block title %}{% page_title 'Statistics' %}{% endblock %}
+{% block title %}{{ settings.SITE_TITLE }} - Statistics{% endblock %}
 {% block content %}
-<div class="page-header">
-  <h1>{{ video_count }} video(s) indexed</h2>
-</div>
+  <div class="page-header">
+    <h1>{{ video_count }} video(s) indexed</h2>
+  </div>
 
-<div class="section">
-  <div class="row">
-    <div class="col-md-3">
-      <div class="well">
-        <p class="stats-number">
-          <strong>{{ category_count }}</strong>
-          <em>categories</em>
-        </p>
+  <div class="section">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="well">
+          <p class="stats-number">
+            <strong>{{ category_count }}</strong>
+            <em>categories</em>
+          </p>
+        </div>
+      </div>
+      <div class="col-md-9">
+        <ul>
+          {% for cat in category_top5 %}
+            <li>
+              <a href="{{ cat.get_absolute_url }}">{{ cat }}</a>
+              (<strong>{{ cat.count }} videos</strong>)
+            </li>
+          {% endfor %}
+          <li><a href="{% url 'videos-category-list' %}">See all
+            categories...</a></li>
+        </ul>
       </div>
     </div>
-    <div class="col-md-9">
-      <ul>
-        {% for cat in category_top5 %}
-        <li>
-          <a href="{{ cat.get_absolute_url }}">{{ cat }}</a>
-          (<strong>{{ cat.count }}&nbsp;videos</strong>)
-        </li>
-        {% endfor %}
-        <li><a href="{% url 'videos-category-list' %}">See all
-        categories...</a></li>
-      </ul>
-    </div>
   </div>
-</div>
 
-<div class="section">
-  <div class="row">
-    <div class="col-md-3">
-      <div class="well">
-        <p class="stats-number">
-          <strong>{{ speaker_count }}</strong>
-          <em>speaker(s)</em>
-        </p>
+  <div class="section">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="well">
+          <p class="stats-number">
+            <strong>{{ speaker_count }}</strong>
+            <em>speaker(s)</em>
+          </p>
+        </div>
+      </div>
+      <div class="col-md-9">
+        <ul>
+          {% for s in speaker_top5 %}
+            <li>
+              <a href="{{ s.get_absolute_url }}">{{ s }}</a>
+              (<strong>{{ s.count }} videos</strong>)
+            </li>
+          {% endfor %}
+          <li><a href="{% url 'videos-speaker-list' %}">See all
+            speakers...</a></li>
+        </ul>
       </div>
     </div>
-    <div class="col-md-9">
-      <ul>
-        {% for s in speaker_top5 %}
-        <li>
-          <a href="{{ s.get_absolute_url }}">{{ s }}</a>
-          (<strong>{{ s.count }}&nbsp;videos</strong>)
-        </li>
-        {% endfor %}
-        <li><a href="{% url 'videos-speaker-list' %}">See all
-        speakers...</a></li>
-      </ul>
-    </div>
   </div>
-</div>
 
-<div class="section">
-  <div class="row">
-    <div class="col-md-3">
-      <div class="well">
-        <p class="stats-number">
-          <strong>{{ tag_count }}</strong>
-          <em>tag(s)</em>
-        </p>
+  <div class="section">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="well">
+          <p class="stats-number">
+            <strong>{{ tag_count }}</strong>
+            <em>tag(s)</em>
+          </p>
+        </div>
+      </div>
+      <div class="col-md-9">
+        <ul>
+          {% for tag in tag_top5 %}
+            <li>
+              {{ tag }}
+              (<strong>{{ tag.count }} videos</strong>)
+            </li>
+          {% endfor %}
+        </ul>
       </div>
     </div>
-    <div class="col-md-9">
-      <ul>
-        {% for tag in tag_top5 %}
-        <li>
-          {{ tag }}
-          (<strong>{{ tag.count }}&nbsp;videos</strong>)
-        </li>
-        {% endfor %}
-      </ul>
-    </div>
   </div>
-</div>
-
 {% endblock %}

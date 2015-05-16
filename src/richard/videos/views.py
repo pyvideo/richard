@@ -174,7 +174,7 @@ def video(request, video_id, slug):
     obj = get_object_or_404(models.Video, pk=video_id)
 
     meta = [
-        ('keywords', ",".join([t.tag for t in obj.tags.all()]))
+        ('keywords', ','.join([t.tag for t in obj.tags.all()]))
         ]
     if obj.summary:
         meta.append(('description',
@@ -209,7 +209,8 @@ def video(request, video_id, slug):
             )
         )
         video_in_playlists = [
-            playlist for playlist in user_playlists if playlist.has_video(obj.id)
+            playlist for playlist in user_playlists
+            if playlist.has_video(obj.id)
         ]
     else:
         user_playlists = []
@@ -271,12 +272,6 @@ def search(request):
     else:
         page = None
 
-    if q:
-        title = u'Search: {query}'.format(
-            query=bleach.clean(q, tags=[], strip=True))
-    else:
-        title = u'Search'
-
     get_params = request.GET.copy()
     if 'category' in get_params:
         get_params.pop('category')
@@ -287,7 +282,6 @@ def search(request):
         'videos/search.html', {
             'query': q,
             'base_url': base_url,
-            'title': title,
             'facet_counts': facet_counts,
             'page': page
         })

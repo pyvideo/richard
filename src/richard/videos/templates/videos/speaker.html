@@ -16,10 +16,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 {% endcomment %}
-{% load page_title %}
 {% load url from future %}
 {% load video_summary %}
-{% block title %}{% page_title speaker.name %}{% endblock %}
+{% block title %}{{ settings.SITE_TITLE }} - {{ speaker.name|truncatechars:60 }}{% endblock %}
 
 {% block additional_head %}
   {{ block.super }}
@@ -27,33 +26,33 @@
 {% endblock %}
 
 {% block content %}
-<ul class="nav nav-pills pull-right">
-  <li class="active"><a href="{% url 'videos-speaker' speaker_id=speaker.pk slug=speaker.slug %}">Videos</a></li>
-  <li><a href="{% url 'videos-speaker-feed' speaker_id=speaker.pk slug=speaker.slug %}">RSS Feed</a></li>
-</ul>
+  <ul class="nav nav-pills pull-right">
+    <li class="active"><a href="{% url 'videos-speaker' speaker_id=speaker.pk slug=speaker.slug %}">Videos</a></li>
+    <li><a href="{% url 'videos-speaker-feed' speaker_id=speaker.pk slug=speaker.slug %}">RSS Feed</a></li>
+  </ul>
 
-<div>
-  <h1>{{ speaker.name }}
-    {% if user.is_staff %}
-      <small>
-        <a href="{% url 'admin:videos_speaker_change' speaker.id %}"><i class="icon-edit"></i> edit</a>
-      </small>
-    {% endif %}
-  </h1>
+  <div>
+    <h1>{{ speaker.name }}
+      {% if user.is_staff %}
+        <small>
+          <a href="{% url 'admin:videos_speaker_change' speaker.id %}"><i class="icon-edit"></i> edit</a>
+        </small>
+      {% endif %}
+    </h1>
 
-  <div class="well">
-    <dl class="dl-horizontal">
-      <dt>Number of videos:</dt>
-      <dd>
-        {{ videos|length }}
-      </dd>
-    </dl>
+    <div class="well">
+      <dl class="dl-horizontal">
+        <dt>Number of videos:</dt>
+        <dd>
+          {{ videos|length }}
+        </dd>
+      </dl>
+    </div>
   </div>
-</div>
 
-<div id="video-summary-content">
-  {% for v in videos %}
-    {% video_summary v %}
-  {% endfor %}
-</div>
+  <div id="video-summary-content">
+    {% for v in videos %}
+      {% video_summary v %}
+    {% endfor %}
+  </div>
 {% endblock %}

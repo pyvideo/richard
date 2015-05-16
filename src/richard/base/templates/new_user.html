@@ -18,17 +18,15 @@
 {% endcomment %}
 {% load url from future %}
 {% block content %}
-
-<div class="row">
-  <div class="col-md-12">
-    <p>
-      You just logged into {{ settings.SITE_TITLE }} using Persona.
-      Please remember which identity you used to log in.
-    </p>
-    <p>
-      <a href="{% url 'home' %}">Back to the front page</a>
-    </p>
+  <div class="row">
+    <div class="col-md-12">
+      <p>
+        You just logged into {{ settings.SITE_TITLE }} using Persona.
+        Please remember which identity you used to log in.
+      </p>
+      <p>
+        <a href="{% url 'home' %}">Back to the front page</a>
+      </p>
+    </div>
   </div>
-</div>
-
 {% endblock %}

@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "playlists/playlist_list.html" %}
 {% comment %}
 # richard -- video index system
 # Copyright (C) 2012, 2013 richard contributors.  See AUTHORS.
@@ -16,17 +16,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 {% endcomment %}
-{% load page_title %}
-{% load url from future %}
-{% load video_summary %}
-{% block title %}{% page_title 'Delete confirmation' %}{% endblock %}
 
-{% block content %}
-<div>
-  <h1>Playlists</h1>
+{% block playlistcontent %}
   <p>
     You are not logged in, so you can't view your playlists. Please
     log in with the "Sign in" button above.
   </p>
-</div>
 {% endblock %}

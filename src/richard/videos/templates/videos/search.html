@@ -16,66 +16,65 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 {% endcomment %}
-{% load page_title %}
 {% load url from future %}
 {% load video_summary %}
-{% block title %}{% page_title title %}{% endblock %}
+{% block title %}{{ settings.SITE_TITLE }} - Search{% if query %}: {{ query|truncatechars:60 }}{% endif %}{% endblock %}
+
 {% block content %}
-
-{% if query %}
-  <div class="row">
-    <div class="col-md-3">
-      <div class="well well-small">
-        <ul class="nav nav-list">
-          <li class="nav-header">Narrow by category</li>
-          {% if facet_counts %}
-            <li><a href="{{ base_url }}">All</a></li>
-            {% for title, count in facet_counts.category %}
-              <li><a href="{{ base_url }}&amp;category={{ title }}">{{ title }} ({{ count }})</a></li>
-            {% endfor %}
-          {% else %}
-            <li>None</li>
-          {% endif %}
-        </ul>
-      </div>
-    </div>
-    <div class="col-md-9">
-      {% if page %}
-        <div id="video-summary-content">
-          {% for result in page.object_list %}
-            {% video_summary result.object True %}
-          {% endfor %}
-        </div>
-      {% else %}
-        <div class="col-md-12">
-          <h2>No results</h2>
-        </div>
-      {% endif %}
-    </div>
-  </div>
-
-  {% if page.has_previous or page.has_next %}
+  {% if query %}
     <div class="row">
-      <div class="col-md-12 centered">
-        <div class="pager">
-          <ul>
-            {% if page.has_previous %}
-              <li><a href="?q={{ query }}&amp;p={{ page.previous_page_number }}">&laquo; Previous</a></li>
+      <div class="col-md-3">
+        <div class="well well-small">
+          <ul class="nav nav-list">
+            <li class="nav-header">Narrow by category</li>
+            {% if facet_counts %}
+              <li><a href="{{ base_url }}">All</a></li>
+              {% for title, count in facet_counts.category %}
+                <li><a href="{{ base_url }}&amp;category={{ title }}">{{ title }} ({{ count }})</a></li>
+              {% endfor %}
             {% else %}
-              <li class="disabled"><a>&laquo;Previous</a></li>
-            {% endif %}
-
-            {% if page.has_next %}
-              <li><a href="?q={{ query }}&amp;p={{ page.next_page_number }}"> Next &raquo;</a></li>
-            {% else %}
-              <li class="disabled"><a>Next&raquo;</a></li>
+              <li>None</li>
             {% endif %}
           </ul>
         </div>
       </div>
+      <div class="col-md-9">
+        {% if page %}
+          <div id="video-summary-content">
+            {% for result in page.object_list %}
+              {% video_summary result.object True %}
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="col-md-12">
+            <h2>No results</h2>
+          </div>
+        {% endif %}
+      </div>
     </div>
+
+    {% if page.has_previous or page.has_next %}
+      <div class="row">
+        <div class="col-md-12 centered">
+          <div class="pager">
+            <ul>
+              {% if page.has_previous %}
+                <li><a href="?q={{ query }}&amp;p={{ page.previous_page_number }}">&laquo; Previous</a></li>
+              {% else %}
+                <li class="disabled"><a>&laquo;Previous</a></li>
+              {% endif %}
+
+              {% if page.has_next %}
+                <li><a href="?q={{ query }}&amp;p={{ page.next_page_number }}"> Next &raquo;</a></li>
+              {% else %}
+                <li class="disabled"><a>Next&raquo;</a></li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% else %}
+    {# Show some example queries to run, maybe query syntax, something else? #}
   {% endif %}
-{% else %}
-  {# Show some example queries to run, maybe query syntax, something else? #}
-{% endif %}
 {% endblock %}

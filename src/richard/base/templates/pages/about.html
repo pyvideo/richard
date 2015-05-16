@@ -16,19 +16,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 {% endcomment %}
-{% load page_title %}
-{% block title %}{% page_title 'About' %}{% endblock %}
-{% block content %}
-<div class="page-header">
-  <h1>About this site</h1>
-</div>
+{% block title %}{{ settings.SITE_TITLE }} - About{% endblock %}
 
-<div class="row">
-  <div class="col-md-12">
-    <p>
-      This site uses <a href="http://github.com/pyvideo/richard">richard</a>.
-      It's a video index site.
-    </p>
+{% block content %}
+  <div class="page-header">
+    <h1>About this site</h1>
   </div>
-</div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <p>
+        This site uses <a href="http://github.com/pyvideo/richard">richard</a>.
+        It's a video index site.
+      </p>
+    </div>
+  </div>
 {% endblock %}

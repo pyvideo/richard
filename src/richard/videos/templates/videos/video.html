@@ -18,227 +18,226 @@
 {% endcomment %}
 {% load duration %}
 {% load md %}
-{% load page_title %}
 {% load static %}
 {% load url from future %}
-{% block title %}{% page_title v.title %}{% endblock %}
+{% block title %}{{ settings.SITE_TITLE }} - {{ v.title|truncatechars:60 }}{% endblock %}
 
 {% block content %}
-{% if not v.is_live %}
-<div class="alert alert-danger">
-  <i class="glyphicon glyphicon-warning-sign"></i> <strong>Note:</strong>
-  This video is in <strong>draft</strong> mode--it is not live.
-</div>
-{% endif %}
+  {% if not v.is_live %}
+    <div class="alert alert-danger">
+      <i class="glyphicon glyphicon-warning-sign"></i> <strong>Note:</strong>
+      This video is in <strong>draft</strong> mode--it is not live.
+    </div>
+  {% endif %}
 
-<div class="row section" vocab="http://schema.org" typeof="VideoObject">
-  <div id="videobox" class="col-md-12">
-    {# Fix floats in unisubs widget that are not cleared #}
-    <div class="clearfix">
-      <div class="videobox-inner">
-        {% if use_amara %}
-          {% if video_url %}
-            <div class="amara-embed" data-height="480px" data-width="854px" data-url="{{ video_url }}"></div>
+  <div class="row section" vocab="http://schema.org" typeof="VideoObject">
+    <div id="videobox" class="col-md-12">
+      {# Fix floats in unisubs widget that are not cleared #}
+      <div class="clearfix">
+        <div class="videobox-inner">
+          {% if use_amara %}
+            {% if video_url %}
+              <div class="amara-embed" data-height="480px" data-width="854px" data-url="{{ video_url }}"></div>
+            {% else %}
+              <p>No video to show.</p>
+            {% endif %}
           {% else %}
-            <p>No video to show.</p>
+            {% if html5_formats %}
+              <video id="{{ v.slug }}" controls>
+                {% for media in html5_formats %}
+                  <source src="{{ media.url }}" type="{{ media.mime_type }}">
+                {% endfor %}
+                {% if embed %}
+                  {{ embed|safe }}
+                {% endif %}
+              </video>
+            {% elif embed %}
+              {{ embed|safe }}
+            {% else %}
+              <p>No video to show.</p>
+            {% endif %}
           {% endif %}
-        {% else %}
-          {% if html5_formats %}
-            <video id="{{ v.slug }}" controls>
-              {% for media in html5_formats %}
-                <source src="{{ media.url }}" type="{{ media.mime_type }}">
-              {% endfor %}
-              {% if embed %}
-                {{ embed|safe }}
-              {% endif %}
-            </video>
-          {% elif embed %}
-            {{ embed|safe }}
-          {% else %}
-            <p>No video to show.</p>
-          {% endif %}
-        {% endif %}
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="row">
-  <div id="videobox" class="col-md-8">
-    <div class="section">
-      <h3 class="centered" property="name">{{ v.title }}</h3>
-      <link property="thumbnailUrl" href="{{ v.get_thumbnail_url }}"/>
-      <link property="sameAs" href="{{ v.get_absolute_url }}"/>
-    </div>
-
-    {% if v.quality_notes %}
-      <div class="section alert alert-info">
-        <span class="label label-info">Note:</span> {{ v.quality_notes }}
-      </div>
-    {% endif %}
-
-    {% if v.summary %}
+  <div class="row">
+    <div id="videobox" class="col-md-8">
       <div class="section">
-        <h4>Summary</h4>
-        <div class="video-details-summary" property="description">{{ v.summary|md|safe }}</div>
-        <meta property="caption" content="{{ v.summary|md|striptags }}"/>
+        <h3 class="centered" property="name">{{ v.title }}</h3>
+        <link property="thumbnailUrl" href="{{ v.get_thumbnail_url }}"/>
+        <link property="sameAs" href="{{ v.get_absolute_url }}"/>
       </div>
-    {% endif %}
 
-    {% if v.related_urls.all %}
-      <div class="section">
-        <h4>Related URLs</h4>
-        <ul>
-          {% for u in v.related_urls.all %}
-            <li><a href="{{ u.url }}">{% if u.description %}{{ u.description }} ({{ u.url|truncatechars:50 }}){% else %}{{ u.url|truncatechars:50 }}{% endif %}</a></li>
-          {% endfor %}
-        </ul>
-      </div>
-    {% endif %}
-
-    {% if v.description %}
-      <div class="section">
-        <h4>Description</h4>
-        <div class="video-details-description">{{ v.description|md|safe }}</div>
-      </div>
-    {% endif %}
-  </div>
-
-  <div class="col-md-4">
-    <div id="sidebar" class="well">
-      {% if user.is_staff %}
-        <a href="{% url 'admin:videos_video_change' v.id %}"><i class="icon-edit"></i> edit</a>
+      {% if v.quality_notes %}
+        <div class="section alert alert-info">
+          <span class="label label-info">Note:</span> {{ v.quality_notes }}
+        </div>
       {% endif %}
 
-      <dl>
-        {% if user.is_authenticated %}
-          <dt>Playlists</dt>
-          {% if not user_playlists %}
-            <dd>
-              <a href="{% url 'playlists-playlist-list' %}">Create new playlist</a>
-            </dd>
-          {% else %}
-            <dd>
-              {% if video_in_playlists %}
-                {% for playlist in video_in_playlists %}
-                  <div><a href="{% url 'playlists-playlist' playlist.id %}">{{ playlist.summary|truncatechars:40 }}</a></div>
-                {% endfor %}
-              {% else %}
-                None
-              {% endif %}
-            </dd>
-            <dt>Add to playlist</dt>
-            <dd>
-              <form class="form-inline form-playlist-add" method="post" action="{% url 'videos-video-add-playlist' %}">
-                {% csrf_token %}
-                <input type="hidden" name="videoid" value="{{ v.id }}">
-                <select class="form-control" id="playlistid" name="playlistid">
-                  {% for playlist in user_playlists %}
-                    <option value="{{ playlist.id }}">{{ playlist.summary|truncatechars:40 }}</option>
-                  {% endfor %}
-                </select>
-                <button class="btn btn-primary" type="submit">Add</button>
-              </form>
-            </dd>
-          {% endif %}
-        {% endif %}
-        <dt>Category</dt>
-        <dd>
-          <a href="{{ v.category.get_absolute_url }}">{{ v.category.title }}</a>
-        </dd>
+      {% if v.summary %}
+        <div class="section">
+          <h4>Summary</h4>
+          <div class="video-details-summary" property="description">{{ v.summary|md|safe }}</div>
+          <meta property="caption" content="{{ v.summary|md|striptags }}"/>
+        </div>
+      {% endif %}
 
-        <dt>Speakers</dt>
-        <dd>
-          {% for s in v.speakers.all %}
-            <div><a href="{{ s.get_absolute_url }}">{{ s.name }}</a></div>
-            <meta property="author" content="{{ s.name }}"/>
-          {% empty %}
-            Unknown
-          {% endfor %}
-        </dd>
-
-        {% if v.language %}
-          <dt>Language</dt>
-          <dd>{{ v.language.name }}
-            <meta property="inLanguage" content="{{ v.language.iso639_1 }}"/>
-          </dd>
-        {% endif %}
-
-        {% if v.duration %}
-          <dt>Duration</dt>
-          <dd>{{ v.duration|duration }}
-            <meta property="duration" content="{{ v.duration|duration_iso8601 }}"/>
-          </dd>
-        {% endif %}
-
-        {% if v.recorded %}
-          <dt>Recorded</dt>
-          <dd>{{ v.recorded|date:"DATE_FORMAT" }}
-            <meta property="dateCreated" content="{{ v.recorded|date:"c" }}"/>
-          </dd>
-        {% endif %}
-
-        {% if v.updated %}
-          <dt>Last updated</dt>
-          <dd>{{ v.updated|date:"DATE_FORMAT" }}
-            <meta property="dateModified" content="{{ v.updated|date:"c" }}"/>
-            <meta property="datePublished" content="{{ v.updated|date:"c" }}"/>
-          </dd>
-        {% endif %}
-
-        <dt>Video origin</dt>
-        <dd>
-          {% if v.source_url %}
-            <a href="{{ v.source_url }}" property="embedUrl">{{ v.source_url }}</a>
-          {% else %}
-            Unknown
-          {% endif %}
-        </dd>
-
-        <dt>Download</dt>
-        <dd>
-          {% if v.get_download_formats %}
-            {% for format in v.get_download_formats %}
-              <a href="{{ format.url }}" property="contentUrl">{{ format.display }}</a>
-              <meta property="contentType" content="{{ format.display }}"/>
+      {% if v.related_urls.all %}
+        <div class="section">
+          <h4>Related URLs</h4>
+          <ul>
+            {% for u in v.related_urls.all %}
+              <li><a href="{{ u.url }}">{% if u.description %}{{ u.description }} ({{ u.url|truncatechars:50 }}){% else %}{{ u.url|truncatechars:50 }}{% endif %}</a></li>
             {% endfor %}
-          {% else %}
-            No downloadable files.
-          {% endif %}
-        </dd>
+          </ul>
+        </div>
+      {% endif %}
 
-        {% if settings.API %}
-          <dt>Metadata</dt>
-          <dd>
-            <a href="{% url 'video-api-view' v.id %}">JSON</a>
-          </dd>
+      {% if v.description %}
+        <div class="section">
+          <h4>Description</h4>
+          <div class="video-details-description">{{ v.description|md|safe }}</div>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="col-md-4">
+      <div id="sidebar" class="well">
+        {% if user.is_staff %}
+          <a href="{% url 'admin:videos_video_change' v.id %}"><i class="icon-edit"></i> edit</a>
         {% endif %}
 
-        <dt>Copyright/License Information</dt>
-        <dd>
-          {% if v.copyright_text %}
-            {{ v.copyright_text }}
-          {% elif v.source_url %}
-            See <a href="{{ v.source_url }}">source</a> for copyright
-            information.
-          {% else %}
-            Unknown.
+        <dl>
+          {% if user.is_authenticated %}
+            <dt>Playlists</dt>
+            {% if not user_playlists %}
+              <dd>
+                <a href="{% url 'playlists-playlist-list' %}">Create new playlist</a>
+              </dd>
+            {% else %}
+              <dd>
+                {% if video_in_playlists %}
+                  {% for playlist in video_in_playlists %}
+                    <div><a href="{% url 'playlists-playlist' playlist.id %}">{{ playlist.summary|truncatechars:40 }}</a></div>
+                  {% endfor %}
+                {% else %}
+                  None
+                {% endif %}
+              </dd>
+              <dt>Add to playlist</dt>
+              <dd>
+                <form class="form-inline form-playlist-add" method="post" action="{% url 'videos-video-add-playlist' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="videoid" value="{{ v.id }}">
+                  <select class="form-control" id="playlistid" name="playlistid">
+                    {% for playlist in user_playlists %}
+                      <option value="{{ playlist.id }}">{{ playlist.summary|truncatechars:40 }}</option>
+                    {% endfor %}
+                  </select>
+                  <button class="btn btn-primary" type="submit">Add</button>
+                </form>
+              </dd>
+            {% endif %}
           {% endif %}
-        </dd>
+          <dt>Category</dt>
+          <dd>
+            <a href="{{ v.category.get_absolute_url }}">{{ v.category.title }}</a>
+          </dd>
 
-        <dt>Tags</dt>
-        <dd>
-          {% for t in v.tags.all %}
-            <span property="keywords">{{ t.tag }}</span>
-          {% empty %}
-            No tags
-          {% endfor %}
-          <meta property="keywords" content="{{ v.category.title }}"/>
-        </dd>
-      </dl>
+          <dt>Speakers</dt>
+          <dd>
+            {% for s in v.speakers.all %}
+              <div><a href="{{ s.get_absolute_url }}">{{ s.name }}</a></div>
+              <meta property="author" content="{{ s.name }}"/>
+            {% empty %}
+              Unknown
+            {% endfor %}
+          </dd>
+
+          {% if v.language %}
+            <dt>Language</dt>
+            <dd>{{ v.language.name }}
+              <meta property="inLanguage" content="{{ v.language.iso639_1 }}"/>
+            </dd>
+          {% endif %}
+
+          {% if v.duration %}
+            <dt>Duration</dt>
+            <dd>{{ v.duration|duration }}
+              <meta property="duration" content="{{ v.duration|duration_iso8601 }}"/>
+            </dd>
+          {% endif %}
+
+          {% if v.recorded %}
+            <dt>Recorded</dt>
+            <dd>{{ v.recorded|date:"DATE_FORMAT" }}
+              <meta property="dateCreated" content="{{ v.recorded|date:"c" }}"/>
+            </dd>
+          {% endif %}
+
+          {% if v.updated %}
+            <dt>Last updated</dt>
+            <dd>{{ v.updated|date:"DATE_FORMAT" }}
+              <meta property="dateModified" content="{{ v.updated|date:"c" }}"/>
+              <meta property="datePublished" content="{{ v.updated|date:"c" }}"/>
+            </dd>
+          {% endif %}
+
+          <dt>Video origin</dt>
+          <dd>
+            {% if v.source_url %}
+              <a href="{{ v.source_url }}" property="embedUrl">{{ v.source_url }}</a>
+            {% else %}
+              Unknown
+            {% endif %}
+          </dd>
+
+          <dt>Download</dt>
+          <dd>
+            {% if v.get_download_formats %}
+              {% for format in v.get_download_formats %}
+                <a href="{{ format.url }}" property="contentUrl">{{ format.display }}</a>
+                <meta property="contentType" content="{{ format.display }}"/>
+              {% endfor %}
+            {% else %}
+              No downloadable files.
+            {% endif %}
+          </dd>
+
+          {% if settings.API %}
+            <dt>Metadata</dt>
+            <dd>
+              <a href="{% url 'video-api-view' v.id %}">JSON</a>
+            </dd>
+          {% endif %}
+
+          <dt>Copyright/License Information</dt>
+          <dd>
+            {% if v.copyright_text %}
+              {{ v.copyright_text }}
+            {% elif v.source_url %}
+              See <a href="{{ v.source_url }}">source</a> for copyright
+              information.
+            {% else %}
+              Unknown.
+            {% endif %}
+          </dd>
+
+          <dt>Tags</dt>
+          <dd>
+            {% for t in v.tags.all %}
+              <span property="keywords">{{ t.tag }}</span>
+            {% empty %}
+              No tags
+            {% endfor %}
+            <meta property="keywords" content="{{ v.category.title }}"/>
+          </dd>
+        </dl>
+      </div>
     </div>
   </div>
-</div>
 {% endblock %}
 
 {% block site_js %}
