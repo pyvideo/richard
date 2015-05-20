@@ -206,8 +206,10 @@ Install the hooks by running::
     $ pre-commit install
 
 The configuration of the hooks is done in ``.pre-commit-config.yaml`.
-To ignore the errors and proceed with the commit, use the
-``--no-verify`` option to the ``git commit`` command.
+To ignore all the errors and proceed with the commit, use the
+``--no-verify`` option to the ``git commit`` command. To ignore specifc
+hooks, you can specify a comma-separated list of hook ids (available in
+``.pre-commit-config.yaml``) in the environment variable ``SKIP``.
 
 
 Set up sample data (optional)
