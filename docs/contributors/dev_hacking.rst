@@ -53,7 +53,9 @@ Debian::
           libxml2-dev \
           libxslt-dev \
           python-pip \
-          python-virtualenv
+          python-virtualenv \
+          libpython-dev \
+          libz-dev
 
 Fedora::
 
@@ -61,7 +63,9 @@ Fedora::
           libxml2-devel \
           libxslt-devel \
           python-pip \
-          python-virtualenv
+          python-virtualenv \
+          python-devel \
+          zlib-devel
 
 
 Python 3.3+
@@ -117,8 +121,7 @@ requirements::
         $ apt-get install \
             postgresql \
             build-essential \
-            libpq-dev \
-            python-dev
+            libpq-dev
 
     Then run in your virtual environment::
 
