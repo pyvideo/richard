@@ -33,9 +33,13 @@ class Command(BaseCommand):
             if field.name in ['id', 'updated', 'added']:
                 continue
 
+            field_type = field.get_internal_type()
+            if field.__class__.__name__ == 'URLField':
+                field_type = 'URLfield'
+
             data = {
                 'name': field.name,
-                'type': field.get_internal_type(),
+                'type': field_type,
                 'has_default': field.default is not fields.NOT_PROVIDED,
                 'null': field.null,
                 'empty_strings': field.empty_strings_allowed,
@@ -45,45 +49,45 @@ class Command(BaseCommand):
 
             if field.name == 'category':
                 data.update({
-                        'type': 'TextField',
-                        'empty_strings': False,
-                        'null': False,
-                        'has_default': False,
-                        'md': False,
-                        'choices': []
-                        })
+                    'type': 'TextField',
+                    'empty_strings': False,
+                    'null': False,
+                    'has_default': False,
+                    'md': False,
+                    'choices': []
+                })
             elif field.name == 'language':
                 data.update({
-                        'type': 'TextField',
-                        'empty_strings': False,
-                        'null': False,
-                        'has_default': False,
-                        'md': False,
-                        'choices': []
-                        })
+                    'type': 'TextField',
+                    'empty_strings': False,
+                    'null': False,
+                    'has_default': False,
+                    'md': False,
+                    'choices': []
+                })
 
             reqs.append(data)
 
         # Add tags and speakers which are M2M, but we do them funkily
         # in the API.
         reqs.append({
-                'name': 'tags',
-                'type': 'TextArrayField',
-                'empty_strings': False,
-                'null': True,
-                'has_default': False,
-                'md': False,
-                'choices': []
-                })
+            'name': 'tags',
+            'type': 'TextArrayField',
+            'empty_strings': False,
+            'null': True,
+            'has_default': False,
+            'md': False,
+            'choices': []
+        })
         reqs.append({
-                'name': 'speakers',
-                'type': 'TextArrayField',
-                'empty_strings': False,
-                'has_default': False,
-                'null': True,
-                'md': False,
-                'choices': []
-                })
+            'name': 'speakers',
+            'type': 'TextArrayField',
+            'empty_strings': False,
+            'has_default': False,
+            'null': True,
+            'md': False,
+            'choices': []
+        })
 
         f = open('video_reqs.json', 'w')
         f.write(json.dumps(reqs, indent=2))
