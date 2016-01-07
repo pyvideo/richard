@@ -483,7 +483,7 @@ class VideoSerializer(serializers.ModelSerializer):
     # These are a little funky since we denormalize them for the API.
     speakers = ShrodingersSlugRelatedField(many=True, slug_field='name')
     tags = ShrodingersSlugRelatedField(many=True, slug_field='tag')
-    related_urls = RelatedUrlSerializer(many=True)
+    related_urls = RelatedUrlSerializer(read_only=True, many=True)
 
     class Meta:
         model = Video
