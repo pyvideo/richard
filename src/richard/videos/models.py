@@ -84,7 +84,7 @@ class Category(models.Model):
         super(Category, self).save(*args, **kwargs)
 
     class Meta(object):
-        ordering = ["title"]
+        ordering = ['title']
         verbose_name = _(u'category')
         verbose_name_plural = _(u'categories')
 
@@ -423,6 +423,19 @@ class VideoUrlStatus(models.Model):
     video = models.ForeignKey(Video)
 
 
+class RelatedUrlSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RelatedUrl
+
+    def to_native(self, obj):
+        # We're removing some uninteresting data here. We'd rather specify
+        # "fields" in Meta, but doing that creates a circular import.
+        ret = super(RelatedUrlSerializer, self).to_native(obj)
+        del ret['id']
+        del ret['video']
+        return ret
+
+
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
     videos = serializers.HyperlinkedRelatedField(
         many=True,
@@ -470,6 +483,7 @@ class VideoSerializer(serializers.ModelSerializer):
     # These are a little funky since we denormalize them for the API.
     speakers = ShrodingersSlugRelatedField(many=True, slug_field='name')
     tags = ShrodingersSlugRelatedField(many=True, slug_field='tag')
+    related_urls = RelatedUrlSerializer(many=True)
 
     class Meta:
         model = Video
